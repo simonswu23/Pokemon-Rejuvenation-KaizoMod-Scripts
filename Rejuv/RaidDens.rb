@@ -1722,7 +1722,7 @@ def RaidDen(den)
         mon.setAbility(encdata[:encounter][:Ability]) if encdata[:encounter][:Ability] != nil
         mon.iv = encdata[:encounter][:IVs].clone if encdata[:encounter][:IVs].length > 0
         mon.ev = encdata[:encounter][:EVs].clone if encdata[:encounter][:EVs].length > 0
-        mon.iv = Array.new(6,31) if ($game_switches[:Full_IVs])
+        mon.iv = Array.new(6,31) if ($game_switches[:Full_IVs] || $game_switches[:Standard_S])
         bossFunction($cache.bosses[:SHADOWDEN],:SHADOWDEN,mon)
         
         ret = pbWildBattleObject(mon,variable)

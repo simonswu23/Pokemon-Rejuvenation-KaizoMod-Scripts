@@ -1774,7 +1774,7 @@ class PokeBattle_Battle
           newenemy = pbSwitchInBetween(index, false, false)
           newname = pbSwitchInName(index, newenemy) # Illusion
           opponent = pbGetOwner(index)
-          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer
+          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer && !$game_switches[:Standard_S]
             pbDisplayPaused(_INTL("{1} is about to send in {2}.", opponent.fullname, newname))
             if pbDisplayConfirm(_INTL("Will {1} change Pokémon?", self.pbPlayer.name))
               newpoke = pbSwitchPlayer(0, true, true)

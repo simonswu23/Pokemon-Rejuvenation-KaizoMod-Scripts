@@ -1447,7 +1447,7 @@ def pbLoadWildBoss(poke,bossdata)
     pokemon.iv=Array.new(6,31)
     pokemon.iv[5]=0
   else
-    iv = 31 if ($game_switches[:Only_Pulse_2] && !(poke[:shadow])) || (poke[:shadow] &&  $game_switches[:Full_IVs])  # pulse 2 mode
+    iv = 31 if ($game_switches[:Only_Pulse_2] && !(poke[:shadow])) || (poke[:shadow] && ($game_switches[:Full_IVs] || $game_switches[:Standard_S]))  # pulse 2 mode
     iv = 31 if $game_switches[:Only_Pulse_2] # pulse 2 mode
     iv = 0 if $game_switches[:Empty_IVs_And_EVs_Password]
     pokemon.iv=Array.new(6,iv)
@@ -1510,7 +1510,7 @@ def pbLoadSOSMon(poke,sosdata,boss)
     pokemon.iv=Array.new(6,31)
     pokemon.iv[5]=0
   else
-    iv = 31 if ($game_switches[:Only_Pulse_2] && !(poke[:shadow])) || (poke[:shadow] &&  $game_switches[:Full_IVs])  # pulse 2 mode
+    iv = 31 if ($game_switches[:Only_Pulse_2] && !(poke[:shadow])) || (poke[:shadow] && ($game_switches[:Full_IVs] || $game_switches[:Standard_S]))  # pulse 2 mode
     iv = 0 if $game_switches[:Empty_IVs_And_EVs_Password]
     pokemon.iv=Array.new(6,iv)
   end

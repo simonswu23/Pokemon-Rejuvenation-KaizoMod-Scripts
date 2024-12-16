@@ -238,7 +238,7 @@ class PokemonOptions
     @audiotype   = (system != nil ? system.audiotype : 0) # Stereo / Mono audio (0 / 1)
     @bagsorttype = (system != nil ? system.bagsorttype : 0)   # Bag sorting (0=by name, 1=by type)
     @battlescene = (system != nil ? system.battlescene : 0)   # Battle scene (animations) (0=on, 1=off)
-    @battlestyle = (system != nil ? system.battlestyle : 0)   # Battle style (0=shift, 1=set)
+    @battlestyle = (system != nil ? system.battlestyle : 1)   # Battle style (0=shift, 1=set)
     @frame       = (system != nil ? system.frame : 0)   # Default window frame (see also TextFrames)
     @textskin    = (system != nil ? system.textskin : 0)   # Speech frame
     @font        = (system != nil ? system.font : 0)   # Font (see also VersionStyles)
@@ -258,7 +258,7 @@ class PokemonOptions
     @unrealTimeClock          = (system != nil ? system.unrealTimeClock : 2)    # Unreal Time Clock (0=always, 1=pause menu, 2=pokegear only)
     @unrealTimeTimeScale      = (system != nil ? system.unrealTimeTimeScale : 30)   # Unreal Time Timescale (default 30x real time)
     @chooseBabyIncense        = (system != nil ? system.chooseBabyIncense : 0) # Gen 9 Mod - Baby Incense needed or not. (0=Incense, 1=No Incense)
-    @itemRestoreGen9          = (system != nil ? system.itemRestoreGen9 : 0) # Gen 9 Mod - Restore Item after battle (0=Off, 1=No Berries (Gen 9), 2=All)
+    @itemRestoreGen9          = (system != nil ? system.itemRestoreGen9 : 2) # Gen 9 Mod - Restore Item after battle (0=Off, 1=No Berries (Gen 9), 2=All)
   end
 end
 

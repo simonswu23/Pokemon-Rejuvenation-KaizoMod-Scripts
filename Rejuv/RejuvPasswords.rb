@@ -229,7 +229,7 @@ def addPassword(entrytext)
   
   def pbTogglePassword(password, isGameStart=false)
     password_string=password.downcase()
-    if !isGameStart && ['fullivs','easyhms','nohms','hmitems','notmxneeded','freemegaz','shinycharm','earlyshiny','freeexpall','freeremotepc','hello eizen.','mintyfresh','mintpack','powerpack'].include?(password_string) && checkPasswordActivation(password_string)
+    if !isGameStart && ['fullivs','easyhms','nohms','hmitems','notmxneeded','freemegaz','shinycharm','earlyshiny','freeexpall','freeremotepc','hello eizen.','mintyfresh','mintpack','powerpack','standard_s','kaizo_s','standardmode','kaizomode'].include?(password_string) && checkPasswordActivation(password_string)
       Kernel.pbMessage(_INTL('This password cannot be disabled anymore.'))
       return false
     end

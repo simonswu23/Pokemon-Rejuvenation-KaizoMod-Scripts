@@ -22127,7 +22127,21 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Venam's Seviper (Gearen)" => {
+    :Type2 => :DARK,
+    :BaseStats => [73, 100, 60, 100, 60, 65],
+    :Abilities => [:MERCILESS],
+  },
+
+  "Venam's Seviper" => {
+    :Type2 => :DARK,
+    # +120 BST
+    :BaseStats => [73, 130, 80, 130, 80, 85],
+    :Abilities => [:MERCILESS],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :LUNATONE => {

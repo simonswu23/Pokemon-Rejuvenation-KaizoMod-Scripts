@@ -371,7 +371,7 @@ def pbDayCareGenerateEgg
   egg.iv[3] = ivs[3]
   egg.iv[4] = ivs[4]
   egg.iv[5] = ivs[5]
-  egg.iv.map! { |_| 31 } if $game_switches[:Full_IVs]
+  egg.iv.map! { |_| 31 } if $game_switches[:Full_IVs] || $game_switches[:Standard_S]
   egg.iv.map! { |_| 0 } if $game_switches[:Empty_IVs_Password]
   egg.moves[0] = finalmoves[0]
   egg.moves[1] = finalmoves[1]

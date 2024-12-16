@@ -1,0 +1,11 @@
+- Commit A 12/15/24
+  - Venam Gym Battle updated, both standard and kaizo (not fully playtested)
+  - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
+  - Added bulk passwords: "standardmode" and "kaizomode"
+    - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata
+    - additionally: forces battle to be set mode
+  - Reconfigured game defaults:
+    - Set Mode
+    - All consumable items restored after battle (including berries)
+    - Hail and Snow are combined
+    - TODO: force these settings with "standardmode" and "kaizomode" password

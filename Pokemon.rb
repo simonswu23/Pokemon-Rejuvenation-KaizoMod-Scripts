@@ -131,7 +131,7 @@ class PokeBattle_Pokemon
       end
     end
     #IV overrides
-    @iv=[31,31,31,31,31,31] if $game_switches[:Full_IVs]
+    @iv=[31,31,31,31,31,31] if $game_switches[:Full_IVs] || $game_switches[:Standard_S]
     @iv=[0,0,0,0,0,0] if $game_switches[:Empty_IVs_Password]
     @level = level
     @exp=PBExp.startExperience(level,self.growthrate)
