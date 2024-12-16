@@ -1735,6 +1735,350 @@ def ExpCandy(pokemon, scene, amount, value)
   return true, amount_consumed
 end
 
+ItemHandlers::UseOnPokemon.add(:MACHOBRACE, proc {|item,pkmn,scene| # LAWDS - macho brace key item
+  stats=STATSTRINGS
+  cmd=0
+  loop do
+  cmd=scene.pbShowCommands(_INTL("What stats would you like to set?"),[
+    _INTL("Set Ability"),
+    _INTL("Set EVs"),
+    _INTL("Set IVs"),
+    _INTL("Set Nature"),
+    _INTL("Set Hidden Power")],cmd)
+  case cmd
+    # Break
+    when -1
+      break
+    # Set Ability
+    when 0
+      cmd2=0
+      loop do
+        abils=pkmn.getAbilityList
+        cmd2 = abils.find_index { |abil| pkmn.ability==abil }
+        cmd2 = 0 if cmd2.nil?
+        commands=[]
+        for i in 0..abils.length-1
+          commands.push(getAbilityName(abils[i]))
+        end
+        msg=_INTL("Current Ability is {1}.",getAbilityName(pkmn.ability))
+        cmd2=scene.pbShowCommands(msg,commands,cmd2)
+        # Break
+        if cmd2==-1
+          break
+        # Set ability override
+        elsif cmd2>=0 && cmd2<abils.length
+          pkmn.setAbility(abils[cmd2])
+        end
+        scene.pbHardRefresh
+      end
+    # Set EVs
+    when 1
+      cmd2=0
+      loop do
+        if pkmn.isShadow?
+          scene.pbDisplay(_INTL("Shadow Pokemon cannot gain EVs."))
+          break
+        end
+        evcommands=[]
+        evs = pkmn.ev
+        statnums = [pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed]
+        for i in 0...stats.length
+          evcommands.push(stats[i]+" (#{evs[i]})")            
+        end
+        evcommands.push("Zero all")
+        promptString = _INTL("HP:                  {1} \nAttack:      {2}\nDefense:   {3}\nSp.Atk:       {4}\nSp.Def:       {5} \nSpeed:        {6}", statnums[0],statnums[1],statnums[2],statnums[3],statnums[4],statnums[5])
+        cmd2=scene.pbShowCommands(promptString,evcommands,cmd2)
+        if cmd2==-1
+          break
+        elsif cmd2>=0 && cmd2<stats.length
+          statindex = cmd2
+          cmd3 = scene.pbShowCommands(_INTL("Do what to the EV?"),["Set to max", "Set to zero", "Set manually"])
+          case cmd3
+          when -1
+            break
+          when 0
+            if $game_switches[:No_Total_EV_Cap]
+                    pkmn.ev[statindex]=252
+            else
+              evsLeft = 510 - pkmn.ev.sum
+              newEV = [252,pkmn.ev[statindex]+evsLeft].min
+              pkmn.ev[statindex]=newEV
+            end
+          when 1
+              pkmn.ev[statindex]=0
+          when 2
+                  params=ChooseNumberParams.new
+                  params.setRange(0,252)
+                  params.setDefaultValue(pkmn.ev[statindex])
+                  params.setCancelValue(pkmn.ev[statindex])
+                  f=Kernel.pbMessageChooseNumber(_INTL("Set the EV for {1} (max. 252).",stats[statindex]),params) { scene.pbHardRefresh }
+                  pkmn.ev[statindex]=f
+          end
+        elsif cmd2==stats.length
+          pkmn.ev=[0,0,0,0,0,0]
+        end
+        #LAWDS - Do sanity checking on EVs
+        evTotal = 0
+        gone_over = false
+        if !$game_switches[:No_Total_EV_Cap]
+          for i in 0..5
+            evTotal += pkmn.ev[i]
+            if evTotal > 510 && gone_over == false
+              amt_over = evTotal - 510
+              pkmn.ev[i] = pkmn.ev[i] - amt_over
+              gone_over = true
+            elsif gone_over == true
+              pkmn.ev[i] = 0
+            end
+          end
+        end
+        pkmn.totalhp
+        pkmn.calcStats
+        scene.pbHardRefresh
+      end
+    # Set IVs
+    when 2
+      cmd2=0
+      loop do
+        hiddenpower=pbHiddenPower(pkmn)
+        msg=_INTL("Hidden Power:\n{1}",getTypeName(hiddenpower))
+        ivcommands=[]
+        for i in 0...stats.length
+          ivcommands.push(stats[i]+" (#{pkmn.iv[i]})")
+        end
+        ivcommands.push(_INTL("Randomise all"))
+        cmd2=scene.pbShowCommands(msg,ivcommands,cmd2)
+        if cmd2==-1
+          break
+        elsif cmd2>=0 && cmd2<stats.length
+          params=ChooseNumberParams.new
+          params.setRange(0,31)
+          params.setDefaultValue(pkmn.iv[cmd2])
+          params.setCancelValue(pkmn.iv[cmd2])
+          f=Kernel.pbMessageChooseNumber(
+            _INTL("Set the IV for {1} (max. 31).",stats[cmd2]),params) { scene.pbHardRefresh }
+          pkmn.iv[cmd2]=f
+          pkmn.calcStats
+          scene.pbHardRefresh
+        elsif cmd2==ivcommands.length-1
+          pkmn.iv[0]=rand(32)
+          pkmn.iv[1]=rand(32)
+          pkmn.iv[2]=rand(32)
+          pkmn.iv[3]=rand(32)
+          pkmn.iv[4]=rand(32)
+          pkmn.iv[5]=rand(32)
+          pkmn.calcStats
+          scene.pbHardRefresh
+        end
+      end
+    when 3 # Nature
+      cmd2=0
+      loop do
+        oldnature=pkmn.nature
+        commands=[]
+        (PBNatures.getCount).times do |i|
+          commands.push(PBNatures.getNameAndStatString(i))
+        end
+        msg=[_INTL("Current Nature is {1}.",oldnature),
+              _INTL("Current Nature is {1}.",oldnature)][pkmn.natureflag ? 1 : 0]
+        cmd2=scene.pbShowCommands(msg,commands,cmd2)
+        # Break
+        if cmd2==-1
+          break
+        # Set nature override
+        elsif cmd2>=0 && cmd<PBNatures.getCount
+          pkmn.setNature(PBNatures.getName(cmd2).intern.upcase)
+          pkmn.calcStats
+        end
+        scene.pbHardRefresh
+      end
+    # Hidden Power
+    when 4
+      HiddenPowerChanger(pkmn)
+    end
+  end
+})
+
+ItemHandlers::UseInField.add(:MACHOBRACE, proc {|item,scene| # LAWDS - macho brace from field
+pbFadeOutIn(99999){
+  scene=PokemonScreen_Scene.new
+  screen=PokemonScreen.new(scene,$Trainer.party)
+  screen.pbStartScene(_INTL("Use on which Pokémon?"),false)
+  loop do
+    scene.pbSetHelpText(_INTL("Use on which Pokémon?"))
+    chosen=screen.pbChoosePokemon
+    if chosen>=0
+      pkmn=$Trainer.party[chosen]
+      stats=STATSTRINGS
+      cmd=0
+      loop do
+    cmd=scene.pbShowCommands(_INTL("What stats would you like to set?"),[
+      _INTL("Set Ability"),
+      _INTL("Set EVs"),
+      _INTL("Set IVs"),
+      _INTL("Set Nature"),
+      _INTL("Set Hidden Power")],cmd)
+    case cmd
+      # Break
+      when -1
+        break
+      # Set Ability
+      when 0
+        cmd2=0
+        loop do
+          abils=pkmn.getAbilityList
+          cmd2 = abils.find_index { |abil| pkmn.ability==abil }
+          cmd2 = 0 if cmd2.nil?
+          commands=[]
+          for i in 0..abils.length-1
+            commands.push(getAbilityName(abils[i]))
+          end
+          msg=_INTL("Current Ability is {1}.",getAbilityName(pkmn.ability))
+          cmd2=scene.pbShowCommands(msg,commands,cmd2)
+          # Break
+          if cmd2==-1
+            break
+          # Set ability override
+          elsif cmd2>=0 && cmd2<abils.length
+            pkmn.setAbility(abils[cmd2])
+          end
+          scene.pbHardRefresh
+        end
+      # Set EVs
+      when 1
+        cmd2=0
+        loop do
+          if pkmn.isShadow?
+            scene.pbDisplay(_INTL("Shadow Pokemon cannot gain EVs."))
+            break
+          end
+          evcommands=[]
+          evs = pkmn.ev
+          statnums = [pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed]
+          for i in 0...stats.length
+            evcommands.push(stats[i]+" (#{evs[i]})")            
+          end
+          evcommands.push("Zero all")
+          promptString = _INTL("HP:                  {1} \nAttack:      {2}\nDefense:   {3}\nSp.Atk:       {4}\nSp.Def:       {5} \nSpeed:        {6}", statnums[0],statnums[1],statnums[2],statnums[3],statnums[4],statnums[5])
+          cmd2=scene.pbShowCommands(promptString,evcommands,cmd2)
+          if cmd2==-1
+            break
+          elsif cmd2>=0 && cmd2<stats.length
+            statindex = cmd2
+            cmd3 = scene.pbShowCommands(_INTL("Do what to the EV?"),["Set to max", "Set to zero", "Set manually"])
+            case cmd3
+            when -1
+              break
+            when 0
+              if $game_switches[:No_Total_EV_Cap]
+                      pkmn.ev[statindex]=252
+              else
+                evsLeft = 510 - pkmn.ev.sum
+                newEV = [252,pkmn.ev[statindex]+evsLeft].min
+                pkmn.ev[statindex]=newEV
+              end
+            when 1
+                pkmn.ev[statindex]=0
+            when 2
+                    params=ChooseNumberParams.new
+                    params.setRange(0,252)
+                    params.setDefaultValue(pkmn.ev[statindex])
+                    params.setCancelValue(pkmn.ev[statindex])
+                    f=Kernel.pbMessageChooseNumber(_INTL("Set the EV for {1} (max. 252).",stats[statindex]),params) { scene.pbHardRefresh }
+                    pkmn.ev[statindex]=f
+            end
+          elsif cmd2==stats.length
+            pkmn.ev=[0,0,0,0,0,0]
+          end
+          #LAWDS - Do sanity checking on EVs
+          evTotal = 0
+          gone_over = false
+          if !$game_switches[:No_Total_EV_Cap]
+            for i in 0..5
+              evTotal += pkmn.ev[i]
+              if evTotal > 510 && gone_over == false
+                amt_over = evTotal - 510
+                pkmn.ev[i] = pkmn.ev[i] - amt_over
+                gone_over = true
+              elsif gone_over == true
+                pkmn.ev[i] = 0
+              end
+            end
+          end
+          pkmn.totalhp
+          pkmn.calcStats
+          scene.pbHardRefresh
+        end
+      # Set IVs
+      when 2
+        cmd2=0
+        loop do
+          hiddenpower=pbHiddenPower(pkmn)
+          msg=_INTL("Hidden Power:\n{1}",getTypeName(hiddenpower))
+          ivcommands=[]
+          for i in 0...stats.length
+            ivcommands.push(stats[i]+" (#{pkmn.iv[i]})")
+          end
+          ivcommands.push(_INTL("Randomise all"))
+          cmd2=scene.pbShowCommands(msg,ivcommands,cmd2)
+          if cmd2==-1
+            break
+          elsif cmd2>=0 && cmd2<stats.length
+            params=ChooseNumberParams.new
+            params.setRange(0,31)
+            params.setDefaultValue(pkmn.iv[cmd2])
+            params.setCancelValue(pkmn.iv[cmd2])
+            f=Kernel.pbMessageChooseNumber(
+              _INTL("Set the IV for {1} (max. 31).",stats[cmd2]),params) { scene.pbHardRefresh }
+            pkmn.iv[cmd2]=f
+            pkmn.calcStats
+            scene.pbHardRefresh
+          elsif cmd2==ivcommands.length-1
+            pkmn.iv[0]=rand(32)
+            pkmn.iv[1]=rand(32)
+            pkmn.iv[2]=rand(32)
+            pkmn.iv[3]=rand(32)
+            pkmn.iv[4]=rand(32)
+            pkmn.iv[5]=rand(32)
+            pkmn.calcStats
+            scene.pbHardRefresh
+          end
+        end
+      when 3 # Nature
+        cmd2=0
+        loop do
+          oldnature=pkmn.nature
+          commands=[]
+          (PBNatures.getCount).times do |i|
+            commands.push(PBNatures.getNameAndStatString(i))
+          end
+          msg=[_INTL("Current Nature is {1}.",oldnature),
+                _INTL("Current Nature is {1}.",oldnature)][pkmn.natureflag ? 1 : 0]
+          cmd2=scene.pbShowCommands(msg,commands,cmd2)
+          # Break
+          if cmd2==-1
+            break
+          # Set nature override
+          elsif cmd2>=0 && cmd<PBNatures.getCount
+            pkmn.setNature(PBNatures.getName(cmd2).intern.upcase)
+            pkmn.calcStats
+          end
+          scene.pbHardRefresh
+        end
+      # Hidden Power
+      when 4
+        HiddenPowerChanger(pkmn)
+      end
+    end
+    else
+      ret=false
+      break
+    end
+  end
+  screen.pbEndScene
+}
+})
+
 ItemHandlers::UseOnPokemon.add(:EXPCANDYXS, proc { |item, pokemon, scene, amount = 1|
   next ExpCandy(pokemon, scene, amount, 100)
 })

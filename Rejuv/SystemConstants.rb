@@ -429,6 +429,6 @@ PickupRare=[
     "easymode" => ["fullivs", "moneybags", "litemode", "stopitems"],
     "hardmode" => ["noitems", "nopenny", "fullevs", "emptyivs"],
     "qol"      => ["easyhms", "nopoisondam", "freeexpall","earlyincu", "pinata","unrealtime","nopoisondam"],
-    "standardmode" => ["standard_s","pinata","fullivs","noitems","unrealtime","easyhms","freeexpall"],
-    "kaizomode" => ["standard_s","kaizo_s","pinata","fullivs","noitems","unrealtime","easyhms","freeexpall","fullevs"],
+    "standardmode" => ["standard_s","pinata","fullivs","noitems","unrealtime","easyhms","freeexpall","powerpack","freeremotepc"],
+    "kaizomode" => ["standard_s","kaizo_s","pinata","fullivs","noitems","unrealtime","easyhms","freeexpall","fullevs","powerpack","freeremotepc"],
   }

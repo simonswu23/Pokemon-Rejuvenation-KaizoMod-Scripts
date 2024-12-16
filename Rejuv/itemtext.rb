@@ -1083,12 +1083,12 @@ ITEMHASH = {
 },
 
 :MACHOBRACE => {
-    :ID => 120,
-    :name => "Macho Brace",
-    :desc => "An item to be held by a Pokémon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.",
-    :price => 3000,
-    :noUseInBattle => true,
-    :noUse => true,
+	:ID => 120,
+	:name => "Macho Brace",
+	:desc => "An item to be used on a Pokémon that allows modification of its EVs and IVs within normal limits.",
+	:price => 0,
+	:keyitem => true,
+	:noUseInBattle => true,
 },
 
 :POWERWEIGHT => {

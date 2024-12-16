@@ -1,8 +1,10 @@
-- Commit A 12/15/24
-  - Venam Gym Battle updated, both standard and kaizo (not fully playtested)
+- 12/16/25
+  - Added LAWDS macho brace implementation for QoL
+- 12/15/24
+  - Venam Gym Battle updated, both standard and kaizo (not playtested)
   - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
   - Added bulk passwords: "standardmode" and "kaizomode"
-    - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata
+    - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata, powerpack
     - additionally: forces battle to be set mode
   - Reconfigured game defaults:
     - Set Mode

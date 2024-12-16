@@ -103,4 +103,35 @@ module PBNatures
     ]
     return names[id]
   end
+
+  def PBNatures.getNameAndStatString(id) # LAWDS - used for macho brace
+    name_stat_string=[
+      _INTL("Neutral"),
+      _INTL("(+Atk  -Def)"),
+      _INTL("(+Atk  -Spe)"),
+      _INTL("(+Atk  -SpA)"),
+      _INTL("(+Atk  -SpD)"),
+      _INTL("Neutral 2"), # docile <-> bold
+      _INTL("(+Def  -Atk)"),
+      _INTL("(+Def  -Spe)"),
+      _INTL("(+Def  -SpA)"),
+      _INTL("(+Def  -SpD)"),
+      _INTL("Neutral 3"), # serious -> timid, timid -> hasty, hasty -> serious
+      _INTL("(+Spe  -Atk)"),
+      _INTL("(+Spe  -Def)"),
+      _INTL("(+Spe  -SpA)"),
+      _INTL("(+Spe  -SpD)"),
+      _INTL("Neutral 4"), # bashful -> modest, modest -> mild, mild -> quiet, quiet -> modest
+      _INTL("(+SpA  -Atk)"),
+      _INTL("(+SpA  -Def)"),
+      _INTL("(+SpA  -Spe)"),
+      _INTL("(+SpA  -SpD)"),
+      _INTL("Neutral 5"), # quirky -> calm, calm -> gentle, gentle -> sassy, sassy -> careful, careful -> quirky 
+      _INTL("(+SpD  -Atk)"),
+      _INTL("(+SpD  -Def)"),
+      _INTL("(+SpD  -Spe)"),
+      _INTL("(+SpD  -SpA)")
+   ]
+   return name_stat_string[id]
+  end
 end

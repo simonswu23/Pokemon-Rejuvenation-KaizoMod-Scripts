@@ -657,7 +657,7 @@ def HiddenPowerChanger(mon)
   end
   if (choosetype >= 0) && (choosetype < 17) && newtype!=oldtype
     mon.hptype=newtype
-    Kernel.pbMessage(_INTL("The Hidden Power of your {1} is now {2} type.", $game_variables[3], mon.hptype)) # Gen 9 Mod - Added message mentioning the new type
+    Kernel.pbMessage(_INTL("The Hidden Power of your {1} is now {2} type.", mon.name, mon.hptype)) # Gen 9 Mod - Added message mentioning the new type
     return true
   end
   if newtype==oldtype
