@@ -105,7 +105,7 @@ def addPassword(entrytext)
       if !ids
         Kernel.pbMessage('That is not a password.')
         next
-      end
+      end      
       success=doExecute ? pbTogglePassword(password) : false
       alreadyKnown=true
       for id,pw in ids
@@ -334,11 +334,13 @@ def addPassword(entrytext)
         :SPDEFCARD => 1,
         :SPEEDCARD => 1,
         :MACHOBRACE => 1,
+        :EXPCANDYXL => 999,
+        :EXPCANDYL  => 999
       }
       items_to_give.each_pair {|item,quantity|
         $PokemonBag.pbStoreItem(item,quantity)
       }
-      Kernel.pbMessage('\PN received a package of EV-training gear.')
+      Kernel.pbMessage('\PN received a package of EV-training gear, and a sweet treat.')
     end
     #pbMonoRandEvents
     return true

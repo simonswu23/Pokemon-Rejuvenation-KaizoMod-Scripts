@@ -3008,8 +3008,8 @@ class PasswordPC
 
   def access
     Kernel.pbMessage(_INTL('Accessed the Password Menu.'))
-    costToBePaid=pbPasswordsMenu($PokemonBag.pbQuantity(:DATACHIP))
-    $PokemonBag.pbDeleteItem(:DATACHIP, costToBePaid) if costToBePaid > 0
+    costToBePaid=pbPasswordsMenu()
+    # $PokemonBag.pbDeleteItem(:DATACHIP, costToBePaid) if costToBePaid > 0
   end
 
   # def pbAddPassword
@@ -3231,6 +3231,7 @@ class DaycarePC
     end
   end
 end
+
 class HiddenPowerChangerPC
   def shouldShow?
     return true if $game_switches[10]
@@ -3247,6 +3248,7 @@ class HiddenPowerChangerPC
     HiddenPowerChanger($Trainer.party[pkmn])
   end
 end
+
 ###### Gen 9 Mod - QoL End ######
 
 def pbPokeCenterPC

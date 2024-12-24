@@ -6432,7 +6432,7 @@ MONHASH = {
       :Type2 => :POISON,
       :BaseStats => [30, 35, 30, 100, 35, 80],
       :EVs => [0, 0, 0, 1, 0, 0],
-      :Abilities => [:LEVITATE],
+      :Abilities => [:LEVITATE, :CURSEDBODY],
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 62,
@@ -6484,7 +6484,7 @@ MONHASH = {
       :Type2 => :POISON,
       :BaseStats => [45, 50, 45, 115, 55, 95],
       :EVs => [0, 0, 0, 2, 0, 0],
-      :Abilities => [:LEVITATE],
+      :Abilities => [:LEVITATE, :CURSEDBODY],
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 142,
@@ -6542,7 +6542,7 @@ MONHASH = {
       :Type2 => :POISON,
       :BaseStats => [60, 65, 60, 130, 75, 110],
       :EVs => [0, 0, 0, 3, 0, 0],
-      :Abilities => [:CURSEDBODY],
+      :Abilities => [:LEVITATE,:PERISHBODY],
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 225,
@@ -12036,7 +12036,16 @@ MONHASH = {
       ]
   },
 
+  "Marianette's Togetic" => {
+    :Type1 => :NORMAL,
+    :Type2 => :FLYING,
+    # +100 BST
+    :BaseStats => [55, 60, 105, 100, 125, 60],
+    :Abilities => [:MAGICGUARD],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 1,
 },
 
 :NATU => {
@@ -13246,7 +13255,15 @@ MONHASH = {
       ]
   },
 
-  :OnCreation => {},
+  :OnCreation => proc{
+       # Map IDs for Aevian form
+       if $game_map && Wooper.include?($game_map.map_id)
+         next 1
+       else
+         next 0
+       end
+       },
+  
 },
 
 :QUAGSIRE => {
@@ -16657,6 +16674,12 @@ MONHASH = {
       :Weight => 2550,
   },
 
+  "Adam's Tyranitar" => {
+    # +100 BST
+    :BaseStats => [100, 154, 150, 95, 160, 51],
+    :Abilities => [:SASHILANSANDSTREAM],
+  },
+  
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
@@ -17019,10 +17042,31 @@ MONHASH = {
       :Weight => 552,
   },
 
+  "Florin's Sceptile" => {
+    :Type2 => :ROCK,
+    # +100 BST
+    :BaseStats => [70, 125, 95, 135, 85, 120],
+    :Abilities => [:GRASSYSURGE],
+    :BaseEXP => 284,
+    :Height => 19,
+    :Weight => 552,
+  },
+
+  "Florin's Sceptile (Mega)" => {
+    :Type2 => :ROCK,
+    # +100 BST
+    :BaseStats => [70, 150, 125, 155, 85, 145],
+    :Abilities => [:ADAPTABILITY],
+    :BaseEXP => 284,
+    :Height => 19,
+    :Weight => 552,
+  },
+
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
       :SCEPTILITE => 1,
+      :SCEPTILITEF => 3,
   },
 },
 
@@ -23604,17 +23648,30 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Mega Form" => {
+  "Mega Form" => {
       :BaseStats => [65, 150, 60, 115, 60, 115],
       :Abilities => [:MAGICBOUNCE],
       :BaseEXP => 198,
       :Weight => 490,
   },
 
+  "Erin's Absol" => {
+    # +100 BST
+    :BaseStats => [65, 130, 70, 115, 80, 105],
+    :Abilities => [:FOREWARN],
+  },
+
+  "Erin's Absol (Mega)" => {
+    # +100 BST
+    :BaseStats => [65, 130, 70, 175, 80, 145],
+    :Abilities => [:PUREPOWER],
+  },
+
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
       :ABSOLITE => 1,
+      :ABSOLITEE => 3,
   },
 },
 
@@ -24043,7 +24100,20 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Angie's Walrein (Kristiline)" => {
+    # + 50 BST
+    :BaseStats => [110, 100, 100, 105, 100, 65],
+    :Abilities => [:ICEBODY],
+  },
+
+  "Angie's Walrein" => {
+    # +100 BST
+    :BaseStats => [110, 110, 110, 115, 120, 65],
+    :Abilities => [:ICEBODY],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :CLAMPERL => {
@@ -25516,7 +25586,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Ryland's Torterra" => {
+    # +100 BST
+    :BaseStats => [95, 149, 145, 75, 105, 56],
+    :Abilities => [:SASHILANSANDSTREAM], # grants ground types spdef boost too, extra effect on Desert Field
+  },
+  
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :CHIMCHAR => {
@@ -29166,7 +29243,7 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Mega Form" => {
+  "Mega Form" => {
       :BaseStats => [70, 145, 88, 140, 70, 112],
       :Abilities => [:ADAPTABILITY],
       :BaseEXP => 219,
@@ -29174,10 +29251,28 @@ MONHASH = {
       :Weight => 575,
   },
 
+  "Keta's Lucario (Sheridan)" => {
+    # +30 BST
+    :BaseStats => [70, 120, 70, 125, 70, 100],
+    :Abilities => [:DEFIANT],
+  },
+
+  "Keta's Lucario" => {
+    # +60 BST
+    :BaseStats => [70, 120, 80, 125, 80, 110],
+    :Abilities => [:DEFIANT],
+  },
+
+  "Keta's Lucario (Mega)" => {
+    # +60 BST
+    :BaseStats => [70, 155, 98, 160, 80, 122],
+  },
+
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
       :LUCARIONITE => 1,
+      :LUCARIONITEK => 4,
   },
 },
 
@@ -30383,7 +30478,14 @@ MONHASH = {
       :BattlerAltitude => 18,
   },
 
+  "Hapi" => {
+    # +100 BST
+    :BaseStats => [85, 70, 115, 140, 135, 100],
+    :Abilities => [:LUCKYWIND],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 1,
 },
 
 :YANMEGA => {
@@ -31197,7 +31299,15 @@ MONHASH = {
       :BaseEXP => 182,
   },
 
+  "Erick's Rotom-Wash" => {
+    :Type2 => :WATER,
+    # +100 BST
+    :BaseStats => [50, 65, 137, 125, 137, 106],
+    :Abilities => [:DRIZZLE],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :UXIE => {
@@ -38585,7 +38695,15 @@ MONHASH = {
       :Weight => 2101,
     },
 
+    "Flora's Ferrothorn" => {
+      :Type1 => :GRASS,
+      :Type2 => :STEEL,
+      :BaseStats => [74, 134, 161, 54, 146, 20],
+      :Abilities => [:GRASSYSURGE],
+    },
+
   :OnCreation => {},
+  :DefaultForm => 1,
 },
 
 :KLINK => {
@@ -39277,6 +39395,17 @@ MONHASH = {
       :Abilities => [:TRACE],
       :ExcludeDex => true,
       :Weight => 1011,
+  },
+
+  "Narcissa's Chandelure (Goldenleaf)" => {
+    :BaseStats => [60, 55, 90, 145, 90, 80],
+    :Abilities => [:SOULFLAME],
+  },
+
+  "Narcissa's Chandelure" => {
+    # +100 BST
+    :BaseStats => [60, 55, 90, 175, 140, 100],
+    :Abilities => [:SOULFLAME],
   },
 
   :OnCreation => proc{
@@ -41125,6 +41254,12 @@ MONHASH = {
       :dexentry => "It valiantly guards places of purity and light. It prefers peace, but when faced with those of vice, attacks without mercy. It gives off a pressuring aura.",
   },
 
+  "Souta's Volcarona" => {
+    # +100 BST
+    :BaseStats => [115, 80, 80, 155, 110, 110],
+    :Abilities => [:GALEWINGS],
+  },
+  
   :OnCreation => proc{
       # Map IDs for Aevian form
       if $game_map && Larvesta.include?($game_map.map_id)
@@ -42404,7 +42539,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Ren's Greninja" => {
+    # +100 BST
+    :BaseStats => [72, 125, 77, 133, 91, 132],
+    :Abilities => [:PROTEAN],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 1,
 },
 
 :BUNNELBY => {
@@ -44857,7 +44999,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Aelita's Hawlucha" => {
+    # +100 BST
+    :BaseStats => [78, 142, 95, 74, 83, 128],
+    :Abilities => [:UNBURDEN]
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :DEDENNE => {
@@ -46733,7 +46882,20 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Valarie's Primarina (Mynori)" => {
+    # +40 BST
+    :BaseStats => [80, 74, 74, 136, 136, 70],
+    :Abilities => [:SWIFTSWIM],
+  },
+
+  "Valarie's Primarina" => {
+    # +100 BST
+    :BaseStats => [80, 84, 84, 146, 146, 90],
+    :Abilities => [:SWIFTSWIM],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :PIKIPEK => {
@@ -48093,6 +48255,21 @@ MONHASH = {
   },
 
   :OnCreation => {},
+
+  "Crawli's Araquanid (Kakori)" => {
+    # +60 BST
+    :BaseStats => [68, 90, 92, 90, 132, 42],
+    :Abilities => [:WATERBUBBLE],
+  },
+
+  "Crawli's Araquanid" => {
+    # +120 BST
+    :BaseStats => [68, 130, 92, 100, 142, 42],
+    :Abilities => [:WATERBUBBLE],
+  },
+
+  :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :FOMANTIS => {
@@ -53893,6 +54070,14 @@ MONHASH = {
       :Height => 240,
       :Weight => 2456,
   },
+
+    "Amber's Toxtricity" => {
+      :Type1 => :FIRE,
+      :Type2 => :POISON,
+      # +100 BST
+      :BaseStats => [70, 105, 90, 144, 90, 98],
+      :Abilities => [:IMMOLATE],
+    },
 
   :OnCreation => proc{
       # Map IDs for Aevian form
@@ -60011,7 +60196,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Saki's Tinkaton" => {
+    # +100 BST
+    :BaseStats => [85, 125, 87, 70, 135, 104],
+    :Abilities => [:HUGEPOWER],
+  },
+  
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :WIGLETT => {
@@ -60294,7 +60486,7 @@ MONHASH = {
       :Type2 => :POISON,
       :BaseStats => [45, 70, 63, 30, 45, 47],
       :EVs => [0, 1, 0, 0, 0, 0],
-      :Abilities => [:OVERCOAT],
+      :Abilities => [:OVERCOAT,:FILTER],
       :HiddenAbilities => :SLOWSTART,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemHalf,
@@ -60347,8 +60539,8 @@ MONHASH = {
       :Type2 => :POISON,
       :BaseStats => [80, 119, 90, 54, 67, 90],
       :EVs => [0, 2, 0, 0, 0, 0],
-      :Abilities => [:OVERCOAT],
-      :HiddenAbilities => :FILTER,
+      :Abilities => [:OVERCOAT,:FILTER],
+      :HiddenAbilities => :SPEEDBOOST,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemHalf,
       :BaseEXP => 175,

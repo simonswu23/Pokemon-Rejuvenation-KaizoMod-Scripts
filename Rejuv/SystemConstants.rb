@@ -104,6 +104,8 @@ Larvesta = []
 Sewaddle = [254]
 Mareep = []
 Lapras = [109]
+# Paldean
+Wooper = [201]
 
 #===============================================================================
 # * Constants for maps to reflect sprites on

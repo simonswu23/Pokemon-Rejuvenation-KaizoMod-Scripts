@@ -2369,6 +2369,7 @@ ENCHASH = {
 		:SKORUPI => [[10,39,42],[5,39,42]],
 		:CROAGUNK => [[5,39,42],[4,39,42],[2,39,42]],
 		:SHELLOS => [[2,39,42]],
+		:CLODSIRE => [[2,39,42]],
 	},
 	:LandDay => {
 		:KARRABLAST => [[20,39,42],[12,39,42],[5,39,42]],
@@ -2378,6 +2379,7 @@ ENCHASH = {
 		:SKORUPI => [[10,39,42],[5,39,42]],
 		:FARFETCHD => [[4,39,42]],
 		:SHELLOS => [[2,39,42]],
+		:CLODSIRE => [[2,39,42]],
 		:MISDREAVUS => [[2,39,42]],
 	},
 	:LandNight => {
@@ -2389,6 +2391,7 @@ ENCHASH = {
 		:CROAGUNK => [[5,39,42]],
 		:MISDREAVUS => [[4,39,42],[2,39,42]],
 		:SHELLOS => [[2,39,42]],
+		:CLODSIRE => [[2,39,42]],
 	},
 },
 220 => {# Fishing Guild
@@ -5252,6 +5255,7 @@ ENCHASH = {
 		:WHISMUR => [[5,5,35]],
 		:SKITTY => [[5,6,44]],
 		:BELLSPROUT => [[5,6,45]],
+		:SMOLIV => [[5,6,45]],
 	},
 },
 573 => {# Zone Zero

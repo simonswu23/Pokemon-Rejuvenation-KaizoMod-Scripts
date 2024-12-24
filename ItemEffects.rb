@@ -1877,7 +1877,7 @@ ItemHandlers::UseOnPokemon.add(:MACHOBRACE, proc {|item,pkmn,scene| # LAWDS - ma
         oldnature=pkmn.nature
         commands=[]
         (PBNatures.getCount).times do |i|
-          commands.push(PBNatures.getNameAndStatString(i))
+          commands.push(PBNatures.getName(i))
         end
         msg=[_INTL("Current Nature is {1}.",oldnature),
               _INTL("Current Nature is {1}.",oldnature)][pkmn.natureflag ? 1 : 0]
@@ -2050,7 +2050,7 @@ pbFadeOutIn(99999){
           oldnature=pkmn.nature
           commands=[]
           (PBNatures.getCount).times do |i|
-            commands.push(PBNatures.getNameAndStatString(i))
+            commands.push(PBNatures.getName(i))
           end
           msg=[_INTL("Current Nature is {1}.",oldnature),
                 _INTL("Current Nature is {1}.",oldnature)][pkmn.natureflag ? 1 : 0]
