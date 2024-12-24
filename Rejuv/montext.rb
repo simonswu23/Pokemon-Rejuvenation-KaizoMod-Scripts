@@ -60195,13 +60195,6 @@ MONHASH = {
       :BattlerEnemyY => 16,
       :BattlerAltitude => 0,
   },
-
-  "Saki's Tinkaton" => {
-    # +100 BST
-    :BaseStats => [85, 125, 87, 70, 135, 104],
-    :Abilities => [:HUGEPOWER],
-  },
-  
   :OnCreation => {},
   :DefaultForm => 0,
 },
