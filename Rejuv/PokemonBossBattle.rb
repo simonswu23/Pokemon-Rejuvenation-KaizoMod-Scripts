@@ -470,7 +470,7 @@ class PokeBattle_Battle
             canstatus = false if battler.hasType?(:ELECTRIC) &&  @battle.battlers[i].hasType?(:GROUND)
           when :POISON
             canstatus = @battle.battlers[i].pbCanPoison?(false)
-          when :FREEZE
+          when :FROZEN
             canstatus = @battle.battlers[i].pbCanFreeze?(false)
           when :PETRIFIED
             canstatus = @battle.battlers[i].pbCanPetrify?(false)
@@ -496,7 +496,7 @@ class PokeBattle_Battle
             canstatus = @battle.battlers[i].pbCanParalyze?(false)
           when :POISON
             canstatus = @battle.battlers[i].pbCanPoison?(false)
-          when :FREEZE
+          when :FROZEN
             canstatus = @battle.battlers[i].pbCanFreeze?(false)
           when :PETRIFIED
             canstatus = @battle.battlers[i].pbCanPetrify?(false)
@@ -1652,7 +1652,7 @@ class BossPokemonDataBox < SpriteWrapper
       when :SLEEP  
         return "Sleep"  
       when :FROZEN 
-        return "Freeze"  
+        return SWUMOD ? "Frostbite" : "Freeze"  
       when :BURN 
         return "Burn"  
       when :POISON 

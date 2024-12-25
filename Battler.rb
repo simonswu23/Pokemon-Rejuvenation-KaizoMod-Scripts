@@ -4126,7 +4126,7 @@ class PokeBattle_Battler
   end
   # Gen 9 Mod - Restore Item after battle (0=Off, 1=No Berries (Gen 9), 2=All). Start
   def pbDisposeItem(berry = true, symbiosis = true, pickupable = true, duringattack = false)
-    if ($Settings.itemRestoreGen9 == 1 && !pbIsBerry?(self.item)) || $Settings.itemRestoreGen9 == 2
+    if ($Settings.itemRestoreGen9 == 1 && !pbIsBerry?(self.item)) || $Settings.itemRestoreGen9 == 2 || SWUMOD
       self.pokemon.itemRecycle = self.item
       # Commented to not remove the item after the battle
       #self.pokemon.itemInitial = nil if self.pokemon.itemInitial == self.item
@@ -4982,7 +4982,7 @@ class PokeBattle_Battler
         end
       end
     end
-    if self.status== :FROZEN
+    if self.status== :FROZEN && !SWUMOD
       if basemove.canThawUser?
         self.pbCureStatus(false)
         @battle.pbDisplay(_INTL("{1} was defrosted by {2}!",pbThis,basemove.name))
@@ -5245,6 +5245,11 @@ class PokeBattle_Battler
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
          [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect
+        if (SWUMOD)
+          addleffect = 30 if basemove.move == :FREEZINGGLARE
+          addleffect = 20 if basemove.move == :BLIZZARD
+          addleffect = 20 if basemove.move == :FREEZEDRY
+        end
         addleffect = 20 if basemove.move == :OMINOUSWIND && @battle.FE == :HAUNTED
         addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW
         addleffect = 100 if $DEBUG && Input.press?(Input::CTRL) && !@battle.isOnline?

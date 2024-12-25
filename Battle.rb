@@ -111,7 +111,7 @@ module PokeBattle_BattleCommon
         rareness += 3
       end
       x = (((a * 3 - b * 2) * rareness) / (a * 3))
-      if battler.status == :SLEEP || battler.status == :FROZEN
+      if battler.status == :SLEEP || (battler.status == :FROZEN && !SWUMOD)
         x = (x * 2.5)
       elsif !battler.status.nil?
         x = (x * 3 / 2)
@@ -153,6 +153,7 @@ module PokeBattle_BattleCommon
         end
       end
       shakes = 4 if $DEBUG && Input.press?(Input::CTRL)
+      shakes += 2 if SWUMOD && shakes <= 2
       @scene.pbThrow(ball, (critical) ? 1 : shakes, critical, critsuccess, battler.index, showplayer)
       case shakes
         when 0
@@ -1774,7 +1775,7 @@ class PokeBattle_Battle
           newenemy = pbSwitchInBetween(index, false, false)
           newname = pbSwitchInName(index, newenemy) # Illusion
           opponent = pbGetOwner(index)
-          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer && !$game_switches[:Standard_S]
+          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer && !SWUMOD
             pbDisplayPaused(_INTL("{1} is about to send in {2}.", opponent.fullname, newname))
             if pbDisplayConfirm(_INTL("Will {1} change Pokémon?", self.pbPlayer.name))
               newpoke = pbSwitchPlayer(0, true, true)
@@ -4419,7 +4420,7 @@ class PokeBattle_Battle
 
   def pbPursuitInterrupt(pursuiter, switcher)
     newpoke = nil
-    if pursuiter.status != :SLEEP && pursuiter.status != :FROZEN && !pursuiter.effects[:Truant]
+    if pursuiter.status != :SLEEP && (pursuiter.status != :FROZEN || SWUMOD) && !pursuiter.effects[:Truant]
       @switching = true
       # Try to Mega-evolve/Ultra-burst before using pursuit
       side = pbIsOpposing?(pursuiter.index) ? 1 : 0
@@ -5083,8 +5084,7 @@ class PokeBattle_Battle
             for i in priority
               next if i.isFainted?
 
-              # Gen 9 Mod - Hail/Snow/Both remove damage when only snow
-              if HAILSNOWMOD != "Snow"
+              if HAILSNOWMOD != "Snow" || SWUMOD
                 if !i.hasType?(:ICE) && i.item != :SAFETYGOGGLES &&
                    ![:TEMPEST, :ICEBODY, :SNOWCLOAK, :SLUSHRUSH, :LUNARIDOL, :MAGICGUARD, :OVERCOAT].include?(i.ability) &&
                    i.crested != :EMPOLEON && !(i.crested == :CASTFORM && i.form == 3) && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) &&
@@ -5224,7 +5224,7 @@ class PokeBattle_Battle
       next if i.isFainted?
 
       if i.chargeAttack
-        next if i.status == :SLEEP || i.status == :FREEZE
+        next if i.status == :SLEEP || (i.status == :FROZEN && !SWUMOD)
 
         chargeAttack = i.chargeAttack
         if i.turncount % chargeAttack[:turns] == 0
@@ -5625,6 +5625,15 @@ class PokeBattle_Battle
             i.pbReduceHP((i.totalhp / 16.0).floor)
           end
         end
+      end
+      # Frostbite
+      if SWUMOD && i.status== :FROZEN && i.ability != :MAGICGUARD && !i.effects[:MagicGuard] && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+        mult = 1
+        if ([:FROZENDIMENSION, :ICY, :SNOWYMOUNTAIN].include?(@field.effect))
+          mult = 2
+        end
+        i.pbContinueStatus
+        i.pbReduceHP((mult * i.totalhp/16.0).floor)
       end
       # Shiinotic Crest
       if i.crested == :SHIINOTIC

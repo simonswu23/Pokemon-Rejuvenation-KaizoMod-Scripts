@@ -359,7 +359,7 @@ class PokeBattle_Battler
     return false if isFainted? && !(Rejuv && isbossmon && @shieldCount > 0)
     return false if !pbCanStatus?(showMessages, false, moldbroken)
     return false if self.hasType?(:ICE)
-    return false if @battle.pbWeather == :SUNNYDAY && !hasWorkingItem(:UTILITYUMBRELLA)
+    return false if @battle.pbWeather == :SUNNYDAY && !hasWorkingItem(:UTILITYUMBRELLA) && !SWUMOD
     return false if self.ability == :MAGMAARMOR && !moldbroken && @battle.FE != :FROZENDIMENSION
     return false if @battle.FE == :VOLCANIC || @battle.FE == :BURNING
 
@@ -391,11 +391,13 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} is paralyzed! It can't move!", pbThis))
       when :FROZEN
         @battle.pbCommonAnimation("Frozen", self, nil)
-        @battle.pbDisplay(_INTL("{1} is frozen solid!", pbThis))
+        message = SWUMOD ? "{1} is hurt by frostbite!" : "{1} is frozen solid!" 
+        @battle.pbDisplay(_INTL(message, pbThis))
     end
     if self.isbossmon
       if self.chargeAttack
-        if [:SLEEP, :PARALYSIS, :FROZEN].include?(self.status)
+        statusList = SWUMOD ? [:SLEEP, :PARALYSIS] : [:SLEEP, :PARALYSIS, :FROZEN]
+        if statusList.include?(self.status)
           self.chargeAttack[:turns] += 1
           self.chargeAttack[:canIntermediateAttack] = false
         end
@@ -423,6 +425,7 @@ class PokeBattle_Battler
         when :BURN
         when :PARALYSIS
         when :FROZEN
+          return if SWUMOD
           @battle.pbDisplay(_INTL("{1} was defrosted!", pbThis))
           if self.isbossmon
             if self.chargeAttack

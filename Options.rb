@@ -439,12 +439,12 @@ class PokemonOptionScene
         OptionList.push(utOpt2)
         OptionList.push(utOpt3)
         OptionList.push(utOpt1Gen9)
-        OptionList.push(utOpt2Gen9)
+        OptionList.push(utOpt2Gen9) if !SWUMOD
       end
     else
       unless OptionList.any? {|opt| opt.name == "Gen 9 Mod Options" }
         OptionList.push(utOpt1Gen9)
-        OptionList.push(utOpt2Gen9)
+        OptionList.push(utOpt2Gen9) if !SWUMOD
       end
     end
     # Gen 9 Mod - Extra options on Options menu. End
@@ -695,7 +695,7 @@ end
 ###### MOD Gen 9 - Other Options Menu ######
 class OtherOptions_PC_Menu
   def shouldShow?
-    return true
+    return !SWUMOD
   end
 
   def name

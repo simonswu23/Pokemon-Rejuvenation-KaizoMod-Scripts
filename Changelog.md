@@ -1,7 +1,30 @@
+- 12/24/24 (batched with previous commits)
+  - implemented SWUMOD constant for future changes
+  - Gengar + Revavroom line ability updates
+  - Paldean Wooper + Clodsire encounterable on Helojak Island (not globally sync-ed in .rxproj file yet)
+  - powerpack password now gives you a shit ton of candy
+  - reverted nature mapping of macho brace
+  - removed PC option to toggle between hail/snow (combined hail is now forced)
+    - reverted game defaults for hail/snow since it was crashing the game
+    - fixed bug where snow was not properly giving ice types x1.5 defense
+  - combined hail/snow implementation (including all AI implementation)
+    - TODO: currently called "Snowscape", change back to "Hail" somehow
+  - grass pokemon have x1.5 defense in sun and x1.5 special defense in rain
+  - replaced freeze with frostbite entirely (including all AI implementations)    
+  - forced consumable item restoration (including berries) and the end of each battle
+      - TODO: might need to double-check how item stealing works here (patch if it's an issue)
+  - improved wild pokemon catch chances
+  - Angie and Valarie Gym Battles updated (standard and kaizo)
+    - TODO: playtest
+   - misc bug fixes
+    - :PETRIFICATION typo (as :PETRFICATION, preventing it from being cured by attacks)
+    - :FROZEN typo (as :FREEZE, for 2-turn attacks and boss battles)
+
 - 12/16/25
   - Added LAWDS macho brace implementation for QoL
 - 12/15/24
-  - Venam Gym Battle updated, both standard and kaizo (not playtested)
+  - Venam Gym Battle updated (standard and kaizo)
+    - TODO: playtest
   - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
   - Added bulk passwords: "standardmode" and "kaizomode"
     - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata, powerpack
@@ -10,4 +33,3 @@
     - Set Mode
     - All consumable items restored after battle (including berries)
     - Hail and Snow are combined
-    - TODO: force these settings with "standardmode" and "kaizomode" password

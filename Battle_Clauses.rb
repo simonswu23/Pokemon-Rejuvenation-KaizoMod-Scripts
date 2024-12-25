@@ -83,7 +83,7 @@ class PokeBattle_Battler
 
   def pbCanFreeze?(*arg)
     if @battle.rules["freezeclause"] && 
-       pbHasStatusPokemon?(:FROZEN)
+       pbHasStatusPokemon?(:FROZEN) && !SWUMOD
       return false
     end
     return __clauses__pbCanFreeze?(*arg)

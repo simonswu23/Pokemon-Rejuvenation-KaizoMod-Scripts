@@ -406,8 +406,8 @@ class PokeBattle_Move
     calcdefmult = 1.0
     calcdefmult *= 1.5 if @battle.FE == :SNOWYMOUNTAIN && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
     calcdefmult *= 1.5 if @battle.FE == :ICY && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
-    # Gen 9 Mod - Hail/Snow/Both
-    calcdefmult *= 1.5 if HAILSNOWMOD != "Hail" && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
+    calcdefmult *= 1.5 if (HAILSNOWMOD != "Hail" || SWUMOD) && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
+    calcdefmult *= 1.5 if (SWUMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :SUNNYDAY
     calcdefmult *= 1.5 if opponent.ability == :MARVELSCALE && (!opponent.status.nil? || ([:MISTY, :RAINBOW, :FAIRYTALE, :DRAGONSDEN, :STARLIGHT].include?(@battle.FE) || @battle.state.effects[:MISTY] > 0)) && !opponent.moldbroken
     calcdefmult *= 1.5 if opponent.ability == :GRASSPELT && (@battle.FE == :GRASSY || @battle.FE == :FOREST || @battle.state.effects[:GRASSY] > 0) # Grassy Field
     calcdefmult *= 2.0 if opponent.ability == :FURCOAT && !opponent.moldbroken
@@ -422,6 +422,8 @@ class PokeBattle_Move
     calcspdefstage = opponent.stages[PBStats::SPDEF] + 6
     # don't forget spdef
     calcspdefmult = 1.0
+    calcspdefmult *= 1.5 if opponent.hasType?(:ROCK) && @battle.pbWeather == :SANDSTORM
+    calcspdefmult *= 1.5 if (SWUMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :RAINDANCE
     calcspdefmult *= 1.5 if @battle.FE == :DESERT && opponent.hasType?(:GROUND)
     calcspdefmult *= 1.5 if @battle.FE == :MISTY && opponent.hasType?(:FAIRY)
     if ((@battle.pbWeather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken
@@ -2092,6 +2094,13 @@ class PokeBattle_Move
     if @battle.pbWeather == :SANDSTORM && opponent.hasType?(:ROCK) && applysandstorm
       defense = (defense * 1.5).round
     end
+    if @battle.pbWeather == :HAIL && opponent.hasType?(:ICE) && !applysandstorm && (HAILSNOWMOD != "Hail" || SWUMOD)
+      defense = (defense * 1.5).round
+    end
+    # @SWu giving grass types buffed defenses in rain/sun
+    if (SWUMOD && opponent.hasType?(:GRASS))
+      defense = (defense * 1.5).round if (applysandstorm && @battle.pbWeather == :RAIN) || (!applysandstorm && @battle.pbWeather == :SUN)
+    end
     defmult = 1.0
     defmult *= 0.5 if @battle.FE == :GLITCH && @function == 0xE0
     defmult *= 0.5 if attacker.crested == :ELECTRODE && pbHitsPhysicalStat?(type)
@@ -2308,6 +2317,8 @@ class PokeBattle_Move
     damage = (damage * typemod / 4.0)
 
     damage *= 0.5 if attacker.status == :BURN && pbIsPhysical?(type) && attacker.ability != :GUTS && @move != :FACADE
+    damage *= 0.5 if attacker.status== :FROZEN && !pbIsPhysical?(type) && SWUMOD
+
     # Random Variance
     if !$game_switches[:No_Damage_Rolls] || @battle.isOnline?
       random = 85 + @battle.pbRandom(16)

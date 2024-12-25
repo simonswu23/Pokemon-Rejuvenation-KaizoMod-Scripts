@@ -320,7 +320,8 @@ class PokeBattle_Move_005 < PokeBattle_Move
         when 1
           return false if !opponent.pbCanFreeze?(false)
           opponent.pbFreeze
-          @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
         when 2
           return false if !opponent.pbCanParalyze?(false)
           opponent.pbParalyze(attacker)
@@ -580,14 +581,16 @@ class PokeBattle_Move_00C < PokeBattle_Move
     return -1 if !opponent.pbCanFreeze?(true)
     pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
     opponent.pbFreeze
-    @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+              message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
     return 0
   end
 
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-      @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
     return false
@@ -604,14 +607,16 @@ class PokeBattle_Move_00D < PokeBattle_Move
     return -1 if !opponent.pbCanFreeze?(true)
     pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
     opponent.pbFreeze
-    @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+              message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
     return 0
   end
 
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-      @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
     return false
@@ -629,7 +634,8 @@ class PokeBattle_Move_00E < PokeBattle_Move
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-      @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
     return false
@@ -840,7 +846,8 @@ class PokeBattle_Move_017 < PokeBattle_Move
       when 1
         return false if !opponent.pbCanFreeze?(false)
         opponent.pbFreeze
-        @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+                  message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message,opponent.pbThis))
       when 2
         return false if !opponent.pbCanParalyze?(false)
         opponent.pbParalyze(attacker)
@@ -901,8 +908,9 @@ class PokeBattle_Move_019 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.",i.pbThis))
         when :FROZEN
-          @battle.pbDisplay(_INTL("{1} was defrosted.",i.pbThis))
-        when :PETRFIED
+          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          @battle.pbDisplay(_INTL(message,i.pbThis))
+        when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.",i.pbThis))
       end
       i.status=nil
@@ -923,8 +931,9 @@ class PokeBattle_Move_019 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.",party[i].name))
         when :FROZEN
-          @battle.pbDisplay(_INTL("{1} was defrosted.",party[i].name))
-        when :PETRFIED
+          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          @battle.pbDisplay(_INTL(message,party[i].name))
+        when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.",party[i].name))
       end
       party[i].status=nil
@@ -1007,12 +1016,14 @@ class PokeBattle_Move_01B < PokeBattle_Move
         @battle.pbDisplay(_INTL("{1} was cured of its burn.",attacker.pbThis))
       when :FROZEN
         opponent.pbFreeze
-        @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+        message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+        @battle.pbDisplay(_INTLmessage(message,attacker.pbThis))
         opponent.pbAbilityCureCheck
         @battle.synchronize=[-1,-1,0] if opponent.status!=:FROZEN
         attacker.status=nil
-        @battle.pbDisplay(_INTL("{1} was defrosted.",attacker.pbThis))
-      when :PETRFIED
+        message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+        @battle.pbDisplay(_INTL(message,attacker.pbThis))
+      when :PETRIFIED
         opponent.pbPetrify(attacker)
         @battle.pbDisplay(_INTL("{1} was petrified!",opponent.pbThis))
         opponent.pbAbilityCureCheck
@@ -1910,7 +1921,8 @@ class PokeBattle_Move_042 < PokeBattle_Move
       if @battle.pbRandom(10) == 0
         if opponent.pbCanFreeze?(false)
           opponent.pbFreeze
-          @battle.pbDisplay(_INTL("{1} was frozen solid!", opponent.pbThis))
+          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message, opponent.pbThis))
         end
       end
     end
@@ -2051,7 +2063,8 @@ class PokeBattle_Move_047 < PokeBattle_Move
           return false if !opponent.pbCanFreeze?(false)
 
           opponent.pbFreeze
-          @battle.pbDisplay(_INTL("{1} was frozen solid!", opponent.pbThis))
+          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          @battle.pbDisplay(_INTL(message, opponent.pbThis))
         when 2
           return false if !opponent.pbCanParalyze?(false)
 
@@ -4608,7 +4621,8 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
             return false if !opponent.pbCanFreeze?(false)
 
             opponent.pbFreeze
-            @battle.pbDisplay(_INTL("{1} was frozen solid!", opponent.pbThis))
+            message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+            @battle.pbDisplay(_INTL(message, opponent.pbThis))
           when 4
             return false if !opponent.pbCanSleep?(false)
 
@@ -4637,7 +4651,8 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
         return false if !opponent.pbCanFreeze?(false)
 
         opponent.pbFreeze
-        @battle.pbDisplay(_INTL("{1} was frozen!", opponent.pbThis))
+        message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+        @battle.pbDisplay(_INTL(message, opponent.pbThis))
       when :ROCKY, :CAVE, :MOUNTAIN, :DIMENSIONAL, :DEEPEARTH, :CONCERT1, :CONCERT2, :CONCERT3, :CONCERT4
         return false if opponent.ability == :INNERFOCUS || opponent.damagestate.substitute
 
@@ -10742,8 +10757,9 @@ class PokeBattle_Move_776 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.", i.pbThis))
         when :FROZEN
-          @battle.pbDisplay(_INTL("{1} was defrosted.", i.pbThis))
-        when :PETRFIED
+          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          @battle.pbDisplay(_INTL(message,i.pbThis))
+        when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.", i.pbThis))
       end
       i.status = nil
@@ -10765,8 +10781,9 @@ class PokeBattle_Move_776 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.", party[i].name))
         when :FROZEN
-          @battle.pbDisplay(_INTL("{1} was defrosted.", party[i].name))
-        when :PETRFIED
+          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          @battle.pbDisplay(_INTL("message", party[i].name))
+        when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.", party[i].name))
       end
       party[i].status = nil
@@ -10811,7 +10828,7 @@ class PokeBattle_Move_778 < PokeBattle_Move
   def pbAdditionalEffect(attacker, opponent)
     if opponent.ability != :INNERFOCUS &&
        !opponent.damagestate.substitute &&
-       opponent.status != :SLEEP && opponent.status != :FROZEN
+       opponent.status != :SLEEP && (opponent.status != :FROZEN || SWUMOD)
       opponent.effects[:Flinch] = true
       return true
     end
@@ -11342,9 +11359,10 @@ class PokeBattle_Move_505 < PokeBattle_Move
       when :BURN
         @battle.pbDisplay(_INTL("{1} was cured of its burn.", attacker.pbThis))
       when :FROZEN
-        @battle.pbDisplay(_INTL("{1} was defrosted.", attacker.pbThis))
-      when :PETRFIED
-        @battle.pbDisplay(_INTL("{1} was released from the stone.", i.pbThis))
+        message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+        @battle.pbDisplay(_INTL(message,attacker.pbThis))
+      when :PETRIFIED
+        @battle.pbDisplay(_INTL("{1} was released from the stone.", attacker.pbThis))
     end
     increment = 1
     increment = 2 if @move == :TAKEHEART && (@battle.FE == :WATERSURFACE || @battle.FE == :UNDERWATER)
@@ -11411,7 +11429,8 @@ class PokeBattle_Move_800 < PokeBattle_Move
         when 1
           if opponent.pbCanFreeze?(false)
             opponent.pbFreeze
-            @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+            message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+            @battle.pbDisplay(_INTL(message,opponent.pbThis))
           end
         when 2
           if opponent.pbCanParalyze?(false)

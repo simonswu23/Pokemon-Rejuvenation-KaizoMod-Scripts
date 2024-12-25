@@ -284,7 +284,7 @@ class PokeBattle_Battle
           next if !i.pbIsOpposing?(j.index)
           # if Pursuit and this target ("i") was chosen
           if pbChoseMoveFunctionCode?(j.index,0x88) && !j.effects[:Pursuit] && (@choices[j.index][3]==-1 || @choices[j.index][3]==i.index)
-            if j.status!=:SLEEP && j.status!=:FROZEN && (!j.ability == (:TRUANT) || !j.effects[:Truant])
+            if j.status!=:SLEEP && (j.status!=:FROZEN || SWUMOD) && (!j.ability == (:TRUANT) || !j.effects[:Truant])
               #Try to Mega-evolve/Ultra-burst before using pursuit
               side=(pbIsOpposing?(j.index)) ? 1 : 0
               owner=pbGetOwnerIndex(j.index)

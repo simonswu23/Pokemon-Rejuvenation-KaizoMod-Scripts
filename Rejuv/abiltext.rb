@@ -238,7 +238,7 @@ ABILHASH = {
 :MAGMAARMOR => {
     :ID => 40,
     :name => "Magma Armor",
-    :desc => "Prevents the Pokémon from becoming frozen."
+    :desc => "Prevents the Pokémon from being afflicted by frostbite."
 },
 
 :WATERVEIL => {

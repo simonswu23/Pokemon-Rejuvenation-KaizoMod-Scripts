@@ -1080,7 +1080,7 @@ class PokeBattle_AI
       threatscore[i] *= 1.5 if aimons.any? { |aimon| pbAIfaster?(nil, nil, opp, aimon) }
       threatscore[i] *= 1.1 if aimons.all? { |aimon| pbAIfaster?(nil, nil, opp, aimon) }
       # Status
-      threatscore[i] *= 0.6 if opp.status == :SLEEP || opp.status == :FROZEN
+      threatscore[i] *= 0.6 if opp.status == :SLEEP || (opp.status == :FROZEN && !SWUMOD)
       threatscore[i] *= 0.8 if opp.status == :PARALYSIS && ![:GUTS, :MARVELSCALE, :QUICKFEET].include?(opp.ability)
     }
     PBDebug.log(sprintf("Opposing threat scores : %s", threatscore.join(", "))) if $INTERNAL
@@ -1151,7 +1151,7 @@ class PokeBattle_AI
       #if move.basedamage>0
       PBDebug.log(sprintf("Priority Check Begin")) if $INTERNAL
       aifaster ? PBDebug.log(sprintf("AI Pokemon is faster.")) : PBDebug.log(sprintf("Player Pokemon is faster.")) if $INTERNAL
-      if (@battle.doublebattle || (@opponent.status!=:SLEEP && @opponent.status!=:FROZEN && !@opponent.effects[:Truant] && @opponent.effects[:HyperBeam] == 0)) && !seedProtection?(@attacker) # This line might be in the wrong place, but we're trying our best here-- skip priority if opponent is incapacitated
+      if (@battle.doublebattle || (@opponent.status!=:SLEEP && (@opponent.status!=:FROZEN || SWUMOD) && !@opponent.effects[:Truant] && @opponent.effects[:HyperBeam] == 0)) && !seedProtection?(@attacker) # This line might be in the wrong place, but we're trying our best here-- skip priority if opponent is incapacitated
         if score>100
           score*= @battle.doublebattle ? 1.3 : (aifaster ? 1.3 : 2)
         elsif @attacker.ability == :STANCECHANGE && !aifaster && @attacker.form == 0 && @attacker.pokemon.species == :AEGISLASH
@@ -1444,7 +1444,7 @@ class PokeBattle_AI
       score *= 0.1 if [:FIRSTIMPRESSION, :FAKEOUT].include?(@move.move) && (@opponent.pbNonActivePokemonCount > 0 || @initial_scores[@score_index] < 100)
     end
     # If user is frozen, prefer a move that can thaw the user
-      if @attacker.status== :FROZEN && @mondata.skill>=MEDIUMSKILL
+      if (@attacker.status== :FROZEN && !SWUMOD) && @mondata.skill>=MEDIUMSKILL
       if PBStuff::UNFREEZEMOVE.include?(@move.move)
         score+=30
       else
@@ -1453,7 +1453,7 @@ class PokeBattle_AI
       end
     end
     # If target is frozen, don't prefer moves that could thaw them
-    if @opponent.status== :FROZEN
+    if @opponent.status== :FROZEN && !SWUMOD
       score *= 0.1 if @move.pbType(@attacker) == :FIRE
     end
     # If opponent is dark type and attacker has prankster, don't use status moves on them
@@ -1597,12 +1597,12 @@ class PokeBattle_AI
         miniscore = burncode()
         miniscore *= flinchcode()
       when 0x0C # Freeze, Ice Beam, Ice Punch, Powder Snow, Freeze-Dry
-        miniscore = freezecode()
+        miniscore = SWUMOD ? frostbitecode() : freezecode()
       when 0x0D # Blizzard Freeze
-        miniscore = freezecode()
+        miniscore = SWUMOD ? frostbitecode() : freezecode()
         miniscore *= nevermisscode(initialscores[scoreindex]) if @battle.pbWeather== :HAIL
       when 0x0E # Freeze + Flinch, Ice Fang
-        miniscore = freezecode()
+        miniscore = SWUMOD ? frostbitecode() : freezecode()
         miniscore *= flinchcode()
         if @mondata.skill >= BESTSKILL
           if @battle.FE == :GLITCH # Glitch
@@ -1651,7 +1651,7 @@ class PokeBattle_AI
       when 0x16 # Attract
         miniscore = attractcode()
       when 0x17 # Tri Attack
-        miniscore = (burncode() + paracode() + freezecode()) / 3
+        miniscore = (burncode() + paracode() + (SWUMOD ? frostbitecode() : freezecode())) / 3
       when 0x18 # Refresh
         miniscore = refreshcode()
       when 0x19 # Aromatherapy, Heal Bell
@@ -1851,7 +1851,7 @@ class PokeBattle_AI
         if @mondata.skill >= BESTSKILL
           miniscore*=selfstatboost([0,0,0,0,1,0,0]) if @move.move==:LUNGE && @battle.FE == :ICY
           miniscore*=2 if @move.move==:AURORABEAM && mirrorNeverMiss && @battle.FE == :MIRROR
-          miniscore*=freezecode() if Rejuv && (@battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN) && @move.move == :BITTERMALICE
+          miniscore*=(SWUMOD ? frostbitecode() : freezecode()) if Rejuv && (@battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN) && @move.move == :BITTERMALICE
         end
       when 0x43 # Tail Whip, Crunch, Rock Smash, Crush Claw, Leer, Iron Tail, Razor Shell, Fire Lash, Liquidation, Shadow Bone
         miniscore=oppstatdrop([0,1,0,0,0,0,0])
@@ -2888,7 +2888,7 @@ class PokeBattle_AI
       when 0x128 # Shadow Fire
         miniscore = 1.2*burncode()
       when 0x129 # Shadow Chill
-        miniscore = 1.2*freezecode()
+        miniscore = 1.2* (SWUMOD ? frostbitecode() : freezecode())
       when 0x12a # Shadow Panic
         miniscore = 1.2*confucode()
       when 0x132 # Shadow Shed (like a hut or a tool shed, i presume.)
@@ -3485,7 +3485,7 @@ class PokeBattle_AI
         end
       #Z-moves
       when 0x800 # Acid Downpour
-        miniscore = (burncode() + paracode() + freezecode() + poisoncode()) / 4 if @battle.FE == :WASTELAND
+        miniscore = (burncode() + paracode() + (SWUMOD ? frostbitecode() : freezecode()) + poisoncode()) / 4 if @battle.FE == :WASTELAND
       when 0x801 # Bloom Doom
         miniscore = grassyterraincode() unless @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN)
       when 0x802 # Shattered Psyche
@@ -3703,6 +3703,39 @@ class PokeBattle_AI
     return miniscore
   end
 
+  def frostbitecode
+    moldbroken = moldBreakerCheck(@attacker) # Gen 9 Mod - Proper Mold Braker Check
+    moldbroken = myceliumMightCheck(@attacker) if !moldbroken # Gen 9 Mod - Added Mycelium Might
+    return @move.basedamage > 0 ? 1 : 0 if !@opponent.pbCanFreeze?(false, false, moldbroken) # Gen 9 Mod - Proper Mold Braker Check
+    return @move.basedamage > 0 ? 1 : 0 if hydrationCheck(@opponent)
+    return @move.basedamage > 0 ? 1 : 0 if secondaryEffectNegated?()
+    miniscore=1.2
+    ministat=0
+    ministat+=@opponent.stages[PBStats::ATTACK]
+    ministat+=@opponent.stages[PBStats::SPATK]
+    ministat+=@opponent.stages[PBStats::SPEED]
+    miniscore*=1+0.05*ministat if ministat>0
+    miniscore*=0.3 if @opponent.ability == :NATURALCURE
+    miniscore*=0.7 if @opponent.ability == :MARVELSCALE
+    # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold
+    miniscore*=0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
+    miniscore*=0.2 if @opponent.ability == :GUTS
+    miniscore*=0.7 if @opponent.ability == :SHEDSKIN
+    miniscore*=0.5 if @opponent.ability == :SYNCHRONIZE && @attacker.pbCanFreeze?(false)
+    miniscore*=0.5 if @opponent.ability == :MAGICGUARD || (@opponent.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+    miniscore*=0.3 if @opponent.ability == :QUICKFEET
+    miniscore*=1.1 if (@opponent.ability == :STURDY || (@battle.FE == :CHESS && @opponent.pokemon.piece==:PAWN) || (@battle.FE == :COLOSSEUM && @opponent.ability == :STALWART)) && @move.basedamage>0
+    miniscore*=0.1 if checkAImoves([:REST])
+    miniscore*=0.2 if checkAImoves([:FACADE])
+    if pbRoughStat(@opponent,PBStats::SPATK)>pbRoughStat(@opponent,PBStats::ATTACK)
+      miniscore*=1.4
+    end
+    miniscore*=0.4 if @opponent.effects[:Yawn]>0
+    miniscore = pbSereneGraceCheck(miniscore) if @move.basedamage>0
+    miniscore = pbReduceWhenKills(miniscore)
+    return miniscore
+  end
+
   def petrifycode
     return @move.basedamage > 0 ? 1 : 0 if !@opponent.pbCanPetrify?(false)
     return @move.basedamage > 0 ? 1 : 0 if hydrationCheck(@opponent)
@@ -3737,7 +3770,7 @@ class PokeBattle_AI
     miniscore *= 1.3 if @attacker.pbOpposingSide.screenActive?
     miniscore *= 1.2 if @attacker.pbOpposingSide.effects[:Tailwind] > 0
     # Gen 9 Mod - Hail/Snow/Both consider HAIL only when it is damaging
-    if @opponent.status== :POISON || @opponent.status== :BURN || (@battle.pbWeather == :HAIL && !@opponent.hasType?(:ICE) && $HAILSNOWMOD != "Snow") || (@battle.pbWeather == :SANDSTORM && !@opponent.hasType?(:ROCK) && !@opponent.hasType?(:GROUND) && !@opponent.hasType?(:STEEL)) || (@battle.pbWeather == :SHADOWSKY && !@opponent.hasType?(:SHADOW)) || @opponent.effects[:LeechSeed]>-1 || @opponent.effects[:Curse] || @opponent.effects[:SaltCure]
+    if @opponent.status== :POISON || @opponent.status== :BURN || (@battle.pbWeather == :HAIL && !@opponent.hasType?(:ICE) && (HAILSNOWMOD != "Snow") || SWUMOD) || (@battle.pbWeather == :SANDSTORM && !@opponent.hasType?(:ROCK) && !@opponent.hasType?(:GROUND) && !@opponent.hasType?(:STEEL)) || (@battle.pbWeather == :SHADOWSKY && !@opponent.hasType?(:SHADOW)) || @opponent.effects[:LeechSeed]>-1 || @opponent.effects[:Curse] || @opponent.effects[:SaltCure]
       miniscore *= 1.1
       miniscore *= 1.2 if @opponent.effects[:Toxic]>0 && (@opponent.ability != :POISONHEAL || @opponent.ability != :MAGICGUARD || @opponent.crested != :ZANGOOSE) # Gen 9 Mod - Checks for abilities, Crest
       # Gen 9 Mod - Additions for Salt Cure since it does even more damage than burn/weather.
@@ -3833,7 +3866,7 @@ class PokeBattle_AI
       next if mon.nil? || mon.hp <= 0 || mon.isEgg? || mon.status.nil?
       miniscore*=0.5 if mon.status== :POISON && mon.ability == :POISONHEAL
       miniscore*=0.8 if mon.ability == :GUTS || mon.ability == :QUICKFEET || mon.knowsMove?(:FACADE)
-      miniscore*=1.1 if mon.status== :SLEEP || mon.status== :FROZEN
+      miniscore*=1.1 if mon.status== :SLEEP || (mon.status== :FROZEN && !SWUMOD)
       monroles=pbGetMonRoles(mon)
       miniscore*=1.2 if (monroles.include?(:PHYSICALWALL) || monroles.include?(:SPECIALWALL)) && mon.status== :POISON
       miniscore*=1.2 if monroles.include?(:SWEEPER) && mon.status== :PARALYSIS
@@ -4005,7 +4038,7 @@ class PokeBattle_AI
       miniscore*=1.3
     end
     miniscore*=0.5 if (@opponent.effects[:Substitute]>0 || ((@opponent.effects[:Disguise] || (@opponent.effects[:IceFace] && (@attacker.attack > @attacker.spatk || @battle.FE == :FROZENDIMENSION))) && !moldBreakerCheck(@attacker)))
-    miniscore*=1.3 if @opponent.status== :SLEEP || @opponent.status== :FROZEN
+    miniscore*=1.3 if @opponent.status== :SLEEP || (@opponent.status== :FROZEN && !SWUMOD)
     miniscore*=1.3 if hasbadmoves(20)
     # Gen 9 Mod - Opportunist
     miniscore*=0.5 if @opponent.ability == :OPPORTUNIST || @opponent.pbPartner.ability == :OPPORTUNIST || @opponent.item == :MIRRORHERB || @opponent.pbPartner.item == :MIRRORHERB
@@ -4398,7 +4431,7 @@ class PokeBattle_AI
     miniscore*=1.2 if (@attacker.hp/4.0)>checkAIdamage()
     miniscore*=1.2 if @attacker.turncount<2
     miniscore*=1.2 if !@opponent.status.nil?
-    miniscore*=1.3 if @opponent.status== :SLEEP || @opponent.status== :FROZEN
+    miniscore*=1.3 if @opponent.status== :SLEEP || (@opponent.status== :FROZEN && !SWUMOD)
     miniscore*=1.5 if @opponent.effects[:Encore]>0 && @opponent.moves[(@opponent.effects[:EncoreIndex])].basedamage==0
     miniscore*=0.5 if @battle.doublebattle
     miniscore*=2 if @attacker.ability == :SUPERLUCK || @attacker.ability == :SNIPER
@@ -5051,12 +5084,12 @@ class PokeBattle_AI
       when :BIGTOP,:STARLIGHT                 then return oppstatdrop([0,0,0,1,0,0,0])
       when :BURNING,:SUPERHEATED,:DRAGONSDEN,:VOLCANIC,:VOLCANICTOP,:INFERNAL,:DANCEFLOOR   then return burncode()
       when :SWAMP,:WATERSURFACE,:GLITCH             then return oppstatdrop([0,0,0,0,1,0,0])
-      when :RAINBOW                      then return (paracode() + poisoncode() + burncode() + freezecode() + sleepcode()) / 5
+      when :RAINBOW                      then return (paracode() + poisoncode() + burncode() + (SWUMOD ? frostbitecode() : freezecode()) + sleepcode()) / 5
       when :CORROSIVE,:CORROSIVEMIST,:MURKWATERSURFACE,:CORRUPTED,:BACKALLEY,:CITY   then return poisoncode()
-      when :ICY,:SNOWYMOUNTAIN,:FROZENDIMENSION         then return freezecode()
+      when :ICY,:SNOWYMOUNTAIN,:FROZENDIMENSION         then return (SWUMOD ? frostbitecode() : freezecode())
       when :ROCKY,:CAVE,:MOUNTAIN,:DIMENSIONAL,:DEEPEARTH,:CONCERT1,:CONCERT2,:CONCERT3,:CONCERT4   then return flinchcode()
       when :FACTORY,:UNDERWATER                 then return oppstatdrop([1,0,0,0,0,0,0])
-      when :WASTELAND                     then return (paracode() + poisoncode() + burncode() + freezecode()) / 4
+      when :WASTELAND                     then return (paracode() + poisoncode() + burncode() + (SWUMOD ? frostbitecode() : freezecode())) / 4
       when :CRYSTALCAVERN                   then return (confucode() + poisoncode() + burncode() + sleepcode()) / 4
       when :MIRROR,:FLOWERGARDEN1,:FLOWERGARDEN2        then return oppstatdrop([0,0,0,0,0,0,1])
       when :FLOWERGARDEN3,:FLOWERGARDEN4            then return oppstatdrop([0,1,0,1,0,0,1])
@@ -5173,7 +5206,7 @@ class PokeBattle_AI
         miniscore *= 4
       end
     end
-    miniscore*=0.3 if @opponent.status== :SLEEP || @opponent.status== :FROZEN
+    miniscore*=0.3 if @opponent.status== :SLEEP || (@opponent.status== :FROZEN && !SWUMOD)
     if @opponent.vanished
       miniscore*=12
       miniscore*=1.5 if !pbAIfaster?()
@@ -5631,7 +5664,7 @@ class PokeBattle_AI
         if @attacker.hp<@attacker.totalhp*0.13
           miniscore*=2 if @attacker.status== :BURN
           # Gen 9 Mod - Hail/Snow/Both consider HAIL only when it is damaging
-          miniscore*=2 if (@battle.pbWeather== :HAIL && !@attacker.hasType?(:ICE) && HAILSNOWMOD != "Snow") || (@battle.pbWeather== :SANDSTORM && !@attacker.hasType?(:ROCK) && !@attacker.hasType?(:GROUND) && !@attacker.hasType?(:STEEL)) || (@battle.pbWeather== :SHADOWSKY && !@attacker.hasType?(:SHADOW))
+          miniscore*=2 if (@battle.pbWeather== :HAIL && !@attacker.hasType?(:ICE) && (HAILSNOWMOD != "Snow" || SWUMOD)) || (@battle.pbWeather== :SANDSTORM && !@attacker.hasType?(:ROCK) && !@attacker.hasType?(:GROUND) && !@attacker.hasType?(:STEEL)) || (@battle.pbWeather== :SHADOWSKY && !@attacker.hasType?(:SHADOW))
         end
       end
     else
@@ -5960,7 +5993,7 @@ class PokeBattle_AI
     return 0 if @attacker.hp==1
     return 0 if notOHKO?(@attacker, @opponent, true)
     # Gen 9 Mod - Hail/Snow/Both consider HAIL only when it is damaging
-    return 0 if (@battle.pbWeather== :HAIL && !@attacker.hasType?(:ICE) && HAILSNOWMOD != "Snow") || (@battle.pbWeather== :SANDSTORM && !(@attacker.hasType?(:ROCK) || @attacker.hasType?(:GROUND) || @attacker.hasType?(:STEEL))) || (@battle.pbWeather== :SHADOWSKY && !@attacker.hasType?(:SHADOW))
+    return 0 if (@battle.pbWeather== :HAIL && !@attacker.hasType?(:ICE) && (HAILSNOWMOD != "Snow" || SWUMOD)) || (@battle.pbWeather== :SANDSTORM && !(@attacker.hasType?(:ROCK) || @attacker.hasType?(:GROUND) || @attacker.hasType?(:STEEL))) || (@battle.pbWeather== :SHADOWSKY && !@attacker.hasType?(:SHADOW))
     return 0 if @attacker.status== :POISON || @attacker.status== :BURN || @attacker.effects[:LeechSeed]>=0 || @attacker.effects[:Curse]
     return 0 if checkAIdamage()<@attacker.hp
     miniscore=1.0
@@ -6210,7 +6243,7 @@ class PokeBattle_AI
     miniscore = 0.9
     miniscore *= 0.7 if notOHKO?(@attacker, @opponent, true)
     miniscore *= 0.8 if @attacker.hp > 0.1 * @attacker.totalhp && @attacker.hp < 0.4 * @attacker.totalhp
-    miniscore *= 0.4 if @initial_scores[@score_index] * recoilamount > @attacker.hp && (@opponent.status == :SLEEP || @opponent.status == :FROZEN)
+    miniscore *= 0.4 if @initial_scores[@score_index] * recoilamount > @attacker.hp && (@opponent.status == :SLEEP || (@opponent.status == :FROZEN && !SWUMOD))
     return miniscore
   end
 
@@ -7009,7 +7042,7 @@ class PokeBattle_AI
       miniscore*=1.1 if checkAIdamage() < @opponent.hp*0.3
       miniscore*=1.1 if @opponent.turncount<2
       miniscore*=1.1 if !opp1.status.nil?
-      miniscore*=1.3 if opp1.status== :SLEEP || opp1.status== :FROZEN
+      miniscore*=1.3 if opp1.status== :SLEEP || (opp1.status== :FROZEN && !SWUMOD)
       miniscore*=1.5 if opp1.effects[:Encore]>0 && opp1.moves[(opp1.effects[:EncoreIndex])].basedamage==0
       miniscore*=0.5 if @opponent.effects[:Confusion]>0
       miniscore*=0.3 if @opponent.effects[:LeechSeed]>=0 || @attacker.effects[:Attract]>=0
@@ -7053,7 +7086,7 @@ class PokeBattle_AI
       miniscore*=1.1 if checkAIdamage() < @opponent.hp*0.25
       miniscore*=1.1 if @opponent.turncount<2
       miniscore*=1.1 if !opp1.status.nil?
-      miniscore*=1.3 if opp1.status== :SLEEP || opp1.status== :FROZEN
+      miniscore*=1.3 if opp1.status== :SLEEP || (opp1.status== :FROZEN && !SWUMOD)
       miniscore*=1.5 if opp1.effects[:Encore]>0 && opp1.moves[(opp1.effects[:EncoreIndex])].basedamage==0
       miniscore*=0.2 if @opponent.effects[:Confusion]>0
       miniscore*=0.6 if @opponent.effects[:LeechSeed]>=0 || @attacker.effects[:Attract]>=0
@@ -7562,7 +7595,7 @@ class PokeBattle_AI
     miniscore*=0.3 if @attacker.pbPartner.pbOpposingSide.effects[:Retaliate]
     miniscore*=1.2 if (@attacker.pbPartner.hp/4.0)>checkAIdamage()
     miniscore*=1.2 if !@opponent.status.nil?
-    miniscore*=1.3 if @opponent.status== :SLEEP || @opponent.status== :FROZEN
+    miniscore*=1.3 if @opponent.status== :SLEEP || (@opponent.status== :FROZEN && !SWUMOD)
     miniscore*=1.5 if @opponent.effects[:Encore]>0 && @opponent.moves[(@opponent.effects[:EncoreIndex])].basedamage==0
     miniscore*=2 if @attacker.pbPartner.ability == :SUPERLUCK || @attacker.pbPartner.ability == :SNIPER
     miniscore*=1.2 if @mondata.attitemworks && (@attacker.pbPartner.item == :SCOPELENS || @attacker.pbPartner.item == :RAZORCLAW || (@attacker.pbPartner.item == :STICK && @attacker.pbPartner.pokemon.species==:FARFETCHD) || (@attacker.pbPartner.item == :LUCKYPUNCH && @attacker.pbPartner.pokemon.species==:CHANSEY))
@@ -7657,6 +7690,11 @@ class PokeBattle_AI
     miniscore-=1
     if @move.effect != 100
       addedeffect = @move.effect.to_f
+      if (SWUMOD)
+        addedeffect = 30 if @move.move == :FREEZINGGLARE
+        addedeffect = 20 if @move.move == :BLIZZARD
+        addedeffect = 20 if @move.move == :FREEZEDRY
+      end
       addedeffect*=2 if @attacker.ability == :SERENEGRACE || @battle.FE == :RAINBOW
       addedeffect=100 if addedeffect>100
       miniscore*=addedeffect/100.0
@@ -7918,7 +7956,7 @@ class PokeBattle_AI
       healing -= 0.125 if @battle.pbWeather == :SUNNYDAY && (attacker.crested == :CASTFORM && attacker.form == 1)
       healing -= (Rejuv && @battle.FE == :DESERT) ? 0.125 : 0.0625 if @battle.pbWeather == :SANDSTORM && (!(attacker.hasType?(:GROUND) || attacker.hasType?(:ROCK) || attacker.hasType?(:STEEL) || [:SANDFORCE,:SANDRUSH,:SANDVEIL,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability)) || attacker.effects[:DesertsMark])
       # Gen 9 Mod - Hail/Snow/Both
-      healing -= (@battle.FE == :FROZENDIMENSION) ? 0.125 : 0.0625 if @battle.pbWeather == :HAIL && !(attacker.hasType?(:ICE) || [:SNOWCLOAK,:ICEBODY,:LUNARIDOL,:SLUSHRUSH,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability) || HAILSNOWMOD == "Snow")
+      healing -= (@battle.FE == :FROZENDIMENSION) ? 0.125 : 0.0625 if @battle.pbWeather == :HAIL && !(attacker.hasType?(:ICE) || [:SNOWCLOAK,:ICEBODY,:LUNARIDOL,:SLUSHRUSH,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability) || HAILSNOWMOD == "Snow") || SWUMOD
       healing -= (@battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSION) ? 0.125 : 0.0625 if (@battle.pbWeather== :SHADOWSKY && !@attacker.hasType?(:SHADOW))
 
       # Status induced
@@ -8825,7 +8863,7 @@ class PokeBattle_AI
     PBDebug.log(sprintf("Beginning AI Item use check.\n")) if $INTERNAL
     for i in items
       next @mondata.itemscore[i] = -100000 if $cache.items[i].checkFlag?(:noUseInBattle)
-      next @mondata.itemscore[i] = -8000 if $game_switches[:Stop_Items_Password] || $game_switches[:No_Items_Password]
+      next @mondata.itemscore[i] = -8000 if $game_switches[:Stop_Items_Password] || $game_switches[:No_Items_Password] || SWUMOD
       next if @mondata.itemscore.key?(i)
       itemscore=100
       if PBStuff::HPITEMS.include?(i)
@@ -8983,9 +9021,17 @@ class PokeBattle_AI
             itemscore*=1.5 if @attacker.effects[:Toxic]>3
           end
           if @attacker.status== :FROZEN
-            itemscore*=1.3
-            itemscore*=0.5 if @attacker.moves.any? {|moveloop| moveloop!=nil && moveloop.canThawUser?}
-            itemscore*=  highdamage > 0.15 * @attacker.hp ? 1.1 : 0.9
+            if (SWUMOD)
+              itemscore*=1.1
+              itemscore*= @attacker.spatk>@attacker.attack ? 1.2 : 0.8
+              itemscore*=0.6 if @attacker.ability == :GUTS
+              itemscore*=0.7 if @attacker.ability == :MAGICGUARD
+              itemscore*=0.7 if @attacker.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM
+            else
+              itemscore*=1.3
+              itemscore*=0.5 if @attacker.moves.any? {|moveloop| moveloop!=nil && moveloop.canThawUser?}
+              itemscore*=  highdamage > 0.15 * @attacker.hp ? 1.1 : 0.9
+            end
           end
         end
         itemscore*=0.5 if @attacker.pbHasMove?(:REFRESH) || @attacker.pbHasMove?(:REST) || @attacker.pbHasMove?(:PURIFY)
@@ -9291,8 +9337,8 @@ class PokeBattle_AI
           rolescore+= (-10)* statchangecounter(@opponent.pbPartner,1,7,-1)
           rolescore+=10 if pbAIfaster?(nil,nil,i,@opponent) && rolescore > 0
           rolescore*= pbAIfaster?(nil,nil,i,@opponent) && rolescore > 0 ? 1.5 : 0.5
-          rolescore+=50 if @opponent.status== :SLEEP || @opponent.status== :FROZEN
-          rolescore+=50 if @opponent.pbPartner.status== :SLEEP || @opponent.pbPartner.status== :FROZEN
+          rolescore+=50 if @opponent.status== :SLEEP || (@opponent.status== :FROZEN && !SWUMOD)
+          rolescore+=50 if @opponent.pbPartner.status== :SLEEP || (@opponent.pbPartner.status== :FROZEN && !SWUMOD)
           # Gen 9 Mod - Last Respects / Supreme Overlord Pokemon aren't ready to sweep if enough other party pokemon aren't fainted.
           rolescore+= (25*(@attacker.pbFaintedPokemonCount - 2)) if @attacker.ability == :SUPREMEOVERLORD
           rolescore+= (50*(@attacker.pbFaintedPokemonCount - 2)) if @attacker.pbHasMove?(:LASTRESPECTS)
@@ -9743,7 +9789,7 @@ class PokeBattle_AI
         end
         if (i.item == :FOCUSSASH || (@battle.FE == :CHESS && i.pokemon.piece==:PAWN) || i.ability == :STURDY || (@battle.FE == :CHESS && i.ability == :STALWART)) && i.hp == i.totalhp
           # Gen 9 Mod - Hail/Snow/Both
-          if   (((@battle.weather== :SANDSTORM && !(i.hasType?(:ROCK) || i.hasType?(:GROUND) || i.hasType?(:STEEL)))  || (@battle.weather== :HAIL && !(i.hasType?(:ICE) && HAILSNOWMOD != "Snow"))) && !((i.ability == :OVERCOAT)))  || @attacker.pbOwnSide.effects[:StealthRock] ||
+          if   (((@battle.weather== :SANDSTORM && !(i.hasType?(:ROCK) || i.hasType?(:GROUND) || i.hasType?(:STEEL)))  || (@battle.weather== :HAIL && !(i.hasType?(:ICE) && (HAILSNOWMOD != "Snow" || SWUMOD)))) && !((i.ability == :OVERCOAT)))  || @attacker.pbOwnSide.effects[:StealthRock] ||
             @attacker.pbOwnSide.effects[:Spikes]>0 || @attacker.pbOwnSide.effects[:ToxicSpikes]>0
             if !(i.ability == :MAGICGUARD) && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
               itemscore-=40
@@ -12631,7 +12677,7 @@ class PokeBattle_AI
   end
 
   def notOHKO?(attacker,opponent, immediate = false)
-    return false if @battle.pbWeather == :HAIL && !(attacker.hasType?(:ICE) || [:ICEBODY,:SNOWCLOAK,:SLUSHRUSH,:LUNARIDOL,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability) || HAILSNOWMOD == "Snow") && !immediate
+    return false if @battle.pbWeather == :HAIL && !(attacker.hasType?(:ICE) || [:ICEBODY,:SNOWCLOAK,:SLUSHRUSH,:LUNARIDOL,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability) || (HAILSNOWMOD == "Snow" || SWUMOD)) && !immediate
     return false if @battle.pbWeather == :SANDSTORM && !(attacker.hasType?(:ROCK) || attacker.hasType?(:GROUND) || attacker.hasType?(:STEEL) || [:SANDFORCE,:SANDRUSH,:SANDVEIL,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability)) && !immediate
     return false if @battle.pbWeather == :SHADOWSKY && !(attacker.hasType?(:SHADOW) || [:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability)) && !immediate
     return false if attacker.hp != attacker.totalhp

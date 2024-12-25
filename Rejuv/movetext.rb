@@ -3468,7 +3468,7 @@ MOVEHASH = {
     :effect => 10,
     :target => :AllOpposing,
     :windmove => true,
-    :desc => "A howling blizzard is blasted at the opposing team. It may also freeze them solid."
+    :desc => "A howling blizzard is blasted at the opposing team. It may also leave them with frostbite."
 },
 
 :ICEBEAM => {
@@ -3483,7 +3483,7 @@ MOVEHASH = {
     :effect => 10,
     :target => :SingleNonUser,
     :beammove => true,
-    :desc => "The target is struck with an icy-cold beam of energy. It may also freeze the target."
+    :desc => "The target is struck with an icy-cold beam of energy. It may also leave them with frostbite."
 },
 
 :ICICLECRASH => {
@@ -3513,7 +3513,7 @@ MOVEHASH = {
     :target => :SingleNonUser,
     :contact => true,
     :punchmove => true,
-    :desc => "The target is punched with an icy fist. It may leave the target frozen."
+    :desc => "The target is punched with an icy fist. It may leave the target with frostbite."
 },
 
 :AURORABEAM => {
@@ -3558,7 +3558,7 @@ MOVEHASH = {
     :moreeffect => 10,
     :target => :SingleNonUser,
     :contact => true,
-    :desc => "The user bites with freezing fangs. It may flinch or freeze the target."
+    :desc => "The user bites with freezing fangs. It may flinch or frostbite the target."
 },
 
 :AVALANCHE => {
@@ -3629,7 +3629,7 @@ MOVEHASH = {
     :maxpp => 25,
     :effect => 10,
     :target => :AllOpposing,
-    :desc => "The user attacks with a chilling snow. It may also freeze the targets."
+    :desc => "The user attacks with a chilling snow. It may also leave them with frostbite."
 },
 
 :ICEBALL => {
@@ -4066,7 +4066,7 @@ MOVEHASH = {
     :maxpp => 10,
     :effect => 20,
     :target => :SingleNonUser,
-    :desc => "The user strikes with a beam attack. May also burn, freeze, or paralyze."
+    :desc => "The user strikes with a beam attack. May also burn, frostbite, or paralyze."
 },
 
 :CRUSHCLAW => {
@@ -8290,7 +8290,7 @@ MOVEHASH = {
     :maxpp => 20,
     :effect => 10,
     :target => :SingleNonUser,
-    :desc => "The user rapidly cools the target, which might leave the target frozen. Its SE on Water types."
+    :desc => "The user rapidly cools the target, which might leave the target with frostbite. Its SE on Water types."
 },
 
 :GEOMANCY => {
@@ -8798,7 +8798,7 @@ MOVEHASH = {
     :effect => 10,
     :target => :SingleNonUser,
     :nonmirror => true,
-    :desc => "A shadowy ice attack that may freeze."
+    :desc => "A shadowy ice attack that may leave the target with frostbite."
 },
 
 :SHADOWFIRE => {
@@ -11071,7 +11071,7 @@ MOVEHASH = {
     :maxpp => 10,
     :effect => 10,
     :target => :SingleNonUser,
-    :desc => "The user shoots its psychic power from its eyes to attack. This may also leave the target frozen."
+    :desc => "The user shoots its psychic power from its eyes to attack. This may also leave the target with frostbite."
 
 },
 

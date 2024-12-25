@@ -16,10 +16,11 @@ GEN9MODVERSIONHAILSNOW = "0"
 # Recompile after changing this constant or using a mod that changes it to get the changes applied everywhere.
 # On Other Options inside the PC, you can use the inegrated mod to change between the options, this will create a Mod file making the changes, so no need to touch this.
 # The integrated mod closes the game to have the mod file apply and then compiles again after opening up, closing up again. Open again and it works.
-HAILSNOWMOD = "Hail and snow"
-HAILSNOWLOWMOD = "hail and snow"
-HAILSNOWNAMEMOD = "Hailscape"
+HAILSNOWMOD = "Hail"
+HAILSNOWLOWMOD = "hail"
+HAILSNOWNAMEMOD = "Hail"
 HAILSNOWCOMPILED = true
+SWUMOD = true
 
 LEVELCAPS           = [18,25,30,35,40,45,50,55,60,65,70,75,80,85,85,90,90,100,100]
 BADGECOUNT          = 18

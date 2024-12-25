@@ -12170,7 +12170,7 @@ TEAMARRAY = [{
 	:nature => :MODEST,
 	:iv => 31,
 	:ev => [0, 0, 0, 252, 0, 252],
-}
+},
 {
 	:species => :PRIMARINA,
 	:level => 40,
