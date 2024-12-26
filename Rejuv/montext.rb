@@ -9282,7 +9282,6 @@ MONHASH = {
 
     "Giga Form" => {
       :BaseStats => [130, 125, 90, 105, 105, 80],
-      :Abilities => [:HYDRATION],
       :Height => 240,
       :Weight => 2456,
   },
@@ -9296,9 +9295,10 @@ MONHASH = {
       end
       },
   :DefaultForm => 0,
-  :MegaForm => {
-        :LAPRASITE => 2
-  },
+  :GigaForm => 2,
+  # :MegaForm => {
+  #       :LAPRASITE => 2
+  # },
 },
 
 :DITTO => {
@@ -17042,31 +17042,31 @@ MONHASH = {
       :Weight => 552,
   },
 
-  "Florin's Sceptile" => {
-    :Type2 => :ROCK,
-    # +100 BST
-    :BaseStats => [70, 125, 95, 135, 85, 120],
-    :Abilities => [:GRASSYSURGE],
-    :BaseEXP => 284,
-    :Height => 19,
-    :Weight => 552,
-  },
+  # "Florin's Sceptile" => {
+  #   :Type2 => :ROCK,
+  #   # +100 BST
+  #   :BaseStats => [70, 125, 95, 135, 85, 120],
+  #   :Abilities => [:GRASSYSURGE],
+  #   :BaseEXP => 284,
+  #   :Height => 19,
+  #   :Weight => 552,
+  # },
 
-  "Florin's Sceptile (Mega)" => {
-    :Type2 => :ROCK,
-    # +100 BST
-    :BaseStats => [70, 150, 125, 155, 85, 145],
-    :Abilities => [:ADAPTABILITY],
-    :BaseEXP => 284,
-    :Height => 19,
-    :Weight => 552,
-  },
+  # "Florin's Sceptile (Mega)" => {
+  #   :Type2 => :ROCK,
+  #   # +100 BST
+  #   :BaseStats => [70, 150, 125, 155, 85, 145],
+  #   :Abilities => [:ADAPTABILITY],
+  #   :BaseEXP => 284,
+  #   :Height => 19,
+  #   :Weight => 552,
+  # },
 
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
       :SCEPTILITE => 1,
-      :SCEPTILITEF => 3,
+      # :SCEPTILITEF => 3,
   },
 },
 

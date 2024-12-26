@@ -77,10 +77,12 @@ class Battle_Party #other data pertaining to specific parties
   attr_accessor :megaEvo
   attr_accessor :uBurst
   attr_accessor :zMove
+  attr_accessor :gigaEvo
   def initialize
     #indices for the mon that mega'd, z'd, burst'd, etc
     @megaEvolution  = -1
     @ultraBurst     = -1
     @zMove          = -1
+    @gigaEvolution  = -1
   end
 end

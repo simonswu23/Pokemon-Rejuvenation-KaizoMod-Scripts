@@ -24,7 +24,7 @@ def pbGetRelearnableMoves(pokemon)
     end
   end
   moves=tmoves+moves
-  moves= tmoves+pokemon.getEggMoveList(true)+moves if Rejuv && $PokemonBag.pbHasItem?(:HM02)
+  moves= tmoves+pokemon.getEggMoveList(true)+moves if Rejuv && ($PokemonBag.pbHasItem?(:HM02) || SWUMOD)
   return moves|[] # remove duplicates
 end
 

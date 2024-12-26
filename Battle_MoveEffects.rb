@@ -6771,6 +6771,10 @@ class PokeBattle_Move_0EB < PokeBattle_Move
       @battle.pbDisplay(_INTL("{1} is immovable!", opponent.pbThis))
       return -1
     end
+    if opponent.isGiga?
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return -1
+    end
     if !@battle.opponent && !@battle.battlers.any? { |battler| battler.isbossmon }
       if opponent.level >= attacker.level
         @battle.pbDisplay(_INTL("But it failed!"))
@@ -6809,7 +6813,7 @@ class PokeBattle_Move_0EC < PokeBattle_Move
      # Gen 9 Mod - Added Guard Dog
      (!(opponent.ability == :SUCTIONCUPS || opponent.ability == :GUARDDOG) || opponent.moldbroken) &&
      !opponent.effects[:Ingrain] && !(attacker.ability == :PARENTALBOND && hitnum==0) &&
-     !(opponent.isbossmon && opponent.chargeAttack) && @battle.FE != :COLOSSEUM
+     !(opponent.isbossmon && opponent.chargeAttack) && @battle.FE != :COLOSSEUM && !opponent.isGiga?
       if !@battle.opponent && !@battle.battlers.any?{|battler| battler.isbossmon}
         if !((opponent.level>attacker.level) || opponent.isbossmon)
           @battle.decision=3 # Set decision to escaped
@@ -10206,7 +10210,7 @@ end
 ################################################################################
 class PokeBattle_Move_178 < PokeBattle_Move
   def pbBaseDamage(basedmg,attacker,opponent)
-    if opponent.isMega? || opponent.isUltra? || opponent.isPrimal?
+    if opponent.isMega? || opponent.isUltra? || opponent.isPrimal? || opponent.isGiga?
       basedmg*=2
     end
     return basedmg
@@ -11282,6 +11286,12 @@ class PokeBattle_Move_502 < PokeBattle_Move
           @battle.pbDisplay(_INTL("{1} was poisoned!", opponent.pbThis))
         end 
     return true
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # @SWu temporary fix until I figure out what's wrong with the Barb Barrage anim
+    @battle.pbAnimation(:POISONSTING,attacker,opponent,hitnum)
   end
 end
 

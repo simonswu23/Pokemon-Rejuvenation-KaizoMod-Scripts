@@ -23,6 +23,9 @@ class PokeBattle_Move
   attr_accessor :fieldmessageshown
   attr_accessor :fieldmessageshown_type
 
+  # @SWu stuff
+  attr_accessor   :giga
+
   ################################################################################
   # Creating a move
   ################################################################################
@@ -49,6 +52,7 @@ class PokeBattle_Move
       @moreeffect = @data.checkFlag?(:moreeffect,0)
       @recoil     = @data.checkFlag?(:recoil, 0)
       @zmove      = @data.checkFlag?(:zmove,false)
+      @giga       = @data.checkFlag?(:giga,false)
     end
     if !zbase.nil?
       @zmove      = true
@@ -2409,9 +2413,9 @@ class PokeBattle_Move
       multiplier += 1.0
       finalmult = (finalmult * multiplier)
     end
-    if @zmove
+    if @zmove || @giga
       if opponent.pbOwnSide.effects[:MatBlock] || opponent.effects[:Protect] ||
-         opponent.pbOwnSide.effects[:WideGuard] && [:AllOpposing, :AllNonUsers].include?(attacker.pbTarget(self))
+         (opponent.pbOwnSide.effects[:WideGuard] && [:AllOpposing, :AllNonUsers].include?(attacker.pbTarget(self)))
         if @move == :UNLEASHEDPOWER
           @battle.pbDisplay(_INTL("The Interceptor's power broke through {1}'s Protect!", opponent.pbThis))
         elsif !opponent.effects[:ProtectNegation]
@@ -2681,6 +2685,10 @@ class PokeBattle_Move
         owner= @battle.pbGetOwner(attacker.index)
         @battle.pbDisplayBrief(_INTL("{1} is changing the flow of Fate!",attacker.pbThis))
         @battle.pbDisplayBrief(_INTL("{1}!",@name))
+      elsif attacker.pbGigaCompatibleBaseMove?(self) && attacker.isGiga?
+        newmove = PBMove.new(PBStuff::POKEMONTOGIGAMOVE[attacker.species][0])
+        newPBmove = PokeBattle_Move.pbFromPBMove(@battle,newmove,attacker)
+        @battle.pbDisplayBrief(_INTL("{1} used\r\n{2}!",attacker.pbThis,newPBmove.getMoveUseName))
       else
         @battle.pbDisplayBrief(_INTL("{1} unleashed its full force Z-Move!",attacker.pbThis))
         @battle.pbDisplayBrief(_INTL("{1}!",getMoveUseName))

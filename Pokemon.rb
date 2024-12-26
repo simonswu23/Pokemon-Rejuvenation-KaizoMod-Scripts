@@ -1284,3 +1284,86 @@ def getListOfSpecies
   }
   return arr
 end
+
+# @SWu's stuff below\
+
+# Giga Evolution
+def hasGigaForm?
+  v = $cache.pkmn[@species].formData.dig(:GigaForm)
+  return false if !v
+  # check if current species form *can* Mega
+  if !self.isGiga? # don't do this check if you are already a Mega
+    k = $cache.pkmn[@species].formData.dig(:DefaultForm)
+    if k.is_a?(Array)
+      return false if !k.include?(@form)
+    else
+      return false if k != @form
+    end 
+  end
+  # will need to handle urshifu at some point
+  if v.is_a?(Hash)
+    return true
+  end
+
+  # owning giga stone handled in call pbCanGigaEvolve
+  return true
+end
+
+def isGiga?
+  v = $cache.pkmn[@species].formData.dig(:GigaForm) if (Rejuv && !v)
+  # @SWu: Do urshifu below
+  return true if v.is_a?(Hash) && v.values.include?(self.form)
+  return false if v.is_a?(Hash)
+  return v!=nil && self.form >= v
+end
+
+def makeGiga
+  v = $cache.pkmn[@species].formData.dig(:GigaForm)
+  self.originalForm = self.form
+  self.form=v # if v.is_a?(Integer)
+
+  # @SWu TODO: only need to handle Urshifu below
+  # self.form=v[@item] if v.is_a?(Hash) && v[@item].is_a?(Integer)
+  # self.form=v[@item][@form] if v.is_a?(Hash) && v[@item].is_a?(Hash)
+  self.originalAbility = self.ability
+  self.ability = self.abilityIndex
+end
+
+def pbGigaCompatibleBaseMove?(move)
+  pkmn=self.species
+  # TODO: reassign base moves
+  case pkmn
+    when :BUTTERFREE      then return true if move.move == :SPRINGBREEZE
+    when :RILLABOOM       then return true if move.move == :DRUMBEATING   
+    when :CINDERACE       then return true if move.move == :PYROBALL    
+    when :INTELEON        then return true if move.move == :SNIPESHOT
+    when :TOXTRICITY      then return true if move.move == :BOOMBURST
+    when :ALCREMIE        then return true if move.move == :DRAININGKISS
+    when :HATTERENE       then return true if move.move == :DAZZLINGGLEAM
+    when :COPPERAJAH      then return true if move.move == :IRONHEAD   
+    when :CORVIKNIGHT     then return true if move.move == :HURRICANE
+    when :MEOWTH          then return true if move.move == :PAYDAY
+    when :PIKACHU         then return true if move.move == :VOLTTACKLE
+    when :EEVEE           then return true if move.move == :CHARM
+    when :GRIMMSNARL      then return true if move.move == :FALSESURRENDER
+    when :GENGAR          then return true if move.move == :DARKPULSE
+    when :GARBODOR        then return true if move.move == :GUNKSHOT
+    when :DURALUDON       then return true if move.move == :DRAGONPULSE
+    when :CENTISKORCH     then return true if move.move == :INFERNO
+    when :LAPRAS          then return true if move.move == :ICEBEAM
+    when :APPLETUN        then return true if move.move == :APPLEACID
+    when :DREDNAW         then return true if move.move == :LIQUIDATION
+    when :MELMETAL        then return true if move.move == :HYPERBEAM
+    when :COALOSSAL       then return true if move.move == :STONEEDGE
+    when :VANILLUXE       then return true if move.move == :BLIZZARD
+    when :MACHAMP         then return true if move.move == :CROSSCHOP
+    when :CHARIZARD       then return true if move.move == :BLASTBURN
+    when :VENUSUAR        then return true if move.move == :FRENZYPLANT
+    when :BLASTOISE       then return true if move.move == :HYDROCANNON
+    when :FERROTHORN      then return true if move.move == :POWERWHIP
+    when :URSHIFU         then return true if move.move == :WICKEDBLOW
+    when :SANDACONDA      then return true if move.move == :HURRICANE
+    when :KINGLER         then return true if move.move == :XSCISSOR
+  end
+  return false
+end

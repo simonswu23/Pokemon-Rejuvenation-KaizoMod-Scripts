@@ -83,6 +83,8 @@ class PokeBattle_Battler
   def inHyperMode?; return false; end
   def isShadow?; return false; end
 
+  attr_accessor :giga
+
   #simple true/false vars
 
   SwitchEff = [:AquaRing, :BindingBand, :BeakBlast, :BurnUp, :ClangedScales, :Curse,
@@ -175,6 +177,14 @@ class PokeBattle_Battler
     return false
   end
 
+  def hasGiga?
+    if @pokemon
+      ret = (@pokemon.hasGigaForm?)
+      return ret
+    end
+    return false
+  end
+
   def hasUltra?
     if @pokemon
       return (@pokemon.hasUltraForm? rescue false)
@@ -219,6 +229,11 @@ class PokeBattle_Battler
     return true
   end
 
+  def pbGigaCompatibleBaseMove?(move)
+    return false if !move
+    return @pokemon.pbGigaCompatibleBaseMove?(move)
+  end
+
   def pbCompatibleZMoveFromMove?(move,moveindex = false)
     pkmn=self
     move = pkmn.moves[move] if moveindex
@@ -255,6 +270,13 @@ class PokeBattle_Battler
   def isMega?
     if @pokemon
       return (@pokemon.isMega? rescue false)
+    end
+    return false
+  end
+
+  def isGiga?
+    if @pokemon
+      return (@pokemon.isGiga? rescue false)
     end
     return false
   end
@@ -444,6 +466,17 @@ class PokeBattle_Battler
         zmove = pkmn.zmoves[i]
         @zmoves[i] = PokeBattle_Move.pbFromPBMove(@battle,zmove,pkmn,@moves[i]) if !zmove.nil?
       end
+    elsif (@battle.pbCanGigaEvolve?(@index))
+      @zmoves       = [nil,nil,nil,nil]
+      for i in 0...4
+        next if !@moves[i]
+        if self.pbGigaCompatibleBaseMove?(@moves[i])
+          newmove=PBMove.new(PBStuff::POKEMONTOGIGAMOVE[@species][0])
+          @zmoves[i]=PokeBattle_Move.pbFromPBMove(@battle,newmove,pkmn)
+        else
+          @zmoves[i]=PokeBattle_Move.pbFromPBMove(@battle,@moves[i],pkmn)
+        end
+      end
     else
       @zmoves = nil
     end
@@ -600,13 +633,15 @@ class PokeBattle_Battler
   end
 
 
-  def pbUpdate(fullchange=false)
+  def pbUpdate(fullchange=false,giga=false,keephp=false)
     return if !@pokemon
 
     @pokemon.calcStats
     @level     = @pokemon.level
-    @hp        = @pokemon.hp
-    @totalhp   = @pokemon.totalhp
+    @hp        = giga ? @hp * 2 : @pokemon.hp
+    if (!keephp)
+      @totalhp   = giga ? @totalhp * 2 : @pokemon.totalhp
+    end
     return if @effects[:Transform]
 
     @attack    = @pokemon.attack
@@ -1043,8 +1078,9 @@ class PokeBattle_Battler
     if @pokemon && @battle.internalbattle
       @pokemon.changeHappiness("faint")
     end
-    if self.isMega?
+    if self.isMega? || self.isGiga?
       @pokemon.makeUnmega
+      @giga = false
     end
     if self.isUltra?
       @pokemon.makeUnultra(@startform)
@@ -1578,6 +1614,9 @@ class PokeBattle_Battler
       elsif (@pokemon.species == :DARMANITAN) ||
         (@pokemon.species == :MINIOR)
         self.form=@startform
+      elsif self.isGiga?
+        @pokemon.makeUnmega
+        @giga = false
       end
     end
     pbUpdate(true)
@@ -3852,6 +3891,7 @@ class PokeBattle_Battler
   ################################################################################
   def pbBerryRecoverAmount
     return 0 if self.isFainted?
+    return 0 if self.effects[:HealBlock] > 0
     return 0 if [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(pbOpposing1.ability) || [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(pbOpposing2.ability)
 
     healing = 0
@@ -4314,6 +4354,19 @@ class PokeBattle_Battler
     elsif @battle.zMove[side][owner]==self.index && move.category != :status
       target=:SingleNonUser
     end
+    
+    # @SWu TODO: run through all Giga moves to fix their targeting here
+    side=(pbIsOpposing?(self.index)) ? 1 : 0
+    owner=@battle.pbGetOwnerIndex(self.index)
+    if @battle.zMove[side][owner]==self.index && !move.giga
+      target=:SingleNonUser if move.category != :status
+      target=:AllOpposing if self.item == :KOMMONIUMZ
+      # @battle.pbDisplay(_INTL("MOVE: {1}",move.move))
+      # if (self.pbGigaCompatibleBaseMove?(move))
+      #   target=PBMove.new(PBStuff::POKEMONTOGIGAMOVE[@species][0]).target
+      # end
+    end
+
     return target
   end
 
@@ -5507,6 +5560,8 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1} refused to move away from its post!",user.pbThis))
         elsif @battle.FE == :COLOSSEUM
           @battle.pbDisplay(_INTL("{1} stands their ground in the arena!", user.pbThis))
+        elsif user.giga
+          @battle.pbDisplay(_INTL("But it failed!"))
         else
           user.forcedSwitch = true
         end
@@ -5594,6 +5649,7 @@ class PokeBattle_Battler
     if @battle.zMove[side][owner] == self.index && choice[2].basedamage > 0 && !danced
       crystal = pbZCrystalFromType(choice[2].type)
       zmoveID = PBStuff::CRYSTALTOZMOVE[crystal]
+      # @SWu -> Giga move change here?
       choice[2] = PokeBattle_Move.pbFromPBMove(@battle, PBMove.new(zmoveID), self, choice[2])
     end
     pbUseMove(choice, { specialusage: true, danced: danced, specialZ: specialZ })
@@ -5660,6 +5716,9 @@ class PokeBattle_Battler
       end
     end
     basemove = choice[2]
+    if (self.pbGigaCompatibleBaseMove?(basemove) && self.isGiga?)
+      basemove = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(PBStuff::POKEMONTOGIGAMOVE[self.species][0]),self)
+    end
     return if !basemove
 
     if !flags[:specialusage]

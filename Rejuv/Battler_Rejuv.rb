@@ -449,7 +449,7 @@ class PokeBattle_Battler
         if @pokemon && @battle.internalbattle
           @pokemon.changeHappiness("faint")
         end
-        if self.isMega?
+        if self.isMega? || self.isGiga?
           @pokemon.makeUnmega
         end
         if self.isUltra?

@@ -215,6 +215,7 @@ class FightMenuDisplay
   attr_accessor :megaButton
   attr_accessor :ultraButton
   attr_accessor :zButton
+  attr_accessor :gigaButton
 
   def initialize(battler,viewport=nil)
     @display=nil
@@ -238,6 +239,7 @@ class FightMenuDisplay
     @megaButton=0 # 0=don't show, 1=show, 2=pressed
     @ultraButton=0 # 0=don't show, 1=show, 2=pressed
     @zButton=0    # 0=don't show, 1=show, 2=pressed
+    @gigaButton=0
     if PBScene::USEFIGHTBOX
       @window.opacity=0
       @window.x=Graphics.width
@@ -339,7 +341,7 @@ class FightMenuDisplay
       commands.push(@battler.moves[i].name)
     end
     @window.commands=commands
-    selmove=@battler.moves[@index]? @battler.moves[@index] : @battler.moves[0]
+    selmove=@battler.moves[@index]? @battler.moves[@index] : @battler.moves[0] 
     movetype=getTypeName(selmove.type)
     if selmove.totalpp==0
       @info.text=_ISPRINTF("{1:s}PP: ---<br>TYPE/{2:s}",@ctag,movetype)
@@ -354,7 +356,7 @@ class FightMenuDisplay
     @window.update
     @display.update if @display
     if @buttons
-      @buttons.update(self.index,@battler,@megaButton,@zButton,@ultraButton)
+      @buttons.update(self.index,@battler,@megaButton,@zButton,@ultraButton,@gigaButton)
     end
   end
 end
@@ -372,27 +374,29 @@ class FightMenuButtons < BitmapSprite
     @typebitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
     @megaevobitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/battleMegaEvo"))
     @ultraburstbitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/battleMegaEvo"))
+    @gigaevobitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/battleMegaEvo"))
     @zmovebitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/battleZMove"))
     @goodmovebitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/fieldUp"))
     @badmovebitmap=AnimatedBitmap.new(_INTL("Graphics/Pictures/Battle/fieldDown"))
-    refresh(index,moves,0,0,0)
+    refresh(index,moves,0,0,0,0)
   end
 
   def dispose
     @typebitmap.dispose
     @megaevobitmap.dispose
     @ultraburstbitmap.dispose
+    @gigaevobitmap.dispose
     @zmovebitmap.dispose
     @goodmovebitmap.dispose
     @badmovebitmap.dispose
     super
   end
 
-  def update(index=0,battler=nil,megaButton=0,zButton=0,ultraButton=0)
-    refresh(index,battler,megaButton,zButton,ultraButton)
+  def update(index=0,battler=nil,megaButton=0,zButton=0,ultraButton=0,gigaButton=0)
+    refresh(index,battler,megaButton,zButton,ultraButton,gigaButton)
   end
 
-  def refresh(index,battler,megaButton,zButton,ultraButton)
+  def refresh(index,battler,megaButton,zButton,ultraButton,gigaButton)
     return if !battler
     moves = nil
     if battler.moves
@@ -475,7 +479,10 @@ class FightMenuButtons < BitmapSprite
       self.bitmap.blt(146,0,@megaevobitmap.bitmap,Rect.new(0,(megaButton-1)*46,96,46))
     end
     if ultraButton>0
-      self.bitmap.blt(146,0,@megaevobitmap.bitmap,Rect.new(0,(ultraButton-1)*46,96,46))
+      self.bitmap.blt(146,0,@ultraburstbitmap.bitmap,Rect.new(0,(ultraButton-1)*46,96,46))
+    end
+    if gigaButton>0
+      self.bitmap.blt(146,0,@gigaevobitmap.bitmap,Rect.new(0,(megaButton-1)*46,96,46))
     end
     if zButton>0
       self.bitmap.blt(146,0,@zmovebitmap.bitmap,Rect.new(0,(zButton-1)*46,96,46))
@@ -850,7 +857,7 @@ class PokemonDataBox < SpriteWrapper
       imagepos.push(["Graphics/Pictures/Battle/battleRiftEvoBox.png",@spritebaseX+megaX,@spritebaseY+megaY,0,0,-1,-1])
     elsif @battler.pokemon.isPerfection?
       imagepos.push(["Graphics/Pictures/Battle/battlePerfectionEvoBox.png",@spritebaseX+megaX,@spritebaseY+megaY,0,0,-1,-1])
-    elsif @battler.isMega?
+    elsif @battler.isMega? || @battler.isGiga?
       imagepos.push(["Graphics/Pictures/Battle/battleMegaEvoBox.png",@spritebaseX+megaX,@spritebaseY+megaY,0,0,-1,-1])
     elsif @battler.isUltra? # Maybe temporary until new icon
       imagepos.push(["Graphics/Pictures/Battle/battleMegaEvoBox.png",@spritebaseX+megaX,@spritebaseY+megaY,0,0,-1,-1])
@@ -958,7 +965,7 @@ class PokemonDataBox < SpriteWrapper
         offset = Desolation ? 20 : 28
         return offset-rect.width, -4
       # Foe's mon in singles
-      when 1
+      when 1 
         offset = Desolation ? 22 : 10
         return @databox.width-offset, -4
       # Player's other mon in doubles
@@ -2613,7 +2620,7 @@ class PokeBattle_Scene
     if @battle.battlescene && ((@battle.battlers[battlerindex].pokemon.isShiny? &&
       @battle.battlers[battlerindex].effects[:Illusion].nil?) ||
        (@battle.battlers[battlerindex].effects[:Illusion] != nil &&
-       @battle.battlers[battlerindex].effects[:Illusion].pokemon.isShiny?))
+       @battle.battlers[battlerindex].effects[:Illusion].isShiny?))
       pbCommonAnimation("Shiny",@battle.battlers[battlerindex],nil)
     end
     sendout.dispose
@@ -2928,17 +2935,28 @@ class PokeBattle_Scene
             pbPlayDecisionSE()
           end
         end
-          if @battle.pbCanUltraBurst?(index)
-            if cw.ultraButton==2
-              @battle.pbUnRegisterUltraBurst(index)
-              cw.ultraButton=1
-              pbPlayCancelSE()
-            else
-              @battle.pbRegisterUltraBurst(index)
-              cw.ultraButton=2
-              pbPlayDecisionSE()
-            end
+        if @battle.pbCanGigaEvolve?(index)
+          if cw.gigaButton==2
+            @battle.pbUnRegisterGigaEvolution(index)
+            cw.gigaButton=1
+            pbPlayCancelSE()
+          else
+            @battle.pbRegisterGigaEvolution(index)
+            cw.gigaButton=2
+            pbPlayDecisionSE()
           end
+        end
+        if @battle.pbCanUltraBurst?(index)
+          if cw.ultraButton==2
+            @battle.pbUnRegisterUltraBurst(index)
+            cw.ultraButton=1
+            pbPlayCancelSE()
+          else
+            @battle.pbRegisterUltraBurst(index)
+            cw.ultraButton=2
+            pbPlayDecisionSE()
+          end
+        end
         if @battle.pbCanZMove?(index)  # Use Z Move
           if cw.zButton==2
             @battle.pbUnRegisterZMove(index)
@@ -3054,6 +3072,9 @@ class PokeBattle_Scene
     if battler && battler.effects[:Embargo]>0
       return false
     end
+    # if battler && battler.pbOwnSide.effects[:Embargo] > 0
+    #   return false
+    # end
     return true if pokemon.hp < pokemon.totalhp && pokemon.hp>0 && PBStuff::HPITEMS.include?(item)
     return true if pokemon.status == :POISON && PBStuff::POISONITEMS.include?(item)
     return true if pokemon.status == :PARALYSIS && PBStuff::PARAITEMS.include?(item)

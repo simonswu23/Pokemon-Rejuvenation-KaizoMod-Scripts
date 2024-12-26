@@ -160,6 +160,7 @@ class PokeBattle_AI
       # Check for conditions where the attacker object is not the one we want to score
       checkMega()
       checkUltraBurst()
+      checkGiga()
       # Actually get the scores
       checkZMoves()
       buildMoveScores()
@@ -231,6 +232,18 @@ class PokeBattle_AI
     @attacker.pbUpdate(true)
     @mondata.shouldMegaOrUltraBurst = true
   end
+
+  def checkGiga
+		return if !@battle.pbCanGigaEvolve?(@index)
+		want_to_giga=true
+		#Run through conditions to see if you don't want to giga
+		return if !want_to_giga
+		#and if you want to giga, change the attacker
+		@attacker.pokemon.makeGiga
+		@attacker.form=@attacker.pokemon.form
+		@attacker.pbUpdate(fullchange=true,giga=true)
+		@mondata.shouldMegaOrUltraBurst = true
+	end
 
   def checkZMoves
     return if @attacker.zmoves.nil?
@@ -472,6 +485,7 @@ class PokeBattle_AI
       if @aimondata[index].shouldMegaOrUltraBurst
         @battle.pbRegisterMegaEvolution(index) if @battle.pbCanMegaEvolve?(index)
         @battle.pbRegisterUltraBurst(index) if @battle.pbCanUltraBurst?(index)
+        @battle.pbRegisterGigaEvolution(index) if @battle.pbCanGigaEvolve?(index)
       end
 
       # MOVE
@@ -3706,7 +3720,7 @@ class PokeBattle_AI
   def frostbitecode
     moldbroken = moldBreakerCheck(@attacker) # Gen 9 Mod - Proper Mold Braker Check
     moldbroken = myceliumMightCheck(@attacker) if !moldbroken # Gen 9 Mod - Added Mycelium Might
-    return @move.basedamage > 0 ? 1 : 0 if !@opponent.pbCanFreeze?(false, false, moldbroken) # Gen 9 Mod - Proper Mold Braker Check
+    return @move.basedamage > 0 ? 1 : 0 if !@opponent.pbCanFreeze?(false, moldbroken) # Gen 9 Mod - Proper Mold Breaker Check
     return @move.basedamage > 0 ? 1 : 0 if hydrationCheck(@opponent)
     return @move.basedamage > 0 ? 1 : 0 if secondaryEffectNegated?()
     miniscore=1.2
@@ -5566,6 +5580,7 @@ class PokeBattle_AI
       miniscore*=0.5 if checkAIhealing()
       miniscore*=0.7 if checkAIaccuracy()
     end
+    miniscore*=0.3 if checkAImoves(PBStuff::PROTECTMOVE)
     return miniscore
   end
 
@@ -6065,7 +6080,7 @@ class PokeBattle_AI
     # Gen 9 Mod - Encourage pivoting when ability is Supersweet Syrup.
     miniscore*=1.1 if @attacker.ability == :SUPERSWEETSYRUP
     # Gen 9 Mod - Great boost to miniscore if Zero To Hero and not Hero Form.
-    miniscore*=100 if @attacker.ability == :ZEROTOHERO && attacker.form == 0
+    miniscore*=2 if @attacker.ability == :ZEROTOHERO && attacker.form == 0
     miniscore*=1.1 if @battle.FE == :DIMENSIONAL && (@opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE)
     miniscore*=1.1 if @battle.FE == :CITY && @opponent.ability == :FRISK
     miniscore*=1.1 if @opponent.crested == :THIEVUL
@@ -8058,10 +8073,10 @@ class PokeBattle_AI
     healing += 0.0625 if attacker.crested == :GOTHITELLE && attacker.type1 == :PSYCHIC
     healing += 0.0625 if attacker.crested == :VESPIQUEN && attacker.effects[:VespiCrest] == false
     healing += (attacker.pbEnemyFaintedPokemonCount*0.05) if attacker.crested == :SPIRITOMB
-    healing += 0.0625 if attacker.ability == :RAINDISH && @battle.pbWeather== :RAINDANCE
+    healing += 0.125 if attacker.ability == :RAINDISH && @battle.pbWeather== :RAINDANCE
     healing += 0.0625 if (attacker.crested == :CASTFORM && attacker.form == 2) && @battle.pbWeather== :RAINDANCE
-    healing += 0.0625 if attacker.ability == :ICEBODY && (@battle.pbWeather== :HAIL || @battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION)
-    healing += 0.0625 if attacker.crested == :DRUDDIGON && @battle.pbWeather== :SUNNYDAY
+    healing += 0.125 if attacker.ability == :ICEBODY && (@battle.pbWeather== :HAIL || @battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION)
+    healing += 0.125 if attacker.crested == :DRUDDIGON && @battle.pbWeather== :SUNNYDAY
     healing += 0.0625 if attacker.crested == :MEGANIUM || attacker.pbPartner.crested == :MEGANIUM
     healing += 0.125 if (attacker.status == :POISON || @battle.FE == :CORROSIVE || @battle.FE == :WASTELAND) && (attacker.ability == :POISONHEAL || attacker.crested == :ZANGOOSE)
     healing += 0.0625 if Rejuv && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0) && attacker.ability == :SAPSIPPER
@@ -9218,6 +9233,9 @@ class PokeBattle_AI
       if @battle.pbCanMegaEvolveAI?(i,@attacker.index)
         i.pokemon.makeMega
       end
+      if @battle.pbCanGigaEvolveAI?(i,@attacker.index)
+				i.pokemon.makeGiga
+			end
       #speed changing
       pbStatChangingSwitch(i)
       pbStatChangingSwitch(nonmegaform)
@@ -10354,6 +10372,7 @@ class PokeBattle_AI
       count+=1
     end
     return -1000 if count==0
+    return 100 if @attacker.ability == :ZEROTOHERO && attacker.form == 0 && !pbAIfaster?()
     aimem = getAIMemory(@opponent)
     aimem2 = getAIMemory(@opponent.pbPartner)
     statusscore = 0
@@ -10898,6 +10917,8 @@ class PokeBattle_AI
       return true if !@battle.pbCanChooseMove?(attacker.index, i, false)
     end
     return true if attacker.effects[:PerishSong] > 0
+
+    return true if @attacker.ability == :ZEROTOHERO && attacker.form == 0 && !checkAImoves(PBStuff::PIVOTMOVE)
 
     switch_in = pbMakeFakeBattler(@battle.pbParty(attacker.index)[switch_in_index], switch_in_index)
     opponent = firstOpponent()

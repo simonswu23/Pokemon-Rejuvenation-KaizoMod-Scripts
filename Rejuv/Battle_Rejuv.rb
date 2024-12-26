@@ -736,6 +736,115 @@ def fakeOutBattleEnd
   end
 end
 
+# @SWu's shit here
+
+def runstarterskills()
+  for i in 0...4
+    pkmn = @battlers[i]
+    party = @battle.pbParty(pkmn.index)
+    monindex = party.index(pkmn.pokemon)
+    trainer = pbPartyGetOwner(pkmn.index,monindex)
+    next if trainer.nil?
+    next if trainer.trainereffect.nil?
+    next if trainer.trainereffect[:effectmode].nil?
+    # run starter skills
+    if trainer.trainereffect[-1]
+      trainereffect = trainer.trainereffect[-1]
+      if trainereffect[:message] && trainereffect[:message] != ""
+        pbDisplayPaused(_INTL(trainereffect[:message]))
+      end
+      if trainereffect[:instantgiga]
+        # giga evolve current battler
+        if (pkmn && pbCanGigaEvolve?(i))
+          pbGigaEvolve(i)
+        end
+      end
+      if trainereffect[:opposingsideChanges]
+        side = pkmn.pbOpposingSide
+        trainereffect[:opposingsideChanges].each_pair {|effect,effectval|
+          side.effects[effect] = effectval[0]
+          pbAnimation(effectval[1],pkmn,nil) if !effectval[1].nil?
+          if effectval[2] != nil
+            statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+            pbDisplay(_INTL(statemessage,trainer.name))
+          end
+        }
+      end
+      if trainereffect[:trainersideChanges]
+        side = pkmn.pbOwnSide
+        trainereffect[:trainersideChanges].each_pair {|effect,effectval|
+          side.effects[effect] = effectval[0]
+          pbAnimation(effectval[1],pkmn,nil) if !effectval[1].nil?
+          if effectval[2] != nil
+            statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+            pbDisplay(_INTL(statemessage,trainer.name))
+          end
+        }
+      end
+      if trainereffect[:stateChanges]
+        trainereffect[:stateChanges].each_pair {|effect,effectval|
+          @battle.state.effects[effect] = effectval[0]
+          pbAnimation(effectval[1],pkmn,nil) if !effectval[1].nil?
+          statemessage = effectval[2] != "" ? effectval[2] : "The state of the battle was changed!"
+          pbDisplay(_INTL(statemessage,trainer.name))
+        }
+      end
+      if trainereffect[:setWeather] && trainereffect[:setWeather] != @weather
+        weather = trainereffect[:setWeather][0]
+        @weather = weather
+        @weatherduration= trainereffect[:setWeather][1]
+        weatherMessage = ""
+        primal = trainereffect[:setWeather][3]
+        weatherText = ""
+        if (weather == :RAINDANCE)
+          weatherText = "Rain"
+          weatherMessage = "Rain is falling..."
+        elsif (weather == :SUNNYDAY)
+          weatherText = "Sunny"
+          weatherMessage = "The sunlight is harsh..."
+        elsif (weather == :HAIL)
+          weatherText = "Hail"
+          weatherMessage = "Hail falls..."
+        elsif (weather == :SANDSTORM)
+          weatherText = "Sandstorm"
+          weatherMessage = "A sandstorm is brewing..."
+        elsif (weather == :STRONGWINDS)
+          weatherText = "Wind"
+          weatherMessage = "Strong winds picked up..."
+        end
+        if (primal)
+          if (weather == :SUNNYDAY)
+            @state.effects[:HarshSunlight] = true
+          elsif (weather == :RAINDANCE)
+            @state.effects[:HeavyRain] = true
+          elsif (weather == :HAIL)
+            @state.effects[:AbsoluteZero] = true
+          elsif (weather == :SANDSTORM)
+            @state.effects[:DesertNova] = true
+          elsif (weather == :STRONGWINDS)
+          end
+          @permWeather = true
+        end
+        
+        @weatherbackup = weather
+        @weatherbackupanim = weatherText
+        pbCommonAnimation(weatherText)
+        weatherMessage = trainereffect[:setWeather][2] if trainereffect[:setWeather][2]
+        @scene.pbShowOpponent(opponent) if trainereffect[:setWeather][4]
+        pbDisplay(_INTL("{1}", weatherMessage)) if weatherMessage
+        @scene.pbHideOpponent
+      end
+      if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
+        pbAnimation(:MAGICROOM,pkmn,nil)
+        setField(trainereffect[:fieldChange][0],trainereffect[:fieldChange][2])
+        fieldmessage = (trainereffect[:fieldChange][1] != "") ? trainereffect[:fieldChange][1] : "The field was changed!"
+        pbDisplay(_INTL("{1}",fieldmessage))
+      end
+    end
+    return
+  end
+end
+
 class PokeBattle_Trainer
   attr_accessor :trainereffect
   attr_accessor :trainereffectused

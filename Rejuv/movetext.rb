@@ -14381,4 +14381,25 @@ MOVEHASH = {
     :desc => "Quickly strikes the target up to three times, each hit increasing in power."
 },
 
+### SWU's Moves
+
+
+
+# Giga Moves
+
+:RESONANCE => {
+	:ID => 2000,
+	:name => "Resonance",
+	:function => 0x1000,
+	:type => :ICE,
+	:category => :special,
+	:basedamage => 110,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :SingleNonUser,
+	:soundmove => true,
+	:desc => "Summons Aurora Veil"
+},
+
 }

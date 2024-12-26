@@ -513,6 +513,8 @@ class PokemonDataBox < SpriteWrapper
         imagepos.push(["Graphics/Pictures/Battle/battleMegaEvoBox.png",sbX+megaX,megaY,0,0,-1,-1])
       elsif @battler.isUltra? # Maybe temporary until new icon
         imagepos.push(["Graphics/Pictures/Battle/battleMegaEvoBox.png",sbX+megaX,megaY,0,0,-1,-1])
+      elsif @battler.isGiga? && @battler.hasGiga?
+        imagepos.push(["Graphics/Pictures/Battle/battleMegaEvoBox.png",sbX+megaX,megaY,0,0,-1,-1])
       end
       # Crest
       illusion = !@battler.effects[:Illusion].nil?
@@ -771,31 +773,31 @@ class PokeBattle_Scene
     backdrop = @battle.field.backdrop
     # Choose bases
     environ=@battle.environment
-    base=""
+    base = ""
     if environ==:Grass || environ==:TallGrass
-      base="Grass"
+      base= "Grass"
     elsif environ==:Sand
-      base="Sand"
+      base= "Sand"
     elsif $PokemonGlobal.surfing
-      base="Water"
+      base= "Water"
     elsif $PokemonGlobal.lavasurfing
-      base="Volcano"
+      base= "Volcano"
     end
-    base="" if !pbResolveBitmap(sprintf("Graphics/Battlebacks/playerbase"+backdrop+base))
+    base= "" if !pbResolveBitmap(sprintf("Graphics/Battlebacks/playerbase"+backdrop+base))
     # Choose time of day
-    time=""
+    time= ""
     timenow=pbGetTimeNow
     if PBDayNight.isNight?(timenow)
-      time="Night"
+      time= "Night"
     elsif PBDayNight.isEvening?(timenow)
-      time="Eve"
+      time= "Eve"
     end
-    time="" if !pbResolveBitmap(sprintf("Graphics/Battlebacks/battlebg"+backdrop+time))
-    battlebg="Graphics/Battlebacks/battlebg"+backdrop+time
-    enemybase="Graphics/Battlebacks/enemybase"+backdrop+base+time
-    playerbase="Graphics/Battlebacks/playerbase"+backdrop+base+time
-    enemybase="Graphics/Battlebacks/enemybaseDummy" if !pbResolveBitmap(sprintf(enemybase))
-    playerbase="Graphics/Battlebacks/playerbaseDummy" if !pbResolveBitmap(sprintf(playerbase))
+    time= "" if !pbResolveBitmap(sprintf("Graphics/Battlebacks/battlebg"+backdrop+time))
+    battlebg= "Graphics/Battlebacks/battlebg"+backdrop+time
+    enemybase= "Graphics/Battlebacks/enemybase"+backdrop+base+time
+    playerbase= "Graphics/Battlebacks/playerbase"+backdrop+base+time
+    enemybase= "Graphics/Battlebacks/enemybaseDummy" if !pbResolveBitmap(sprintf(enemybase))
+    playerbase= "Graphics/Battlebacks/playerbaseDummy" if !pbResolveBitmap(sprintf(playerbase))
     pbAddPlane("battlebg",battlebg,@viewport)
     pbAddSprite("playerbase",
        PBScene::PLAYERBASEX,
@@ -1300,7 +1302,7 @@ class PokeBattle_Scene
       fadeanim=TrainerFadeAnimation.new(@sprites)
     end
     frame=0    
-    @sprites["pokemon#{battlerindex}"].setPokemonBitmap(pkmn, false)
+    @sprites["pokemon#{battlerindex}"].setPokemonBitmap(pkmn,false)
     if @battle.battlers[battlerindex].effects[:Illusion] != nil #Illusion
       @sprites["pokemon#{battlerindex}"].setPokemonBitmap(
       @battle.battlers[battlerindex].effects[:Illusion].pokemon, false)
@@ -1454,11 +1456,12 @@ def pbFightMenu(index)
     cw.setIndex(0)
   end
   cw.megaButton=0 unless @battle.megaEvolution[(@battle.pbIsOpposing?(index)) ? 1 : 0][@battle.pbGetOwnerIndex(index)] == index && @battle.battlers[index].hasMega?
-  cw.megaButton=1 if (@battle.pbCanMegaEvolve?(index) && !@battle.pbCanZMove?(index))
+  cw.megaButton=1 if @battle.pbCanMegaEvolve?(index) && !@battle.pbCanZMove?(index)
   cw.ultraButton=0
   cw.ultraButton=1 if @battle.pbCanUltraBurst?(index)
+  # cw.gigaButton=0   #@SWu might need to update to be consistent with mega evo code above (assuming it's for double battles)
   cw.zButton=0
-  cw.zButton=1 if @battle.pbCanZMove?(index)
+  cw.zButton=1 if @battle.pbCanZMove?(index) && !battler.isMega? && !battler.isGiga?
   pbSelectBattler(index)
   pbRefresh
   update_menu = true
@@ -1488,8 +1491,12 @@ def pbFightMenu(index)
     end
     if Input.trigger?(Input::C)   # Confirm choice
       ret=cw.index
-      if cw.zButton==2
+      if cw.zButton==2        
         if battler.pbCompatibleZMoveFromMove?(ret,true)
+          pbPlayDecisionSE()     
+          @lastmove[index]=ret
+          return ret
+        elsif @battle.pbCanGigaEvolve?(index)
           pbPlayDecisionSE()     
           @lastmove[index]=ret
           return ret
@@ -1503,8 +1510,8 @@ def pbFightMenu(index)
         @lastmove[index]=ret   
         return ret
       end          
-    elsif Input.trigger?(Input::X)   # Use Mega Evolution 
-      if @battle.pbCanMegaEvolve?(index) && !pbIsZCrystal?(battler.item)
+    elsif Input.trigger?(Input::X)  
+      if (@battle.pbCanMegaEvolve?(index)) && !pbIsZCrystal?(battler.item)
         if cw.megaButton==2
           @battle.pbUnRegisterMegaEvolution(index)
           cw.megaButton=1
@@ -1514,19 +1521,29 @@ def pbFightMenu(index)
           cw.megaButton=2
           pbPlayDecisionSE()
         end
-      end
-        if @battle.pbCanUltraBurst?(index)
-          if cw.ultraButton==2
-            @battle.pbUnRegisterUltraBurst(index)
-            cw.ultraButton=1
-            pbPlayCancelSE()
-          else
-            @battle.pbRegisterUltraBurst(index)
-            cw.ultraButton=2
-            pbPlayDecisionSE()
-          end
+      elsif @battle.pbCanGigaEvolve?(index)
+        if cw.megaButton==2
+          @battle.pbUnRegisterGigaEvolution(index)
+          cw.megaButton=1
+          pbPlayCancelSE()
+        else
+          @battle.pbRegisterGigaEvolution(index)
+          cw.megaButton=2
+          pbPlayDecisionSE()
         end
-      if @battle.pbCanZMove?(index)  # Use Z Move
+      end
+      if @battle.pbCanUltraBurst?(index)
+        if cw.ultraButton==2
+          @battle.pbUnRegisterUltraBurst(index)
+          cw.ultraButton=1
+          pbPlayCancelSE()
+        else
+          @battle.pbRegisterUltraBurst(index)
+          cw.ultraButton=2
+          pbPlayDecisionSE()
+        end
+      end
+      if @battle.pbCanZMove?(index) # && !@battle.pbCanGigaEvolve?(index) # Use Z Move
         if cw.zButton==2
           @battle.pbUnRegisterZMove(index)
           cw.zButton=1
@@ -1535,6 +1552,9 @@ def pbFightMenu(index)
           @battle.pbRegisterZMove(index)
           cw.zButton=2
           pbPlayDecisionSE()
+          if (battler.isGiga?)
+            @battle.pbUnRegisterZMove(index)
+          end
         end
       end        
       update_menu=true

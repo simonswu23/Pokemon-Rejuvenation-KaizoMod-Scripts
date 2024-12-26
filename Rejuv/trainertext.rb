@@ -1,6 +1,6 @@
 TEAMARRAY = [{
 :teamid => ["Dan",:LEADER_KETA,0],
-:items => [:SILVCREST,:SUPERPOTION],
+:items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GIGABAND],
 :ace => "sighs about it",
 =begin
 :trainereffect => { # in party order
@@ -35,11 +35,11 @@ TEAMARRAY = [{
 },
 =end
 :mons => [{
-	:species => :BANETTE,
-	:level => 63,
-	:item => :BANETTITE,
-	:moves => [:SHADOWSNEAK,:DISABLE,:GUNKSHOT,:PHANTOMFORCE],
-	:ability => :INSOMNIA,
+	:species => :LAPRAS,
+	:level => 40,
+	:item => :BLACKSLUDGE,
+	:moves => [:REST,:ICEBEAM],
+	:ability => :WATERVEIL,
 	:gender => "M",
 	:shiny => true,
 	:nature => :ADAMANT,
@@ -12094,11 +12094,18 @@ TEAMARRAY = [{
 :teamid => ["Valarie",:LEADER_VALARIE,0],
 :defeat => "Looks like I've been washed away...",
 :items => [:HYPERPOTION,:HYPERPOTION],
+:trainereffect => { 
+	:effectmode => :Party,
+	:buffactivation => :Limited,
+	-1 => {
+		:setWeather => [:RAINDANCE,-1,"VALARIE: Looks like it's going to rain!", false, true],
+	},
+},
 :mons => [{
 	:species => :PALAFIN,
-	:level => 38,
+	:level => 40,
 	:item => :MYSTICWATER,
-	:moves => [:JETPUNCH,:WAVECRASH,:ICEPUNCH,:DRAINPUNCH],
+	:moves => [:JETPUNCH,:WAVECRASH,:ICEBEAM,:FLIPTURN],
 	:ability => :ZEROTOHERO,
 	:gender => "M",
 	:nature => :ADAMANT,
@@ -12107,7 +12114,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :OVERQWIL,
-	:level => 38,
+	:level => 40,
 	:item => :POISONBARB,
 	:moves => [:BARBBARRAGE,:WATERFALL,:CRUNCH,:DESTINYBOND],
 	:ability => :SWIFTSWIM,
@@ -12118,7 +12125,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :SWAMPERT,
-	:level => 38,
+	:level => 40,
 	:item => :SWAMPERTITE,
 	:moves => [:EARTHQUAKE,:WATERFALL,:POISONJAB,:ICEPUNCH],
 	:ability => :SWIFTSWIM,
@@ -12129,18 +12136,18 @@ TEAMARRAY = [{
 },
 {
 	:species => :LAPRAS,
-	:level => 37,
+	:level => 39,
 	:item => :LIGHTCLAY,
 	:moves => [:ICEBEAM,:CHILLINGWATER,:THUNDERBOLT,:REST],
 	:ability => :HYDRATION,
 	:gender => "M",
-	:nature => :CALM,
+	:nature => :MODEST,
 	:iv => 31,
-	:ev => [252, 0, 0, 4, 252, 0],
+	:ev => [252, 0, 0, 252, 0, 0],
 },
 {
 	:species => :WHISCASH,
-	:level => 38,
+	:level => 40,
 	:item => :WHISCREST,
 	:moves => [:DRAGONDANCE,:WATERFALL,:BOUNCE,:ZENHEADBUTT],
 	:ability => :HYDRATION,
@@ -12151,7 +12158,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :DONDOZO,
-	:level => 38,
+	:level => 40,
 	:item => :ELEMENTALSEED,
 	:moves => [:WAVECRASH,:BODYPRESS,:HEAVYSLAM,:CURSE],
 	:ability => :WATERVEIL,
@@ -12162,7 +12169,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :KINGDRA,
-	:level => 38,
+	:level => 40,
 	:item => :DRAGONIUMZ,
 	:moves => [:SURF,:DRAGONPULSE,:HURRICANE,:ICEBEAM],
 	:ability => :SWIFTSWIM,
@@ -12173,7 +12180,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :PRIMARINA,
-	:level => 40,
+	:level => 42,
 	:item => :ASSAULTVEST,
 	:moves => [:SURF,:ENERGYBALL,:MOONBLAST,:PSYCHICNOISE],
 	:ability => :SWIFTSWIM,
@@ -12291,12 +12298,19 @@ TEAMARRAY = [{
 {
 :teamid => ["Valarie",:LEADER_VALARIE,100],
 :items => [:HYPERPOTION],
+:trainereffect => { 
+	:effectmode => :Party,
+	:buffactivation => :Limited,
+	-1 => {
+		:setWeather => [:RAINDANCE,-1,"VALARIE: Looks like it's going to rain!", false, true],
+	},
+},
 :mons => [
 {
 	:species => :PALAFIN,
 	:level => 38,
 	:item => :MYSTICWATER,
-	:moves => [:JETPUNCH,:FLIPTURN,:ICEPUNCH,:DRAINPUNCH],
+	:moves => [:JETPUNCH,:FLIPTURN,:ICEPUNCH,:WATERFALL],
 	:ability => :ZEROTOHERO,
 	:gender => "M",
 	:nature => :ADAMANT,
@@ -12318,7 +12332,7 @@ TEAMARRAY = [{
 	:species => :LAPRAS,
 	:level => 37,
 	:item => :ELEMENTALSEED,
-	:moves => [:ICEBEAM,:CHILLINGWATER,:THUNDERBOLT,:REST],
+	:moves => [:FREEZEDRY,:CHILLINGWATER,:THUNDERBOLT,:REST],
 	:ability => :HYDRATION,
 	:gender => "M",
 	:nature => :CALM,

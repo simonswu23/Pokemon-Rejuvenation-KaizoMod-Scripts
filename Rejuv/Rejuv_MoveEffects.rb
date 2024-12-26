@@ -759,3 +759,37 @@ class PokeBattle_Move_80E < PokeBattle_Move
     @battle.pbAnimation(:DARKVOID,attacker,opponent,hitnum) 
   end
 end
+
+### SWU'S MOVES HERE ###
+
+
+
+### Giga Moves Below ###
+class PokeBattle_Move_1000 < PokeBattle_Move
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+    return if ret == -1
+    if attacker.pbOwnSide.effects[:AuroraVeil] == 0
+      # @SWu showing sparkling aria twice?
+      pbShowAnimation(:AURORAVEIL,attacker,opponent,hitnum,alltargets,showanimation)
+      attacker.pbOwnSide.effects[:AuroraVeil]=5
+      attacker.pbOwnSide.effects[:AuroraVeil]=8 if attacker.hasWorkingItem(:LIGHTCLAY)
+      attacker.pbOwnSide.effects[:AuroraVeil]=8 if @battle.FE == :MIRROR
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("An Aurora is protecting your team!"))
+      else
+        @battle.pbDisplay(_INTL("An Aurora is protecting the opposing team!"))
+      end
+      if @battle.FE == :MIRROR && attacker.pbCanIncreaseStatStage?(PBStats::EVASION,false)
+        attacker.pbIncreaseStat(PBStats::EVASION,1,abilitymessage:false)
+      end
+    end
+    return ret
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:SPARKLINGARIA,attacker,opponent,hitnum)
+  end
+end
