@@ -9296,9 +9296,9 @@ MONHASH = {
       },
   :DefaultForm => 0,
   :GigaForm => 2,
-  # :MegaForm => {
-  #       :LAPRASITE => 2
-  # },
+  :MegaForm => {
+        :LAPRASITE => 2
+  },
 },
 
 :DITTO => {

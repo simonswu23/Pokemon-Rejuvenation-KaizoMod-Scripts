@@ -1,21 +1,26 @@
+- 12/26/2024
+  - finally fixed Giga evolution bug (properly registers and checks choice to Giga evolve now)
+  - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance (TODO: figure out the animation)
+  - AI updates for Giga:
+    - discouraged switching giga pokemon
+
 - 12/25/2024
   - updated Z-Moves not breaking through Wide Guard properly
   - migration of Giga Evolution Logic
-    - TODO: fix everything
-      - Currently animation not displayed properly
-      - Giga evolution is not going through either for player or opponents (pbCanGigaEvolve works?)
-      - Giga Move is currently only single-use (treated as Z move)
+    - kept old Mega stones intact, along with Mega logic
+    - new Giga Core items created, along with Giga Band
+    - implemented Lapras (for Valarie), need to update montext.rb for the other Giga forms
+  - TODO: fix Urshifu
   - TODO: fix Giga move targeting
     - flagged in Battler.rb
   - TODO: implement Giga AI logic
     - update movelist in pbGiga Evolve
-    - add logic to discourage switching
     - add logic to discourage ineffective attacks against Giga pokemon
     - add logic to encourage using moves that would encourage the Giga pokemon to switch out
     - update HP and damage calculation values (ensure it's working properly)
     - add logic to handle Giga moves
-  - TODO: fix Urshifu 
     - flagged in Pokemon.rb
+  - changed logic so that move relearner is an egg move relearner instantly
 
 - 12/24/24 (batched with previous commits)
   - implemented SWUMOD constant for future changes

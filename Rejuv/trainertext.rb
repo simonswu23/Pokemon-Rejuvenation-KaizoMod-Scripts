@@ -12093,7 +12093,7 @@ TEAMARRAY = [{
 {
 :teamid => ["Valarie",:LEADER_VALARIE,0],
 :defeat => "Looks like I've been washed away...",
-:items => [:HYPERPOTION,:HYPERPOTION],
+:items => [:HYPERPOTION,:HYPERPOTION,:LAPRASCORE],
 :trainereffect => { 
 	:effectmode => :Party,
 	:buffactivation => :Limited,
@@ -12160,7 +12160,7 @@ TEAMARRAY = [{
 	:species => :DONDOZO,
 	:level => 40,
 	:item => :ELEMENTALSEED,
-	:moves => [:WAVECRASH,:BODYPRESS,:HEAVYSLAM,:CURSE],
+	:moves => [:WAVECRASH,:BODYPRESS,:REST,:CURSE],
 	:ability => :WATERVEIL,
 	:gender => "M",
 	:nature => :BOLD,
@@ -12185,7 +12185,8 @@ TEAMARRAY = [{
 	:moves => [:SURF,:ENERGYBALL,:MOONBLAST,:PSYCHICNOISE],
 	:ability => :SWIFTSWIM,
 	:gender => "F",
-	:form => 1,
+	:form => 2,
+	:shiny => true,
 	:nature => :TIMID,
 	:iv => 31,
 	:ev => [0, 0, 0, 252, 0, 252],
@@ -12297,7 +12298,7 @@ TEAMARRAY = [{
 }]},
 {
 :teamid => ["Valarie",:LEADER_VALARIE,100],
-:items => [:HYPERPOTION],
+:items => [:HYPERPOTION, :LAPRASCORE],
 :trainereffect => { 
 	:effectmode => :Party,
 	:buffactivation => :Limited,

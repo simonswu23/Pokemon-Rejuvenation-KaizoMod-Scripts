@@ -4480,13 +4480,10 @@ class PokeBattle_Battle
     end
     # Giga Evolution
     for i in priority
-      pbDisplay(_INTL("BREAK1"))
-      next if @choices[i.index][0]!=1
-      pbDisplay(_INTL("BREAK2"))
+      next if @choices[i.index][0] != :move
       side=(pbIsOpposing?(i.index)) ? 1 : 0
       owner=pbGetOwnerIndex(i.index)
       if @gigaEvolution[side][owner]==i.index
-        pbDisplay(_INTL("BREAK3"))
         pbGigaEvolve(i.index)
       end
     end

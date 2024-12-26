@@ -5580,7 +5580,7 @@ class PokeBattle_AI
       miniscore*=0.5 if checkAIhealing()
       miniscore*=0.7 if checkAIaccuracy()
     end
-    miniscore*=0.3 if checkAImoves(PBStuff::PROTECTMOVE)
+    miniscore*=0.2 if checkAImoves(PBStuff::PROTECTMOVE)
     return miniscore
   end
 
@@ -6092,6 +6092,7 @@ class PokeBattle_AI
     end
     miniscore*=1.5 if @mondata.partyroles.any? {|role| role.include?(:SWEEPER)} && @move.move == :PARTINGSHOT
     miniscore*=1.2 if @mondata.partyroles.any? {|role| role.include?(:SWEEPER)} && (@move.move == :UTURN || @move.move == :VOLTSWITCH || @move.move == :FLIPTURN) && !pbAIfaster?() # Gen 9 Mod - Added Flip Turn
+    miniscore*0.5 if @attacker.isGiga?
 
     movebackup = @move
     attackerbackup = @attacker
@@ -10725,6 +10726,7 @@ class PokeBattle_AI
     secondwindscore += monturn if monturn > 0
     PBDebug.log(sprintf("Initial noswitchscore building: Second Wind Situations (%d)", secondwindscore)) if $INTERNAL
     noswitchscore = statantiscore + hazardantiscore + betterswitchscore + secondwindscore
+    noswitchscore *= 2 if @attacker.isGiga?
     noswitchscore += 999 if Reborn && !@battle.doublebattle && @battle.opponent.name == "Priscilla"
     PBDebug.log(sprintf("%s: initial noswitchscore: %d", getMonName(@attacker.species), noswitchscore)) if $INTERNAL
     finalscore = switchscore - noswitchscore
@@ -10917,9 +10919,6 @@ class PokeBattle_AI
       return true if !@battle.pbCanChooseMove?(attacker.index, i, false)
     end
     return true if attacker.effects[:PerishSong] > 0
-
-    return true if @attacker.ability == :ZEROTOHERO && attacker.form == 0 && !checkAImoves(PBStuff::PIVOTMOVE)
-
     switch_in = pbMakeFakeBattler(@battle.pbParty(attacker.index)[switch_in_index], switch_in_index)
     opponent = firstOpponent()
     return true if (!$cache.moves[opponent.lastMoveUsed].nil? && $cache.moves[opponent.lastMoveUsed].category == :status)

@@ -828,9 +828,9 @@ def runstarterskills()
         
         @weatherbackup = weather
         @weatherbackupanim = weatherText
+        @scene.pbShowOpponent(opponent) if trainereffect[:setWeather][4]
         pbCommonAnimation(weatherText)
         weatherMessage = trainereffect[:setWeather][2] if trainereffect[:setWeather][2]
-        @scene.pbShowOpponent(opponent) if trainereffect[:setWeather][4]
         pbDisplay(_INTL("{1}", weatherMessage)) if weatherMessage
         @scene.pbHideOpponent
       end

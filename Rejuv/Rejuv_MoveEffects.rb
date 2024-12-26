@@ -787,9 +787,9 @@ class PokeBattle_Move_1000 < PokeBattle_Move
     return ret
   end
 
-  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation
-    # replacement anim until proper one is made
-    @battle.pbAnimation(:SPARKLINGARIA,attacker,opponent,hitnum)
-  end
+  # def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+  #   return if !showanimation
+  #   # replacement anim until proper one is made
+  #   @battle.pbAnimation(:SPARKLINGARIA,attacker,opponent,hitnum)
+  # end
 end
