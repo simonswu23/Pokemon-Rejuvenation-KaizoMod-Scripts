@@ -10841,6 +10841,16 @@ class PokeBattle_AI
     if @battle.FE == :MISTY || @battle.FE == :CORROSIVEMIST || @battle.state.effects[:MISTY] > 0
       mon.stages[PBStats::DEFENSE]+=2 if mon.ability == :WATERCOMPACTION
     end
+    # Water's Surface Abilities
+    if @battle.FE == :WATERSURFACE && SWUMOD
+      if mon.ability == COMMANDER
+        mon.stages[PBStats::ATTACK]+=1
+        mon.stages[PBStats::DEFENSE]+=1
+        mon.stages[PBStats::SPATK]+=1
+        mon.stages[PBStats::SPDEF]+=1
+        mon.stages[PBStats::SPEED]+=1
+      end
+    end
     # Mirror Field Evasion & Accuracy
     if @battle.FE == :MIRROR
       mon.stages[PBStats::EVASION]+=1 if [:SANDVEIL,:SNOWCLOAK,:TANGLEDFEET,:MAGICBOUNCE,:COLORCHANGE].include?(mon.ability)
@@ -10859,13 +10869,13 @@ class PokeBattle_AI
     if @battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSION
       mon.stages[PBStats::SPATK]+=1 if mon.ability == :BERSERK
       mon.stages[PBStats::ATTACK]+=1 if mon.ability == :JUSTIFIED || mon.ability == :ANGERPOINT
-      #if mon.ability == :ANGERSHELL # Gen 9 Mod - Added Anger Shell / On base mod, it isn't affected by the field
+      # if mon.ability == :ANGERSHELL && SWUMOD # Gen 9 Mod - Added Anger Shell / On base mod, it isn't affected by the field
       #  mon.stages[PBStats::ATTACK]+=1
       #  mon.stages[PBStats::DEFENSE]-=1
       #  mon.stages[PBStats::SPATK]+=1
       #  mon.stages[PBStats::SPDEF]-=1
       #  mon.stages[PBStats::SPEED]+=1
-      #end
+      # end
     end
     # Sky
     if @battle.FE == :SKY

@@ -357,12 +357,15 @@ def pbDebugMenu
           else
             Kernel.pbMessage(_INTL("The item was added."))
             $PokemonBag.pbStoreItem(item,qty)
+            # @SWu curious
+            # incrementBlackPrisms(0,999) if item == :BLKPRISM
           end
         end
       end
     elsif cmd=="clearbag"
-      $PokemonBag.clear
-      Kernel.pbMessage(_INTL("The Bag was cleared."))
+      # $PokemonBag.clear
+      # Kernel.pbMessage(_INTL("The Bag was cleared."))
+      Kernel.pbMessage(_INTL("Clear bag option disabled"))
     elsif cmd=="addpokemon"
       species=pbChooseSpeciesOrdered(1)
       if species

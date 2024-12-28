@@ -2270,6 +2270,27 @@ class PokeBattle_Battler
         end
       end
     end
+    # Water's Surface entry
+    if @battle.FE == :WATERSURFACE && SWUMOD
+      if self.ability == :WATERVEIL && onactive
+        self.effects[:AquaRing]=true
+        @battle.pbAnimation(:AQUARING,self,nil) # Aqua Ring animation
+        @battle.pbDisplay(_INTL("{1}'s Water Veil protects it with a ring of water!", pbThis))
+      end
+      if self.ability == :COMMANDER && onactive
+        self.pbIncreaseStatBasic(PBStats::ATTACK, 1)
+        @battle.pbCommonAnimation("StatUp", self, nil)
+        self.pbIncreaseStatBasic(PBStats::DEFENSE, 1)
+        @battle.pbCommonAnimation("StatUp", self, nil)
+        self.pbIncreaseStatBasic(PBStats::SPATK, 1)
+        @battle.pbCommonAnimation("StatUp", self, nil)
+        self.pbIncreaseStatBasic(PBStats::SPDEF, 1)
+        @battle.pbCommonAnimation("StatUp", self, nil)
+        self.pbIncreaseStatBasic(PBStats::SPEED, 1)
+        @battle.pbCommonAnimation("StatUp", self, nil)
+        @battle.pbDisplay(_INTL("{1}'s Commander took charge over the water!", pbThis))
+      end
+    end
   end
 
   def pbAbilitiesOnSwitchIn(onactive)
@@ -2763,7 +2784,9 @@ class PokeBattle_Battler
         tatsugiri.effects[:Commander] = true
         for stat in 1..5
           if dondozo.pbCanIncreaseStatStage?(stat,false)
-            dondozo.pbIncreaseStat(stat,2)
+            statinc = 2
+            statinc += 1 if @battle.FE == :WATERSURFACE && SWUMOD
+            dondozo.pbIncreaseStat(stat,statinc)
           end
         end
         dondozo.effects[:Commandee] = true

@@ -11657,15 +11657,15 @@ MOVEHASH = {
 :CHILLINGWATER => {
     :ID => 911,
     :name => "Chilling Water",
-    :function => 0x042,
+    :function => 0x00D,
     :type => :WATER,
     :category => :special,
-    :basedamage => 50,
+    :basedamage => 75,
     :accuracy => 100,
     :maxpp => 20,
-    :effect => 100,
+    :effect => 30,
     :target => :SingleNonUser,
-    :desc => "The user showers the target with frigid water. This also lowers the target's Attack stat."
+    :desc => "The user showers the target with frigid water. This may leave them with frostbite."
 },
 
 :CHILLYRECEPTION => {

@@ -1,59 +1,50 @@
-- 12/26/2024
-  - finally fixed Giga evolution bug (properly registers and checks choice to Giga evolve now)
-  - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance (TODO: figure out the animation)
-  - AI updates for Giga:
-    - discouraged switching giga pokemon
+# Weather
+  - Hail
+    - Ice types have x1.5 defense
+  - Sun
+    - Grass types have x1.5 defense
+  - Rain
+    - Grass types have x1.5 special defense
 
-- 12/25/2024
-  - updated Z-Moves not breaking through Wide Guard properly
-  - migration of Giga Evolution Logic
-    - kept old Mega stones intact, along with Mega logic
-    - new Giga Core items created, along with Giga Band
-    - implemented Lapras (for Valarie), need to update montext.rb for the other Giga forms
-  - TODO: fix Urshifu
-  - TODO: fix Giga move targeting
-    - flagged in Battler.rb
-  - TODO: implement Giga AI logic
-    - update movelist in pbGiga Evolve
-    - add logic to discourage ineffective attacks against Giga pokemon
-    - add logic to encourage using moves that would encourage the Giga pokemon to switch out
-    - update HP and damage calculation values (ensure it's working properly)
-    - add logic to handle Giga moves
-    - flagged in Pokemon.rb
-  - changed logic so that move relearner is an egg move relearner instantly
+# Status
+  - Freeze
+    - removed, replaced with Frostbite
+  - Frostbite
+    - halves special attack of afflicted pokemon
+    - afflicted pokemon take 1/16th HP at the end of each turn (1/8 in the Icy, Snowy Mountain, and Frozen Dimensional Field)
+    - Ice types are immune to Frostbite
+    - all attacks that previously have effects that freeze become frostbite instead
+    - Shaymin-Sky will revert to Land form if inflicted with Frostbite
 
-- 12/24/24 (batched with previous commits)
-  - implemented SWUMOD constant for future changes
-  - Gengar + Revavroom line ability updates
-  - Paldean Wooper + Clodsire encounterable on Helojak Island (not globally sync-ed in .rxproj file yet)
-  - powerpack password now gives you a shit ton of candy
-  - reverted nature mapping of macho brace
-  - removed PC option to toggle between hail/snow (combined hail is now forced)
-    - reverted game defaults for hail/snow since it was crashing the game
-    - fixed bug where snow was not properly giving ice types x1.5 defense
-  - combined hail/snow implementation (including all AI implementation)
-    - TODO: currently called "Snowscape", change back to "Hail" somehow
-  - grass pokemon have x1.5 defense in sun and x1.5 special defense in rain
-  - replaced freeze with frostbite entirely (including all AI implementations)    
-  - forced consumable item restoration (including berries) and the end of each battle
-      - TODO: might need to double-check how item stealing works here (patch if it's an issue)
-  - improved wild pokemon catch chances
-  - Angie and Valarie Gym Battles updated (standard and kaizo)
-    - TODO: playtest
-   - misc bug fixes
-    - :PETRIFICATION typo (as :PETRFICATION, preventing it from being cured by attacks)
-    - :FROZEN typo (as :FREEZE, for 2-turn attacks and boss battles)
+# Abilities
+  - Magma Armor protects against Frostbite
 
-- 12/16/25
-  - Added LAWDS macho brace implementation for QoL
-- 12/15/24
-  - Venam Gym Battle updated (standard and kaizo)
-    - TODO: playtest
-  - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
-  - Added bulk passwords: "standardmode" and "kaizomode"
-    - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata, powerpack
-    - additionally: forces battle to be set mode
-  - Reconfigured game defaults:
-    - Set Mode
-    - All consumable items restored after battle (including berries)
-    - Hail and Snow are combined
+# Attacks
+  - Blizzard, Freeze Dry have their base effect chance improved to 20%
+  - Freezing Glare has its base effect chance improved to 30%
+  - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
+
+# Pokemon
+  ## Standard Pokemon
+  - Varoom and Revavroom
+    - ability Filter added for Varoom
+    - ability Speed Boost added for Revavroom
+    - abilities across evolution: Filter -> Filter, Slow Start -> Speed Boost
+  - Gastly, Haunter, Gengar
+    - ability Cursed Body added for Gastly, Haunter
+    - ability Perish Body, Levitate added for Gengar
+    - abilities across evolution: Levitate -> Levitate -> Levitate, Cursed Body -> Cursed Body -> Perish Body
+
+# Field Changes
+  - Water's Surface
+    - Commander gives a +1 omniboost to self on entry. If Dondozo is a partner on the field, it will also get an addition +1 omniboost.
+    - Water Veil now sets up Aqua Ring on entry instead of its old field effect
+    - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+  - Underwater
+    - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+  - Swamp
+    - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+
+# Other
+  - Removed data chip cost to enter password
+  - All consumed held items (including berries) are restored at the end of each battle

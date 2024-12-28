@@ -1,7 +1,6 @@
 TEAMARRAY = [{
-:teamid => ["Dan",:LEADER_KETA,0],
+:teamid => ["SWu",:LEADER_KETA,0],
 :items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GIGABAND],
-:ace => "sighs about it",
 =begin
 :trainereffect => { # in party order
 	:effectmode => :Party, #effect mode switches how the effects are applied (:Party = on party index; :Fainted = first sendout after this number of pokemon are fainted)
@@ -34,11 +33,29 @@ TEAMARRAY = [{
 	},
 },
 =end
+:trainereffect => { 
+	:effectmode => :Party,
+	:buffactivation => :Always,
+	# 0 => {
+	# 	:fieldChange => [:WATERSURFACE,"Hubba Hubba",0],
+	# },
+},
 :mons => [{
-	:species => :LAPRAS,
+	:species => :TATSUGIRI,
 	:level => 40,
-	:item => :BLACKSLUDGE,
-	:moves => [:REST,:ICEBEAM],
+	:item => :POKEBALL,
+	:moves => [:SPLASH],
+	:ability => :COMMANDER,
+	:gender => "M",
+	:shiny => true,
+	:nature => :ADAMANT,
+	:iv => 31,
+	:ev => [0, 252, 0, 4, 252, 0]},
+	{
+	:species => :DONDOZO,
+	:level => 40,
+	:item => :POKEBALL,
+	:moves => [:SPLASH],
 	:ability => :WATERVEIL,
 	:gender => "M",
 	:shiny => true,
@@ -12098,7 +12115,7 @@ TEAMARRAY = [{
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
-		:setWeather => [:RAINDANCE,-1,"VALARIE: Looks like it's going to rain!", false, true],
+		:setWeather => [:RAINDANCE,-1,"VALARIE: Watch out, storm's rolling in!", false, true],
 	},
 },
 :mons => [{
@@ -12127,7 +12144,7 @@ TEAMARRAY = [{
 	:species => :SWAMPERT,
 	:level => 40,
 	:item => :SWAMPERTITE,
-	:moves => [:EARTHQUAKE,:WATERFALL,:POISONJAB,:ICEPUNCH],
+	:moves => [:EARTHQUAKE,:DIVE,:POISONJAB,:ICEPUNCH],
 	:ability => :SWIFTSWIM,
 	:gender => "M",
 	:nature => :ADAMANT,
@@ -12137,8 +12154,8 @@ TEAMARRAY = [{
 {
 	:species => :LAPRAS,
 	:level => 39,
-	:item => :LIGHTCLAY,
-	:moves => [:ICEBEAM,:CHILLINGWATER,:THUNDERBOLT,:REST],
+	:item => :ELEMENTALSEED,
+	:moves => [:ICEBEAM,:CHILLINGWATER,:FREEZEDRY,:REST],
 	:ability => :HYDRATION,
 	:gender => "M",
 	:nature => :MODEST,
@@ -12160,8 +12177,8 @@ TEAMARRAY = [{
 	:species => :DONDOZO,
 	:level => 40,
 	:item => :ELEMENTALSEED,
-	:moves => [:WAVECRASH,:BODYPRESS,:REST,:CURSE],
-	:ability => :WATERVEIL,
+	:moves => [:WAVECRASH,:BODYPRESS,:AVALANCHE,:CURSE],
+	:ability => :UNAWARE,
 	:gender => "M",
 	:nature => :BOLD,
 	:iv => 31,
@@ -12303,13 +12320,13 @@ TEAMARRAY = [{
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
-		:setWeather => [:RAINDANCE,-1,"VALARIE: Looks like it's going to rain!", false, true],
+		:setWeather => [:RAINDANCE,-1,"VALARIE: Watch out, storm's rolling in!", false, true],
 	},
 },
 :mons => [
 {
 	:species => :PALAFIN,
-	:level => 38,
+	:level => 40,
 	:item => :MYSTICWATER,
 	:moves => [:JETPUNCH,:FLIPTURN,:ICEPUNCH,:WATERFALL],
 	:ability => :ZEROTOHERO,
@@ -12320,7 +12337,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :OVERQWIL,
-	:level => 38,
+	:level => 40,
 	:item => :POISONBARB,
 	:moves => [:BARBBARRAGE,:WATERFALL,:CRUNCH,:DESTINYBOND],
 	:ability => :SWIFTSWIM,
@@ -12331,18 +12348,18 @@ TEAMARRAY = [{
 },
 {
 	:species => :LAPRAS,
-	:level => 37,
-	:item => :ELEMENTALSEED,
-	:moves => [:FREEZEDRY,:CHILLINGWATER,:THUNDERBOLT,:REST],
+	:level => 39,
+	:item => :LIGHTCLAY,
+	:moves => [:FREEZEDRY,:CHILLINGWATER,:THUNDERBOLT,:ICEBEAM],
 	:ability => :HYDRATION,
 	:gender => "M",
-	:nature => :CALM,
+	:nature => :MODEST,
 	:iv => 31,
-	:ev => [252, 0, 0, 4, 252, 0],
+	:ev => [252, 0, 0, 252, 4, 0],
 },
 {
 	:species => :WHISCASH,
-	:level => 38,
+	:level => 40,
 	:item => :WHISCREST,
 	:moves => [:DRAGONDANCE,:WATERFALL,:BOUNCE,:ZENHEADBUTT],
 	:ability => :HYDRATION,
@@ -12353,9 +12370,9 @@ TEAMARRAY = [{
 },
 {
 	:species => :LANTURN,
-	:level => 38,
+	:level => 41,
 	:item => :ELEMENTALSEED,
-	:moves => [:REST,:WHIRLPOOL,:ENERGYBALL,:THUNDERBOLT],
+	:moves => [:REST,:SCALD,:ENERGYBALL,:THUNDERBOLT],
 	:ability => :HYDRATION,
 	:gender => "M",
 	:nature => :BOLD,
@@ -12364,12 +12381,13 @@ TEAMARRAY = [{
 },
 {
 	:species => :PRIMARINA,
-	:level => 40,
+	:level => 42,
 	:item => :WACANBERRY,
 	:moves => [:SURF,:ENERGYBALL,:MOONBLAST,:PSYCHIC],
 	:ability => :SWIFTSWIM,
 	:gender => "F",
 	:nature => :TIMID,
+	:shiny => true,
 	:form => 1,
 	:iv => 31,
 	:ev => [0, 0, 0, 252, 0, 252],

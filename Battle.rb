@@ -5573,7 +5573,7 @@ class PokeBattle_Battle
           pbDisplay(_INTL("{1}'s Hydration restored its health!", i.pbThis))
         end
       end
-      if i.ability == :WATERVEIL && (@field.effect == :WATERSURFACE || @field.effect == :UNDERWATER)
+      if i.ability == :WATERVEIL && (@field.effect == :WATERSURFACE || @field.effect == :UNDERWATER) && !SWUMOD
         if !i.status.nil?
           pbDisplay(_INTL("{1}'s Water Veil cured its {2} problem!", i.pbThis, i.status.downcase))
           i.status = nil
@@ -6507,6 +6507,14 @@ class PokeBattle_Battle
             pbCommonAnimation("StatUp", i, nil)
             pbDisplay(_INTL("{1}'s Water Compaction sharply raised its defense!", i.pbThis))
           end
+        end
+      end
+      # Storm Drain on Water-based Fields
+      if i.ability == :STORMDRAIN && [:SWAMP, :WATERSURFACE, :MURKWATERSURFACE].include?(@field.effect) && !i.isAirborne? && SWUMOD
+        if !i.pbTooHigh?(PBStats::SPATK)
+          i.pbIncreaseStatBasic(PBStats::SPATK, 1)
+          pbCommonAnimation("StatUp", i, nil)
+          pbDisplay(_INTL("{1}'s Storm Drain raised its special attack!", i.pbThis))
         end
       end
       if i.effects[:Octolock] >= 0
