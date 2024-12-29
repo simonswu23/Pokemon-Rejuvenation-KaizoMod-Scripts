@@ -1,5 +1,5 @@
 - 12/27/2024
-  - discouraged switching + twoturncode vs protect even more
+  - minor AI giga evolution tweaks 
   - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
 
 - 12/26/2024

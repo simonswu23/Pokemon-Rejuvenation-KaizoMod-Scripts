@@ -23,6 +23,7 @@
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
   - Freezing Glare has its base effect chance improved to 30%
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
+  - Detect has a better rate when used consecutively (1/2 instead of 1/3 each successful use)
 
 # Pokemon
   ## Standard Pokemon
@@ -40,8 +41,13 @@
     - Commander gives a +1 omniboost to self on entry. If Dondozo is a partner on the field, it will also get an addition +1 omniboost.
     - Water Veil now sets up Aqua Ring on entry instead of its old field effect
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+    - Zero to Hero activates instantly
+    - Wave Crash added to moves boosted by field, field boost 1.2x -> 1.3x
+    - speed reduction effect increased to x0.5
   - Underwater
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+    - Surf causes the battle to resurface
+    - speed reduction effect increased to x0.25
   - Swamp
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
 

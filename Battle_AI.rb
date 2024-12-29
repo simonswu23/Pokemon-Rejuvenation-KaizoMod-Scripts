@@ -5580,7 +5580,7 @@ class PokeBattle_AI
       miniscore*=0.5 if checkAIhealing()
       miniscore*=0.7 if checkAIaccuracy()
     end
-    miniscore*=0 if checkAImoves(PBStuff::PROTECTMOVE)
+    miniscore*=0.1 if checkAImoves(PBStuff::PROTECTMOVE)
     return miniscore
   end
 

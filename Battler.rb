@@ -943,9 +943,9 @@ class PokeBattle_Battler
       when :NEWWORLD
         speed *= 0.75 if !self.isAirborne?
       when :WATERSURFACE, :MURKWATERSURFACE
-        speed *= 0.75 if !self.isAirborne? && self.ability != :SURGESURFER && self.ability != :SWIFTSWIM && !self.hasType?(:WATER)
+        speed *= 0.5 if !self.isAirborne? && self.ability != :SURGESURFER && self.ability != :SWIFTSWIM && !self.hasType?(:WATER)
       when :UNDERWATER
-        speed *= 0.5 if !self.hasType?(:WATER) && self.ability != :SWIFTSWIM && self.ability != :STEELWORKER
+        speed *= 0.25 if !self.hasType?(:WATER) && self.ability != :SWIFTSWIM && self.ability != :STEELWORKER
     end
     if self.itemWorks?
       if self.item == :CHOICESCARF
