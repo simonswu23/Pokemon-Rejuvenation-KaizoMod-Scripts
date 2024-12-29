@@ -1,3 +1,7 @@
+- 12/27/2024
+  - discouraged switching + twoturncode vs protect even more
+  - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
+
 - 12/26/2024
   - finally fixed Giga evolution bug (properly registers and checks choice to Giga evolve now)
   - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance (TODO: figure out the animation)

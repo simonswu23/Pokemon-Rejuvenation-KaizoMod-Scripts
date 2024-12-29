@@ -80,6 +80,7 @@ class PokeBattle_Battler
   attr_accessor :supersweetSyrupTriggered # Gen 9 Mod - Used for abilities that should only work once in battle
   attr_accessor :supersweetSyrupTriggeredDoubleBattle # Gen 9 Mod - check for having two enemies
   attr_accessor :teraformZeroTriggered # Gen 9 Mod - Teraform Zero only once per battle.
+  attr_accessor :lastMoveCancelled     # @SWu bug fix
   def inHyperMode?; return false; end
   def isShadow?; return false; end
 
@@ -422,6 +423,8 @@ class PokeBattle_Battler
     @item         = nil
     @weight       = nil
     @battle_bond_flags = []
+
+    @lastMoveCancelled = -1
 
     pbInitEffects(false,fakebattler)
 
@@ -2270,6 +2273,7 @@ class PokeBattle_Battler
         end
       end
     end
+
     # Water's Surface entry
     if @battle.FE == :WATERSURFACE && SWUMOD
       if self.ability == :WATERVEIL && onactive
@@ -2290,6 +2294,16 @@ class PokeBattle_Battler
         @battle.pbCommonAnimation("StatUp", self, nil)
         @battle.pbDisplay(_INTL("{1}'s Commander took charge over the water!", pbThis))
       end
+    end
+    if self.ability == :ZEROTOHERO && self.form == 0 && self.species == :PALAFIN && SWUMOD
+      self.form = 1
+      pbUpdate(true)
+      @battle.pbAnimation(:FLATTER, self, nil)
+      @battle.pbDisplay(_INTL("The return of a local hero!"))
+      @battle.pbAnimation(:TRANSFORM,self,nil)
+      @battle.scene.pbChangePokemon(self, self.pokemon)
+      @battle.pbDisplay(_INTL("{1} underwent a heroic transformation!",pbThis))
+      self.pokemon.justTransformed = 0
     end
   end
 
@@ -6479,6 +6493,7 @@ class PokeBattle_Battler
     # Reset counters for moves which increase them when used in succession
     @effects[:FuryCutter]=0
     @effects[:EchoedVoice]=0
+    @lastMoveCancelled = 1
   end
 
 ################################################################################

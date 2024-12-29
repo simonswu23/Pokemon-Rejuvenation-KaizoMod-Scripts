@@ -4704,6 +4704,7 @@ class PokeBattle_Battle
       @battlers[i].itemUsed = false
       @battlers[i].effects[:SyrupBomb] -= 1     if @battlers[i].effects[:SyrupBomb] > 0 # Gen 9 Mod - Added Syrup Bomb effects.
       @battlers[i].effects[:SyrupBomb] = 0    if @battlers[i].effects[:SyrupBombUser] == -1 # Gen 9 Mod - Added Syrup Bomb effects.
+      @battlers[i].lastMoveCancelled -= 1
     end
     @state.effects[:IonDeluge] = false
     @state.effects[:Round] = false

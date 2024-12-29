@@ -4798,7 +4798,7 @@ end
 ################################################################################
 class PokeBattle_Move_0AA < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    if !PBStuff::RATESHARERS.include?(attacker.previousMove)
+    if !PBStuff::RATESHARERS.include?(attacker.previousMove || attacker.lastMoveCancelled == 0)
       attacker.effects[:ProtectRate]=0
     end
     priority = @battle.pbPriority
@@ -4807,7 +4807,8 @@ class PokeBattle_Move_0AA < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
-    if @battle.pbRandom(65536)<(65536/(3**attacker.effects[:ProtectRate])).floor
+    rate = @move == :DETECT ? 2 : 3
+    if @battle.pbRandom(65536)<(65536/(rate**attacker.effects[:ProtectRate])).floor
       attacker.effects[:Protect]=:Protect
       attacker.effects[:ProtectRate]+=1
       @battle.pbAnimation(@move,attacker,nil)

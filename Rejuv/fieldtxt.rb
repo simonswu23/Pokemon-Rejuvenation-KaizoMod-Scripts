@@ -1292,12 +1292,12 @@ FIELDEFFECTS = {
 	:naturePower => :WHIRLPOOL,
 	:mimicry => :WATER,
 	:damageMods => {
-		1.2 => [:WHIRLPOOL, :SURF, :MUDDYWATER, :WHIRLPOOL, :DIVE, :SLUDGEWAVE, :OCTAZOOKA, :ORIGINPULSE, :HYDROVORTEX],
+		1.3 => [:WHIRLPOOL, :SURF, :MUDDYWATER, :WHIRLPOOL, :DIVE, :SLUDGEWAVE, :OCTAZOOKA, :ORIGINPULSE, :HYDROVORTEX, :WAVECRASH],
 		0 => [:SPIKES, :TOXICSPIKES],
 	},
 	:accuracyMods => {},
 	:moveMessages => {
-		"The attack rode the current!" => [:WHIRLPOOL, :SURF, :MUDDYWATER, :WHIRLPOOL, :DIVE, :ORIGINPULSE, :HYDROVORTEX],
+		"The attack rode the current!" => [:WHIRLPOOL, :SURF, :MUDDYWATER, :WHIRLPOOL, :DIVE, :ORIGINPULSE, :HYDROVORTEX, :WAVECRASH],
 		"Poison spread through the water!" => [:SLUDGEWAVE],
 		"...The spikes sank into the water and vanished!" => [:SPIKES, :TOXICSPIKES],
 	},
@@ -1403,7 +1403,7 @@ FIELDEFFECTS = {
 	},
 	:dontChangeBackup => [],
 	:changeMessage => {
-		 "The battle resurfaced!" => [:DIVE, :SKYDROP, :FLY, :BOUNCE, :SHOREUP],
+		 "The battle resurfaced!" => [:DIVE, :SKYDROP, :FLY, :BOUNCE, :SHOREUP, :SURF],
 		 "The grime sank beneath the battlers!" => [:SLUDGEWAVE, :ACIDDOWNPOUR],
 	},
 	:statusMods => [:AQUARING, :TAKEHEART],
