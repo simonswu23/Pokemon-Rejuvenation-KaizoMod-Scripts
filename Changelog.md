@@ -18,12 +18,17 @@
 
 # Abilities
   - Magma Armor protects against Frostbite
+  - Rain Dish and Ice Body healing improved to 1/8
+
+# Crests
+  - Druddigon Crest healing improved to 1/8
 
 # Attacks
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
   - Freezing Glare has its base effect chance improved to 30%
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
   - Detect has a better rate when used consecutively (1/2 instead of 1/3 each successful use)
+  - Dragon Pulse power buffed to 95, and never misses
 
 # Pokemon
   ## Standard Pokemon
@@ -50,7 +55,12 @@
     - speed reduction effect increased to x0.25
   - Swamp
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+  - Beach
+    - Dig is immediate
+    - Shadow Bone boosted x2.0 by field
+    - Dig, Psychic, Stored Power, Zen Headbutt, Focus Punch, Focus Blast, Aura Sphere boosted x1.35 by field
 
 # Other
   - Removed data chip cost to enter password
   - All consumed held items (including berries) are restored at the end of each battle
+  - Terajuma password is disabled

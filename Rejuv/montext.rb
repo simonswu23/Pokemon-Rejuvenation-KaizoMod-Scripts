@@ -2271,7 +2271,22 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Geara's Clefable (Intense)" => {
+    # +50 BST
+    :Type2 => :GHOST,
+    :BaseStats => [95, 80, 83, 105, 100, 70],
+    :Abilities => [:MAGICGUARD],
+  },
+
+  "Geara's Clefable (Kaizo)" => {
+    # +100 BST
+    :Type2 => :GHOST,
+    :BaseStats => [95, 90, 93, 115, 110, 80],
+    :Abilities => [:MAGICGUARD],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :VULPIX => {
@@ -4623,17 +4638,23 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
-      :BaseStats => [90, 170, 105, 70, 105, 65],
-      :Abilities => [:NOGUARD],
-      :Height => 250,
-      :Weight => 2866,
+  "Giga Form" => {
+    :Height => 250,
+    :Weight => 2866,
   },
 
+  "Mega Form" => {
+    :BaseStats => [90, 170, 105, 70, 105, 65],
+    :Abilities => [:NOGUARD],
+    :Height => 250,
+    :Weight => 2866,
+},
+
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :MACHAMPITE => 1
+      :MACHAMPITE => 2
   },
 },
 
@@ -9280,10 +9301,16 @@ MONHASH = {
       :dexentry => "This unique Lapras was previously fossilized, but the strange energy the crystals in Amethyst cave seem to give off slowly revived and altered it.",
   },
 
-    "Giga Form" => {
-      :BaseStats => [130, 125, 90, 105, 105, 80],
+  "Giga Form" => {
       :Height => 240,
       :Weight => 2456,
+  },
+
+  "Mega Form" => {
+    :BaseStats => [130, 125, 90, 105, 105, 80],
+    :Abilities => [:HYDRATION],
+    :Height => 240,
+    :Weight => 2456,
   },
 
   :OnCreation => proc{
@@ -9294,10 +9321,11 @@ MONHASH = {
         next 0
       end
       },
+
   :DefaultForm => 0,
   :GigaForm => 2,
   :MegaForm => {
-        :LAPRASITE => 2
+        :LAPRASITE => 3
   },
 },
 
@@ -21822,6 +21850,7 @@ MONHASH = {
       :BaseStats => [50, 85, 40, 85, 40, 35],
       :EVs => [0, 0, 0, 1, 0, 0],
       :Abilities => [:SANDVEIL, :WATERABSORB],
+      :HiddenAbilities => :TECHNICIAN,
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 67,
@@ -21880,6 +21909,7 @@ MONHASH = {
       :BaseStats => [70, 115, 60, 115, 60, 55],
       :EVs => [0, 1, 0, 1, 0, 0],
       :Abilities => [:SANDVEIL, :WATERABSORB],
+      :HiddenAbilities => :TECHNICIAN,
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 166,
@@ -46882,15 +46912,15 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-  "Valarie's Primarina (Mynori)" => {
-    # +40 BST
-    :BaseStats => [80, 74, 74, 136, 136, 70],
+  "Valarie's Primarina (Intense)" => {
+    # +50 BST
+    :BaseStats => [80, 74, 74, 146, 136, 70],
     :Abilities => [:SWIFTSWIM],
   },
 
-  "Valarie's Primarina" => {
+  "Valarie's Primarina (Kaizo)" => {
     # +100 BST
-    :BaseStats => [80, 84, 84, 146, 146, 90],
+    :BaseStats => [80, 74, 84, 156, 146, 90],
     :Abilities => [:SWIFTSWIM],
   },
 
@@ -53175,17 +53205,23 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
-      :BaseStats => [90, 155, 110, 48, 88, 94],
-      :Abilities => [:STRONGJAW],
-      :Height => 240,
-      :Weight => 2456,
+  "Giga Form" => {
+    :Height => 240,
+    :Weight => 2456,
+  },
+
+  "Mega Form" => {
+    :BaseStats => [90, 155, 110, 48, 88, 94],
+    :Abilities => [:STRONGJAW],
+    :Height => 240,
+    :Weight => 2456,
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :DREDNAWTITE => 1
+      :DREDNAWTITE => 2
   },
 },
 
@@ -54736,7 +54772,12 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Height => 240,
+    :Weight => 2456,
+  },
+
+    "Mega Form" => {
       :BaseStats => [95, 145, 105, 75, 100, 90],
       :Abilities => [:PRANKSTER],
       :Height => 320,
@@ -54744,9 +54785,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :GRIMMSNARLITE => 1
+      :GRIMMSNARLITE => 2
   },
 },
 

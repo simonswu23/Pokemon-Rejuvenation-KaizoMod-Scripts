@@ -802,7 +802,6 @@ class PokeBattle_Pokemon
         self.form = 11
       end
     end
-    # self.originalAbility = self.ability
     self.ability = self.abilityIndex
   end
 
@@ -1325,8 +1324,6 @@ def makeGiga
   # @SWu TODO: only need to handle Urshifu below
   # self.form=v[@item] if v.is_a?(Hash) && v[@item].is_a?(Integer)
   # self.form=v[@item][@form] if v.is_a?(Hash) && v[@item].is_a?(Hash)
-  self.originalAbility = self.ability
-  self.ability = self.abilityIndex
 end
 
 def pbGigaCompatibleBaseMove?(move)

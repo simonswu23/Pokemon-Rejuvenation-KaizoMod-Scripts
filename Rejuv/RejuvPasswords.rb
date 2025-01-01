@@ -105,6 +105,9 @@ def addPassword(entrytext)
       if !ids
         Kernel.pbMessage('That is not a password.')
         next
+      elsif password == "terajuma" && SWUMOD
+        Kernel.pbMessage('That password is disabled for this mod.')
+        next
       end      
       success=doExecute ? pbTogglePassword(password) : false
       alreadyKnown=true

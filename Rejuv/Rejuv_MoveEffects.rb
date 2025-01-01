@@ -765,13 +765,15 @@ end
 
 
 ### Giga Moves Below ###
+
+# Resonance
 class PokeBattle_Move_1000 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     return if ret == -1
     if attacker.pbOwnSide.effects[:AuroraVeil] == 0
       # @SWu showing sparkling aria twice?
-      pbShowAnimation(:AURORAVEIL,attacker,opponent,hitnum,alltargets,showanimation)
+      @battle.pbAnimation(:AURORAVEIL,attacker,opponent,hitnum)
       attacker.pbOwnSide.effects[:AuroraVeil]=5
       attacker.pbOwnSide.effects[:AuroraVeil]=8 if attacker.hasWorkingItem(:LIGHTCLAY)
       attacker.pbOwnSide.effects[:AuroraVeil]=8 if @battle.FE == :MIRROR
@@ -787,9 +789,33 @@ class PokeBattle_Move_1000 < PokeBattle_Move
     return ret
   end
 
-  # def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-  #   return if !showanimation
-  #   # replacement anim until proper one is made
-  #   @battle.pbAnimation(:SPARKLINGARIA,attacker,opponent,hitnum)
-  # end
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:SPARKLINGARIA,attacker,opponent,hitnum)
+  end
+end
+
+# Snooze
+class PokeBattle_Move_1001 < PokeBattle_Move
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+    if (opponent.pbCanSleep?(true) || opponent.effects[:Yawn]>0) && opponent.status != :SLEEP
+      @battle.pbAnimation(:YAWN,opponent,attacker,hitnum)
+      opponent.effects[:Yawn]=2
+      @battle.pbDisplay(_INTL("{1} made {2} drowsy!",attacker.pbThis,opponent.pbThis(true)))  
+    end
+    return ret
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:DARKVOID,attacker,opponent,hitnum)
+    # if id == :YAWN
+    #   @battle.pbAnimation(id,attacker,opponent,hitnum)
+    # else
+    #   @battle.pbAnimation(:DARKVOID,attacker,opponent,hitnum)
+    # end
+  end
 end

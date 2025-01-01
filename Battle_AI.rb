@@ -1954,7 +1954,7 @@ class PokeBattle_AI
       when 0x4e # Captivate # Gen 9 Mod - Added myceliumMightCheck
         agender=@attacker.gender
         ogender=@opponent.gender
-        if (agender==2 || ogender==2 || agender==ogender || @opponent.effects[:Attract]>=0 || ((@opponent.ability == :OBLIVIOUS || @opponent.ability == :AROMAVEIL || @opponent.pbPartner.ability == :AROMAVEIL) && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))))
+        if (((agender==2 || ogender==2 || agender==ogender) && !SWUMOD) || @opponent.effects[:Attract]>=0 || ((@opponent.ability == :OBLIVIOUS || @opponent.ability == :AROMAVEIL || @opponent.pbPartner.ability == :AROMAVEIL) && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))))
           miniscore = 0
         else
           miniscore = oppstatdrop([0,0,0,2,0,0,0])
@@ -2397,7 +2397,7 @@ class PokeBattle_AI
           miniscore = 0 #Telling the AI that Suicide is bad hmmm kay
         elsif @attacker.ability == :NOGUARD || @opponent.ability == :NOGUARD || (@opponent.ability==:FAIRYAURA && @battle.FE == :FAIRYTALE)
           miniscore = weaselslashcode() unless (Rejuv && @battle.FE == :DESERT)
-        elsif !(Rejuv && @battle.FE == :DESERT)
+        elsif !(Rejuv && @battle.FE == :DESERT || (SWUMOD && @battle.FE == :ASHENBEACH)))
           miniscore = twoturncode()
           miniscore*=0.3 if checkAImoves([:EARTHQUAKE])
         end
@@ -3529,6 +3529,12 @@ class PokeBattle_AI
         miniscore = petrifycode()
         miniscore *= tormentcode()
         miniscore *= oppstatdrop([2,0,2,0,0,0,0])
+      # Giga Moves
+      when 0x1000 # Resonance
+        miniscore = screencode()
+      when 0x1001 # Snooze
+        miniscore = sleepcode()
+
     end
     miniscore *= recoilcode() if @move.recoil > 0
     miniscore *= cooldownmovecode() if @move.hasFlag?(:cooldown)
@@ -3843,7 +3849,7 @@ class PokeBattle_AI
   def attractcode # Gen 9 Mod - Added myceliumMightCheck
     agender=@attacker.gender
     ogender=@opponent.gender
-    return 0 if (agender==2 || ogender==2 || agender==ogender || @opponent.effects[:Attract]>=0 || ((@opponent.ability == :OBLIVIOUS || @opponent.ability == :AROMAVEIL || @opponent.pbPartner.ability == :AROMAVEIL) && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))))
+    return 0 if (((agender==2 || ogender==2 || agender==ogender) && !SWUMOD) || @opponent.effects[:Attract]>=0 || ((@opponent.ability == :OBLIVIOUS || @opponent.ability == :AROMAVEIL || @opponent.pbPartner.ability == :AROMAVEIL) && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))))
     miniscore=1.2
     miniscore*=0.7 if @attacker.ability == :CUTECHARM
     miniscore*=1.3 if @mondata.roles.include?(:PHYSICALWALL) || @mondata.roles.include?(:SPECIALWALL)

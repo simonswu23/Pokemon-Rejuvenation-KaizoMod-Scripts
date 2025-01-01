@@ -1,10 +1,35 @@
+# Battle Log
+
+## Intense
+- Venam Gym, **UNTESTED**
+- Alex + Sam (1), **UNTESTED**
+- Valarie (Gym)
+- Geara (Terajuma Beach)
+
+## Kaizo
+- Venam Gym, **UNTESTED**
+- Alex + Sam (1), **UNTESTED**
+- Valarie (Gym)
+- Geara (Terajuma Beach)
+
+# Progress
+
+- 12/29/24
+  - updated Captivate x Attract to work irrespective of gender
+  - minor update to AI code for giga moves (Resonance and Snooze)
+  - fixed Giga Evolution not properly keeping old ability
+  - beach field updates
+  - re-ordered pokemon form data so Giga forms use their G-Mega sprites
+  - disabled Terajuma password (softlock protection)
+
 - 12/27/2024
   - minor AI giga evolution tweaks 
   - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
 
 - 12/26/2024
   - finally fixed Giga evolution bug (properly registers and checks choice to Giga evolve now)
-  - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance (TODO: figure out the animation)
+  - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance
+    - FIXED: needed to call pbAnimation from @battle (not the overridden function in the class)
   - AI updates for Giga:
     - discouraged switching giga pokemon
 
@@ -43,13 +68,13 @@
       - TODO: might need to double-check how item stealing works here (patch if it's an issue)
   - improved wild pokemon catch chances
   - Angie and Valarie Gym Battles updated (standard and kaizo)
-    - TODO: playtest
    - misc bug fixes
     - :PETRIFICATION typo (as :PETRFICATION, preventing it from being cured by attacks)
     - :FROZEN typo (as :FREEZE, for 2-turn attacks and boss battles)
 
 - 12/16/25
   - Added LAWDS macho brace implementation for QoL
+
 - 12/15/24
   - Venam Gym Battle updated (standard and kaizo)
     - TODO: playtest

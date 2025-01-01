@@ -24,6 +24,7 @@ def pbGetRelearnableMoves(pokemon)
     end
   end
   moves=tmoves+moves
+  # @SWu TODO: require move learner to be found before egg moves can be instantly relearned
   moves= tmoves+pokemon.getEggMoveList(true)+moves if Rejuv && ($PokemonBag.pbHasItem?(:HM02) || SWUMOD)
   return moves|[] # remove duplicates
 end

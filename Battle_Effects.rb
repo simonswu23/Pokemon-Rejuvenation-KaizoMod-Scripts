@@ -507,7 +507,7 @@ class PokeBattle_Battler
     end
     agender = attacker.gender
     ogender = self.gender
-    if agender == 2 || ogender == 2 || agender == ogender
+    if (agender == 2 || ogender == 2 || agender == ogender) && !SWUMOD
       @battle.pbDisplay(_INTL("But it failed!")) if showMessages
       return false
     end

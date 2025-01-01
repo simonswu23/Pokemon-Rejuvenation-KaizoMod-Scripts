@@ -2408,8 +2408,8 @@ class PokeBattle_Move_04E < PokeBattle_Move
     return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
     return -1 if !opponent.pbCanReduceStatStage?(PBStats::SPATK, true)
 
-    if attacker.gender == 2 || opponent.gender == 2 ||
-       attacker.gender == opponent.gender
+    if (attacker.gender == 2 || opponent.gender == 2 ||
+       attacker.gender == opponent.gender) && !SWUMOD
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -2423,8 +2423,8 @@ class PokeBattle_Move_04E < PokeBattle_Move
   end
 
   def pbAdditionalEffect(attacker, opponent)
-    return false if attacker.gender == 2 || opponent.gender == 2 ||
-                    attacker.gender == opponent.gender
+    return false if (attacker.gender == 2 || opponent.gender == 2 ||
+    attacker.gender == opponent.gender) && !SWUMOD
     return false if opponent.ability == :OBLIVIOUS && !opponent.moldbroken
 
     opponent.pbReduceStat(PBStats::SPATK, 2, abilitymessage: false, statdropper: attacker)
@@ -5756,7 +5756,7 @@ class PokeBattle_Move_0CA < PokeBattle_Move
   def pbTwoTurnAttack(attacker, checking = false)
     @immediate = false
     if attacker.effects[:TwoTurnAttack] == 0
-      @immediate = true if Rejuv && @battle.FE == :DESERT
+      @immediate = true if Rejuv && @battle.FE == :DESERT || (@battle.FE == :ASHENBEACH && SWUMOD)
       @immediate = true if (@battle.FE == :WATERSURFACE || @battle.FE == :MURKWATERSURFACE) && self.pbType(attacker, self.type) == :GROUND # for move failure on these fields
     end
     if !@immediate && attacker.hasWorkingItem(:POWERHERB)
