@@ -1338,7 +1338,7 @@ class PokeBattle_Battle
       end
       return false
     end
-    if PBStuff::HEALFUNCTIONS.include?(basemove.function) && !basemove.zmove && thispkmn.effects[:HealBlock] > 0
+    if PBStuff::HEALFUNCTIONS.include?(basemove.function) && !basemove.zmove && thispkmn.effects[:HealBlock] != 0
       if showMessages
         pbDisplayPaused(_INTL("{1} can't use {2} after the Heal Block!", thispkmn.pbThis, basemove.name))
       end
@@ -6054,7 +6054,7 @@ class PokeBattle_Battle
     for i in priority
       next if i.isFainted?
 
-      if i.effects[:HealBlock] > 0
+      if i.effects[:HealBlock] != 0
         i.effects[:HealBlock] -= 1
         if i.effects[:HealBlock] == 0
           pbDisplay(_INTL("The heal block on {1} ended.", i.pbThis))
@@ -6662,7 +6662,7 @@ class PokeBattle_Battle
           failsafe1 += 1
           break if failsafe1 == 1000
 
-          randomnumber = 1 + pbRandom(Gen <= 7 ? 7 : 5)
+          randomnumber = 1 + pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
           if !i.pbTooHigh?(randomnumber)
             randomup.push(randomnumber)
             break
@@ -6672,7 +6672,7 @@ class PokeBattle_Battle
           failsafe2 += 1
           break if failsafe2 == 1000
 
-          randomnumber = 1 + pbRandom(Gen <= 7 ? 7 : 5)
+          randomnumber = 1 + pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
           if !i.pbTooLow?(randomnumber) && randomnumber != randomup[0]
             randomdown.push(randomnumber)
             break

@@ -20,6 +20,7 @@ class PokeBattle_Move
   attr_reader     :effect
   attr_reader     :moreeffect
   attr_reader     :recoil
+  attr_reader     :damagedealt
   attr_accessor :fieldmessageshown
   attr_accessor :fieldmessageshown_type
 
@@ -1450,6 +1451,7 @@ class PokeBattle_Move
     end
     c += 1 if attacker.hasWorkingItem(:RAZORCLAW)
     c += 1 if attacker.hasWorkingItem(:SCOPELENS)
+    c += 2 if @move == :HYDROSNIPE
     c += 3 if sharpMove? && attacker.crested == :SAMUROTT
     c += 1 if attacker.crested == :FEAROW # Fearow Crest
     c += 1 if attacker.speed > opponent.speed && @battle.FE == :GLITCH
@@ -2674,12 +2676,13 @@ class PokeBattle_Move
   def pbAddTarget(targets,attacker)
   end
 
-  def pbDisplayUseMessage(attacker,choice)
+  def pbDisplayUseMessage(attacker,choice,showmessage=true)
   # Return values:
   # -1 if the attack should exit as a failure
   # 1 if the attack should exit as a success
   # 0 if the attack should proceed its effect
   # 2 if Bide is storing energy
+    return if !showmessage
     if choice[2].zmove
       if choice[2].hasFlag?(:intercept)
         owner= @battle.pbGetOwner(attacker.index)

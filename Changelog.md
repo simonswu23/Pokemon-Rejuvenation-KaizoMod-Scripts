@@ -17,11 +17,22 @@
     - Shaymin-Sky will revert to Land form if inflicted with Frostbite
 
 # Abilities
+  ## New Abilities
+  - Melodramatic
+    - on switch in, sharply raise a random stat and lower a random stat, three times
+    - Neved's Glalie
+  - Meteor Impactor
+    - on switch in, crash and deal big rock type damage in exchange for losing 50% hp
+    - Zetta's Minior
+
+  ## Changes
   - Magma Armor protects against Frostbite
   - Rain Dish and Ice Body healing improved to 1/8
+  - Moody nerf reverted (can affect Evasion and Accuracy)
 
 # Crests
   - Druddigon Crest healing improved to 1/8
+  - Cicinno and Ledian Crests can now trigger side effects for all hits
 
 # Attacks
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
@@ -29,8 +40,19 @@
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
   - Detect has a better rate when used consecutively (1/2 instead of 1/3 each successful use)
   - Dragon Pulse power buffed to 95, and never misses
+  - Explosion and Selfdestruct are now doubled in base power
+  - Nature's Power now can never miss
+  - Guardian of Alola:
+    - deals 99% of hp in damage in forest field
+    - additional effect now changes depending on user:
+      - Koko: paralysis
+      - Bulu: heals user equal to damage dealt
+      - Lele: indefinite heal block + trapping effect
+      - Fini: clears all stat changes + defog
 
 # Pokemon
+  ## Giga Pokemon
+  
   ## Standard Pokemon
   - Varoom and Revavroom
     - ability Filter added for Varoom
@@ -40,6 +62,9 @@
     - ability Cursed Body added for Gastly, Haunter
     - ability Perish Body, Levitate added for Gengar
     - abilities across evolution: Levitate -> Levitate -> Levitate, Cursed Body -> Cursed Body -> Perish Body
+  - Minior
+    - +40 BST: 60, 120, 60, 120, 60, 120
+    - Shields Down: 60, 60, 120, 60, 120, 60
 
 # Field Changes
   - Water's Surface
@@ -59,8 +84,13 @@
     - Dig is immediate
     - Shadow Bone boosted x2.0 by field
     - Dig, Psychic, Stored Power, Zen Headbutt, Focus Punch, Focus Blast, Aura Sphere boosted x1.35 by field
+  - Forest
+    - Slash and Burn, Trailblaze are boosted x1.5 by field
+    - Trailblaze raises user's speed by 2 instead of 1
+    - All Bug moves are now boosted by x1.5
 
 # Other
   - Removed data chip cost to enter password
   - All consumed held items (including berries) are restored at the end of each battle
   - Terajuma password is disabled
+  - Crests now work on pokemon regardless of their form

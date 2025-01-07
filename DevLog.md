@@ -5,14 +5,44 @@
 - Alex + Sam (1), **UNTESTED**
 - Valarie (Gym)
 - Geara (Terajuma Beach)
+- Zetta (Terajuma Falls)
+- Neved (Terajuma Falls)
 
 ## Kaizo
 - Venam Gym, **UNTESTED**
 - Alex + Sam (1), **UNTESTED**
 - Valarie (Gym)
 - Geara (Terajuma Beach)
+- Tapu Koko (Boss)
+- Zetta (Terajuma Falls)
+- Neved (Terajuma Falls)
 
 # Progress
+
+- 1/8/25
+ - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)
+ - improved Magnitude rolls with Loaded Dice (might need to double check this)
+ - refactored show_message logic to allow for move use message suppression
+ - reverted Moody nerf
+ - re-ambiguated crests to allow for use regardless of pokemon form
+ - Guardian of Alola rework
+  - TODO: add AI here? (default AI always uses Z-move first if possible
+  - TODO: add proper Tapu Koko anim (or debug if it exists)
+ - TODO: add AI logic for Crash Landing Ability
+ - Z-Move side effects can now trigger, and bypass Shield Dust / Sheer Force / Covert Cloak
+  - TODO: fix Z-moves so they bypass protect
+- reverted Ledian + Cincinno crest nerfs (allow for side effects on subsequent hits)
+- added instantmove to boss battles
+- (old) added starter skills for trainer battles (TODO: import over logic for additional trainer skills) 
+- Darkglare (or whatever Geara's ability will be) not currently implemented
+- TODO: Update Giga pokemon in the Changelog (can paste from previous)
+- TODO: Update signature pokemon in the Changelog
+- temporarily removed terrain destroying effect of Ice Spinner
+
+- 1/2/25
+  - retroactively SWUMODDIFY some changes?
+    - including move changes (can hard code them in PBMOVE)
+  - TODO: fix bug -- Z moves do not trigger side effect chances
 
 - 12/29/24
   - updated Captivate x Attract to work irrespective of gender

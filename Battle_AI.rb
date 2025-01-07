@@ -2397,7 +2397,7 @@ class PokeBattle_AI
           miniscore = 0 #Telling the AI that Suicide is bad hmmm kay
         elsif @attacker.ability == :NOGUARD || @opponent.ability == :NOGUARD || (@opponent.ability==:FAIRYAURA && @battle.FE == :FAIRYTALE)
           miniscore = weaselslashcode() unless (Rejuv && @battle.FE == :DESERT)
-        elsif !(Rejuv && @battle.FE == :DESERT || (SWUMOD && @battle.FE == :ASHENBEACH)))
+        elsif !(Rejuv && @battle.FE == :DESERT || (SWUMOD && @battle.FE == :ASHENBEACH))
           miniscore = twoturncode()
           miniscore*=0.3 if checkAImoves([:EARTHQUAKE])
         end
@@ -5445,7 +5445,7 @@ class PokeBattle_AI
   end
 
   def healblockcode
-    return @move.basedamage > 0 ? 1 : 0 if @opponent.effects[:HealBlock] > 0
+    return @move.basedamage > 0 ? 1 : 0 if @opponent.effects[:HealBlock] != 0
     miniscore = 1.0
     if @move.move == :PSYCHICNOISE # Gen 9 Score Nerf for Psychic Noise
       miniscore *= 1.5 if checkAIhealing()
@@ -5639,7 +5639,7 @@ class PokeBattle_AI
   end
 
   def recovercode(amount=@attacker.totalhp/2.0)
-    return 0 if @attacker.effects[:HealBlock]>0
+    return 0 if @attacker.effects[:HealBlock]!=0
     return 0 if @attacker.effects[:Wish]>0
     miniscore = 1.0
     amount *= 0.67 if @mondata.skill>=BESTSKILL && @battle.FE == :BACKALLEY
@@ -5857,7 +5857,7 @@ class PokeBattle_AI
   end
 
   def healpulsecode
-    return 0 if @opponent.index != @attacker.pbPartner.index || @attacker.effects[:HealBlock]>0 || @opponent.effects[:HealBlock]>0
+    return 0 if @opponent.index != @attacker.pbPartner.index || @attacker.effects[:HealBlock]!=0 || @opponent.effects[:HealBlock]!=0
     miniscore=1.0
     if @opponent.hp > 0.8*@opponent.totalhp
       if !pbAIfaster?(nil, nil, @attacker, @attacker.pbOpposing1) && !pbAIfaster?(nil, nil, @attacker, @attacker.pbOpposing2)

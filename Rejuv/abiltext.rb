@@ -2090,4 +2090,22 @@ ABILHASH = {
 
 ###MODDED###
 
+:MELODRAMATIC => {
+    :ID => 380,
+    :name => "Melodramatic",
+    :desc => "Upon switch in, raise and lower this pokemon's stats, three times."
+},
+
+:DARKGLARE => {
+    :ID => 381,
+    :name => "Darkglare",
+    :desc => "Upon switch in, disables the last attack that opponents used."
+},
+
+:METEORIMPACTOR => {
+    :ID => 382,
+    :name => "Meteor Impactor",
+    :desc => "Upon switch in, user crashes and deals massive damage, taking 50% recoil."
+},
+
 }

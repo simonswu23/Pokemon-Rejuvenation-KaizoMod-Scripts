@@ -990,7 +990,7 @@ MOVEHASH = {
     :function => 0x000,
     :type => :ELECTRIC,
     :category => :physical,
-    :basedamage => 90,
+    :basedamage => 120,
     :accuracy => 100,
     :maxpp => 15,
     :target => :SingleNonUser,
@@ -3721,7 +3721,7 @@ MOVEHASH = {
     :function => 0x0E0,
     :type => :NORMAL,
     :category => :physical,
-    :basedamage => 250,
+    :basedamage => 500,
     :accuracy => 100,
     :maxpp => 5,
     :target => :AllNonUsers,
@@ -9686,7 +9686,7 @@ MOVEHASH = {
     :type => :FAIRY,
     :category => :special,
     :basedamage => 1,
-    :accuracy => 90,
+    :accuracy => 0,
     :maxpp => 10,
     :target => :SingleNonUser,
     :desc => "The user hits the target with the force of nature. It halves the target's HP."
@@ -11898,7 +11898,7 @@ MOVEHASH = {
 :ICESPINNER => {
     :ID => 928,
     :name => "Ice Spinner",
-    :function => 0x306,
+    :function => 0x000, # SWUMOD temp fix
     :type => :ICE,
     :category => :physical,
     :basedamage => 80,
@@ -13560,6 +13560,7 @@ MOVEHASH = {
     :maxpp => 0,
     :target => :SingleNonUser,
     :zmove => true,
+    :effect => 100,
     :desc => "The user, the Land Spirit Pokémon, obtains Alola's energy using its Z-Power and attacks the target with full force. This reduces the target's HP greatly."
 },
 
@@ -14384,7 +14385,6 @@ MOVEHASH = {
 ### SWU's Moves
 
 
-
 # Giga Moves
 
 :RESONANCE => {
@@ -14403,7 +14403,7 @@ MOVEHASH = {
 },
 
 :SNOOZE => {
-	:ID => 2000,
+	:ID => 2001,
 	:name => "Snooze",
 	:function => 0x1001,
 	:type => :DARK,
@@ -14413,8 +14413,51 @@ MOVEHASH = {
 	:maxpp => 10,
 	:giga => true,
 	:target => :SingleNonUser,
-	:soundmove => true,
 	:desc => "Makes target drowsy"
+},
+
+:HYDROSNIPE => {
+	:ID => 2002,
+	:name => "Hydrosnipe",
+	:function => 0x179,
+	:type => :WATER,
+	:category => :special,
+	:basedamage => 110,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :SingleNonUser,
+    # high crit rate handled directly elsewhere
+	:desc => "+2 CHR, cannot be redirected. Ignores Abilities"
+},
+
+:GIANTSDRUM => {
+	:ID => 2003,
+	:name => "Giant's Drum",
+	:function => 0x166,      # Ignores Abilities
+	:type => :NORMAL,
+	:category => :physical,
+	:basedamage => 165,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :AllOpposing,
+	:soundmove => true,
+	:desc => "Ignores Abilities."
+},
+
+# Handlers
+:METEORIMPACTOR => {
+	:ID => 9999,
+	:name => "Meteor Impactor",
+	:function => 0x175,
+	:type => :ROCK,
+	:category => :physical,
+	:basedamage => 150,
+	:accuracy => 100,
+	:maxpp => 16,
+	:target => :AllNonUsers,
+	:desc => "called for ability" 
 },
 
 }

@@ -200,9 +200,9 @@ class PokeBattle_Battler
     return true if @battle.pbGetOwnerItems(@index).include?(:SILVCREST) && crestmon.species == :SILVALLY && !@battle.pbOwnedByPlayer?(@index)
     return false if !crestmon.item || !$cache.items[crestmon.item].checkFlag?(:crest)
     return false if crestmon.species == :DARMANITAN && ![0,1].include?(crestmon.form)
-    return false if [:TYPHLOSION,:SAMUROTT,:ELECTRODE,:ZOROARK].include?(crestmon.species) && crestmon.form!=0
+    # return false if [:TYPHLOSION,:SAMUROTT,:ELECTRODE,:ZOROARK].include?(crestmon.species) && crestmon.form!=0
     # if you want better typh, samu, electrode and zoro, please comment out
-    return false if crestmon.species == :AMPHAROS && crestmon.form!=1
+    # return false if crestmon.species == :AMPHAROS && crestmon.form!=1
     return PBStuff::POKEMONTOCREST[crestmon.species]==crestmon.item
   end
 
@@ -2829,7 +2829,7 @@ class PokeBattle_Battler
     if self.ability == :ICEFACE && self.form == 1 && self.species == :EISCUE && onactive
       if @battle.weather == :HAIL
         self.pbRegenFace
-        @battle.pbDisplay(_INTL("{1} transformed!",self.pbThis))
+        @battle.pbDisplay(_INTL("{1} transformed!",self.pbThis)) 
       end
     end
     # Pastel Veil
@@ -2986,6 +2986,46 @@ class PokeBattle_Battler
       pbIncreaseStatBasic(PBStats::DEFENSE,1)
       @battle.pbCommonAnimation("StatUp",self,nil)
       @battle.pbDisplay(_INTL("{1}'s {2} boosted its Defense!", pbThis,getAbilityName(ability)))
+    end
+    if self.ability == :MELODRAMATIC && onactive && SWUMOD
+      for i in 0...3
+        randomup = []
+        randomdown = []
+        failsafe1 = 0
+        failsafe2 = 0
+        loop do
+          failsafe1 += 1
+          break if failsafe1 == 1000
+
+          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          if !self.pbTooHigh?(randomnumber)
+            randomup.push(randomnumber)
+            break
+          end
+        end
+        loop do
+          failsafe2 += 1
+          break if failsafe2 == 1000
+
+          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          if !self.pbTooLow?(randomnumber) && randomnumber != randomup[0]
+            randomdown.push(randomnumber)
+            break
+          end
+        end
+        if failsafe1 != 1000
+          self.stages[randomup[0]] += 2
+          self.stages[randomup[0]] = 6 if self.stages[randomup[0]] > 6
+          @battle.pbCommonAnimation("StatUp", self, nil)
+          @battle.pbDisplay(_INTL("{1}'s Melodramatic sharply raised its {2}!", self.pbThis, self.pbGetStatName(randomup[0])))
+        end
+        if failsafe2 != 1000
+          self.stages[randomdown[0]] -= 1
+          @battle.pbCommonAnimation("StatDown", self, nil)
+          @battle.pbDisplay(_INTL("{1}'s Melodramatic lowered its {2}!", self.pbThis, self.pbGetStatName(randomdown[0])))
+        end
+      end
+      self.pbBerryHerbCheck
     end
     # Slow Start
     if self.ability == :SLOWSTART && onactive && @battle.FE != :DEEPEARTH
@@ -3243,6 +3283,13 @@ class PokeBattle_Battler
         self.pbAbilitiesOnSwitchIn(true)
       end
     end
+
+    # Meteor Impactor
+    if SWUMOD && self.ability == :METEORIMPACTOR && onactive
+      @battle.pbDisplay(_INTL("{1} crashed into the battlefield!",self.pbThis))
+      self.pbUseMoveSimple(:METEORIMPACTOR, -1, -1, false, false, false)
+    end
+
   end
 
   def pbEffectsOnDealingDamage(move, user, target, damage, innards)
@@ -3928,7 +3975,7 @@ class PokeBattle_Battler
   ################################################################################
   def pbBerryRecoverAmount
     return 0 if self.isFainted?
-    return 0 if self.effects[:HealBlock] > 0
+    return 0 if self.effects[:HealBlock] != 0
     return 0 if [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(pbOpposing1.ability) || [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(pbOpposing2.ability)
 
     healing = 0
@@ -4000,13 +4047,13 @@ class PokeBattle_Battler
       end
     end
     if self.item == :MENTALHERB && (@effects[:Attract] >= 0 || @effects[:Taunt] > 0 || @effects[:Encore] > 0 ||
-       @effects[:Torment] || @effects[:Disable] > 0 || @effects[:HealBlock] > 0)
+       @effects[:Torment] || @effects[:Disable] > 0 || @effects[:HealBlock] != 0)
       @battle.pbDisplay(_INTL("{1}'s {2} cured its love problem!", pbThis, itemname)) if @effects[:Attract] >= 0
       @battle.pbDisplay(_INTL("{1} is taunted no more!", pbThis)) if @effects[:Taunt] > 0
       @battle.pbDisplay(_INTL("{1}'s encore ended!", pbThis)) if @effects[:Encore] > 0
       @battle.pbDisplay(_INTL("{1} is tormented no more!", pbThis)) if @effects[:Torment]
       @battle.pbDisplay(_INTL("{1} is disabled no more!", pbThis)) if @effects[:Disable] > 0
-      @battle.pbDisplay(_INTL("{1}'s heal block ended!", pbThis)) if @effects[:HealBlock] > 0
+      @battle.pbDisplay(_INTL("{1}'s heal block ended!", pbThis)) if @effects[:HealBlock] != 0
       @effects[:Attract] = -1
       @effects[:Taunt] = 0
       @effects[:Encore] = 0
@@ -5011,7 +5058,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1} can't use {2} after the taunt!", pbThis,basemove.name))
       return false
     end
-    if @effects[:HealBlock]>0 && basemove.isHealingMove? && !choice[2].zmove
+    if @effects[:HealBlock]!=0 && basemove.isHealingMove? && !choice[2].zmove
       @battle.pbDisplay(_INTL("{1} can't use {2} after the Heal Block!", pbThis,basemove.name))
       return false
     end
@@ -5331,7 +5378,18 @@ class PokeBattle_Battler
       # Activation Timing: after a hit of a move resolves, relevant for multihit moves
       # Additional effect
       # Gen 9 Mod - Added Covert Cloak and exception for Ceaseless Edge and Stone Axe functions
-      if !basemove.zmove && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
+
+      # Z-Move side effects will always trigger
+      if (basemove.zmove && SWUMOD)
+        if (target.ability == :SHIELDDUST && !target.moldbroken)
+          @battle.pbDisplay(_INTL("The powerful attack's effect broke through {1}'s Shield Dust!", target.pbThis))
+        elsif target.hasWorkingItem(:COVERTCLOAK)
+          @battle.pbDisplay(_INTL("The powerful attack's effect broke through {1}'s Covert Cloak!", target.pbThis))
+        end
+        basemove.pbAdditionalEffect(user, target)
+      end
+
+      if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
          [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect
@@ -5348,7 +5406,7 @@ class PokeBattle_Battler
         addleffect = 100 if basemove.move == :LICK && @battle.FE == :HAUNTED
         addleffect = 100 if basemove.move == :DIRECLAW && @battle.FE == :WASTELAND
         addleffect = 100 if basemove.move == :INFERNALPARADE && @battle.FE == :INFERNAL
-        addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1)
+        addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1) && !SWUMOD
         if @battle.pbRandom(100) < addleffect
           basemove.pbAdditionalEffect(user, target)
         end
@@ -5359,7 +5417,6 @@ class PokeBattle_Battler
         if @battle.pbRandom(100) < addleffect
           basemove.pbSecondAdditionalEffect(user, target)
         end
-        
         # Gulp Missile
         if (self.species == :CRAMORANT) && self.ability == :GULPMISSILE && !self.isFainted? && (basemove.move == :SURF || basemove.move == :DIVE) # Surf or Dive
           if self.form==0
@@ -5674,7 +5731,7 @@ class PokeBattle_Battler
     return damage, killflag
   end
 
-  def pbUseMoveSimple(moveid, index = -1, target = -1, danced = false, specialZ = false)
+  def pbUseMoveSimple(moveid, index = -1, target = -1, danced = false, specialZ = false, showmessage = true)
     choice = [:move, index, PokeBattle_Move.pbFromPBMove(@battle, PBMove.new(moveid.intern), self), target]
     @simplemove = danced == false
     if index >= 0
@@ -5687,9 +5744,10 @@ class PokeBattle_Battler
       crystal = pbZCrystalFromType(choice[2].type)
       zmoveID = PBStuff::CRYSTALTOZMOVE[crystal]
       # @SWu -> Giga move change here?
-      choice[2] = PokeBattle_Move.pbFromPBMove(@battle, PBMove.new(zmoveID), self, choice[2])
+      zmove = PokeBattle_Move.pbFromPBMove(@battle, PBMove.new(zmoveID), self, choice[2])
+      choice[2] = zmove
     end
-    pbUseMove(choice, { specialusage: true, danced: danced, specialZ: specialZ })
+    pbUseMove(choice, { specialusage: true, danced: danced, specialZ: specialZ }, showmessage)
     @usingsubmove = false
     @simplemove = false
     return
@@ -5722,7 +5780,7 @@ class PokeBattle_Battler
     end
   end
 
-  def pbUseMove(choice, flags = { danced: false, totaldamage: 0, specialusage: false, specialZ: false })
+  def pbUseMove(choice, flags = { danced: false, totaldamage: 0, specialusage: false, specialZ: false }, showmessage = true)
     if @battle.recorded == true
       $game_variables[:BattleDataArray].last().pokemonTrackMove(choice, self, @battle.battlers)
     end
@@ -5832,7 +5890,7 @@ class PokeBattle_Battler
       @effects[:SkyDroppee] = nil if basemove.move != :SKYDROP
     end
     # "X used Y!" message
-    case basemove.pbDisplayUseMessage(self, choice)
+    case basemove.pbDisplayUseMessage(self, choice, showmessage)
       when 2   # Continuing Bide
         if !flags[:specialusage]
           self.lastRoundMoved = @battle.turncount
@@ -5886,7 +5944,7 @@ class PokeBattle_Battler
     # moldbreaker
     # Gen 9 Mod - Added Mycelium Might
     if (user.ability == :MOLDBREAKER || user.ability == :TERAVOLT || user.ability == :TURBOBLAZE) || (user.ability == :MYCELIUMMIGHT && basemove.basedamage == 0 && user.effects[:TwoTurnAttack] == 0) ||
-       basemove.function == 0x166 || basemove.function == 0x176 || basemove.function == 0x200 # Solgaluna/crozma signatures
+       basemove.function == 0x166 || basemove.function == 0x176 || basemove.function == 0x200 # Solgaluna/crozma signatures 
       for i in 0..3
         # Gen 9 Mod - Added Ability Shield
         if !@battle.battlers[i].hasWorkingItem(:ABILITYSHIELD)

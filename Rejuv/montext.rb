@@ -4639,6 +4639,7 @@ MONHASH = {
   },
 
   "Giga Form" => {
+    :Type2 => :ROCK,
     :Height => 250,
     :Weight => 2866,
   },
@@ -10980,6 +10981,21 @@ MONHASH = {
       :dexentry => "Said to purify lost, forsaken souls with its flames and guide them to the afterlife. It is believed its form has been influenced by the energy of the sacred mountain towering at Hisuis center.",
   },
 
+  "Zetta's Typhlosion (Intense)" => {
+    # +60 BST
+    :Type2 => :GROUND,
+    :BaseStats => [73, 104, 78, 139, 85, 115],
+    :Abilities => [:DROUGHT],
+  },
+
+  "Zetta's Typhlosion (Kaizo)" => {
+    # +120 BST
+    :Type2 => :GROUND,
+    :BaseStats => [73, 124, 88, 149, 95, 125],
+    :Abilities => [:DROUGHT],
+},
+
+  :DefaultForm => 0,
   :OnCreation => {},
 },
 
@@ -23943,6 +23959,36 @@ MONHASH = {
       :Weight => 3502,
   },
 
+  "Neved's Glalie (Intense)" => {
+    # +60 BST
+    :Type2 => :DARK,
+    :BaseStats => [90, 90, 90, 90, 90, 90],
+    :Abilities => [:MELODRAMATIC],
+  },
+
+  "Mega Form (Neved Intense)" => {
+    :BaseStats => [90, 130, 90, 130, 90, 110],
+    :Abilities => [:REFRIGERATE],
+    :BaseEXP => 203,
+    :Height => 21,
+    :Weight => 3502,
+},
+
+  "Neved's Glalie (Kaizo)" => {
+    # +120 BST
+    :Type2 => :DARK,
+    :BaseStats => [100,100,100,100,100,100],
+    :Abilities => [:MELODRAMATIC],
+  },
+
+  "Mega Form (Neved Kaizo)" => {
+    :BaseStats => [100,140,100,140,100,120],
+    :Abilities => [:REFRIGERATE],
+    :BaseEXP => 203,
+    :Height => 21,
+    :Weight => 3502,
+},
+
   :OnCreation => proc{
       # Map IDs for Aevian form
       if $game_map && Snorunt.include?($game_map.map_id)
@@ -23954,6 +24000,8 @@ MONHASH = {
   :DefaultForm => 0,
   :MegaForm => {
       :GLALITITE => 2,
+      :GLALITITENI => 4,
+      :GLALITITENK => 6,
   },
 },
 
@@ -49779,7 +49827,7 @@ MONHASH = {
       :dexnum => 774,
       :Type1 => :ROCK,
       :Type2 => :FLYING,
-      :BaseStats => [60, 100, 60, 100, 60, 120],
+      :BaseStats => [60, 120, 60, 120, 60, 120],
       :EVs => [0, 1, 0, 1, 0, 0],
       :Abilities => [:SHIELDSDOWN],
       :GrowthRate => :MediumSlow,
@@ -49843,7 +49891,7 @@ MONHASH = {
   },
 
     "Meteor Form" => {
-      :BaseStats => [60, 60, 100, 60, 100, 60],
+      :BaseStats => [60, 60, 120, 60, 120, 60],
       :EVs => [0, 0, 1, 0, 1, 0],
       :BaseEXP => 154,
       :Color => "Brown",
@@ -50212,6 +50260,24 @@ MONHASH = {
       :BattlerAltitude => 1,
   },
 
+
+  "Neved's Dhelmise (Intense)" => {
+    # +60 BST
+    :Type1 => :WATER,
+    :Type2 => :STEEL,
+    :BaseStats => [70, 161, 140, 86, 90, 40],
+    :Abilities => [:LIGHTNINGROD],
+  },
+
+  "Neved's Dhelmise (Kaizo)" => {
+    # +120 BST
+    :Type1 => :WATER,
+    :Type2 => :STEEL,
+    :BaseStats => [70, 161, 130, 116, 120, 40],
+    :Abilities => [:LIGHTNINGROD],
+},
+
+  :DefaultForm => 0,
   :OnCreation => {},
 },
 
@@ -52037,7 +52103,13 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type2 => :NORMAL,
+    :Height => 400,
+    :Weight => 1653,
+  },
+
+  "Mega Form" => {
       :BaseStats => [100, 150, 115, 120, 90, 55],
       :Abilities => [:GRASSYSURGE],
       :Height => 280,
@@ -52045,6 +52117,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
       :RILLABOOMITE => 1
@@ -52367,14 +52440,21 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
-      :BaseStats => [70, 125, 75, 145, 75, 140],
-      :Abilities => [:SNIPER],
+  "Giga Form" => {
+      :Type2 => :DARK,
       :Height => 400,
       :Weight => 1653,
   },
 
+  "Mega Form" => {
+    :BaseStats => [70, 125, 75, 145, 75, 140],
+    :Abilities => [:SNIPER],
+    :Height => 400,
+    :Weight => 1653,
+},
+
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
       :INTELEONITE => 1

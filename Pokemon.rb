@@ -1331,7 +1331,7 @@ def pbGigaCompatibleBaseMove?(move)
   # TODO: reassign base moves
   case pkmn
     when :BUTTERFREE      then return true if move.move == :SPRINGBREEZE
-    when :RILLABOOM       then return true if move.move == :DRUMBEATING   
+    when :RILLABOOM       then return true if move.move == :BOOMBURST   
     when :CINDERACE       then return true if move.move == :PYROBALL    
     when :INTELEON        then return true if move.move == :SNIPESHOT
     when :TOXTRICITY      then return true if move.move == :BOOMBURST

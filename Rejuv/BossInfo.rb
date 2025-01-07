@@ -907,33 +907,62 @@ BOSSINFOHASH = {
         :moninfo => {
             :species => :YVELTAL,
             :level => 75,
-            :moves => [:DECIMATION,:HURRICANE,:FOCUSBLAST,nil],
+            :moves => [:DECIMATION,:HURRICANE,:FOCUSBLAST,:TAUNT],
             :nature => :MODEST,
             :iv => 31,
-            :ev => [48,48,48,48,48,48]
+            :ev => [252,252,252,252,252,252]
         },
     },
     :TAPUKOKOJUNGLE=> {
         :name => "Thunder Warrior",
-        :shieldCount => 2,
+        :shieldCount => 3,
         :immunities => {},
         :moninfo => {
             :species => :TAPUKOKO,
             :level => 50,
             :shiny => true,
-            :moves => [:STEELWING,:NATURESMADNESS,:ELECTRICTERRAIN,:DISCHARGE],
-            :nature => :TIMID,
+            :moves => [:BRAVEBIRD,:NATURESMADNESS,:NATUREPOWER,:BOLTBEAK],
+            :nature => :RASH,
             :ability => :ELECTRICSURGE,
-            :iv => 20,
+            :iv => 31,
+            :item => :SHUCABERRY,
             :happiness => 255,
-            :ev => [32,32,32,32,32,32]
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
+            3 => {
+                :threshold => 0,
+                :message => "Tapu Koko is getting worked up!!",
+                :abilityChange => :ELECTERRAIN,
+                :bossStatChanges => {
+                    PBStats::ATTACK => 1,
+                    PBStats::DEFENSE => 1,
+                    PBStats::SPATK => 1,
+                    PBStats::SPDEF => 1,
+                    PBStats::SPEED => 1,
+                },
+            },
             2 => {
                 :threshold => 0,
                 :message => "Tapu Koko is putting in its all!!",
-                :movesetUpdate => [:ELECTROBALL,:TAUNT,:ROOST,:DAZZLINGGLEAM],
+                :movesetUpdate => [:GRASSKNOT,:HIDDENPOWERICE,:ROOST,:RISINGVOLTAGE],
                 :statDropCure => true,
+                :statusCure => true,
+                :effectClear => true,
+                :fieldChange => :ELECTERRAIN,
+                :fieldChangeMessage => "Electricity stormed acrosss the arena!",
+                :abilitychange => :MOLDBREAKER,
+                :itemchange => :EXPERTBELT,
+            },
+            1 => {
+                :threshold => 0,
+                :message => "TAPU KOKO: KOKOOOOOOO!",
+                :movesetUpdate => [:NATURESMADNESS,:HIDDENPOWERICE,:GRASSKNOT,:RISINGVOLTAGE],
+                :statDropCure => true,
+                :statusCure => true,
+                :effectClear => true,
+                :itemchange => :LIFEORB,
+                :instantMove => [:GUARDIANOFALOLA, 0],
             },
         }
     },
@@ -4604,20 +4633,41 @@ BOSSINFOHASH = {
         :immunities => {},
         :moninfo => {
             :species => :TAPUKOKO,
-            :level => 42,
+            :level => 50,
             :shiny => true,
-            :moves => [:STEELWING,:NATURESMADNESS,:ELECTRICTERRAIN,:DISCHARGE],
-            :nature => :TIMID,
+            :moves => [:BRAVEBIRD,:NATURESMADNESS,:NATUREPOWER,:BOLTBEAK],
+            :nature => :RASH,
             :ability => :ELECTRICSURGE,
-            :iv => 20,
+            :iv => 31,
+            :item => :SHUCABERRY,
             :happiness => 255,
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
+            2 => {
+                :threshold => 0,
+                :message => "Tapu Koko is getting worked up!!",
+                :abilityChange => :ELECTERRAIN,
+                :bossStatChanges => {
+                    PBStats::ATTACK => 1,
+                    PBStats::DEFENSE => 1,
+                    PBStats::SPATK => 1,
+                    PBStats::SPDEF => 1,
+                    PBStats::SPEED => 1,
+                },
+            },
             1 => {
                 :threshold => 0,
                 :message => "Tapu Koko is putting in its all!!",
-                :movesetUpdate => [:ELECTROBALL,:TAUNT,:SWIFT,:FLY],
+                :movesetUpdate => [:GRASSKNOT,:HIDDENPOWERICE,:ROOST,:RISINGVOLTAGE],
                 :statDropCure => true,
+                :statusCure => true,
+                :effectClear => true,
+                :fieldChange => :ELECTERRAIN,
+                :fieldChangeMessage => "Electricity stormed acrosss the arena!",
+                :abilitychange => :MOLDBREAKER,
+                :itemchange => :EXPERTBELT,
+
             },
         }
     },

@@ -1138,7 +1138,7 @@ class PokeBattle_Move_01F < PokeBattle_Move
 
   def pbAdditionalEffect(attacker, opponent)
     increment = 1
-    increment = 2 if @move == :ESPERWING && @battle.FE == :PSYTERRAIN
+    increment = 2 if (@move == :ESPERWING && @battle.FE == :PSYTERRAIN) || (SWUMOD && @move == :TRAILBLAZE && @battle.FE == :FOREST)
     attacker.pbIncreaseStat(PBStats::SPEED, increment, statsource: attacker)
     return true
   end
@@ -4195,6 +4195,7 @@ class PokeBattle_Move_095 < PokeBattle_Move
        10
     ]
     magni=magnitudes[@battle.pbRandom(magnitudes.length)]
+    magni = [10, magni + 3].min if attacker.hasWorkingItem(:LOADEDDICE)
     magni=magnitudes[0] if @battle.FE == :CONCERT1
     magni=magnitudes[19] if @battle.FE == :CONCERT4
     @calcbasedmg=basedmg[magni-4]
@@ -5226,7 +5227,7 @@ end
 class PokeBattle_Move_0BB < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
-    if opponent.effects[:HealBlock]>0
+    if opponent.effects[:HealBlock]!=0
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -5241,7 +5242,7 @@ class PokeBattle_Move_0BB < PokeBattle_Move
   end
 
   def pbAdditionalEffect(attacker,opponent)
-    if opponent.effects[:HealBlock]>0
+    if opponent.effects[:HealBlock]!=0
       return -1
     end
     if @battle.pbCheckSideAbility(:AROMAVEIL,opponent)!=nil && !(opponent.moldbroken)
@@ -6465,7 +6466,7 @@ end
 ################################################################################
 class PokeBattle_Move_0DF < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    if opponent.effects[:Substitute]>0 || (opponent.effects[:HealBlock]>0 && !@zmove)
+    if opponent.effects[:Substitute]>0 || (opponent.effects[:HealBlock]!=0 && !@zmove)
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -9784,7 +9785,7 @@ class PokeBattle_Move_167 < PokeBattle_Move
       end
       hpgain = ((opponent.totalhp) / 2).floor
       pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
-      if !(opponent.ability == :BULLETPROOF || opponent.effects[:HealBlock] > 0)
+      if !(opponent.ability == :BULLETPROOF || opponent.effects[:HealBlock] != 0)
         opponent.pbRecoverHP(hpgain, true)
         @battle.pbDisplay(_INTL("{1}'s HP was restored.", opponent.pbThis))
         return 0
@@ -10128,6 +10129,16 @@ class PokeBattle_Move_175 < PokeBattle_Move
     end
     return ret
   end
+
+    # Replacement animation till a proper one is made
+    def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+      return if !showanimation
+      if id == :METEORIMPACTOR
+        @battle.pbAnimation(:EXPLOSION,attacker,opponent,hitnum)
+      else
+        @battle.pbAnimation(id,attacker,opponent,hitnum)
+      end
+    end
 end
 
 ################################################################################
@@ -11613,7 +11624,164 @@ end
 class PokeBattle_Move_809 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     hploss = (opponent.hp*0.75).floor
+    hploss = (opponent.hp*0.99).floor if SWUMOD && @battle.FE == :FOREST
+    @damagedealt = hploss
     return pbEffectFixedDamage(hploss,attacker,opponent,hitnum,alltargets,showanimation)
+  end
+
+  def pbAdditionalEffect(attacker,opponent)
+    case attacker.species
+    when :TAPULELE
+      if @battle.pbCheckSideAbility(:AROMAVEIL,opponent)!=nil && !(opponent.moldbroken)
+        @battle.pbDisplay(_INTL("The Aroma Veil prevents #{opponent.pbThis} from being blocked!"))
+      end
+      opponent.effects[:HealBlock]=-1
+      @battle.pbAnimation(:HEALBLOCK, attacker, opponent)
+      @battle.pbDisplay(_INTL("{1} was prevented from healing!",opponent.pbThis))
+      @battle.pbAnimation(:MEANLOOK, attacker, opponent)
+      opponent.effects[:MeanLook] = attacker.index
+      @battle.pbDisplay(_INTL("{1} can't escape!",opponent.pbThis))
+    when :TAPUBULU
+      @battle.pbAnimation(:GIGADRAIN, attacker, opponent)
+      hpgain = @damagedealt
+      @battle.pbDisplay(_INTL("HPGAIN: {1}!", hpgain))
+      if opponent.ability == :LIQUIDOOZE
+        hpgain *= 2 if @battle.FE == :WASTELAND || @battle.FE == :MURKWATERSURFACE || @battle.FE == :CORRUPTED
+        attacker.pbReduceHP(hpgain, true)
+        @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!", attacker.pbThis))
+      else
+        attacker.pbRecoverHP(hpgain, true)
+        @battle.pbDisplay(_INTL("{1} had its energy drained!", opponent.pbThis))
+      end
+    when :TAPUFINI
+      @battle.pbAnimation(:HAZE, attacker, opponent)
+      for i in 0...4
+        @battle.battlers[i].stages[PBStats::ATTACK]   = 0
+        @battle.battlers[i].stages[PBStats::DEFENSE]  = 0
+        @battle.battlers[i].stages[PBStats::SPEED]    = 0
+        @battle.battlers[i].stages[PBStats::SPATK]    = 0
+        @battle.battlers[i].stages[PBStats::SPDEF]    = 0
+        @battle.battlers[i].stages[PBStats::ACCURACY] = 0
+        @battle.battlers[i].stages[PBStats::EVASION]  = 0
+      end
+      @battle.pbDisplay(_INTL("All stat changes were eliminated!"))
+      if opponent.pbOwnSide.effects[:Reflect] > 0
+        opponent.pbOwnSide.effects[:Reflect] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team's Reflect wore off!"))
+        else
+          @battle.pbDisplay(_INTL("Your team's Reflect wore off!"))
+        end
+      end
+      if opponent.pbOwnSide.effects[:LightScreen] > 0
+        opponent.pbOwnSide.effects[:LightScreen] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team's Light Screen wore off!"))
+        else
+          @battle.pbDisplay(_INTL("Your team's Light Screen wore off!"))
+        end
+      end
+      if opponent.pbOwnSide.effects[:AuroraVeil] > 0
+        opponent.pbOwnSide.effects[:AuroraVeil] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team's Aurora Veil wore off!"))
+        else
+          @battle.pbDisplay(_INTL("Your team's Aurora Veil wore off!"))
+        end
+      end
+      if opponent.pbOwnSide.effects[:AreniteWall] > 0
+        opponent.pbOwnSide.effects[:AreniteWall] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team's Arenite Wall wore off!"))
+        else
+          @battle.pbDisplay(_INTL("Your team's Arenite Wall wore off!"))
+        end
+      end
+      if opponent.pbOwnSide.effects[:Mist] > 0
+        opponent.pbOwnSide.effects[:Mist] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team is no longer protected by Mist."))
+        else
+          @battle.pbDisplay(_INTL("Your team is no longer protected by Mist."))
+        end
+      end
+      if opponent.pbOwnSide.effects[:Safeguard] > 0
+        opponent.pbOwnSide.effects[:Safeguard] = 0
+        if @battle.pbIsOpposing?(opponent.index)
+          @battle.pbDisplay(_INTL("The opposing team is no longer protected by Safeguard."))
+        else
+          @battle.pbDisplay(_INTL("Your team is no longer protected by Safeguard."))
+        end
+      end
+      if attacker.pbOwnSide.effects[:Spikes] > 0
+        attacker.pbOwnSide.effects[:Spikes] = 0
+        if @battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The spikes disappeared from around your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The spikes disappeared from around your team's feet!"))
+        end
+      end
+      if attacker.pbOpposingSide.effects[:Spikes] > 0
+        attacker.pbOpposingSide.effects[:Spikes] = 0
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The spikes disappeared from around your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The spikes disappeared from around your team's feet!"))
+        end
+      end
+      if attacker.pbOwnSide.effects[:StealthRock]
+        attacker.pbOwnSide.effects[:StealthRock] = false
+        if @battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The pointed stones disappeared from around your opponent's team!"))
+        else
+          @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
+        end
+      end
+      if attacker.pbOpposingSide.effects[:StealthRock]
+        attacker.pbOpposingSide.effects[:StealthRock] = false
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The pointed stones disappeared from around your opponent's team!"))
+        else
+          @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
+        end
+      end
+      if attacker.pbOwnSide.effects[:ToxicSpikes] > 0
+        attacker.pbOwnSide.effects[:ToxicSpikes] = 0
+        if @battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The poison spikes disappeared from around your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The poison spikes disappeared from around your team's feet!"))
+        end
+      end
+      if attacker.pbOpposingSide.effects[:ToxicSpikes] > 0
+        attacker.pbOpposingSide.effects[:ToxicSpikes] = 0
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The poison spikes disappeared from around your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The poison spikes disappeared from around your team's feet!"))
+        end
+      end
+      if attacker.pbOwnSide.effects[:StickyWeb]
+        attacker.pbOwnSide.effects[:StickyWeb] = false
+        if @battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your team's feet!"))
+        end
+      end
+      if attacker.pbOpposingSide.effects[:StickyWeb]
+        attacker.pbOpposingSide.effects[:StickyWeb] = false
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your opponent's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your team's feet!"))
+        end
+      end
+    when :TAPUKOKO
+      return false if !opponent.pbCanParalyze?(false)
+      opponent.pbParalyze(attacker)
+      @battle.pbDisplay(_INTL("{1} was paralyzed! It may be unable to move!",opponent.pbThis))
+    end
   end
 
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
@@ -11625,8 +11793,9 @@ class PokeBattle_Move_809 < PokeBattle_Move
         @battle.pbAnimation(:GUARDIANOFALOLABULU,attacker,opponent,hitnum)
       when :TAPUFINI
         @battle.pbAnimation(:GUARDIANOFALOLAFINI,attacker,opponent,hitnum)
-      else
-        @battle.pbAnimation(id,attacker,opponent,hitnum) # Tapu Koko
+      when :TAPUKOKO
+        # @SWu temporary fix until I figure out what's wrong with the Tapu Koko anim
+        @battle.pbAnimation(:STOKEDSPARKSURFER,attacker,opponent,hitnum)
     end
   end
 end

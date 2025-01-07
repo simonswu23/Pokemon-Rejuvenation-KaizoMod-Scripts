@@ -937,7 +937,7 @@ FIELDEFFECTS = {
 	:mimicry => :BUG,
 	:damageMods => {
 		0.5 => [:SURF, :MUDDYWATER],
-		1.5 => [:GRAVAPPLE, :ATTACKORDER, :ELECTROWEB, :SLASH, :AIRSLASH, :GALESTRIKE, :FURYCUTTER, :AIRCUTTER, :PSYCHOCUT, :BREAKINGSWIPE],
+		1.5 => [:TRAILBLAZE, :SLASHANDBURN, :GRAVAPPLE, :ATTACKORDER, :ELECTROWEB, :SLASH, :AIRSLASH, :GALESTRIKE, :FURYCUTTER, :AIRCUTTER, :PSYCHOCUT, :BREAKINGSWIPE],
 		2.0 => [:CUT],
 	},
 	:accuracyMods => {},
@@ -947,6 +947,7 @@ FIELDEFFECTS = {
 		"Gossamer and arbor strengthened the attack!" => [:ELECTROWEB],
 		"The apple did not fall far from the tree" => [:GRAVAPPLE],
 		"A tree slammed down!" => [:CUT, :SLASH, :AIRSLASH, :GALESTRIKE, :FURYCUTTER, :AIRCUTTER, :PSYCHOCUT, :BREAKINGSWIPE],
+		"Clear the path!" => [:SLASHANDBURN, :TRAILBLAZE],
 	},
 	:typeMods => {
 		:GRASS => [:CUT, :SLASH, :AIRSLASH, :GALESTRIKE, :FURYCUTTER, :AIRCUTTER, :PSYCHOCUT, :BREAKINGSWIPE],
@@ -963,9 +964,9 @@ FIELDEFFECTS = {
 		"The attack spread throughout the forest!" => [:BUG],
 		"The forestry strengthened the attack!" => [:GRASS],
 	},
-	:typeCondition => {
-		:BUG => "self.pbIsSpecial?(type)",
-	},
+	# :typeCondition => {
+	# 	:BUG => "self.pbIsSpecial?(type) && !SWUMOD",
+	# },
 	:typeEffects => {},
 	:changeCondition => {
 		:SWAMP => "@battle.field.counter > 2",
