@@ -32,6 +32,7 @@
   - Liquid Voice provides an additional x1.3 boost to sound-based moves
   - Galvanize, Pixilate, Refrigerate, Aerilate give a x1.3 boost in power
   - Normalize gives a x1.5 boost in power
+  - Gale Wings now activates at above 50% hp
 
 
 # Crests
@@ -71,6 +72,8 @@
   - Minior
     - +40 BST: 60, 120, 60, 120, 60, 120
     - Shields Down: 60, 60, 120, 60, 120, 60
+  - Terapagos
+    - Stellar type (neutral relationship with every other typing)
 
 # Field Changes
   - Water's Surface
@@ -80,12 +83,20 @@
     - Zero to Hero activates instantly
     - Wave Crash added to moves boosted by field, field boost 1.2x -> 1.3x
     - speed reduction effect increased to x0.5
+    - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
+
   - Underwater
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
     - Surf causes the battle to resurface
     - speed reduction effect increased to x0.25
+    - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
+
   - Swamp
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
+    - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
+    - Bug moves boost increased to x1.5
+    - Grassy Glide has increased priority and gains x1.3 power
+
   - Beach
     - Dig is immediate
     - Shadow Bone boosted x2.0 by field
@@ -94,11 +105,10 @@
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
     - All Bug moves are now boosted by x1.5
-  - Swamp
-    - Bug moves boost increased to x1.5
 
 # Other
   - Removed data chip cost to enter password
   - All consumed held items (including berries) are restored at the end of each battle
   - Terajuma password is disabled
   - Crests now work on pokemon regardless of their form
+  - Terapagos and Ogerpon may now mega evolve regardless of item, and do not require an item slot to do so

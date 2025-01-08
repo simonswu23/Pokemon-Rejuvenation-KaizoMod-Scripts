@@ -18,6 +18,7 @@
 - Zetta (Terajuma Falls)
 - Neved (Terajuma Falls)
 - Ren (Helojak)
+  - used Bellibolt
 
 # Progress
 
@@ -30,6 +31,53 @@
       - Crests (Cacturne, Corviknight)
       - Crash Landing and Melodramatic code
     - individually log every priority change in the future
+  - Terapagos and Ogerpon mega evolution now does not require a mega slot
+    - added internal mega blocker item to prevent certain battles from mega evolving them by default
+    - can consider reworking to be similar to Giga evolution, requiring an item in bag
+  - fully imported all trainer skill logic (runtrainerskills)
+  - Corv crest erased (but logic kept as comments for future reference)
+  - Defog now clears terrain overlays
+    - TODO: actually cause terrains to be separate layer (like weather), and for them to override each other
+
+
+  - Crawli todos:
+    - Vespiquen Crest:
+      - Defend Order naturally has increased priority, crested effect additionally applies quick guard, wide guard, and crafty shield
+      - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority and breaks through protect
+      - Heal Order naturally cures status effects, crested effect additionally heals friendly pokemon's hp by 25% and cures their status
+    - Ariados Crest:
+      - Make more viable on Swamp field
+        - always moves before targets with lowered speed (increased priority)
+        - always crits targets with lowered speed (can remove poisoned effect)
+    - Barbed Web:
+      - copy old swumod implementation
+    - Swap field ordering: forest for gym, swamp for jynobi
+    - Giga Appletun
+      - Bug/Dragon type
+      - Honeypot max move (renamed from sweetness): cures ally status conditions
+      - Give it recycle (good enough)
+      - Un-nerf pinch berries
+  - Giga Moves should stick to canon, except:
+    - Wind Rage -> defog effect
+    - Volcalith -> fire-type stealth rock hazard
+    - Depletion -> removes all positive stat changes
+    - Meltdown -> badly poisons all targets, regardless of typing
+    - Sandblast -> desert's mark effect instead
+    - Centiferno -> burn
+    - Stun Shock -> paralysis
+    - Foam Burst -> frostbite
+    - Tartness -> harshly lowers foes evasion
+    - Volt Crash -> ignores abilities, immunities when dealing damage
+    - Gold Rush -> +1 priority, follow me
+    - Cuddlestorm (Cuddle) -> infatuates the target
+    - Giant's Drum (Drum Solo) -> normal type attack, spread attack (TODO: fix, also add AI logic here since base is now Drum Beating)
+    - Hydrosnipe -> +2 CHR
+    - Fireball -> +1 priority
+  - TODO: signature abilities for Giga Meowth, Eevee, and Pikachu
+    - Meowth: Gold Envy (permanent taunt effect)
+    - Eevee: TBD (foes are locked into using a single attack)
+    - Pikachu: TBD (all other pokemon are "temporarily" paralyzed, except electric types, ground types, and pokemon with quick feet/limber)
+
 
 - 1/8/25
  - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)
@@ -45,7 +93,7 @@
   - TODO: fix Z-moves so they bypass protect
 - reverted Ledian + Cincinno crest nerfs (allow for side effects on subsequent hits)
 - added instantmove to boss battles
-- (old) added starter skills for trainer battles (TODO: import over logic for additional trainer skills) 
+- (old) added starter skills for trainer battles
 - Darkglare (or whatever Geara's ability will be) not currently implemented
 - TODO: Update Giga pokemon in the Changelog (can paste from previous)
 - TODO: Update signature pokemon in the Changelog

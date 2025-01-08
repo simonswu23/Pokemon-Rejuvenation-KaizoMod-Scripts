@@ -2636,13 +2636,13 @@ class PokeBattle_Move
     pri += 1 if @battle.FE == :CHESS && attacker.pokemon && attacker.pokemon.piece == :KING
     pri += 1 if attacker.crested == :FERALIGATR && @basedamage != 0 && attacker.turncount == 1 # Feraligatr Crest
     pri += 1 if attacker.ability == :PRANKSTER && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move
-    pri += 1 if attacker.ability == :GALEWINGS && @type==:FLYING && ((attacker.hp == attacker.totalhp) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
+    pri += 1 if attacker.ability == :GALEWINGS && @type==:FLYING && ((attacker.hp >= attacker.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
     pri += 3 if attacker.ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@function)
     pri -= 1 if @battle.FE == :DEEPEARTH && @move == :COREENFORCER
     pri -= 2 if attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
     
     # Giga updates here
-    pri -= 6 if attacker.species == :CORVIKNIGHT && attacker.giga && @move == :BRAVEBIRD
+    # pri -= 6 if attacker.species == :CORVIKNIGHT && attacker.giga && @move == :BRAVEBIRD
 
     return pri
   end

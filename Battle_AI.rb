@@ -2285,7 +2285,7 @@ class PokeBattle_AI
       when 0xaa # Protect, Detect
         miniscore = protectcode()
       when 0xab # Quick Guard
-        if (@opponent.ability == :GALEWINGS && (@opponent.hp == @opponent.totalhp || @battle.FE == :SKY || ([:MOUNTAIN, :SNOWYMOUNTAIN, :VOLCANICTOP].include?(@battle.FE) && @battle.pbWeather == :STRONGWINDS))) || (@opponent.ability == :PRANKSTER && (!@attacker.hasType?(:DARK) || @battle.FE == :BEWITCHED)) || checkAIpriority()
+        if (@opponent.ability == :GALEWINGS && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY || ([:MOUNTAIN, :SNOWYMOUNTAIN, :VOLCANICTOP].include?(@battle.FE) && @battle.pbWeather == :STRONGWINDS))) || (@opponent.ability == :PRANKSTER && (!@attacker.hasType?(:DARK) || @battle.FE == :BEWITCHED)) || checkAIpriority()
           miniscore = specialprotectcode()
         else
           miniscore = 0
@@ -3455,7 +3455,7 @@ class PokeBattle_AI
       when 0x922 # Triple Dive
         miniscore = multihitcode()
       when 0x923 # Upper Hand
-        if (@opponent.ability == :GALEWINGS && (@opponent.hp == @opponent.totalhp || @battle.FE == :SKY)) || checkAIpriority()
+        if (@opponent.ability == :GALEWINGS && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY)) || checkAIpriority()
           miniscore = suckercode()
         else
           miniscore = 0
@@ -7911,13 +7911,13 @@ class PokeBattle_AI
       pri = battlermove.priority if !battlermove.zmove
       pri = pri.nil? ? 0 : pri
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
-      pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp == battler.totalhp || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
+      pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
       pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
       pri += 3 if battler.ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(battlermove.function)
       pri -= 1 if @battle.FE == :DEEPEARTH && battlermove.move == :COREENFORCER
       pri -= 2 if battler.ability == :MYCELIUMMIGHT && battlermove.basedamage == 0 && battler.effects[:TwoTurnAttack] == 0 # is Status Move # Gen 9 Mod - Added Mycelium Might
-      pri = -6 if battler.species == :CORVIKNIGHT && battler.giga && battlermove.move == :BRAVEBIRD
+      # pri = -6 if battler.species == :CORVIKNIGHT && battler.giga && battlermove.move == :BRAVEBIRD
 
       priorityarray[index][0] = pri
     end

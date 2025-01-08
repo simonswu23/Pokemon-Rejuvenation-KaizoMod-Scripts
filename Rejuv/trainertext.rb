@@ -5968,7 +5968,7 @@ TEAMARRAY = [{
 {
 	:species => :CORVIKNIGHT,
 	:level => 46,
-	:item => :CORVICREST,
+	:item => :LEFTOVERS,
 	:moves => [:BRAVEBIRD,:BULKUP,:BODYPRESS,:ROOST],
 	:ability => :MIRRORARMOR,
 	:gender => "M",
@@ -6133,7 +6133,7 @@ TEAMARRAY = [{
 :items => [:HYPERPOTION,:HYPERPOTION,:SILVCREST,:CORVIKNIGHTCORE],
 :mons => [{
 	:species => :CACTURNE,
-	:level => 46,
+	:level => 45,
 	:item => :CACTCREST,
 	:moves => [:GIGADRAIN,:OBSTRUCT,:NATUREPOWER,:SUCKERPUNCH],
 	:ability => :WATERABSORB,
@@ -6166,7 +6166,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :CLODSIRE,
-	:level => 44,
+	:level => 45,
 	:item => :BLACKSLUDGE,
 	:moves => [:SLUDGEWAVE,:MUDBARRAGE,:MUDDYWATER,:TOXIC],
 	:ability => :WATERABSORB,
@@ -14370,7 +14370,7 @@ TEAMARRAY = [{
 	:species => :RILLABOOM,
 	:level => 46,
 	:item => :ASSAULTVEST,
-	:moves => [:BOOMBURST,:WOODHAMMER,:GRASSYGLIDE,:HIGHHORSEPOWER],
+	:moves => [:DRUMBEATING,:WOODHAMMER,:GRASSYGLIDE,:HIGHHORSEPOWER],
 	:ability => :GRASSYSURGE,
 	:gender => "M",
 	:nature => :ADAMANT,

@@ -819,3 +819,134 @@ class PokeBattle_Move_1001 < PokeBattle_Move
     # end
   end
 end
+
+# Wind Rage
+class PokeBattle_Move_1002 < PokeBattle_Move
+  def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+    ret = super(attacker, opponent, hitnum, alltargets, showanimation)
+    return 0 if ret == 0
+
+    if opponent.pbOwnSide.effects[:Reflect] > 0
+      opponent.pbOwnSide.effects[:Reflect] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team's Reflect wore off!"))
+      else
+        @battle.pbDisplay(_INTL("Your team's Reflect wore off!"))
+      end
+    end
+    if opponent.pbOwnSide.effects[:LightScreen] > 0
+      opponent.pbOwnSide.effects[:LightScreen] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team's Light Screen wore off!"))
+      else
+        @battle.pbDisplay(_INTL("Your team's Light Screen wore off!"))
+      end
+    end
+    if opponent.pbOwnSide.effects[:AuroraVeil] > 0
+      opponent.pbOwnSide.effects[:AuroraVeil] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team's Aurora Veil wore off!"))
+      else
+        @battle.pbDisplay(_INTL("Your team's Aurora Veil wore off!"))
+      end
+    end
+    if opponent.pbOwnSide.effects[:AreniteWall] > 0
+      opponent.pbOwnSide.effects[:AreniteWall] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team's Arenite Wall wore off!"))
+      else
+        @battle.pbDisplay(_INTL("Your team's Arenite Wall wore off!"))
+      end
+    end
+    if opponent.pbOwnSide.effects[:Mist] > 0
+      opponent.pbOwnSide.effects[:Mist] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team is no longer protected by Mist."))
+      else
+        @battle.pbDisplay(_INTL("Your team is no longer protected by Mist."))
+      end
+    end
+    if opponent.pbOwnSide.effects[:Safeguard] > 0
+      opponent.pbOwnSide.effects[:Safeguard] = 0
+      if @battle.pbIsOpposing?(opponent.index)
+        @battle.pbDisplay(_INTL("The opposing team is no longer protected by Safeguard."))
+      else
+        @battle.pbDisplay(_INTL("Your team is no longer protected by Safeguard."))
+      end
+    end
+    if attacker.pbOwnSide.effects[:Spikes] > 0
+      attacker.pbOwnSide.effects[:Spikes] = 0
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The spikes disappeared from around your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The spikes disappeared from around your team's feet!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:Spikes] > 0
+      attacker.pbOpposingSide.effects[:Spikes] = 0
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The spikes disappeared from around your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The spikes disappeared from around your team's feet!"))
+      end
+    end
+    if attacker.pbOwnSide.effects[:StealthRock]
+      attacker.pbOwnSide.effects[:StealthRock] = false
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The pointed stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:StealthRock]
+      attacker.pbOpposingSide.effects[:StealthRock] = false
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The pointed stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
+      end
+    end
+    if attacker.pbOwnSide.effects[:ToxicSpikes] > 0
+      attacker.pbOwnSide.effects[:ToxicSpikes] = 0
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The poison spikes disappeared from around your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The poison spikes disappeared from around your team's feet!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:ToxicSpikes] > 0
+      attacker.pbOpposingSide.effects[:ToxicSpikes] = 0
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The poison spikes disappeared from around your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The poison spikes disappeared from around your team's feet!"))
+      end
+    end
+    if attacker.pbOwnSide.effects[:StickyWeb]
+      attacker.pbOwnSide.effects[:StickyWeb] = false
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your team's feet!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:StickyWeb]
+      attacker.pbOpposingSide.effects[:StickyWeb] = false
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your opponent's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("The sticky web has disappeared from beneath your team's feet!"))
+      end
+    end
+    if (@battle.state.effects[:PSYTERRAIN] > 0 || @battle.state.effects[:GRASSY] > 0 ||
+      @battle.state.effects[:ELECTERRAIN] > 0 || @battle.state.effects[:MISTY] > 0)
+      @battle.state.effects[:PSYTERRAIN] = 0
+      @battle.state.effects[:GRASSY] = 0
+      @battle.state.effects[:ELECTERRAIN] = 0
+      @battle.state.effects[:MISTY] = 0
+      @battle.pbDisplay(_INTL("The terrain effects were cleared!"))
+    end
+    ####
+    return ret
+  end
+end
