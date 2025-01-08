@@ -553,8 +553,9 @@ FIELDEFFECTS = {
 	:typeAddOns => {},
 	:moveEffects => {},
 	:typeBoosts => {
-		1.3 => [:BUG,:WATER,:GRASS],
-		0.8 => [:FIRE],
+		1.5 => [:BUG],
+		1.3 => [:WATER,:GRASS],
+		0.5 => [:FIRE],
 	},
 	:typeMessages => {
 		"Bugs are swarming everywhere!" => [:BUG],

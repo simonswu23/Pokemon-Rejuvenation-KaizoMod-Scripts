@@ -52120,7 +52120,7 @@ MONHASH = {
   :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :RILLABOOMITE => 1
+      :RILLABOOMITE => 2
   },
 },
 
@@ -52457,7 +52457,7 @@ MONHASH = {
   :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :INTELEONITE => 1
+      :INTELEONITE => 2
   },
 },
 
@@ -52717,7 +52717,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Height => 140,
+    :Weight => 1653,
+    :BattlerEnemyY => -2,
+    :BattlerAltitude => 2,
+  },
+
+  "Mega Form" => {
       :BaseStats => [98, 122, 145, 53, 110, 67],
       :Abilities => [:MIRRORARMOR],
       :Height => 140,
@@ -52727,9 +52734,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :CORVIKNITE => 1
+      :CORVIKNITE => 2
   },
 },
 

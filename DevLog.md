@@ -7,6 +7,7 @@
 - Geara (Terajuma Beach)
 - Zetta (Terajuma Falls)
 - Neved (Terajuma Falls)
+- Ren (Helojak)
 
 ## Kaizo
 - Venam Gym, **UNTESTED**
@@ -16,8 +17,14 @@
 - Tapu Koko (Boss)
 - Zetta (Terajuma Falls)
 - Neved (Terajuma Falls)
+- Ren (Helojak)
 
 # Progress
+
+- 1/9/25
+  - Finally figured out how to make Giga moves break through protect
+  - TODO: bug -- changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
+  - 
 
 - 1/8/25
  - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)

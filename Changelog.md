@@ -29,10 +29,16 @@
   - Magma Armor protects against Frostbite
   - Rain Dish and Ice Body healing improved to 1/8
   - Moody nerf reverted (can affect Evasion and Accuracy)
+  - Liquid Voice provides an additional x1.3 boost to sound-based moves
+  - Galvanize, Pixilate, Refrigerate, Aerilate give a x1.3 boost in power
+  - Normalize gives a x1.5 boost in power
+
 
 # Crests
   - Druddigon Crest healing improved to 1/8
   - Cicinno and Ledian Crests can now trigger side effects for all hits
+  - Corviknight Crest: clears hazards and screens at the end of each turn
+  - Cacturne Crest: raises offenses by 1 if attacking first
 
 # Attacks
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
@@ -88,6 +94,8 @@
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
     - All Bug moves are now boosted by x1.5
+  - Swamp
+    - Bug moves boost increased to x1.5
 
 # Other
   - Removed data chip cost to enter password

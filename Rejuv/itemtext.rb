@@ -10765,4 +10765,26 @@ ITEMHASH = {
 	:noUse => true,
 },
 
+### Other SWu ###
+
+:CACTCREST => {
+    :ID => 3000,
+    :name => "Cacturne Crest",
+    :desc => "If attacking before the target, raise user's offenses.",
+    :price => 0,
+    :crest => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
+:CORVICREST => {
+    :ID => 3000,
+    :name => "Corviknight Crest",
+    :desc => "Clears hazards and screens at the end of each turn.",
+    :price => 0,
+    :crest => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
 }

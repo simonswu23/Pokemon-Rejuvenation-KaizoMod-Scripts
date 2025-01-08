@@ -14446,6 +14446,22 @@ MOVEHASH = {
 	:desc => "Ignores Abilities."
 },
 
+:WINDRAGE => {
+	:ID => 2004,
+	:name => "Wind Rage",
+	:function => 0x0EC,
+	:type => :FLYING,
+	:category => :physical,
+	:basedamage => 130,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :AllOpposing,
+    :priority => -6,
+	:soundmove => true,
+	:desc => "Forces foes to switch out."
+},
+
 # Handlers
 :METEORIMPACTOR => {
 	:ID => 9999,

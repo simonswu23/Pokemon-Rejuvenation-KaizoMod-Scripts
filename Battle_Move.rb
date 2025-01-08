@@ -53,7 +53,7 @@ class PokeBattle_Move
       @moreeffect = @data.checkFlag?(:moreeffect,0)
       @recoil     = @data.checkFlag?(:recoil, 0)
       @zmove      = @data.checkFlag?(:zmove,false)
-      @giga       = @data.checkFlag?(:giga,false)
+      @giga       = @data.checkFlag?(:giga, false)
     end
     if !zbase.nil?
       @zmove      = true
@@ -1559,7 +1559,7 @@ class PokeBattle_Move
             basemult *= 1.5
           end
         end
-      when :PUNKROCK
+      when :PUNKROCK, :LIQUIDVOICE
         if isSoundBased?
           case @battle.FE
             when :BIGTOP then basemult *= 1.5
@@ -1578,7 +1578,7 @@ class PokeBattle_Move
           case @battle.FE
             when :MOUNTAIN, :SNOWYMOUNTAIN, :SKY then basemult *= 1.5
             else
-              basemult *= 1.2
+              basemult *= 1.3
           end
         end
       when :GALVANIZE
@@ -1590,7 +1590,7 @@ class PokeBattle_Move
               if @battle.state.effects[:ELECTERRAIN] > 0
                 basemult *= 1.5
               else
-                basemult *= 1.2
+                basemult *= 1.3
               end
           end
         end
@@ -1599,7 +1599,7 @@ class PokeBattle_Move
           case @battle.FE
             when :ICY, :SNOWYMOUNTAIN, :FROZENDIMENSION then basemult *= 1.5
             else
-              basemult *= 1.2
+              basemult *= 1.3
           end
         end
       when :PIXILATE
@@ -1610,12 +1610,12 @@ class PokeBattle_Move
               if @battle.state.effects[:MISTY] > 0
                 basemult *= 1.5
               else
-                basemult *= 1.2
+                basemult *= 1.3
               end
           end
         end
-      when :DUSKILATE     then basemult *= 1.2 if @type == :NORMAL && (type == :DARK || (type == :NORMAL && @battle.FE == :GLITCH))
-      when :NORMALIZE     then basemult *= 1.2 if !@zmove
+      when :DUSKILATE     then basemult *= 1.3 if @type == :NORMAL && (type == :DARK || (type == :NORMAL && @battle.FE == :GLITCH))
+      when :NORMALIZE     then basemult *= 1.5 if !@zmove
       when :TRANSISTOR    then basemult *= 1.5 if type == :ELECTRIC
       when :DRAGONSMAW    then basemult *= 1.5 if type == :DRAGON
       when :STEELWORKER   then basemult *= @battle.FE == :FACTORY ? 2.0 : 1.5 if type == :STEEL
