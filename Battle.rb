@@ -1462,11 +1462,14 @@ class PokeBattle_Battle
         pri += 1 if @field.effect == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type == :FLYING && (@battlers[i].hp == @battlers[i].totalhp || ((@field.effect == :MOUNTAIN || @field.effect == :SNOWYMOUNTAIN) && pbWeather == :STRONGWINDS))
-        pri += 1 if @choices[i][2].move == :GRASSYGLIDE && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+        pri += 1 if @choices[i][2].move == :GRASSYGLIDE && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
         pri += 1 if @choices[i][2].move == :QUASH && @field.effect == :DIMENSIONAL
         pri += 1 if @choices[i][2].basedamage != 0 && @battlers[i].crested == :FERALIGATR && @battlers[i].turncount == 1 # Feraligatr Crest
         pri += 3 if @battlers[i].ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(@choices[i][2].function)
         pri = -2 if @battlers[i].ability == :MYCELIUMMIGHT && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
+        
+        # Updating Giga Move priority here (on turn of evolution)
+        pri -= 6 if @battlers[i].species == :CORVIKNIGHT && @battlers[i].giga && @choices[i][2].move == :BRAVEBIRD
       end
       priorityarray[i][0] = pri
 
@@ -2475,6 +2478,16 @@ class PokeBattle_Battle
     return false if !@battlers[index].hasMega?
     return false if !pbHasMegaRing(index)
 
+    if (SWUMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
+      if !pbBelongsToPlayer?(index)
+        items=@battle.pbGetOwnerItems(index)
+        for i in items
+          return false if i == :MEGABLOCKER
+        end
+      end
+      return true
+    end
+
     side = pbIsOpposing?(index) ? 1 : 0
     owner = pbGetOwnerIndex(index)
     return true if @megaEvolution[side][owner] == -1
@@ -2492,6 +2505,16 @@ class PokeBattle_Battle
       return false if !i.hasMegaForm?
     end
     return false if !pbHasMegaRing(index)
+
+    if (SWUMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
+      if !pbBelongsToPlayer?(index)
+        items=@battle.pbGetOwnerItems(index)
+        for i in items
+          return false if i == :MEGABLOCKER
+        end
+      end
+      return true
+    end
 
     side = 1
     owner = pbGetOwnerIndex(index)
@@ -2575,9 +2598,12 @@ class PokeBattle_Battle
     end
 
     # Remember trainer has mega-evolved
-    side = pbIsOpposing?(index) ? 1 : 0
-    owner = pbGetOwnerIndex(index)
-    @megaEvolution[side][owner] = -2
+    # Ogerpon and Terapagos do not take up a mega slot
+    if (SWUMOD && (@battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS))
+      side = pbIsOpposing?(index) ? 1 : 0
+      owner = pbGetOwnerIndex(index)
+      @megaEvolution[side][owner] = -2
+    end
 
     # Re-update ability of mega-evolved mon
     @battlers[index].pbAbilitiesOnSwitchIn(true)
@@ -4914,11 +4940,19 @@ class PokeBattle_Battle
             hpgain = i.pbRecoverHP(hpgain, true)
             pbDisplay(_INTL("{1} absorbed stray electricity!", i.pbThis)) if hpgain > 0
           end
+        when :SWAMP # Swamp
+          next if i.hp <= 0
+
+          if (i.ability == :WATERABSORB || i.ability == :DRYSKIN) && i.effects[:HealBlock] == 0 && !i.isAirborne?
+            hpgain = (i.totalhp / 8.0).floor
+            hpgain = i.pbRecoverHP(hpgain, true)
+            pbDisplay(_INTL("The dampness of the swamp restored some of {1}'s health!", i.pbThis)) if hpgain > 0
+          end
         when :WATERSURFACE # Water Surface
           next if i.hp <= 0
 
           if (i.ability == :WATERABSORB || i.ability == :DRYSKIN) && i.effects[:HealBlock] == 0 && !i.isAirborne?
-            hpgain = (i.totalhp / 16.0).floor
+            hpgain = (i.totalhp / 8.0).floor
             hpgain = i.pbRecoverHP(hpgain, true)
             pbDisplay(_INTL("{1} absorbed some of the water!", i.pbThis)) if hpgain > 0
           end
@@ -4934,7 +4968,7 @@ class PokeBattle_Battle
             pbDisplay(_INTL("The tar washed off {1} in the water!", i.pbThis))
           end
           if (i.ability == :WATERABSORB || i.ability == :DRYSKIN) && i.effects[:HealBlock] == 0
-            hpgain = (i.totalhp / 16.0).floor
+            hpgain = (i.totalhp / 8.0).floor
             hpgain = i.pbRecoverHP(hpgain, true)
             pbDisplay(_INTL("{1} absorbed some of the water!", i.pbThis)) if hpgain > 0
           end
@@ -5909,10 +5943,10 @@ class PokeBattle_Battle
         next if (i.index % 2 == j.index % 2) || j.isFainted?
 
         @battle.pbAnimation(:DEFOG, i, j, 0);
-        for move in j.moves
-          j.pbSetPP(move,move.pp-1) if move.pp>0
-        end
-        @battle.pbDisplay(_INTL("{1}'s Downdraft lowered the pp of {2}'s moves!", i.pbThis, j.pbThis))
+        # for move in j.moves
+        #   j.pbSetPP(move,move.pp-1) if move.pp>0
+        # end
+        # @battle.pbDisplay(_INTL("{1}'s Downdraft lowered the pp of {2}'s moves!", i.pbThis, j.pbThis))
 
         if i.pbOpposingSide.effects[:Reflect]>0
           i.pbOpposingSide.effects[:Reflect]=0

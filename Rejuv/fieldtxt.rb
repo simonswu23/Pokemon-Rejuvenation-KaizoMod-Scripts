@@ -535,6 +535,7 @@ FIELDEFFECTS = {
 	:mimicry => :WATER,
 	:damageMods => {
 		1.5 => [:MUDBOMB, :MUDSHOT, :MUDSLAP, :MUDBARRAGE, :MUDDYWATER, :SLUDGEWAVE, :GUNKSHOT, :BRINE, :SMACKDOWN, :THOUSANDARROWS, :HYDROVORTEX, :SAVAGESPINOUT],
+		1.3 => [:GRASSYGLIDE],
 		0.25 => [:EARTHQUAKE, :MAGNITUDE, :BULLDOZE],
 		0 => [:SELFDESTRUCT, :EXPLOSION, :MINDBLOWN]
 	},
@@ -546,6 +547,7 @@ FIELDEFFECTS = {
 		"The attack dissipated in the soggy ground..." => [:EARTHQUAKE, :MAGNITUDE, :BULLDOZE],
 		"The dampness prevents the explosion!" => [:SELFDESTRUCT, :EXPLOSION, :MINDBLOWN],
 		"There are bugs EVERYWHERE!" => [:SAVAGESPINOUT],
+		"The attack gained speed across the swamp slick!" => [:GRASSYGLIDE],
 	},
 	:typeMods => {
 		:WATER => [:SMACKDOWN, :THOUSANDARROWS],

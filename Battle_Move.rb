@@ -2640,6 +2640,9 @@ class PokeBattle_Move
     pri += 3 if attacker.ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@function)
     pri -= 1 if @battle.FE == :DEEPEARTH && @move == :COREENFORCER
     pri -= 2 if attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
+    
+    # Giga updates here
+    pri -= 6 if attacker.species == :CORVIKNIGHT && attacker.giga && @move == :BRAVEBIRD
 
     return pri
   end

@@ -1699,7 +1699,9 @@ class PokeBattle_AI
         miniscore = selfstatboost([0,1,0,0,0,0,0])
         score*=1.3 if @attacker.pbHasMove?(:ROLLOUT) && @attacker.effects[:DefenseCurl]==false
       when 0x1f # Flame Charge, Esper Wing, # Gen 9 Mod - Aqua Step, Trailblaze
-        miniscore = selfstatboost([0,0,0,0,1,0,0])
+        statarray = [0,0,0,0,1,0,0]
+        statarray = [0,0,0,0,2,0,0] if @move.move==:TRAILBLAZE && @battle.FE == :FOREST
+        miniscore = selfstatboost(statarray)
       when 0x20 # Charge Beam, Fiery Dance
         miniscore = selfstatboost([0,0,1,0,0,0,0])
       when 0x21 # Charge
@@ -3515,6 +3517,18 @@ class PokeBattle_AI
         miniscore = getFieldDisruptScore(@attacker,@opponent)
       when 0x808 # Clangorous Soulblaze
         miniscore = selfstatboost([1,1,1,1,1,0,0])
+      when 0x809 # Guardian of Alola
+        basescore = 0
+        if (attacker.species == :TAPUKOKO)
+          basescore += paracode()
+        elsif (attacker.species == :TAPULELE)
+          basescore += healblockcode() + meanlookcode()
+        elsif (attacker.species == :TAPUFINI)
+          basescore += hazecode() + defogcode()
+        elsif (attacker.species == :TAPUBULU)
+          basescore += absorbcode(initialscores[scoreindex])
+        end
+        return basescore
       when 0x80A # Unleashed Power
         miniscore = brickbreakcode()
         miniscore *= feintcode()
@@ -7899,10 +7913,12 @@ class PokeBattle_AI
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp == battler.totalhp || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
-      pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+      pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
       pri += 3 if battler.ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(battlermove.function)
       pri -= 1 if @battle.FE == :DEEPEARTH && battlermove.move == :COREENFORCER
       pri -= 2 if battler.ability == :MYCELIUMMIGHT && battlermove.basedamage == 0 && battler.effects[:TwoTurnAttack] == 0 # is Status Move # Gen 9 Mod - Added Mycelium Might
+      pri = -6 if battler.species == :CORVIKNIGHT && battler.giga && battlermove.move == :BRAVEBIRD
+
       priorityarray[index][0] = pri
     end
     priorityarray.sort_by! { |a| [a[0], a[1], a[2]] }
@@ -8093,7 +8109,7 @@ class PokeBattle_AI
       healing += 0.0625 if @battle.FE == :RAINBOW && attacker.status == :SLEEP
       healing += 0.0625 if @battle.FE == :FOREST && attacker.ability == :SAPSIPPER
       healing += 0.0625 if @battle.FE == :SHORTCIRCUIT && attacker.ability == :VOLTABSORB
-      healing += 0.0625 if (@battle.FE == :WATERSURFACE || @battle.FE == :UNDERWATER) && attacker.ability == :WATERABSORB
+      healing += 0.125 if (@battle.FE == :WATERSURFACE || @battle.FE == :UNDERWATER || @battle.FE == :SWAMP) && attacker.ability == :WATERABSORB
       healing += 0.0625 if @battle.FE == :BEWITCHED && attacker.hasType?(:GRASS) && !attacker.isAirborne?
       healing *= 0.67 if @battle.FE == :BACKALLEY
     end
@@ -9922,6 +9938,7 @@ class PokeBattle_AI
             fieldscore+=20 if (i.ability == :WATERCOMPACTION)
             fieldscore+=15 if (i.ability == :PROPELLERTAIL)
             fieldscore+=20 if (i.ability == :DRYSKIN)
+            fieldscore+=20 if (i.ability == :WATERABSORB)
             fieldscore+=10 if ((i.ability == :RATTLED) || (nonmegaform.ability == :RATTLED))
         when :RAINBOW
             fieldscore+=10 if (i.ability == :WONDERSKIN)
@@ -11414,7 +11431,7 @@ class PokeBattle_AI
           end
         when :ANALYTIC then basedamage = (basedamage * 1.3).round if pbAIfaster?(move, nil, attacker, opponent)
         when :SHEERFORCE then basedamage = (basedamage * 1.3).round if move.effect > 0
-        when :NORMALIZE then basedamage = (basedamage * 1.2).round
+        when :NORMALIZE then basedamage = (basedamage * 1.5).round
         when :HUSTLE then atk = [:BACKALLEY, :CITY].include?(@battle.FE) ? (atk * 1.75).round : (atk * 1.5).round if move.pbIsPhysical?(type)
         when :GUTS then atk = (atk * 1.5).round if !attacker.status.nil? && move.pbIsPhysical?(type)
         when :PLUS, :MINUS
@@ -11439,7 +11456,8 @@ class PokeBattle_AI
           end
         when :SOLARPOWER then atk = (atk * 1.5).round if @battle.pbWeather == :SUNNYDAY && move.pbIsSpecial?(type)
         when :SLOWSTART then atk = (atk * 0.5).round if attacker.turncount < 5 && move.pbIsPhysical?(type)
-        when :PUNKROCK then basedamage = [:BIGTOP,:CAVE].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.isSoundBased?
+        when :PUNKROCK, :LIQUIDVOICE
+          basedamage = [:BIGTOP,:CAVE].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.isSoundBased?
         # only check attacker ability here, partner ability is checked seperately
         when :STEELYSPIRIT then basedamage = @battle.FE == :FAIRYTALE ? (basedamage * 2.0).round : (basedamage * 1.5).round if type == :STEEL
         when :STEELWORKER then basedamage = @battle.FE == :FACTORY ? (basedamage * 2.0).round : (basedamage * 1.5).round if type == :STEEL
@@ -11484,7 +11502,7 @@ class PokeBattle_AI
           if @battle.pbWeather == :HAIL && move.pbIsSpecial?(type)
             atk = (atk * 1.5).round
           end
-        when :AERILATE then basedamage = [:MOUNTAIN, :SNOWYMOUNTAIN, :SKY].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.2).round if move.type == :NORMAL
+        when :AERILATE then basedamage = [:MOUNTAIN, :SNOWYMOUNTAIN, :SKY].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.type == :NORMAL
         when :GALVANIZE
           if move.type == :NORMAL
             if @battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY || @battle.state.effects[:ELECTERRAIN] > 0 # Electric or Factory Fields
@@ -11492,7 +11510,7 @@ class PokeBattle_AI
             elsif @battle.FE == :SHORTCIRCUIT # Short-Circuit Field
               basedamage = (basedamage * 2).round
             else
-              basedamage = (basedamage * 1.2).round
+              basedamage = (basedamage * 1.3).round
             end
           end
         when :PIXILATE
@@ -11500,11 +11518,11 @@ class PokeBattle_AI
             if @battle.FE == :MISTY || @battle.state.effects[:MISTY] > 0
               basedamage = (basedamage * 1.5).round # Misty Field
             else
-              basedamage = (basedamage * 1.2).round
+              basedamage = (basedamage * 1.3).round
             end
           end
-        when :REFRIGERATE then basedamage = [:ICY, :SNOWYMOUNTAIN, :FROZENDIMENSION].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.2).round if move.type == :NORMAL
-        when :DUSKILATE then basedamage = (basedamage * 1.2).round if move.type == :NORMAL
+        when :REFRIGERATE then basedamage = [:ICY, :SNOWYMOUNTAIN, :FROZENDIMENSION].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.type == :NORMAL
+        when :DUSKILATE then basedamage = (basedamage * 1.3).round if move.type == :NORMAL
       end
       
       # Gen 9 Mod - Beads of Ruin, Sword of Ruin
@@ -12601,7 +12619,8 @@ class PokeBattle_AI
         rageFistCounter=@battle.getBattlerHit(attacker)
         return basedamage+(50*rageFistCounter)
       # Z-moves
-      when 0x809 # Guardian of Alola
+      when 0x809 # Guardian of Alola        
+        return (opponent.hp*0.99).floor if @battle.FE == :FOREST
         return (opponent.hp*0.75).floor
     end
     return basedamage

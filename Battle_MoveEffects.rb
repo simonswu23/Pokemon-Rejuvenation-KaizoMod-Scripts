@@ -12684,6 +12684,8 @@ class PokeBattle_Move_923 < PokeBattle_Move
     pri += 1 if opponent.crested == :FERALIGATR && oppmovedata.basedamage != 0 && opponent.turncount == 1 # Feraligatr Crest
     pri += 1 if opponent.ability == :GALEWINGS && oppmovedata.type ==:FLYING && ((opponent.hp == opponent.totalhp) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.weather == :STRONGWINDS))
     pri -= 1 if @battle.FE == :DEEPEARTH && oppmoveid == :COREENFORCER
+
+    pri = -6 if opponent.species == :CORVIKNIGHT && opponent.giga && oppmovedata.move == :BRAVEBIRD
     if (pri < 1)
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1

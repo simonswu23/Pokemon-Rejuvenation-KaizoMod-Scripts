@@ -10765,6 +10765,16 @@ ITEMHASH = {
 	:noUse => true,
 },
 
+:MEGABLOCKER => {
+	:ID => 2033,
+	:name => "Mega Blocker",
+	:desc => "Internal use to prevent Ogerpon + Terapagos from mega evolving",
+	:price => 999,
+	:keyitem => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
 ### Other SWu ###
 
 :CACTCREST => {

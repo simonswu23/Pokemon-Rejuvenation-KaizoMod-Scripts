@@ -24,7 +24,12 @@
 - 1/9/25
   - Finally figured out how to make Giga moves break through protect
   - TODO: bug -- changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
-  - 
+  - Fixed giga move priority on turn of giga evolution
+  - TODO: backlog AI updates (since 1/8/25 commits)
+    - missing:
+      - Crests (Cacturne, Corviknight)
+      - Crash Landing and Melodramatic code
+    - individually log every priority change in the future
 
 - 1/8/25
  - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)
