@@ -19,10 +19,13 @@
 - Neved (Terajuma Falls)
 - Ren (Helojak)
   - used Bellibolt
+- Rorim B. (Gym)
+- Crawli (Gym)
+- Saki x Venam (Boom Battle)
 
 # Progress
 
-- 1/13/25
+- 1/13/25 (@SWu)
   - AI backlog (to implement)
     - updated Unburden to work with boss battles better
     - double-check self-destruct code
@@ -43,12 +46,12 @@
   - fixed setweather trainer skill bug, removed double faint handler (unused)
 
 
-- 1/10/25
+- 1/10/25 (@SWu)
   - Update battle.inspect to work with negative effect counters (like Taunt, Heal Block)
   - TODO: fix protect after a flinch 
   - TODO: change move releaner to also relearn moves from previous evolutions
 
-- 1/9/25
+- 1/9/25 (@SWu)
   - Finally figured out how to make Giga moves break through protect
   - TODO: bug -- changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
   - Fixed giga move priority on turn of giga evolution
@@ -66,7 +69,7 @@
     - TODO: actually cause terrains to be separate layer (like weather), and for them to override each other
 
 
-  - Crawli todos:
+  - (@SWu) Crawli todos:
     - Vespiquen Crest:
       - Defend Order naturally has increased priority, crested effect additionally applies quick guard, wide guard, and crafty shield
       - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority and breaks through protect
@@ -106,7 +109,7 @@
     - Pikachu: TBD (all other pokemon are "temporarily" paralyzed, except electric types, ground types, and pokemon with quick feet/limber)
 
 
-- 1/8/25
+- 1/8/25 (@SWu)
  - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)
  - improved Magnitude rolls with Loaded Dice (might need to double check this)
  - refactored show_message logic to allow for move use message suppression
@@ -126,12 +129,12 @@
 - TODO: Update signature pokemon in the Changelog
 - temporarily removed terrain destroying effect of Ice Spinner
 
-- 1/2/25
+- 1/2/25 (@SWu)
   - retroactively KAIZOMODDIFY some changes?
     - including move changes (can hard code them in PBMOVE)
   - TODO: fix bug -- Z moves do not trigger side effect chances
 
-- 12/29/24
+- 12/29/24 (@SWu)
   - updated Captivate x Attract to work irrespective of gender
   - minor update to AI code for giga moves (Resonance and Snooze)
   - fixed Giga Evolution not properly keeping old ability
@@ -139,18 +142,18 @@
   - re-ordered pokemon form data so Giga forms use their G-Mega sprites
   - disabled Terajuma password (softlock protection)
 
-- 12/27/2024
+- 12/27/2024 (@SWu)
   - minor AI giga evolution tweaks 
   - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
 
-- 12/26/2024
+- 12/26/2024 (@SWu)
   - finally fixed Giga evolution bug (properly registers and checks choice to Giga evolve now)
   - still cannot combine Aurora Veil + Sparkling Aria animation for Resonance
     - FIXED: needed to call pbAnimation from @battle (not the overridden function in the class)
   - AI updates for Giga:
     - discouraged switching giga pokemon
 
-- 12/25/2024
+- 12/25/2024 (@SWu)
   - updated Z-Moves not breaking through Wide Guard properly
   - migration of Giga Evolution Logic
     - kept old Mega stones intact, along with Mega logic
@@ -168,7 +171,7 @@
     - flagged in Pokemon.rb
   - changed logic so that move relearner is an egg move relearner instantly
 
-- 12/24/24 (batched with previous commits)
+- 12/24/24 (batched with previous commits, @SWu)
   - implemented KAIZOMOD constant for future changes
   - Gengar + Revavroom line ability updates
   - Paldean Wooper + Clodsire encounterable on Helojak Island (not globally sync-ed in .rxproj file yet)
@@ -189,10 +192,10 @@
     - :PETRIFICATION typo (as :PETRFICATION, preventing it from being cured by attacks)
     - :FROZEN typo (as :FREEZE, for 2-turn attacks and boss battles)
 
-- 12/16/25
+- 12/16/25 (@SWu)
   - Added LAWDS macho brace implementation for QoL
 
-- 12/15/24
+- 12/15/24 (@SWu)
   - Venam Gym Battle updated (standard and kaizo)
     - TODO: playtest
   - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
