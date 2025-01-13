@@ -138,7 +138,7 @@ module PokeBattle_BattleCommon
       rareness +=1 if Reborn && $PokemonBag.pbQuantity(:CATCHINGCHARM3)>0
       rareness +=1 if Reborn && $PokemonBag.pbQuantity(:CATCHINGCHARM4)>0
       x=(((a*3-b*2)*rareness)/(a*3))
-      if battler.status== :SLEEP || (battler.status== :FROZEN || SWUMOD)
+      if battler.status== :SLEEP || (battler.status== :FROZEN || KAIZOMOD)
         x=(x*2.5)
       elsif !battler.status.nil?
         x=(x*3/2)
@@ -183,7 +183,7 @@ module PokeBattle_BattleCommon
       end
       shakes=4 if $DEBUG && Input.press?(Input::CTRL)
       # @SWu make catching easier
-      shakes+=2 if SWUMOD && shakes <= 2
+      shakes+=2 if KAIZOMOD && shakes <= 2
       @scene.pbThrow(ball,(critical) ? 1 : shakes,critical,critsuccess,battler.index,showplayer)
       case shakes
         when 0

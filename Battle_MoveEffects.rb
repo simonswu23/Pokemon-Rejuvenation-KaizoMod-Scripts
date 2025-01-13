@@ -320,7 +320,7 @@ class PokeBattle_Move_005 < PokeBattle_Move
         when 1
           return false if !opponent.pbCanFreeze?(false)
           opponent.pbFreeze
-          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
         when 2
           return false if !opponent.pbCanParalyze?(false)
@@ -396,6 +396,7 @@ class PokeBattle_Move_006 < PokeBattle_Move
   end
 
   def pbAdditionalEffect(attacker,opponent)
+    opponent.corroded = true if@move == :MELTDOWN
     return false if !opponent.pbCanPoison?(false)
     opponent.pbPoison(attacker,true)
     # Gen 9 Mod - Poison Puppeteer effect
@@ -581,7 +582,7 @@ class PokeBattle_Move_00C < PokeBattle_Move
     return -1 if !opponent.pbCanFreeze?(true)
     pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
     opponent.pbFreeze
-              message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+              message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
     return 0
   end
@@ -589,7 +590,7 @@ class PokeBattle_Move_00C < PokeBattle_Move
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+                message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
@@ -607,7 +608,7 @@ class PokeBattle_Move_00D < PokeBattle_Move
     return -1 if !opponent.pbCanFreeze?(true)
     pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
     opponent.pbFreeze
-              message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+              message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
     return 0
   end
@@ -615,7 +616,7 @@ class PokeBattle_Move_00D < PokeBattle_Move
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+                message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
@@ -634,7 +635,7 @@ class PokeBattle_Move_00E < PokeBattle_Move
   def pbAdditionalEffect(attacker,opponent)
     if opponent.pbCanFreeze?(false)
       opponent.pbFreeze
-                message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+                message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
       return true
     end
@@ -846,7 +847,7 @@ class PokeBattle_Move_017 < PokeBattle_Move
       when 1
         return false if !opponent.pbCanFreeze?(false)
         opponent.pbFreeze
-                  message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+                  message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message,opponent.pbThis))
       when 2
         return false if !opponent.pbCanParalyze?(false)
@@ -908,7 +909,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.",i.pbThis))
         when :FROZEN
-          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
           @battle.pbDisplay(_INTL(message,i.pbThis))
         when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.",i.pbThis))
@@ -931,7 +932,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.",party[i].name))
         when :FROZEN
-          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
           @battle.pbDisplay(_INTL(message,party[i].name))
         when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.",party[i].name))
@@ -1016,12 +1017,12 @@ class PokeBattle_Move_01B < PokeBattle_Move
         @battle.pbDisplay(_INTL("{1} was cured of its burn.",attacker.pbThis))
       when :FROZEN
         opponent.pbFreeze
-        message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+        message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
         @battle.pbDisplay(_INTLmessage(message,attacker.pbThis))
         opponent.pbAbilityCureCheck
         @battle.synchronize=[-1,-1,0] if opponent.status!=:FROZEN
         attacker.status=nil
-        message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+        message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
         @battle.pbDisplay(_INTL(message,attacker.pbThis))
       when :PETRIFIED
         opponent.pbPetrify(attacker)
@@ -1138,7 +1139,7 @@ class PokeBattle_Move_01F < PokeBattle_Move
 
   def pbAdditionalEffect(attacker, opponent)
     increment = 1
-    increment = 2 if (@move == :ESPERWING && @battle.FE == :PSYTERRAIN) || (SWUMOD && @move == :TRAILBLAZE && @battle.FE == :FOREST)
+    increment = 2 if (@move == :ESPERWING && @battle.FE == :PSYTERRAIN) || (KAIZOMOD && @move == :TRAILBLAZE && @battle.FE == :FOREST)
     attacker.pbIncreaseStat(PBStats::SPEED, increment, statsource: attacker)
     return true
   end
@@ -1921,7 +1922,7 @@ class PokeBattle_Move_042 < PokeBattle_Move
       if @battle.pbRandom(10) == 0
         if opponent.pbCanFreeze?(false)
           opponent.pbFreeze
-          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message, opponent.pbThis))
         end
       end
@@ -2063,7 +2064,7 @@ class PokeBattle_Move_047 < PokeBattle_Move
           return false if !opponent.pbCanFreeze?(false)
 
           opponent.pbFreeze
-          message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+          message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
           @battle.pbDisplay(_INTL(message, opponent.pbThis))
         when 2
           return false if !opponent.pbCanParalyze?(false)
@@ -2417,7 +2418,7 @@ class PokeBattle_Move_04E < PokeBattle_Move
     return -1 if !opponent.pbCanReduceStatStage?(PBStats::SPATK, true)
 
     if (attacker.gender == 2 || opponent.gender == 2 ||
-       attacker.gender == opponent.gender) && !SWUMOD
+       attacker.gender == opponent.gender) && !KAIZOMOD
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -2432,7 +2433,7 @@ class PokeBattle_Move_04E < PokeBattle_Move
 
   def pbAdditionalEffect(attacker, opponent)
     return false if (attacker.gender == 2 || opponent.gender == 2 ||
-    attacker.gender == opponent.gender) && !SWUMOD
+    attacker.gender == opponent.gender) && !KAIZOMOD
     return false if opponent.ability == :OBLIVIOUS && !opponent.moldbroken
 
     opponent.pbReduceStat(PBStats::SPATK, 2, abilitymessage: false, statdropper: attacker)
@@ -4630,7 +4631,7 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
             return false if !opponent.pbCanFreeze?(false)
 
             opponent.pbFreeze
-            message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+            message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
             @battle.pbDisplay(_INTL(message, opponent.pbThis))
           when 4
             return false if !opponent.pbCanSleep?(false)
@@ -4660,7 +4661,7 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
         return false if !opponent.pbCanFreeze?(false)
 
         opponent.pbFreeze
-        message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+        message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
         @battle.pbDisplay(_INTL(message, opponent.pbThis))
       when :ROCKY, :CAVE, :MOUNTAIN, :DIMENSIONAL, :DEEPEARTH, :CONCERT1, :CONCERT2, :CONCERT3, :CONCERT4
         return false if opponent.ability == :INNERFOCUS || opponent.damagestate.substitute
@@ -4727,7 +4728,7 @@ class PokeBattle_Move_0A5 < PokeBattle_Move
         @battle.pbDisplay(_INTL("The Aroma Veil protects #{opponent.pbThis} from being taunted!"))
       elsif (opponent.ability == :OBLIVIOUS) && !opponent.moldbroken
         @battle.pbDisplay(_INTL("It doesn't affect {1}...", opponent.pbThis(true)))
-      elsif !(opponent.effects[:Taunt] > 0)
+      elsif !(opponent.effects[:Taunt] != 0)
         pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
         opponent.effects[:Taunt] = 4
         @battle.pbDisplay(_INTL("{1} fell for the taunt!", opponent.pbThis))
@@ -5208,7 +5209,7 @@ end
 class PokeBattle_Move_0BA < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
    # this was unchanged - just a reference of where the following needs to be placed.
-    if opponent.effects[:Taunt]>0
+    if opponent.effects[:Taunt]!=0
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -5386,7 +5387,7 @@ end
 ################################################################################
 class PokeBattle_Move_0C0 < PokeBattle_Move
   def pbBaseDamage(basedmg, attacker, opponent)
-    return 20 if @move == :WATERSHURIKEN && attacker.species == :GRENINJA && attacker.ability == :BATTLEBOND && attacker.form == 1 && !attacker.effects[:Transform] && LegacyBattleBond
+    return 20 if @move == :WATERSHURIKEN && (KAIZOMOD || (attacker.species == :GRENINJA && attacker.ability == :BATTLEBOND && attacker.form == 1 && !attacker.effects[:Transform] && LegacyBattleBond))
     return basedmg
   end
 
@@ -5395,7 +5396,7 @@ class PokeBattle_Move_0C0 < PokeBattle_Move
   end
 
   def pbNumHits(attacker)
-    return 3 if @move == :WATERSHURIKEN && attacker.species == :GRENINJA && attacker.ability == :BATTLEBOND && attacker.form == 1 && !attacker.effects[:Transform] && LegacyBattleBond
+    return 3 if @move == :WATERSHURIKEN && (KAIZOMOD || (attacker.species == :GRENINJA && attacker.ability == :BATTLEBOND && attacker.form == 1 && !attacker.effects[:Transform] && LegacyBattleBond))
     hitchances = [2, 2, 3, 3, 4, 5]
     ret = hitchances[@battle.pbRandom(hitchances.length)]
     # Gen 9 Mod - Added Loaded Dice
@@ -5765,7 +5766,7 @@ class PokeBattle_Move_0CA < PokeBattle_Move
   def pbTwoTurnAttack(attacker, checking = false)
     @immediate = false
     if attacker.effects[:TwoTurnAttack] == 0
-      @immediate = true if Rejuv && @battle.FE == :DESERT || (@battle.FE == :ASHENBEACH && SWUMOD)
+      @immediate = true if Rejuv && @battle.FE == :DESERT || (@battle.FE == :ASHENBEACH && KAIZOMOD)
       @immediate = true if (@battle.FE == :WATERSURFACE || @battle.FE == :MURKWATERSURFACE) && self.pbType(attacker, self.type) == :GROUND # for move failure on these fields
     end
     if !@immediate && attacker.hasWorkingItem(:POWERHERB)
@@ -6508,6 +6509,16 @@ class PokeBattle_Move_0E0 < PokeBattle_Move
     pbShowAnimation(@move,attacker,nil)
     attacker.pbReduceHP(attacker.hp)
     return true
+  end
+
+  def pbType(attacker,type=@type)
+    type=@type
+    if (@move == :SELFDESTRUCT)
+      type = attacker.type1
+    elsif (@move == :EXPLOSION && @battle.FE == :CORROSIVEMIST)
+      type = :POISON
+    end
+    return super(attacker,type)
   end
 
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
@@ -10781,7 +10792,7 @@ class PokeBattle_Move_776 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.", i.pbThis))
         when :FROZEN
-          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
           @battle.pbDisplay(_INTL(message,i.pbThis))
         when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.", i.pbThis))
@@ -10805,7 +10816,7 @@ class PokeBattle_Move_776 < PokeBattle_Move
         when :BURN
           @battle.pbDisplay(_INTL("{1} was cured of its burn.", party[i].name))
         when :FROZEN
-          message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
           @battle.pbDisplay(_INTL("message", party[i].name))
         when :PETRIFIED
           @battle.pbDisplay(_INTL("{1} was released from the stone.", party[i].name))
@@ -10852,7 +10863,7 @@ class PokeBattle_Move_778 < PokeBattle_Move
   def pbAdditionalEffect(attacker, opponent)
     if opponent.ability != :INNERFOCUS &&
        !opponent.damagestate.substitute &&
-       opponent.status != :SLEEP && (opponent.status != :FROZEN || SWUMOD)
+       opponent.status != :SLEEP && (opponent.status != :FROZEN || KAIZOMOD)
       opponent.effects[:Flinch] = true
       return true
     end
@@ -11389,7 +11400,7 @@ class PokeBattle_Move_505 < PokeBattle_Move
       when :BURN
         @battle.pbDisplay(_INTL("{1} was cured of its burn.", attacker.pbThis))
       when :FROZEN
-        message = SWUMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+        message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
         @battle.pbDisplay(_INTL(message,attacker.pbThis))
       when :PETRIFIED
         @battle.pbDisplay(_INTL("{1} was released from the stone.", attacker.pbThis))
@@ -11459,7 +11470,7 @@ class PokeBattle_Move_800 < PokeBattle_Move
         when 1
           if opponent.pbCanFreeze?(false)
             opponent.pbFreeze
-            message = SWUMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
+            message = KAIZOMOD ? "{1} was afflicted with frostbite!" : "{1} was frozen solid!"
             @battle.pbDisplay(_INTL(message,opponent.pbThis))
           end
         when 2
@@ -11632,7 +11643,7 @@ end
 class PokeBattle_Move_809 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     hploss = (opponent.hp*0.75).floor
-    hploss = (opponent.hp*0.99).floor if SWUMOD && @battle.FE == :FOREST
+    hploss = (opponent.hp*0.99).floor if KAIZOMOD && @battle.FE == :FOREST
     @damagedealt = hploss
     return pbEffectFixedDamage(hploss,attacker,opponent,hitnum,alltargets,showanimation)
   end

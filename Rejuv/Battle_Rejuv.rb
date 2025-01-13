@@ -160,7 +160,6 @@
     return if trainer.trainereffect[:effectmode].nil?
     if !delay
       trainer.trainereffectused = [] if !trainer.trainereffectused && trainer.trainereffect[:buffactivation] == :Limited
-      trainer.idsUsed = [] if !trainer.idsUsed
       if trainer.trainereffect[:effectmode] == :Party
         monindex = monindex-6 if monindex > 5 && @opponent.is_a?(Array)
         trainereffect = trainer.trainereffect[monindex]
@@ -174,15 +173,7 @@
         trainereffect = trainer.trainereffect[pkmn.pbFaintedPokemonCount]
         if trainer.trainereffect[:buffactivation] == :Limited
           return if trainer.trainereffectused.include?(pkmn.pbFaintedPokemonCount)
-          trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)
-
-          if (trainer.trainereffect[:doubleFaintHandler])
-            complement = trainer.trainereffect[:doubleFaintHandler][pkmn.pbFaintedPokemonCount]
-            return if trainer.idsUsed.include?(complement)
-            return if trainer.idsUsed.include?(pkmn.pbFaintedPokemonCount)
-            trainer.idsUsed.push(complement)
-            trainer.idsUsed.push(pkmn.pbFaintedPokemonCount)
-          end          
+          trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)      
         end
       end
     else
@@ -360,7 +351,7 @@
       animation = trainereffect[:changeAbility][1]
       message = trainereffect[:changeAbility][2]
       pbAnimation(animation,anim,nil) if !animation.nil?
-      pbDisplay(_INTL("{1}", message)) if !message.nil?
+      pbDisplay(_INTL(message, pkmn.pbThis,)) if !message.nil?
     end
     if trainereffect[:applyStatus]
       status = trainereffect[:applyStatus][0]
@@ -910,7 +901,7 @@ def runstarterskills()
         pbCommonAnimation(weatherText)
         weatherMessage = trainereffect[:setWeather][2] if trainereffect[:setWeather][2]
         pbDisplay(_INTL("{1}", weatherMessage)) if weatherMessage
-        @scene.pbHideOpponent
+        @scene.pbHideOpponent if trainereffect[:setWeather][4]
       end
       if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
         pbAnimation(:MAGICROOM,pkmn,nil)

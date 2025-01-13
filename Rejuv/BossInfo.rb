@@ -502,25 +502,84 @@ BOSSINFOHASH = {
     :CRESCGOTHITELLE => {
         :name => "Gothitelle",
         :entryText => "The mischievous Gothitelle laughs at you!",
-        :shieldCount => 1,
+        :shieldCount => 3,
         :immunities => {},
         :moninfo => {
             :species => :GOTHITELLE,
-            :level => 50,
+            :level => 60,
             :form => 1,
-            :moves => [:PLAYNICE,:PSYSHOCK,:FOCUSBLAST,:DARKPULSE],
+            :moves => [:PLAYNICE,:TORMENT,:FAKEOUT,:DARKPULSE],
             :gender => "F",
             :nature => :MODEST,
-            :ability => :COMPETITIVE,
+            :ability => :SHADOWTAG,
+            :item => :GOTHCREST,
             :iv => 31,
             :happiness => 255,
-            :ev => [252,0,0,252,0,0]
+            :ev => [252,252,252,252,252,252]
+        },
+        :onEntryEffects => {
+            # :animation => :IONDELUGE,
+            # :fieldChange => :ELECTERRAIN,
+            # :fieldChangeMessage => "Aelita's nightmares manifest into reality...",
+            # :delayedaction => {
+            #     :delay => 1,
+            #     :playerSideStatusChanges => [:PARALYSIS,"Paralysis"],
+            #     :delayedaction => {
+            #         :delay => 3,
+            #         :repeat => true,
+            #         :playerEffects => :GastroAcid,
+            #         :playerEffectsAnimation => :EMBARGO,
+            #         :playerEffectsMessage => "Abilities have been suppressed!"
+            #     }
+            # }
+            :playerEffects => :PerishSong,
+            :playerEffectsduration => 4,
+            :playerEffectsAnimation => :PERISHSONG,
+            :playerEffectsMessage => "Gothitelle sings a haunting tune!",
+            :instantMove => [:TAUNT, 0],
         },
         :onBreakEffects => {
+            3 => {
+                :threshold => 0,
+                :movesetUpdate => [:GRASSKNOT,:THUNDERBOLT,:TAUNT,:PSYSHOCK],
+                :delayedaction => {
+                    :delay => 2,
+                    :repeat => false,
+                    :playerEffects => :PerishSong,
+                    :playerEffectsduration => 4,
+                    :playerEffectsAnimation => :PERISHSONG,
+                    :playerEffectsMessage => "Gothitelle's tune lingers!",
+                }
+            },
+            2 => {
+                :threshold => 0,
+                :movesetUpdate => [:DARKPULSE,:TAUNT,:CHARM,:PSYSHOCK],
+                :delayedaction => {
+                    :delay => 2,
+                    :repeat => false,
+                    :playerEffects => :PerishSong,
+                    :playerEffectsduration => 4,
+                    :playerEffectsAnimation => :PERISHSONG,
+                    :playerEffectsMessage => "Gothitelle mocks your demise!",
+                }
+            },
             1 => {
                 :threshold => 0,
                 :fieldChange => :PSYTERRAIN,
-                :fieldChangeMessage => "Gothitelle laughs at how dumb your face looks. So mean!"
+                :fieldChangeMessage => "Gothitelle laughs at how dumb your face looks. So mean!",
+                :movesetUpdate => [:TAUNT,:PSYSHOCK,:DARKPULSE,:FOCUSBLAST],
+                :statDropCure => true,
+                :statusCure => true,
+                :effectClear => true,
+                :delayedaction => {
+                    :delay => 2,
+                    :repeat => false,
+                    :playerEffects => :PerishSong,
+                    :playerEffectsduration => 4,
+                    :playerEffectsAnimation => :PERISHSONG,
+                    :playerEffectsMessage => "Gothitelle sings once more!",
+                }
+
             }
         }
     },

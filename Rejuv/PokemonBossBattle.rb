@@ -407,9 +407,6 @@ class PokeBattle_Battle
       battler.status = nil
       pbDisplayBrief(_INTL("{1} recovered from its status!",battler.pbThis))
     end
-    if onBreakdata[:instantMove]
-      battler.pbUseMoveSimple(onBreakdata[:instantMove][0], -1, onBreakdata[:instantMove][1], false, true)
-    end
     animplay = false
     #Gen 9 Mod - Added Salt Cure and Syrup Bomb
     negativeEffects = [:Curse,:GastroAcid,:Imprison,:Nightmare,:TarShot,:SmackDown,:Encore,:HealBlock,:Octolock,:MultiTurn,:ChtonicMalady,:LeechSeed,:Petrification,:Attract,:Torment,:SaltCure,:SyrupBomb]
@@ -735,6 +732,9 @@ class PokeBattle_Battle
       pbBossSOS(@battlers,false,onEntry)
     else
       pbBossSOS(@battlers,shieldbreak=true,onEntry)
+    end
+    if onBreakdata[:instantMove]
+      battler.pbUseMoveSimple(onBreakdata[:instantMove][0], -1, onBreakdata[:instantMove][1], false, true)
     end
   end
 
@@ -1655,7 +1655,7 @@ class BossPokemonDataBox < SpriteWrapper
       when :SLEEP  
         return "Sleep"  
       when :FROZEN 
-        return SWUMOD ? "Frostbite" : "Freeze"  
+        return KAIZOMOD ? "Frostbite" : "Freeze"  
       when :BURN 
         return "Burn"  
       when :POISON 

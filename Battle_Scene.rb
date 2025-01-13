@@ -3013,9 +3013,9 @@ class PokeBattle_Scene
       itemname=getItemName(item)
       command=itemscene.pbShowCommands(_INTL("{1} is selected.",itemname),commands)
       if cmdUse>=0 && command==cmdUse
-        if $game_switches[:No_Items_Password]==true && (usetype==1 || usetype==2 || usetype==5 || usetype == 7) || SWUMOD
-          Kernel.pbMessage("The 'No Items' password is on, so items can't be used in battle.") if !SWUMOD
-          Kernel.pbMessage("In-battle items can't be used with this mod!") if SWUMOD
+        if $game_switches[:No_Items_Password]==true && (usetype==1 || usetype==2 || usetype==5 || usetype == 7) || KAIZOMOD
+          Kernel.pbMessage("The 'No Items' password is on, so items can't be used in battle.") if !KAIZOMOD
+          Kernel.pbMessage("In-battle items can't be used with this mod!") if KAIZOMOD
         elsif usetype!=3 && usetype!=7
           modparty=[]
           for i in 0...6

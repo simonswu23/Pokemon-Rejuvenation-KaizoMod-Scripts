@@ -22,6 +22,32 @@
 
 # Progress
 
+- 1/13/25
+  - AI backlog (to implement)
+    - updated Unburden to work with boss battles better
+    - double-check self-destruct code
+    - Barbed Web
+    - Pinch Berries
+    - Swarm
+
+  - updated Taunt to check for != 0 (allows for infinite Taunt to be applied if negative)
+  - commented out runtrainerskills in Battle.rb (causing issues)
+  - updated AI for pinch abilities
+  - replaced all SWUMOD instances with KAIZOMOD
+  - Barbed Web:
+    - cursory AI implementation
+    - excluded from Shield Dust / Covert Cloak / Sheer Force (like Ceaseless Edge)
+    - TODO: need to fix applied effect in doubles (happens twice)
+    - TODO (@ren): randomly apply Spikes or Toxic Spikes if Sticky Web is set up (until everything is maxxed out)
+  - Giga Moves not documented yet (still not finalized)
+  - fixed setweather trainer skill bug, removed double faint handler (unused)
+
+
+- 1/10/25
+  - Update battle.inspect to work with negative effect counters (like Taunt, Heal Block)
+  - TODO: fix protect after a flinch 
+  - TODO: change move releaner to also relearn moves from previous evolutions
+
 - 1/9/25
   - Finally figured out how to make Giga moves break through protect
   - TODO: bug -- changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
@@ -29,7 +55,7 @@
   - TODO: backlog AI updates (since 1/8/25 commits)
     - missing:
       - Crests (Cacturne, Corviknight)
-      - Crash Landing and Melodramatic code
+      - Meteor Impactor and Melodramatic code
     - individually log every priority change in the future
   - Terapagos and Ogerpon mega evolution now does not require a mega slot
     - added internal mega blocker item to prevent certain battles from mega evolving them by default
@@ -51,6 +77,7 @@
         - always crits targets with lowered speed (can remove poisoned effect)
     - Barbed Web:
       - copy old swumod implementation
+      - TODO: update AI fully
     - Swap field ordering: forest for gym, swamp for jynobi
     - Giga Appletun
       - Bug/Dragon type
@@ -100,7 +127,7 @@
 - temporarily removed terrain destroying effect of Ice Spinner
 
 - 1/2/25
-  - retroactively SWUMODDIFY some changes?
+  - retroactively KAIZOMODDIFY some changes?
     - including move changes (can hard code them in PBMOVE)
   - TODO: fix bug -- Z moves do not trigger side effect chances
 
@@ -142,7 +169,7 @@
   - changed logic so that move relearner is an egg move relearner instantly
 
 - 12/24/24 (batched with previous commits)
-  - implemented SWUMOD constant for future changes
+  - implemented KAIZOMOD constant for future changes
   - Gengar + Revavroom line ability updates
   - Paldean Wooper + Clodsire encounterable on Helojak Island (not globally sync-ed in .rxproj file yet)
   - powerpack password now gives you a shit ton of candy

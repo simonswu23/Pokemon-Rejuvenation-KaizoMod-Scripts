@@ -534,7 +534,7 @@ FIELDEFFECTS = {
 	:naturePower => :MUDDYWATER,
 	:mimicry => :WATER,
 	:damageMods => {
-		1.5 => [:MUDBOMB, :MUDSHOT, :MUDSLAP, :MUDBARRAGE, :MUDDYWATER, :SLUDGEWAVE, :GUNKSHOT, :BRINE, :SMACKDOWN, :THOUSANDARROWS, :HYDROVORTEX, :SAVAGESPINOUT],
+		1.5 => [:MUDBOMB, :MUDSHOT, :MUDSLAP, :MUDBARRAGE, :MUDDYWATER, :SLUDGEWAVE, :GUNKSHOT, :BRINE, :SMACKDOWN, :THOUSANDARROWS, :HYDROVORTEX, :SAVAGESPINOUT, :HONEYPOT],
 		1.3 => [:GRASSYGLIDE],
 		0.25 => [:EARTHQUAKE, :MAGNITUDE, :BULLDOZE],
 		0 => [:SELFDESTRUCT, :EXPLOSION, :MINDBLOWN]
@@ -546,7 +546,7 @@ FIELDEFFECTS = {
 		"The murk strengthened the attack!" => [:MUDBOMB, :MUDSHOT, :MUDSLAP, :MUDBARRAGE, :MUDDYWATER, :SLUDGEWAVE, :GUNKSHOT, :BRINE, :SMACKDOWN, :THOUSANDARROWS, :HYDROVORTEX],
 		"The attack dissipated in the soggy ground..." => [:EARTHQUAKE, :MAGNITUDE, :BULLDOZE],
 		"The dampness prevents the explosion!" => [:SELFDESTRUCT, :EXPLOSION, :MINDBLOWN],
-		"There are bugs EVERYWHERE!" => [:SAVAGESPINOUT],
+		"There are bugs EVERYWHERE!" => [:SAVAGESPINOUT, :HONEYPOT],
 		"The attack gained speed across the swamp slick!" => [:GRASSYGLIDE],
 	},
 	:typeMods => {
@@ -962,14 +962,17 @@ FIELDEFFECTS = {
 	},
 	:typeBoosts => {
 		1.5 => [:BUG, :GRASS],
+		0.5 => [:FLYING],
 	},
 	:typeMessages => {
 		"The attack spread throughout the forest!" => [:BUG],
 		"The forestry strengthened the attack!" => [:GRASS],
+		"The dense forest canopy blocked the attack!" => [:FLYING],
 	},
-	# :typeCondition => {
-	# 	:BUG => "self.pbIsSpecial?(type) && !SWUMOD",
-	# },
+	:typeCondition => {
+		# :BUG => "self.pbIsSpecial?(type) && !KAIZOMOD",
+		:FLYING => "self.contactMove?",
+	},
 	:typeEffects => {},
 	:changeCondition => {
 		:SWAMP => "@battle.field.counter > 2",

@@ -763,6 +763,36 @@ end
 ### SWU'S MOVES HERE ###
 
 
+# Barbed Web
+class PokeBattle_Move_900 < PokeBattle_Move
+  def pbAdditionalEffect(attacker,opponent)
+    if (!attacker.pbOpposingSide.effects[:StickyWeb])
+      attacker.pbOpposingSide.effects[:StickyWeb]=true
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("A sticky web has been laid out beneath your foe's team's feet!"))
+      else
+        @battle.pbDisplay(_INTL("A sticky web has been laid out beneath your team's feet!"))
+      end
+    else
+      if(attacker.pbOpposingSide.effects[:Spikes] < 3)
+        attacker.pbOpposingSide.effects[:Spikes]+= 1
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("Spikes were scattered around your foe's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("Spikes were scattered around your team's feet!"))
+        end
+      end
+      if(attacker.pbOpposingSide.effects[:ToxicSpikes] < 2)
+        attacker.pbOpposingSide.effects[:ToxicSpikes]+= 1
+        if !@battle.pbIsOpposing?(attacker.index)
+          @battle.pbDisplay(_INTL("Poison spikes were scattered around your foe's team's feet!"))
+        else
+          @battle.pbDisplay(_INTL("Poison spikes were scattered around your team's feet!"))
+        end
+      end
+    end
+  end
+end
 
 ### Giga Moves Below ###
 
@@ -948,5 +978,34 @@ class PokeBattle_Move_1002 < PokeBattle_Move
     end
     ####
     return ret
+  end
+end
+
+### Honeypot
+class PokeBattle_Move_1003 < PokeBattle_Move
+  def pbAdditionalEffect(attacker, opponent)
+    inc = 1
+    if @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 3, 5)
+      case @battle.FE
+        when :FLOWERGARDEN3
+          for stat in [PBStats::EVASION, PBStats::DEFENSE, PBStats::SPDEF]
+            inc = 2
+          end
+        when :FLOWERGARDEN4
+          for stat in [PBStats::EVASION, PBStats::DEFENSE, PBStats::SPDEF]
+            inc = 3
+          end
+        when :FLOWERGARDEN5
+          for stat in [PBStats::EVASION, PBStats::DEFENSE, PBStats::SPDEF]
+            inc = 6
+          end
+      end
+    end
+    ret1 = opponent.pbReduceStat(PBStats::EVASION, inc, abilitymessage: false, statdropper: attacker)
+    ret2 = false
+    if (opponent.pbPartner && !opponent.pbPartner.isFainted?)
+      ret2 = opponent.pbPartner.pbReduceStat(PBStats::EVASION, inc, abilitymessage: false, statdropper: attacker)
+    end
+    return ret1 || ret2
   end
 end

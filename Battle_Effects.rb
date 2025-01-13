@@ -359,7 +359,7 @@ class PokeBattle_Battler
     return false if isFainted? && !(Rejuv && isbossmon && @shieldCount > 0)
     return false if !pbCanStatus?(showMessages, false, moldbroken)
     return false if self.hasType?(:ICE)
-    return false if @battle.pbWeather == :SUNNYDAY && !hasWorkingItem(:UTILITYUMBRELLA) && !SWUMOD
+    return false if @battle.pbWeather == :SUNNYDAY && !hasWorkingItem(:UTILITYUMBRELLA) && !KAIZOMOD
     return false if self.ability == :MAGMAARMOR && !moldbroken && @battle.FE != :FROZENDIMENSION
     return false if @battle.FE == :VOLCANIC || @battle.FE == :BURNING
 
@@ -391,12 +391,12 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} is paralyzed! It can't move!", pbThis))
       when :FROZEN
         @battle.pbCommonAnimation("Frozen", self, nil)
-        message = SWUMOD ? "{1} is hurt by frostbite!" : "{1} is frozen solid!" 
+        message = KAIZOMOD ? "{1} is hurt by frostbite!" : "{1} is frozen solid!" 
         @battle.pbDisplay(_INTL(message, pbThis))
     end
     if self.isbossmon
       if self.chargeAttack
-        statusList = SWUMOD ? [:SLEEP, :PARALYSIS] : [:SLEEP, :PARALYSIS, :FROZEN]
+        statusList = KAIZOMOD ? [:SLEEP, :PARALYSIS] : [:SLEEP, :PARALYSIS, :FROZEN]
         if statusList.include?(self.status)
           self.chargeAttack[:turns] += 1
           self.chargeAttack[:canIntermediateAttack] = false
@@ -425,7 +425,7 @@ class PokeBattle_Battler
         when :BURN
         when :PARALYSIS
         when :FROZEN
-          return if SWUMOD
+          return if KAIZOMOD
           @battle.pbDisplay(_INTL("{1} was defrosted!", pbThis))
           if self.isbossmon
             if self.chargeAttack
@@ -507,7 +507,7 @@ class PokeBattle_Battler
     end
     agender = attacker.gender
     ogender = self.gender
-    if (agender == 2 || ogender == 2 || agender == ogender) && !SWUMOD
+    if (agender == 2 || ogender == 2 || agender == ogender) && !KAIZOMOD
       @battle.pbDisplay(_INTL("But it failed!")) if showMessages
       return false
     end

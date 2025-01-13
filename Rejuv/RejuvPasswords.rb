@@ -105,7 +105,7 @@ def addPassword(entrytext)
       if !ids
         Kernel.pbMessage('That is not a password.')
         next
-      elsif password == "terajuma" && SWUMOD
+      elsif password == "terajuma" && KAIZOMOD
         Kernel.pbMessage('That password is disabled for this mod.')
         next
       end      

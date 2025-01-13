@@ -39872,7 +39872,7 @@ MONHASH = {
       :CatchRate => 200,
       :Happiness => 70,
       :EggSteps => 3840,
-      :EggMoves => [:BATONPASS,:DOUBLEEDGE,:ENCORE,:ENDURE,:FEINT,:GUARDSPLIT,:MINDREADER,:MUDSLAP,:PURSUIT,:SPIKES,:TOXICSPIKES],
+      :EggMoves => [:BATONPASS,:DOUBLEEDGE,:ENCORE,:ENDURE,:FEINT,:GUARDSPLIT,:MINDREADER,:MUDSLAP,:PURSUIT,:SPIKES,:STICKYWEB,:TOXICSPIKES],
       :Moveset => [
         [1,:ABSORB],
         [4,:ACID],
@@ -42619,9 +42619,15 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-  "Ren's Greninja" => {
-    # +100 BST
-    :BaseStats => [72, 125, 77, 133, 91, 132],
+  "Ren's Greninja (Intense)" => {
+    # +60 BST
+    :BaseStats => [72, 105, 77, 123, 71, 122],
+    :Abilities => [:PROTEAN],
+  },
+
+  "Ren's Greninja (Kaizo)" => {
+    # +120 BST
+    :BaseStats => [72, 135, 77, 143, 91, 132],
     :Abilities => [:PROTEAN],
   },
 
@@ -48338,13 +48344,13 @@ MONHASH = {
 
   "Crawli's Araquanid (Kakori)" => {
     # +60 BST
-    :BaseStats => [68, 90, 92, 90, 132, 42],
+    :BaseStats => [78, 110, 92, 60, 142, 42],
     :Abilities => [:WATERBUBBLE],
   },
 
   "Crawli's Araquanid" => {
     # +120 BST
-    :BaseStats => [68, 130, 92, 100, 142, 42],
+    :BaseStats => [78, 120, 92, 110, 142, 42],
     :Abilities => [:WATERBUBBLE],
   },
 
@@ -51938,17 +51944,24 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
-      :BaseStats => [135, 183, 163, 85, 85, 45],
-      :Abilities => [:IRONFIST],
-      :Height => 250,
-      :Weight => 17637,
+  "Giga Form" => {
+    :Type2 => :POISON,
+    :Height => 250,
+    :Weight => 17637,
   },
 
+  "Mega Form" => {
+    :BaseStats => [135, 183, 163, 85, 85, 45],
+    :Abilities => [:IRONFIST],
+    :Height => 250,
+    :Weight => 17637,
+},
+
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
-    :MegaForm => {
-      :MELMETALITE => 1
+  :MegaForm => {
+    :MELMETALITE => 2
   },
 },
 
@@ -53739,7 +53752,14 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type1 => :BUG,
+    :Type2 => :DRAGON,
+    :Height => 250,
+    :Weight => 2866,
+  },
+
+    "Mega Form" => {
       :BaseStats => [110, 95, 110, 140, 110, 20],
       :Abilities => [:THICKFAT],
       :Height => 240,
@@ -53747,9 +53767,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :APPLETUNITE => 1
+      :APPLETUNITE => 2
   },
 },
 
@@ -54191,8 +54212,6 @@ MONHASH = {
   },
 
     "Giga Form" => {
-      :BaseStats => [75, 123, 95, 139, 70, 100],
-      :Abilities => [:TECHNICIAN],
       :Height => 240,
       :Weight => 2456,
   },
@@ -54205,6 +54224,13 @@ MONHASH = {
       :Abilities => [:IMMOLATE],
     },
 
+    "Mega Form" => {
+      :BaseStats => [75, 123, 95, 139, 70, 100],
+      :Abilities => [:TECHNICIAN],
+      :Height => 240,
+      :Weight => 2456,
+  },
+
   :OnCreation => proc{
       # Map IDs for Aevian form
       if $game_map && Toxtricity.include?($game_map.map_id)
@@ -54213,9 +54239,10 @@ MONHASH = {
         next 0
       end
       },
+  :GigaForm => 3,
   :DefaultForm => [0,1],
     :MegaForm => {
-        :TOXTRICITITE => 3,
+        :TOXTRICITITE => 5,
     },
 },
 
@@ -57899,6 +57926,19 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Rorrim's Quaquaval (Intense)" => {
+    # +60 BST
+    :BaseStats => [85, 120, 100, 105, 85, 95],
+    :Abilities => [:DANCER],
+  },
+
+  "Rorrim's Quaquaval (Kaizo)" => {
+    # +120 BST
+    :BaseStats => [85, 130, 120, 115, 95, 105],
+    :Abilities => [:DANCER],
+},
+
+  :DefaultForm => 0,
   :OnCreation => {},
 },
 

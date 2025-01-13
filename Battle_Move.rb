@@ -411,8 +411,8 @@ class PokeBattle_Move
     calcdefmult = 1.0
     calcdefmult *= 1.5 if @battle.FE == :SNOWYMOUNTAIN && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
     calcdefmult *= 1.5 if @battle.FE == :ICY && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
-    calcdefmult *= 1.5 if (HAILSNOWMOD != "Hail" || SWUMOD) && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
-    calcdefmult *= 1.5 if (SWUMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :SUNNYDAY
+    calcdefmult *= 1.5 if (HAILSNOWMOD != "Hail" || KAIZOMOD) && opponent.hasType?(:ICE) && @battle.pbWeather == :HAIL
+    calcdefmult *= 1.5 if (KAIZOMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :SUNNYDAY
     calcdefmult *= 1.5 if opponent.ability == :MARVELSCALE && (!opponent.status.nil? || ([:MISTY, :RAINBOW, :FAIRYTALE, :DRAGONSDEN, :STARLIGHT].include?(@battle.FE) || @battle.state.effects[:MISTY] > 0)) && !opponent.moldbroken
     calcdefmult *= 1.5 if opponent.ability == :GRASSPELT && (@battle.FE == :GRASSY || @battle.FE == :FOREST || @battle.state.effects[:GRASSY] > 0) # Grassy Field
     calcdefmult *= 2.0 if opponent.ability == :FURCOAT && !opponent.moldbroken
@@ -428,7 +428,7 @@ class PokeBattle_Move
     # don't forget spdef
     calcspdefmult = 1.0
     calcspdefmult *= 1.5 if opponent.hasType?(:ROCK) && @battle.pbWeather == :SANDSTORM
-    calcspdefmult *= 1.5 if (SWUMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :RAINDANCE
+    calcspdefmult *= 1.5 if (KAIZOMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :RAINDANCE
     calcspdefmult *= 1.5 if @battle.FE == :DESERT && opponent.hasType?(:GROUND)
     calcspdefmult *= 1.5 if @battle.FE == :MISTY && opponent.hasType?(:FAIRY)
     if ((@battle.pbWeather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken
@@ -621,7 +621,7 @@ class PokeBattle_Move
       mod2 = 2 if otype2 == :FAIRY && (opponent.ability == :PASTELVEIL || opponent.pbPartner.ability == :PASTELVEIL) && !opponent.moldbroken && mod2 > 2
     end
     # effects that ignore Inverse battles entirely
-    if @move == :VENAMSKISS
+    if @move == :VENAMSKISS || @move == :ACIDROCK
       mod1 = 4 if otype1 == :STEEL
       mod2 = 4 if otype2 == :STEEL
     end
@@ -1573,6 +1573,7 @@ class PokeBattle_Move
       when :SANDFORCE     then basemult *= 1.3 if (@battle.pbWeather == :SANDSTORM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && (type == :ROCK || type == :GROUND || type == :STEEL)
       when :ANALYTIC      then basemult *= 1.3 if (@battle.battlers.find_all { |battler| battler && battler.hp > 0 && !battler.hasMovedThisRound? && !@battle.switchedOut[battler.index] }).length == 0
       when :SHEERFORCE    then basemult *= 1.3 if effect > 0 || [0x908].include?(@function) # Gen 9 Mod - Electro Shot needs to be affected by Sheer Force.
+      when :AFTERMATH     then basemult *= 2 if [:EXPLOSION, :SELFDESTRUCT, :MISTYEXPLOSION, :MELTDOWN].include?(@move)
       when :AERILATE
         if @type == :NORMAL && type == :FLYING
           case @battle.FE
@@ -1940,8 +1941,8 @@ class PokeBattle_Move
       atkmult *= 1.5
     elsif (@battle.FE == :FOREST || (Rejuv && @battle.FE == :GRASSY)) && (attacker.ability == :OVERGROW && type == :GRASS)
       atkmult *= 1.5
-    elsif @battle.FE == :FOREST && (attacker.ability == :SWARM && type == :BUG)
-      atkmult *= 1.5
+    # elsif (@battle.FE == :FOREST || (KAIZOMOD && @battle.FE == :SWAMP)) && (attacker.ability == :SWARM && type == :BUG)
+    #   atkmult *= 1.5
     elsif ((@battle.FE == :WATERSURFACE && !attacker.isAirborne?) || @battle.FE == :UNDERWATER) && (attacker.ability == :TORRENT && type == :WATER)
       atkmult *= 1.5
     elsif @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) && (attacker.ability == :SWARM && type == :BUG)
@@ -1955,7 +1956,7 @@ class PokeBattle_Move
         when :FLOWERGARDEN4 then atkmult *= 1.8
         when :FLOWERGARDEN5 then atkmult *= 2.0
       end
-    elsif attacker.hp <= (attacker.totalhp / 3.0).floor
+    elsif attacker.hp <= (attacker.totalhp / 2.0).floor
       if (attacker.ability == :OVERGROW && type == :GRASS) || (attacker.ability == :BLAZE && type == :FIRE && @battle.FE != :FROZENDIMENSION) ||
          (attacker.ability == :TORRENT && type == :WATER) || (attacker.ability == :SWARM && type == :BUG)
         atkmult *= 1.5
@@ -2100,11 +2101,11 @@ class PokeBattle_Move
     if @battle.pbWeather == :SANDSTORM && opponent.hasType?(:ROCK) && applysandstorm
       defense = (defense * 1.5).round
     end
-    if @battle.pbWeather == :HAIL && opponent.hasType?(:ICE) && !applysandstorm && (HAILSNOWMOD != "Hail" || SWUMOD)
+    if @battle.pbWeather == :HAIL && opponent.hasType?(:ICE) && !applysandstorm && (HAILSNOWMOD != "Hail" || KAIZOMOD)
       defense = (defense * 1.5).round
     end
     # @SWu giving grass types buffed defenses in rain/sun
-    if (SWUMOD && opponent.hasType?(:GRASS))
+    if (KAIZOMOD && opponent.hasType?(:GRASS))
       defense = (defense * 1.5).round if (applysandstorm && @battle.pbWeather == :RAIN) || (!applysandstorm && @battle.pbWeather == :SUN)
     end
     defmult = 1.0
@@ -2268,7 +2269,7 @@ class PokeBattle_Move
     # Critical hits
     if opponent.damagestate.critical
       damage*=1.5
-      damage*=1.5 if attacker.ability == :SNIPER
+      damage*=2 if attacker.ability == :SNIPER
     end
     # STAB-addition from Crests
     typecrest = false
@@ -2323,7 +2324,7 @@ class PokeBattle_Move
     damage = (damage * typemod / 4.0)
 
     damage *= 0.5 if attacker.status == :BURN && pbIsPhysical?(type) && attacker.ability != :GUTS && @move != :FACADE
-    damage *= 0.5 if attacker.status== :FROZEN && !pbIsPhysical?(type) && SWUMOD
+    damage *= 0.5 if attacker.status== :FROZEN && !pbIsPhysical?(type) && KAIZOMOD
 
     # Random Variance
     if !$game_switches[:No_Damage_Rolls] || @battle.isOnline?

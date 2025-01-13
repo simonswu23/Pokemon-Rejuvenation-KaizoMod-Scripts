@@ -3734,7 +3734,7 @@ MOVEHASH = {
     :function => 0x0E0,
     :type => :NORMAL,
     :category => :physical,
-    :basedamage => 200,
+    :basedamage => 300,
     :accuracy => 100,
     :maxpp => 5,
     :target => :AllNonUsers,
@@ -11898,7 +11898,7 @@ MOVEHASH = {
 :ICESPINNER => {
     :ID => 928,
     :name => "Ice Spinner",
-    :function => 0x000, # SWUMOD temp fix
+    :function => 0x000, # KAIZOMOD temp fix
     :type => :ICE,
     :category => :physical,
     :basedamage => 80,
@@ -12713,16 +12713,16 @@ MOVEHASH = {
 :BARBEDWEB => {
     :ID => 635,
     :name => "Barbed Web",
-    :function => 0x005,
+    :function => 0x900,
     :type => :BUG,
     :category => :physical,
-    :basedamage => 70,
+    :basedamage => 75,
     :accuracy => 100,
     :maxpp => 10,
-    :effect => 30,
+    :effect => 100,
     :target => :AllOpposing,
     :highcrit => true,
-    :desc => "The user spreads spiked silk which may inflict Poison."
+    :desc => "The user spreads spiked silk across the opposing battlefield."
 },
 
 :COLDTRUTH => {
@@ -14457,9 +14457,52 @@ MOVEHASH = {
 	:maxpp => 10,
 	:giga => true,
 	:target => :AllOpposing,
-    :priority => -6,
-	:soundmove => true,
-	:desc => "Forces foes to switch out."
+	:desc => "Clears haards and screens."
+},
+
+:HONEYPOT => {
+	:ID => 2005,
+	:name => "Honeypot",
+	:function => 0x1003,
+	:type => :BUG,
+	:category => :special,
+	:basedamage => 140,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
+	:desc => "Lowers all foes evasion by 2."
+},
+
+:ACIDROCK => {
+	:ID => 2006,
+	:name => "Acid Rock",
+	:function => 0x007,
+	:type => :POISON,
+	:category => :special,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllNonUsers,
+	:desc => "Paralyzes foes. SE against steel."
+},
+
+:MELTDOWN => {
+	:ID => 2007,
+	:name => "Meltdown",
+	:function => 0x006,
+	:type => :STEEL,
+	:category => :physical,
+	:basedamage => 200,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllNonUsers,
+	:desc => "Badly poisons targets, regardless of typing."
 },
 
 # Handlers

@@ -1350,7 +1350,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :LAPRAS          then return true if move.move == :ICEBEAM
     when :APPLETUN        then return true if move.move == :APPLEACID
     when :DREDNAW         then return true if move.move == :LIQUIDATION
-    when :MELMETAL        then return true if move.move == :HYPERBEAM
+    when :MELMETAL        then return true if move.move == :SELFDESTRUCT
     when :COALOSSAL       then return true if move.move == :STONEEDGE
     when :VANILLUXE       then return true if move.move == :BLIZZARD
     when :MACHAMP         then return true if move.move == :CROSSCHOP

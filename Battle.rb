@@ -111,7 +111,7 @@ module PokeBattle_BattleCommon
         rareness += 3
       end
       x = (((a * 3 - b * 2) * rareness) / (a * 3))
-      if battler.status == :SLEEP || (battler.status == :FROZEN && !SWUMOD)
+      if battler.status == :SLEEP || (battler.status == :FROZEN && !KAIZOMOD)
         x = (x * 2.5)
       elsif !battler.status.nil?
         x = (x * 3 / 2)
@@ -153,7 +153,7 @@ module PokeBattle_BattleCommon
         end
       end
       shakes = 4 if $DEBUG && Input.press?(Input::CTRL)
-      shakes += 2 if SWUMOD && shakes <= 2
+      shakes += 2 if KAIZOMOD && shakes <= 2
       @scene.pbThrow(ball, (critical) ? 1 : shakes, critical, critsuccess, battler.index, showplayer)
       case shakes
         when 0
@@ -641,6 +641,10 @@ class PokeBattle_Battle
 
         when :SWAMP
           if Rejuv
+            if (KAIZOMOD && battler.ability == :UNBURDEN)
+              battler.pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
+              @battle.pbDisplay(_INTL("{1}'s Unburden sharply raised its Speed!", pbThis))
+            end
             battler.ability = :CLEARBODY
             battler.effects[:GorillaLock] = nil
           end
@@ -691,6 +695,10 @@ class PokeBattle_Battle
           if Rejuv
             battler.type1 = :NORMAL
             battler.type2 = nil
+            if (KAIZOMOD && battler.ability == :UNBURDEN)
+              battler.pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
+              @battle.pbDisplay(_INTL("{1}'s Unburden sharply raised its Speed!", pbThis))
+            end
             battler.ability = :NORMALIZE
             battler.effects[:GorillaLock] = nil
           else
@@ -737,6 +745,10 @@ class PokeBattle_Battle
           battler.pbCrossOpposing.effects[:LockOnPos] = battler.index
 
         when :DANCEFLOOR
+          if (KAIZOMOD && battler.ability == :UNBURDEN)
+            battler.pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
+            @battle.pbDisplay(_INTL("{1}'s Unburden sharply raised its Speed!", pbThis))
+          end
           battler.ability = :DANCER
           battler.effects[:GorillaLock] = nil
       end
@@ -1310,7 +1322,7 @@ class PokeBattle_Battle
         return false
       end
     end
-    if thispkmn.effects[:Taunt] > 0 && basemove.betterCategory(basemove.type) == :status && !basemove.zmove
+    if thispkmn.effects[:Taunt] != 0 && basemove.betterCategory(basemove.type) == :status && !basemove.zmove
       if showMessages
         pbDisplayPaused(_INTL("{1} can't use {2} after the Taunt!", thispkmn.pbThis, basemove.name))
       end
@@ -1792,7 +1804,7 @@ class PokeBattle_Battle
           newenemy = pbSwitchInBetween(index, false, false)
           newname = pbSwitchInName(index, newenemy) # Illusion
           opponent = pbGetOwner(index)
-          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer && !SWUMOD
+          if !@doublebattle && firstbattlerhp > 0 && @shiftStyle && @opponent && @internalbattle && pbCanChooseNonActive?(0) && pbIsOpposing?(index) && @battlers[0].effects[:Outrage] == 0 && !@controlPlayer && !KAIZOMOD
             pbDisplayPaused(_INTL("{1} is about to send in {2}.", opponent.fullname, newname))
             if pbDisplayConfirm(_INTL("Will {1} change Pokémon?", self.pbPlayer.name))
               newpoke = pbSwitchPlayer(0, true, true)
@@ -2344,7 +2356,7 @@ class PokeBattle_Battle
   # Giga Evolve battler.
   ################################################################################
   def pbCanGigaEvolve?(index)
-    return false if !SWUMOD
+    return false if !KAIZOMOD
     return false if $game_switches[:No_Mega_Evolution]==true
     return false if !@battlers[index].hasGiga?
     # return true if !pbBelongsToPlayer?(index)
@@ -2372,7 +2384,7 @@ class PokeBattle_Battle
   end
 
   def pbCanGigaEvolveAI?(i,index)
-    return false if !SWUMOD
+    return false if !KAIZOMOD
     return false if $game_switches[:No_Mega_Evolution]==true
     if i.class==PokeBattle_Battler
       return false if !i.pokemon.hasGigaForm?
@@ -2478,7 +2490,7 @@ class PokeBattle_Battle
     return false if !@battlers[index].hasMega?
     return false if !pbHasMegaRing(index)
 
-    if (SWUMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
+    if (KAIZOMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
       if !pbBelongsToPlayer?(index)
         items=@battle.pbGetOwnerItems(index)
         for i in items
@@ -2506,7 +2518,7 @@ class PokeBattle_Battle
     end
     return false if !pbHasMegaRing(index)
 
-    if (SWUMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
+    if (KAIZOMOD && @battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS)
       if !pbBelongsToPlayer?(index)
         items=@battle.pbGetOwnerItems(index)
         for i in items
@@ -2599,7 +2611,7 @@ class PokeBattle_Battle
 
     # Remember trainer has mega-evolved
     # Ogerpon and Terapagos do not take up a mega slot
-    if (SWUMOD && (@battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS))
+    if (KAIZOMOD && (@battlers[index].species == :OGERPON || @battlers[index].species == :TERAPAGOS))
       side = pbIsOpposing?(index) ? 1 : 0
       owner = pbGetOwnerIndex(index)
       @megaEvolution[side][owner] = -2
@@ -3619,213 +3631,213 @@ class PokeBattle_Battle
   # Trainereffects (Rejuv Xen Mage style on entry effects cause by trainer)
   ################################################################################
 
-  def runtrainerskills(pkmn, delay = false)
-    party = @battle.pbParty(pkmn.index)
-    monindex = party.index(pkmn.pokemon)
-    trainer = pbPartyGetOwner(pkmn.index, monindex)
-    return if trainer.nil?
-    return if trainer.trainereffect.nil?
-    return if trainer.trainereffect[:effectmode].nil?
+  # def runtrainerskills(pkmn, delay = false)
+  #   party = @battle.pbParty(pkmn.index)
+  #   monindex = party.index(pkmn.pokemon)
+  #   trainer = pbPartyGetOwner(pkmn.index, monindex)
+  #   return if trainer.nil?
+  #   return if trainer.trainereffect.nil?
+  #   return if trainer.trainereffect[:effectmode].nil?
 
-    if !delay
-      trainer.trainereffectused = [] if !trainer.trainereffectused && trainer.trainereffect[:buffactivation] == :Limited
-      if trainer.trainereffect[:effectmode] == :Party
-        monindex = monindex - 6 if monindex > 5 && @opponent.is_a?(Array)
-        trainereffect = trainer.trainereffect[monindex]
-        if trainer.trainereffect[:buffactivation] == :Limited
-          return if trainer.trainereffectused.include?(monindex)
+  #   if !delay
+  #     trainer.trainereffectused = [] if !trainer.trainereffectused && trainer.trainereffect[:buffactivation] == :Limited
+  #     if trainer.trainereffect[:effectmode] == :Party
+  #       monindex = monindex - 6 if monindex > 5 && @opponent.is_a?(Array)
+  #       trainereffect = trainer.trainereffect[monindex]
+  #       if trainer.trainereffect[:buffactivation] == :Limited
+  #         return if trainer.trainereffectused.include?(monindex)
 
-          trainer.trainereffectused.push(monindex)
-        end
-      # on god if someone tries to use Fainted effect mode on a Multibattle heads will roll
-      elsif trainer.trainereffect[:effectmode] == :Fainted
-        trainereffect = trainer.trainereffect[pkmn.pbFaintedPokemonCount]
-        if trainer.trainereffect[:buffactivation] == :Limited
-          return if trainer.trainereffectused.include?(pkmn.pbFaintedPokemonCount)
+  #         trainer.trainereffectused.push(monindex)
+  #       end
+  #     # on god if someone tries to use Fainted effect mode on a Multibattle heads will roll
+  #     elsif trainer.trainereffect[:effectmode] == :Fainted
+  #       trainereffect = trainer.trainereffect[pkmn.pbFaintedPokemonCount]
+  #       if trainer.trainereffect[:buffactivation] == :Limited
+  #         return if trainer.trainereffectused.include?(pkmn.pbFaintedPokemonCount)
 
-          trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)
-        end
-      end
-    else
-      trainereffect = trainer.trainerdelayedeffect
-    end
-    return if trainereffect.nil?
+  #         trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)
+  #       end
+  #     end
+  #   else
+  #     trainereffect = trainer.trainerdelayedeffect
+  #   end
+  #   return if trainereffect.nil?
 
-    if @opponent.is_a?(Array)
-      if @opponent.include?(trainer)
-        opponent = @opponent.index(trainer)
-        @scene.pbShowOpponent(opponent)
-        showtrainer = true
-      end
-    else
-      if @opponent == trainer
-        @scene.pbShowOpponent(0)
-        showtrainer = true
-      end
-    end
-    if trainereffect[:message] && trainereffect[:message] != ""
-      if trainereffect[:message].is_a?(Array)
-        for message in trainereffect[:message]
-          pbDisplayAutoPaused(_INTL(message))
-        end
-      else
-        pbDisplayAutoPaused(_INTL(trainereffect[:message]))
-      end
-    end
-    if trainereffect[:animation]
-      pbAnimation(trainereffect[:animation], pkmn, nil)
-    end
-    if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
-      pbAnimation(:MAGICROOM, pkmn, nil)
-      setField(trainereffect[:fieldChange][0], trainereffect[:fieldChange][2])
-      fieldmessage = (trainereffect[:fieldChange][1] != "") ? trainereffect[:fieldChange][1] : "The field was changed!"
-      pbDisplay(_INTL("{1}", fieldmessage))
-    end
-    if trainereffect[:typeChange]
-      pkmn.type1 = trainereffect[:typeChange][0]
-      pkmn.type2 = trainereffect[:typeChange][1] if trainereffect[:typeChange][1]
-      typechangeMessage = trainereffect[:typeChangeMessage]
-      pbDisplay(_INTL(typechangeMessage, pkmn.pbThis)) if typechangeMessage
-    end
-    trainereffect[:pokemonEffect].each_pair { |effect, effectval|
-      pkmn.effects[effect] = effectval[0]
-      pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
-      effectmessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
-      pbDisplay(_INTL(effectmessage, trainer.name, pkmn.pbThis(true)))
-    } if trainereffect[:pokemonEffect]
-    trainereffect[:opposingEffects].each_pair { |effect, effectval|
-      if !pkmn.pbOpposing1.isFainted?
-        pkmn.pbOpposing1.effects[effect] = effectval[0]
-        pbAnimation(effectval[1], pkmn.pbOpposing1, nil) if !effectval[1].nil?
-      end
-      if !pkmn.pbOpposing2.isFainted?
-        pkmn.pbOpposing2.effects[effect] = effectval[0]
-        pbAnimation(effectval[1], pkmn.pbOpposing2, nil) if !effectval[1].nil?
-      end
-      effectmessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
-      pbDisplay(_INTL(effectmessage, trainer.name, pkmn.pbThis(true)))
-    } if trainereffect[:opposingEffects]
-    trainereffect[:stateChanges].each_pair { |effect, effectval|
-      @battle.state.effects[effect] = effectval[0]
-      pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
-      statemessage = effectval[2] != "" ? effectval[2] : "The state of the battle was changed!"
-      pbDisplay(_INTL(statemessage, trainer.name))
-    } if trainereffect[:stateChanges]
-    side = pkmn.pbOwnSide
-    trainereffect[:trainersideChanges].each_pair { |effect, effectval|
-      side.effects[effect] = effectval[0]
-      pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
-      statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
-      pbDisplay(_INTL(statemessage, trainer.name))
-    } if trainereffect[:trainersideChanges]
-    side = pkmn.pbOpposingSide
-    trainereffect[:opposingsideChanges].each_pair { |effect, effectval|
-      side.effects[effect] = effectval[0]
-      pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
-      statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
-      pbDisplay(_INTL(statemessage, trainer.name))
-    } if trainereffect[:opposingsideChanges]
-    trainereffect[:pokemonStatChanges].each_pair { |stat, statval|
-      statval *= -1 if pkmn.ability == :CONTRARY
-      if statval > 0 && !pkmn.pbTooHigh?(stat, ignoreContrary: true)
-        pkmn.pbIncreaseStatBasic(stat, statval)
-        @battle.pbCommonAnimation("StatUp", pkmn) if !pkmn.statupanimplayed
-        pkmn.statupanimplayed = true
-        pbDisplay(_INTL("{1}'s {2} rose!", pkmn.pbThis, pkmn.pbGetStatName(stat)))
-      elsif statval < 0 && !pkmn.pbTooLow?(stat, ignoreContrary: true)
-        pkmn.pbReduceStatBasic(stat, -statval)
-        @battle.pbCommonAnimation("StatDown", pkmn) if !pkmn.statdownanimplayed
-        pkmn.statdownanimplayed = true
-        pbDisplay(_INTL("{1}'s {2} fell!", pkmn.pbThis, pkmn.pbGetStatName(stat)))
-      end
-    } if trainereffect[:pokemonStatChanges]
-    pkmn.statupanimplayed = false
-    pkmn.statdownanimplayed = false
-    trainereffect[:opposingSideStatChanges].each_pair { |stat, statval|
-      for i in @battlers
-        next if i.isFainted?
-        next if !pkmn.pbIsOpposing?(i.index)
+  #   if @opponent.is_a?(Array)
+  #     if @opponent.include?(trainer)
+  #       opponent = @opponent.index(trainer)
+  #       @scene.pbShowOpponent(opponent)
+  #       showtrainer = true
+  #     end
+  #   else
+  #     if @opponent == trainer
+  #       @scene.pbShowOpponent(0)
+  #       showtrainer = true
+  #     end
+  #   end
+  #   if trainereffect[:message] && trainereffect[:message] != ""
+  #     if trainereffect[:message].is_a?(Array)
+  #       for message in trainereffect[:message]
+  #         pbDisplayAutoPaused(_INTL(message))
+  #       end
+  #     else
+  #       pbDisplayAutoPaused(_INTL(trainereffect[:message]))
+  #     end
+  #   end
+  #   if trainereffect[:animation]
+  #     pbAnimation(trainereffect[:animation], pkmn, nil)
+  #   end
+  #   if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
+  #     pbAnimation(:MAGICROOM, pkmn, nil)
+  #     setField(trainereffect[:fieldChange][0], trainereffect[:fieldChange][2])
+  #     fieldmessage = (trainereffect[:fieldChange][1] != "") ? trainereffect[:fieldChange][1] : "The field was changed!"
+  #     pbDisplay(_INTL("{1}", fieldmessage))
+  #   end
+  #   if trainereffect[:typeChange]
+  #     pkmn.type1 = trainereffect[:typeChange][0]
+  #     pkmn.type2 = trainereffect[:typeChange][1] if trainereffect[:typeChange][1]
+  #     typechangeMessage = trainereffect[:typeChangeMessage]
+  #     pbDisplay(_INTL(typechangeMessage, pkmn.pbThis)) if typechangeMessage
+  #   end
+  #   trainereffect[:pokemonEffect].each_pair { |effect, effectval|
+  #     pkmn.effects[effect] = effectval[0]
+  #     pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
+  #     effectmessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+  #     pbDisplay(_INTL(effectmessage, trainer.name, pkmn.pbThis(true)))
+  #   } if trainereffect[:pokemonEffect]
+  #   trainereffect[:opposingEffects].each_pair { |effect, effectval|
+  #     if !pkmn.pbOpposing1.isFainted?
+  #       pkmn.pbOpposing1.effects[effect] = effectval[0]
+  #       pbAnimation(effectval[1], pkmn.pbOpposing1, nil) if !effectval[1].nil?
+  #     end
+  #     if !pkmn.pbOpposing2.isFainted?
+  #       pkmn.pbOpposing2.effects[effect] = effectval[0]
+  #       pbAnimation(effectval[1], pkmn.pbOpposing2, nil) if !effectval[1].nil?
+  #     end
+  #     effectmessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+  #     pbDisplay(_INTL(effectmessage, trainer.name, pkmn.pbThis(true)))
+  #   } if trainereffect[:opposingEffects]
+  #   trainereffect[:stateChanges].each_pair { |effect, effectval|
+  #     @battle.state.effects[effect] = effectval[0]
+  #     pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
+  #     statemessage = effectval[2] != "" ? effectval[2] : "The state of the battle was changed!"
+  #     pbDisplay(_INTL(statemessage, trainer.name))
+  #   } if trainereffect[:stateChanges]
+  #   side = pkmn.pbOwnSide
+  #   trainereffect[:trainersideChanges].each_pair { |effect, effectval|
+  #     side.effects[effect] = effectval[0]
+  #     pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
+  #     statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+  #     pbDisplay(_INTL(statemessage, trainer.name))
+  #   } if trainereffect[:trainersideChanges]
+  #   side = pkmn.pbOpposingSide
+  #   trainereffect[:opposingsideChanges].each_pair { |effect, effectval|
+  #     side.effects[effect] = effectval[0]
+  #     pbAnimation(effectval[1], pkmn, nil) if !effectval[1].nil?
+  #     statemessage = effectval[2] != "" ? effectval[2] : "An effect was put up by {1}!"
+  #     pbDisplay(_INTL(statemessage, trainer.name))
+  #   } if trainereffect[:opposingsideChanges]
+  #   trainereffect[:pokemonStatChanges].each_pair { |stat, statval|
+  #     statval *= -1 if pkmn.ability == :CONTRARY
+  #     if statval > 0 && !pkmn.pbTooHigh?(stat, ignoreContrary: true)
+  #       pkmn.pbIncreaseStatBasic(stat, statval)
+  #       @battle.pbCommonAnimation("StatUp", pkmn) if !pkmn.statupanimplayed
+  #       pkmn.statupanimplayed = true
+  #       pbDisplay(_INTL("{1}'s {2} rose!", pkmn.pbThis, pkmn.pbGetStatName(stat)))
+  #     elsif statval < 0 && !pkmn.pbTooLow?(stat, ignoreContrary: true)
+  #       pkmn.pbReduceStatBasic(stat, -statval)
+  #       @battle.pbCommonAnimation("StatDown", pkmn) if !pkmn.statdownanimplayed
+  #       pkmn.statdownanimplayed = true
+  #       pbDisplay(_INTL("{1}'s {2} fell!", pkmn.pbThis, pkmn.pbGetStatName(stat)))
+  #     end
+  #   } if trainereffect[:pokemonStatChanges]
+  #   pkmn.statupanimplayed = false
+  #   pkmn.statdownanimplayed = false
+  #   trainereffect[:opposingSideStatChanges].each_pair { |stat, statval|
+  #     for i in @battlers
+  #       next if i.isFainted?
+  #       next if !pkmn.pbIsOpposing?(i.index)
 
-        statval *= -1 if i.ability == :CONTRARY
-        if statval > 0 && !i.pbTooHigh?(stat, ignoreContrary: true)
-          i.pbIncreaseStatBasic(stat, statval)
-          @battle.pbCommonAnimation("StatUp", i) if !i.statupanimplayed
-          i.statupanimplayed = true
-          pbDisplay(_INTL("{1} boosted {2}'s {3}!", trainer.name, i.name, i.pbGetStatName(stat)))
-        elsif statval < 0 && !i.pbTooLow?(stat, ignoreContrary: true)
-          i.pbReduceStatBasic(stat, -statval)
-          @battle.pbCommonAnimation("StatDown", i) if !i.statdownanimplayed
-          i.statdownanimplayed = true
-          pbDisplay(_INTL("{1} lowered {2}'s {3}!", trainer.name, i.name, i.pbGetStatName(stat)))
-        end
-        i.statupanimplayed = false
-        i.statdownanimplayed = false
-      end
-    } if trainereffect[:opposingSideStatChanges]
-    if trainereffect[:instantMove]
-      pkmn.pbUseMoveSimple(trainereffect[:instantMove][0], -1, trainereffect[:instantMove][1], false, true)
-    end
-    if trainereffect[:reuseZMovePlayer]
-      # @party1.zMove          = -1
-      @battle.zMove[0][0] = -1
-      for i in @battlers
-        next if !pkmn.pbIsOpposing?(i.index) || i.hp <= 0
+  #       statval *= -1 if i.ability == :CONTRARY
+  #       if statval > 0 && !i.pbTooHigh?(stat, ignoreContrary: true)
+  #         i.pbIncreaseStatBasic(stat, statval)
+  #         @battle.pbCommonAnimation("StatUp", i) if !i.statupanimplayed
+  #         i.statupanimplayed = true
+  #         pbDisplay(_INTL("{1} boosted {2}'s {3}!", trainer.name, i.name, i.pbGetStatName(stat)))
+  #       elsif statval < 0 && !i.pbTooLow?(stat, ignoreContrary: true)
+  #         i.pbReduceStatBasic(stat, -statval)
+  #         @battle.pbCommonAnimation("StatDown", i) if !i.statdownanimplayed
+  #         i.statdownanimplayed = true
+  #         pbDisplay(_INTL("{1} lowered {2}'s {3}!", trainer.name, i.name, i.pbGetStatName(stat)))
+  #       end
+  #       i.statupanimplayed = false
+  #       i.statdownanimplayed = false
+  #     end
+  #   } if trainereffect[:opposingSideStatChanges]
+  #   if trainereffect[:instantMove]
+  #     pkmn.pbUseMoveSimple(trainereffect[:instantMove][0], -1, trainereffect[:instantMove][1], false, true)
+  #   end
+  #   if trainereffect[:reuseZMovePlayer]
+  #     # @party1.zMove          = -1
+  #     @battle.zMove[0][0] = -1
+  #     for i in @battlers
+  #       next if !pkmn.pbIsOpposing?(i.index) || i.hp <= 0
 
-        i.zmoves = [nil, nil, nil, nil]
-        for j in 0...4
-          @battle.updateZMoveIndexBattler(j, i, true)
-        end
-        # mon gets a flag to allow it to use zmoves with it
-        i.effects[:IgnoreZflag] = true
-        pbCommonAnimation("ZPower", i, nil)
-      end
-    end
-    if delay
-      if trainereffect[:repeat]
-        trainer.trainerdelaycounter = trainereffect[:delay]
-      else
-        trainer.trainerdelayedeffect = nil
-        trainer.trainerdelaycounter = nil
-      end
-    end
-    if trainereffect[:delayedaction]
-      trainer.trainerdelayedeffect = trainereffect[:delayedaction]
-      trainer.trainerdelaycounter = (trainereffect[:delayedaction][:delay])
-    end
-    @scene.pbHideOpponent if showtrainer
-  end
+  #       i.zmoves = [nil, nil, nil, nil]
+  #       for j in 0...4
+  #         @battle.updateZMoveIndexBattler(j, i, true)
+  #       end
+  #       # mon gets a flag to allow it to use zmoves with it
+  #       i.effects[:IgnoreZflag] = true
+  #       pbCommonAnimation("ZPower", i, nil)
+  #     end
+  #   end
+  #   if delay
+  #     if trainereffect[:repeat]
+  #       trainer.trainerdelaycounter = trainereffect[:delay]
+  #     else
+  #       trainer.trainerdelayedeffect = nil
+  #       trainer.trainerdelaycounter = nil
+  #     end
+  #   end
+  #   if trainereffect[:delayedaction]
+  #     trainer.trainerdelayedeffect = trainereffect[:delayedaction]
+  #     trainer.trainerdelaycounter = (trainereffect[:delayedaction][:delay])
+  #   end
+  #   @scene.pbHideOpponent if showtrainer
+  # end
 
-  def delayedaction
-    actionsrun = []
-    for i in priority
-      next if i.isFainted?
+  # def delayedaction
+  #   actionsrun = []
+  #   for i in priority
+  #     next if i.isFainted?
 
-      party = @battle.pbParty(i.index)
-      monindex = party.index(i.pokemon)
-      trainer = pbPartyGetOwner(i.index, monindex)
-      battler = i
-      if battler.isbossmon
-        next if !battler.bossdelayedeffect
-        next if battler.bossdelaycounter.nil?
+  #     party = @battle.pbParty(i.index)
+  #     monindex = party.index(i.pokemon)
+  #     trainer = pbPartyGetOwner(i.index, monindex)
+  #     battler = i
+  #     if battler.isbossmon
+  #       next if !battler.bossdelayedeffect
+  #       next if battler.bossdelaycounter.nil?
 
-        battler.bossdelaycounter -= 1
-        actionsrun.push(battler)
-        if battler.bossdelaycounter == 0
-          pbShieldEffects(battler, battler.bossdelayedeffect, false, true)
-        end
-      else
-        next if !trainer
-        next if trainer.trainerdelaycounter.nil?
-        next if actionsrun.include?(trainer)
+  #       battler.bossdelaycounter -= 1
+  #       actionsrun.push(battler)
+  #       if battler.bossdelaycounter == 0
+  #         pbShieldEffects(battler, battler.bossdelayedeffect, false, true)
+  #       end
+  #     else
+  #       next if !trainer
+  #       next if trainer.trainerdelaycounter.nil?
+  #       next if actionsrun.include?(trainer)
 
-        trainer.trainerdelaycounter -= 1
-        actionsrun.push(trainer)
-        if trainer.trainerdelaycounter == 0
-          runtrainerskills(battler, true)
-        end
-      end
-    end
-  end
+  #       trainer.trainerdelaycounter -= 1
+  #       actionsrun.push(trainer)
+  #       if trainer.trainerdelaycounter == 0
+  #         runtrainerskills(battler, true)
+  #       end
+  #     end
+  #   end
+  # end
 
   ################################################################################
   # Battle core.
@@ -4065,7 +4077,7 @@ class PokeBattle_Battle
     end
     # END OF UPDATE
 
-    runstarterskills if SWUMOD
+    runstarterskills if KAIZOMOD
 
     priority = pbPriority
     if Rejuv
@@ -4623,7 +4635,7 @@ class PokeBattle_Battle
 
   def pbPursuitInterrupt(pursuiter, switcher)
     newpoke = nil
-    if pursuiter.status != :SLEEP && (pursuiter.status != :FROZEN || SWUMOD) && !pursuiter.effects[:Truant]
+    if pursuiter.status != :SLEEP && (pursuiter.status != :FROZEN || KAIZOMOD) && !pursuiter.effects[:Truant]
       @switching = true
       # Try to Mega-evolve/Ultra-burst before using pursuit
       side = pbIsOpposing?(pursuiter.index) ? 1 : 0
@@ -5299,7 +5311,7 @@ class PokeBattle_Battle
             for i in priority
               next if i.isFainted?
 
-              if HAILSNOWMOD != "Snow" || SWUMOD
+              if HAILSNOWMOD != "Snow" || KAIZOMOD
                 if !i.hasType?(:ICE) && i.item != :SAFETYGOGGLES &&
                    ![:TEMPEST, :ICEBODY, :SNOWCLOAK, :SLUSHRUSH, :LUNARIDOL, :MAGICGUARD, :OVERCOAT].include?(i.ability) &&
                    i.crested != :EMPOLEON && !(i.crested == :CASTFORM && i.form == 3) && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) &&
@@ -5439,7 +5451,7 @@ class PokeBattle_Battle
       next if i.isFainted?
 
       if i.chargeAttack
-        next if i.status == :SLEEP || (i.status == :FROZEN && !SWUMOD)
+        next if i.status == :SLEEP || (i.status == :FROZEN && !KAIZOMOD)
 
         chargeAttack = i.chargeAttack
         if i.turncount % chargeAttack[:turns] == 0
@@ -5609,7 +5621,7 @@ class PokeBattle_Battle
           pbDisplay(_INTL("{1}'s Hydration restored its health!", i.pbThis))
         end
       end
-      if i.ability == :WATERVEIL && (@field.effect == :WATERSURFACE || @field.effect == :UNDERWATER) && !SWUMOD
+      if i.ability == :WATERVEIL && (@field.effect == :WATERSURFACE || @field.effect == :UNDERWATER) && !KAIZOMOD
         if !i.status.nil?
           pbDisplay(_INTL("{1}'s Water Veil cured its {2} problem!", i.pbThis, i.status.downcase))
           i.status = nil
@@ -5842,7 +5854,7 @@ class PokeBattle_Battle
         end
       end
       # Frostbite
-      if SWUMOD && i.status== :FROZEN && i.ability != :MAGICGUARD && !i.effects[:MagicGuard] && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+      if KAIZOMOD && i.status== :FROZEN && i.ability != :MAGICGUARD && !i.effects[:MagicGuard] && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
         mult = 1
         if ([:FROZENDIMENSION, :ICY, :SNOWYMOUNTAIN].include?(@field.effect))
           mult = 2
@@ -6546,7 +6558,7 @@ class PokeBattle_Battle
         end
       end
       # Storm Drain on Water-based Fields
-      if i.ability == :STORMDRAIN && [:SWAMP, :WATERSURFACE, :MURKWATERSURFACE].include?(@field.effect) && !i.isAirborne? && SWUMOD
+      if i.ability == :STORMDRAIN && [:SWAMP, :WATERSURFACE, :MURKWATERSURFACE].include?(@field.effect) && !i.isAirborne? && KAIZOMOD
         if !i.pbTooHigh?(PBStats::SPATK)
           i.pbIncreaseStatBasic(PBStats::SPATK, 1)
           pbCommonAnimation("StatUp", i, nil)
@@ -6697,7 +6709,7 @@ class PokeBattle_Battle
           failsafe1 += 1
           break if failsafe1 == 1000
 
-          randomnumber = 1 + pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          randomnumber = 1 + pbRandom((Gen <= 7 || KAIZOMOD) ? 7 : 5)
           if !i.pbTooHigh?(randomnumber)
             randomup.push(randomnumber)
             break
@@ -6707,7 +6719,7 @@ class PokeBattle_Battle
           failsafe2 += 1
           break if failsafe2 == 1000
 
-          randomnumber = 1 + pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          randomnumber = 1 + pbRandom((Gen <= 7 || KAIZOMOD) ? 7 : 5)
           if !i.pbTooLow?(randomnumber) && randomnumber != randomup[0]
             randomdown.push(randomnumber)
             break

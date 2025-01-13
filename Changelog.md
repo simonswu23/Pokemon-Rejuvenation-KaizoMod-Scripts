@@ -33,6 +33,9 @@
   - Galvanize, Pixilate, Refrigerate, Aerilate give a x1.3 boost in power
   - Normalize gives a x1.5 boost in power
   - Gale Wings now activates at above 50% hp
+  - Unburden now gives +2 speed on trigger instead of passively doubling speed
+  - Swarm, Overgrow, Blaze, Torrent now trigger at 50% or lower instead of 33%
+  - Aftermath doubles the power of explosion moves
 
 
 # Crests
@@ -41,13 +44,17 @@
   - Corviknight Crest: clears hazards and screens at the end of each turn
   - Cacturne Crest: raises offenses by 1 if attacking first
 
+# Items
+  - Pinch berries now heal 50% hp
+
 # Attacks
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
   - Freezing Glare has its base effect chance improved to 30%
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
   - Detect has a better rate when used consecutively (1/2 instead of 1/3 each successful use)
   - Dragon Pulse power buffed to 95, and never misses
-  - Explosion and Selfdestruct are now doubled in base power
+  - Explosion now has 500 base power
+  - Selfdestruct now has 300 base power and matches the user's primary typing
   - Nature's Power now can never miss
   - Guardian of Alola:
     - deals 99% of hp in damage in forest field
@@ -56,6 +63,7 @@
       - Bulu: heals user equal to damage dealt
       - Lele: indefinite heal block + trapping effect
       - Fini: clears all stat changes + defog
+  - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
 
 # Pokemon
   ## Giga Pokemon
@@ -74,6 +82,8 @@
     - Shields Down: 60, 60, 120, 60, 120, 60
   - Terapagos
     - Stellar type (neutral relationship with every other typing)
+  - Shelmet
+    - learns sticky web as an egg move
 
 # Field Changes
   - Water's Surface
@@ -96,6 +106,7 @@
     - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
     - Bug moves boost increased to x1.5
     - Grassy Glide has increased priority and gains x1.3 power
+    - Pokemon with Swarm get +1 attack and special attack on entry
 
   - Beach
     - Dig is immediate
@@ -105,6 +116,7 @@
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
     - All Bug moves are now boosted by x1.5
+    - Pokemon with Swarm get +1 attack and special attack on entry
 
 # Other
   - Removed data chip cost to enter password

@@ -907,10 +907,18 @@ class PokeBattle_Battler
     stage = @stages[PBStats::SPEED] + 6
     speed = (speed * PBStats::StageMul[stage]).floor
     if @unburdened
-      if self.ability != :UNBURDEN || self.item != nil
-        @unburdened = false
+      if (KAIZOMOD)
+        if self.item != nil
+          @unburdened = false
+        elsif self.pbCanIncreaseStatStage?(PBStats::SPEED, true)
+          self.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
+        end
       else
-        speed = speed * 2
+        if (self.ability != :UNBURDEN) || self.item != nil
+          @unburdened = false
+        else
+          speed = speed * 2
+        end
       end
     end
     if self.pbOwnSide.effects[:Tailwind] > 0
@@ -1680,6 +1688,24 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1}'s Rattled raised its speed!", pbThis))
         end
       end
+      if KAIZOMOD && self.ability == :SWARM && onactive
+        if !pbTooHigh?(PBStats::ATTACK) || !pbTooHigh?(PBStats::SPATK)
+          pbIncreaseStatBasic(PBStats::ATTACK, 1) if !pbTooHigh?(PBStats::ATTACK)
+          pbIncreaseStatBasic(PBStats::SPATK, 1) if !pbTooHigh?(PBStats::SPATK)
+          @battle.pbCommonAnimation("StatUp", self, nil)
+          @battle.pbDisplay(_INTL("{1}'s Swarm raised its offenses!", pbThis))
+        end
+      end
+    end
+    if Rejuv && @battle.FE == :FOREST && KAIZOMOD
+      if self.ability == :SWARM && onactive
+        if !pbTooHigh?(PBStats::ATTACK) || !pbTooHigh?(PBStats::SPATK)
+          pbIncreaseStatBasic(PBStats::ATTACK, 1) if !pbTooHigh?(PBStats::ATTACK)
+          pbIncreaseStatBasic(PBStats::SPATK, 1) if !pbTooHigh?(PBStats::SPATK)
+          @battle.pbCommonAnimation("StatUp", self, nil)
+          @battle.pbDisplay(_INTL("{1}'s Swarm raised its offenses!", pbThis))
+        end
+      end
     end
     if Rejuv && @battle.FE == :FACTORY
       if self.ability == :LIGHTMETAL && onactive
@@ -2275,7 +2301,7 @@ class PokeBattle_Battler
     end
 
     # Water's Surface entry
-    if @battle.FE == :WATERSURFACE && SWUMOD
+    if @battle.FE == :WATERSURFACE && KAIZOMOD
       if self.ability == :WATERVEIL && onactive
         self.effects[:AquaRing]=true
         @battle.pbAnimation(:AQUARING,self,nil) # Aqua Ring animation
@@ -2295,7 +2321,7 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1}'s Commander took charge over the water!", pbThis))
       end
     end
-    if self.ability == :ZEROTOHERO && self.form == 0 && self.species == :PALAFIN && SWUMOD
+    if self.ability == :ZEROTOHERO && self.form == 0 && self.species == :PALAFIN && KAIZOMOD
       self.form = 1
       pbUpdate(true)
       @battle.pbAnimation(:FLATTER, self, nil)
@@ -2799,7 +2825,7 @@ class PokeBattle_Battler
         for stat in 1..5
           if dondozo.pbCanIncreaseStatStage?(stat,false)
             statinc = 2
-            statinc += 1 if @battle.FE == :WATERSURFACE && SWUMOD
+            statinc += 1 if @battle.FE == :WATERSURFACE && KAIZOMOD
             dondozo.pbIncreaseStat(stat,statinc)
           end
         end
@@ -2987,7 +3013,7 @@ class PokeBattle_Battler
       @battle.pbCommonAnimation("StatUp",self,nil)
       @battle.pbDisplay(_INTL("{1}'s {2} boosted its Defense!", pbThis,getAbilityName(ability)))
     end
-    if self.ability == :MELODRAMATIC && onactive && SWUMOD
+    if self.ability == :MELODRAMATIC && onactive && KAIZOMOD
       for i in 0...3
         randomup = []
         randomdown = []
@@ -2997,7 +3023,7 @@ class PokeBattle_Battler
           failsafe1 += 1
           break if failsafe1 == 1000
 
-          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || KAIZOMOD) ? 7 : 5)
           if !self.pbTooHigh?(randomnumber)
             randomup.push(randomnumber)
             break
@@ -3007,7 +3033,7 @@ class PokeBattle_Battler
           failsafe2 += 1
           break if failsafe2 == 1000
 
-          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || SWUMOD) ? 7 : 5)
+          randomnumber = 1 + @battle.pbRandom((Gen <= 7 || KAIZOMOD) ? 7 : 5)
           if !self.pbTooLow?(randomnumber) && randomnumber != randomup[0]
             randomdown.push(randomnumber)
             break
@@ -3285,7 +3311,7 @@ class PokeBattle_Battler
     end
 
     # Meteor Impactor
-    if SWUMOD && self.ability == :METEORIMPACTOR && onactive
+    if KAIZOMOD && self.ability == :METEORIMPACTOR && onactive
       @battle.pbDisplay(_INTL("{1} crashed into the battlefield!",self.pbThis))
       self.pbUseMoveSimple(:METEORIMPACTOR, -1, -1, false, false, false)
     end
@@ -3985,7 +4011,7 @@ class PokeBattle_Battler
       when :ENIGMABERRY then healing = (self.totalhp / 4.0).floor if self.damagestate.typemod > 4
       when :BERRYJUICE then healing = 20 if self.hp <= (self.totalhp / 2.0).floor
       when :FIGYBERRY, :WIKIBERRY, :MAGOBERRY, :AGUAVBERRY, :IAPAPABERRY
-        healing = (self.totalhp / (Gen <= 7 ? 2.0 : 3.0)).floor if self.hp <= (self.totalhp / 4.0).floor || (self.ability == :GLUTTONY && self.hp <= (self.totalhp / 2.0).floor)
+        healing = (self.totalhp / ((Gen <= 7 || KAIZOMOD) ? 2.0 : 3.0)).floor if self.hp <= (self.totalhp / 4.0).floor || (self.ability == :GLUTTONY && self.hp <= (self.totalhp / 2.0).floor)
     end
     healing *= 2 if self.ability == :RIPEN
     return healing
@@ -4046,10 +4072,10 @@ class PokeBattle_Battler
         return
       end
     end
-    if self.item == :MENTALHERB && (@effects[:Attract] >= 0 || @effects[:Taunt] > 0 || @effects[:Encore] > 0 ||
+    if self.item == :MENTALHERB && (@effects[:Attract] >= 0 || @effects[:Taunt] != 0 || @effects[:Encore] > 0 ||
        @effects[:Torment] || @effects[:Disable] > 0 || @effects[:HealBlock] != 0)
       @battle.pbDisplay(_INTL("{1}'s {2} cured its love problem!", pbThis, itemname)) if @effects[:Attract] >= 0
-      @battle.pbDisplay(_INTL("{1} is taunted no more!", pbThis)) if @effects[:Taunt] > 0
+      @battle.pbDisplay(_INTL("{1} is taunted no more!", pbThis)) if @effects[:Taunt] != 0
       @battle.pbDisplay(_INTL("{1}'s encore ended!", pbThis)) if @effects[:Encore] > 0
       @battle.pbDisplay(_INTL("{1} is tormented no more!", pbThis)) if @effects[:Torment]
       @battle.pbDisplay(_INTL("{1} is disabled no more!", pbThis)) if @effects[:Disable] > 0
@@ -4250,7 +4276,7 @@ class PokeBattle_Battler
   end
   # Gen 9 Mod - Restore Item after battle (0=Off, 1=No Berries (Gen 9), 2=All). Start
   def pbDisposeItem(berry = true, symbiosis = true, pickupable = true, duringattack = false)
-    if ($Settings.itemRestoreGen9 == 1 && !pbIsBerry?(self.item)) || $Settings.itemRestoreGen9 == 2 || SWUMOD
+    if ($Settings.itemRestoreGen9 == 1 && !pbIsBerry?(self.item)) || $Settings.itemRestoreGen9 == 2 || KAIZOMOD
       self.pokemon.itemRecycle = self.item
       # Commented to not remove the item after the battle
       #self.pokemon.itemInitial = nil if self.pokemon.itemInitial == self.item
@@ -5070,7 +5096,7 @@ class PokeBattle_Battler
      # Stance Change moved from here to end of method to match Gen VII mechanics.
     # TODO: If being Sky Dropped, return false
     # TODO: Gravity prevents airborne-based moves here
-    if @effects[:Taunt]>0 && basemove.betterCategory(basemove.type) == :status && !choice[2].zmove
+    if @effects[:Taunt]!=0 && basemove.betterCategory(basemove.type) == :status && !choice[2].zmove
       @battle.pbDisplay(_INTL("{1} can't use {2} after the taunt!", pbThis,basemove.name))
       return false
     end
@@ -5135,7 +5161,7 @@ class PokeBattle_Battler
         end
       end
     end
-    if self.status== :FROZEN && !SWUMOD
+    if self.status== :FROZEN && !KAIZOMOD
       if basemove.canThawUser?
         self.pbCureStatus(false)
         @battle.pbDisplay(_INTL("{1} was defrosted by {2}!",pbThis,basemove.name))
@@ -5396,7 +5422,7 @@ class PokeBattle_Battler
       # Gen 9 Mod - Added Covert Cloak and exception for Ceaseless Edge and Stone Axe functions
 
       # Z-Move side effects will always trigger
-      if (basemove.zmove && SWUMOD)
+      if (basemove.zmove && KAIZOMOD)
         if (target.ability == :SHIELDDUST && !target.moldbroken)
           @battle.pbDisplay(_INTL("The powerful attack's effect broke through {1}'s Shield Dust!", target.pbThis))
         elsif target.hasWorkingItem(:COVERTCLOAK)
@@ -5407,9 +5433,9 @@ class PokeBattle_Battler
 
       if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
-         [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105].include?(basemove.function)) # Selfbuffing additional effects
+         [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105, 0x900].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect
-        if (SWUMOD)
+        if (KAIZOMOD)
           addleffect = 30 if basemove.move == :FREEZINGGLARE
           addleffect = 20 if basemove.move == :BLIZZARD
           addleffect = 20 if basemove.move == :FREEZEDRY
@@ -5422,7 +5448,7 @@ class PokeBattle_Battler
         addleffect = 100 if basemove.move == :LICK && @battle.FE == :HAUNTED
         addleffect = 100 if basemove.move == :DIRECLAW && @battle.FE == :WASTELAND
         addleffect = 100 if basemove.move == :INFERNALPARADE && @battle.FE == :INFERNAL
-        addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1) && !SWUMOD
+        addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1) && !KAIZOMOD
         if @battle.pbRandom(100) < addleffect
           basemove.pbAdditionalEffect(user, target)
         end
