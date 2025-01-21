@@ -25,6 +25,18 @@
 
 # Progress
 
+- 1/17/25 (@SWu)
+  - Ability Updates (Implemented)
+    - Pressure, Unnerve -> Intimidate copies (including blocked abilities, adrenaline orb, guard dog etc)
+      - TODO: test, add AI
+  - Ability Updates (TODO:)
+    - Magician: uses Trick/Switcheroo when switching into battle (instead of normal effect)
+    - Frisk: disables Frisked items for 1 turn
+    - Anticipation: if the user shudders, the first SE move used against it does half
+    - Forewarn: if the target is using the forewarned move, the user has +1 priority when attacking
+  - Other
+    - Embargo: now effects the entire team for 5 turns
+
 - 1/13/25 (@SWu)
   - AI backlog (to implement)
     - updated Unburden to work with boss battles better
@@ -105,7 +117,7 @@
     - Fireball -> +1 priority
   - TODO: signature abilities for Giga Meowth, Eevee, and Pikachu
     - Meowth: Gold Envy (permanent taunt effect)
-    - Eevee: TBD (foes are locked into using a single attack)
+    - Eevee: Debutante (foes are locked into using a single attack)
     - Pikachu: TBD (all other pokemon are "temporarily" paralyzed, except electric types, ground types, and pokemon with quick feet/limber)
 
 

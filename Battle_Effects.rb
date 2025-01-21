@@ -885,16 +885,209 @@ class PokeBattle_Battler
     return false
   end
 
-  def triggerAdrenalineOrb
-    pbIncreaseStat(PBStats::SPEED, 1, statmessage: false)
-    @battle.pbDisplay(_INTL("{1}'s Adrenaline Orb raised its Speed!", pbThis(true)))
+  def pbReduceSpatkStatStagePressure(opponent)
+    # Ways Pressure doesn't work
+    return false if isFainted? && !(Rejuv && isbossmon && @shieldCount > 0)
+    return false if @effects[:Substitute] > 0
+
+    if [:CLEARBODY, :WHITESMOKE, :FULLMETALBODY].include?(self.ability) || (Gen > 7 && [:INNERFOCUS, :OBLIVIOUS, :OWNTEMPO, :SCRAPPY].include?(self.ability))
+      abilityname = getAbilityName(self.ability)
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!", pbThis, abilityname, opponent.pbThis(true), oppabilityname))
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPATK] > -6
+        triggerAdrenalineOrb
+      end
+      return false
+    end
+    if pbOwnSide.effects[:Mist] > 0
+      @battle.pbDisplay(_INTL("{1} is protected by Mist!", pbThis))
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPATK] > -6
+        triggerAdrenalineOrb
+      end
+      return false
+    end
+    # Gen 9 Mod - Clear Amulet prevents stat drop from intimidate
+    if hasWorkingItem(:CLEARAMULET)
+      itemname = getItemName(self.item)
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!", pbThis, itemname, opponent.pbThis(true), oppabilityname))
+      return false
+    end
+    # Gen 9 Mod - Guard Dog raises attack on Intimidate-related abilities
+    if (self.ability == :GUARDDOG)
+      @battle.pbDisplay(_INTL("{1} got angry!",pbThis))
+      pbIncreaseStat(PBStats::ATTACK, 1)
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPATK] > -6
+        triggerAdrenalineOrb
+      end
+      return false
+    end
+
+    if pbReduceStat(PBStats::SPATK, 1, statmessage: false, statdropper: opponent, defiant_proc: false)
+      # Battle message
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} cuts {3}'s Special Attack!", opponent.pbThis, oppabilityname, pbThis(true))) if !(self.ability == :CONTRARY)
+      @battle.pbDisplay(_INTL("{1}'s {2} boosts {3}'s Special Attack!", opponent.pbThis, oppabilityname, pbThis(true))) if (self.ability == :CONTRARY)
+
+      if self.ability == :RATTLED && Gen > 7
+        pbIncreaseStat(PBStats::SPEED, 1, statmessage: false)
+        @battle.pbDisplay(_INTL("{1}'s Rattled raised its Speed!", pbThis))
+      end
+
+      # Defiant/Competitive
+      if self.ability == :DEFIANT
+        increment = 2
+        increment = 3 if @battle.FE == :BACKALLEY
+        pbIncreaseStat(PBStats::ATTACK, increment, statmessage: false)
+        if @battle.FE == :BACKALLEY
+          @battle.pbDisplay(_INTL("Defiant dramatically raised {1}'s Attack!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("Defiant sharply raised {1}'s Attack!", pbThis))
+        end
+      end
+      if self.ability == :COMPETITIVE && !(Rejuv && @battle.FE == :CHESS)
+        increment = 2
+        increment = 3 if @battle.FE == :CITY
+        pbIncreaseStat(PBStats::SPATK, increment, statmessage: false)
+        if @battle.FE == :CITY
+          @battle.pbDisplay(_INTL("Competitive dramatically raised {1}'s Special Attack!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("Competitive sharply raised {1}'s Special Attack!", pbThis))
+        end
+      end
+
+      # Item triggers
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false)
+        triggerAdrenalineOrb
+      end
+      if hasWorkingItem(:WHITEHERB)
+        reducedstats = false
+        for i in 1..7
+          if self.stages[i] < 0
+            self.stages[i] = 0
+            reducedstats = true
+          end
+        end
+        if reducedstats
+          itemname = self.item.nil? ? "" : getItemName(self.item)
+          @battle.pbDisplay(_INTL("{1}'s {2} restored its status!", pbThis, itemname))
+          pbDisposeItem(false)
+        end
+      end
+      return true
+    end
+    return false
+  end
+
+  def pbReduceSpeedStatStageUnnerve(opponent)
+    # Ways Unnerve doesn't work
+    return false if isFainted? && !(Rejuv && isbossmon && @shieldCount > 0)
+    return false if @effects[:Substitute] > 0
+
+    if [:CLEARBODY, :WHITESMOKE, :FULLMETALBODY].include?(self.ability) || (Gen > 7 && [:INNERFOCUS, :OBLIVIOUS, :OWNTEMPO, :SCRAPPY].include?(self.ability))
+      abilityname = getAbilityName(self.ability)
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!", pbThis, abilityname, opponent.pbThis(true), oppabilityname))
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPEED] > -6
+        triggerAdrenalineOrb(true)
+      end
+      return false
+    end
+    if pbOwnSide.effects[:Mist] > 0
+      @battle.pbDisplay(_INTL("{1} is protected by Mist!", pbThis))
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPEED] > -6
+        triggerAdrenalineOrb(true)
+      end
+      return false
+    end
+    # Gen 9 Mod - Clear Amulet prevents stat drop from intimidate
+    if hasWorkingItem(:CLEARAMULET)
+      itemname = getItemName(self.item)
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!", pbThis, itemname, opponent.pbThis(true), oppabilityname))
+      return false
+    end
+    # Gen 9 Mod - Guard Dog raises attack on Intimidate-related abilities
+    if (self.ability == :GUARDDOG)
+      @battle.pbDisplay(_INTL("{1} got angry!",pbThis))
+      pbIncreaseStat(PBStats::ATTACK, 1)
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && self.stages[PBStats::SPEED] > -6
+        triggerAdrenalineOrb(true)
+      end
+      return false
+    end
+
+    if pbReduceStat(PBStats::SPEED, 1, statmessage: false, statdropper: opponent, defiant_proc: false)
+      # Battle message
+      oppabilityname = getAbilityName(opponent.ability)
+      @battle.pbDisplay(_INTL("{1}'s {2} cuts {3}'s Speed!", opponent.pbThis, oppabilityname, pbThis(true))) if !(self.ability == :CONTRARY)
+      @battle.pbDisplay(_INTL("{1}'s {2} boosts {3}'s Speed!", opponent.pbThis, oppabilityname, pbThis(true))) if (self.ability == :CONTRARY)
+
+      if self.ability == :RATTLED && Gen > 7
+        pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
+        @battle.pbDisplay(_INTL("{1}'s Rattled sharply raised its Speed!", pbThis))
+      end
+
+      # Defiant/Competitive
+      if self.ability == :DEFIANT
+        increment = 2
+        increment = 3 if @battle.FE == :BACKALLEY
+        pbIncreaseStat(PBStats::ATTACK, increment, statmessage: false)
+        if @battle.FE == :BACKALLEY
+          @battle.pbDisplay(_INTL("Defiant dramatically raised {1}'s Attack!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("Defiant sharply raised {1}'s Attack!", pbThis))
+        end
+      end
+      if self.ability == :COMPETITIVE && !(Rejuv && @battle.FE == :CHESS)
+        increment = 2
+        increment = 3 if @battle.FE == :CITY
+        pbIncreaseStat(PBStats::SPATK, increment, statmessage: false)
+        if @battle.FE == :CITY
+          @battle.pbDisplay(_INTL("Competitive dramatically raised {1}'s Special Attack!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("Competitive sharply raised {1}'s Special Attack!", pbThis))
+        end
+      end
+
+      # Item triggers
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false)
+        triggerAdrenalineOrb
+      end
+      if hasWorkingItem(:WHITEHERB)
+        reducedstats = false
+        for i in 1..7
+          if self.stages[i] < 0
+            self.stages[i] = 0
+            reducedstats = true
+          end
+        end
+        if reducedstats
+          itemname = self.item.nil? ? "" : getItemName(self.item)
+          @battle.pbDisplay(_INTL("{1}'s {2} restored its status!", pbThis, itemname))
+          pbDisposeItem(false)
+        end
+      end
+      return true
+    end
+    return false
+  end
+
+  def triggerAdrenalineOrb(unnerve=false)
+    if (unnerve)
+      pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
+      @battle.pbDisplay(_INTL("{1}'s Adrenaline Orb sharply raised its Speed!", pbThis(true)))
+    else
+      pbIncreaseStat(PBStats::SPEED, 1, statmessage: false)
+      @battle.pbDisplay(_INTL("{1}'s Adrenaline Orb raised its Speed!", pbThis(true)))
+    end
     pbDisposeItem(false)
   end
 
   # Gen 9 Mod - Supersweet Syrup implementation
   def pbReduceEvasionStatStageSyrup(opponent)
     # Can only trigger once per battle
-    return false if opponent.supersweetSyrupTriggered
+    return false if opponent.supersweetSyrupTriggered && !KAIZOMOD
     # Regadless if it is effective or not, it is only used once, but on both enemies on double battles.
     if @battle.doublebattle && !opponent.pbOpposing1.isFainted? && !opponent.pbOpposing2.isFainted?
       if opponent.supersweetSyrupTriggeredDoubleBattle == true
@@ -926,7 +1119,8 @@ class PokeBattle_Battler
       return false
     end
     # reduce stat only if you can
-    if pbReduceStat(PBStats::EVASION, 1, statmessage:false, statdropper: opponent, defiant_proc: false)
+    inc = KAIZOMOD ? 2 : 1
+    if pbReduceStat(PBStats::EVASION, inc, statmessage:false, statdropper: opponent, defiant_proc: false)
       # Battle message
       oppabilityname = getAbilityName(opponent.ability)
       @battle.pbDisplay(_INTL("A supersweet aroma is wafting from the syrup covering {1}! Evasion drops!", opponent.pbThis)) if !(self.ability == :CONTRARY)

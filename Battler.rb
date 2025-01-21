@@ -1044,6 +1044,20 @@ class PokeBattle_Battler
             i.pbReduceAttackStatStageIntimidate(pbPartner)
           end
         end
+        if KAIZOMOD
+          if pbPartner.ability == :PRESSURE
+            for i in @battle.battlers
+              next if i.isFainted? || !pbIsOpposing?(i.index)
+              i.pbReduceSpatkStatStagePressure(pbPartner)
+            end
+          end
+          if pbPartner.ability == :UNNERVE
+            for i in @battle.battlers
+              next if i.isFainted? || !pbIsOpposing?(i.index)
+              i.pbReduceSpeedStatStageUnnerve(pbPartner)
+            end
+          end
+        end
         # Gen 9 Mod - Supersweet Syrup implementation
         if pbPartner.ability == :SUPERSWEETSYRUP
           for i in @battle.battlers
@@ -1941,7 +1955,12 @@ class PokeBattle_Battler
         for i in 0...4
           next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
 
-          @battle.battlers[i].pbReduceStat(PBStats::SPEED, 1, abilitymessage: false, statdropper: self)
+          if !KAIZOMOD
+            @battle.battlers[i].pbReduceStat(PBStats::SPEED, 1, abilitymessage: false, statdropper: self)
+          else
+            @battle.battlers[i].pbReduceStat(PBStats::ATTACK, 1, abilitymessage: false, statdropper: self)
+            @battle.battlers[i].pbReduceStat(PBStats::SPATK, 1, abilitymessage: false, statdropper: self)
+          end
         end
       end
       if @battle.FE == :FROZENDIMENSION && self.ability == :HUNGERSWITCH && self.species == :MORPEKO && self.form == 0 && onactive
@@ -2873,6 +2892,13 @@ class PokeBattle_Battler
         @battle.battlers[i].pbReduceAttackStatStageIntimidate(self)
       end
     end
+    # Pressure (Kaizo Mod)
+    if KAIZOMOD && self.ability == :PRESSURE && onactive
+      for i in 0...4
+        next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
+        @battle.battlers[i].pbReduceSpatkStatStagePressure(self)
+      end
+    end
     if Rejuv
       rejuvAbilities(onactive)
     end
@@ -3122,6 +3148,12 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("The opposing team is too nervous to eat berries!", pbThis))
       elsif !@battle.pbOwnedByPlayer?(@index)
         @battle.pbDisplay(_INTL("Your team is too nervous to eat berries!", pbThis))
+      end
+      if (KAIZOMOD)
+        for i in 0...4
+          next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
+          @battle.battlers[i].pbReduceSpeedStatStageUnnerve(self)
+        end
       end
     end
     # Forewarn

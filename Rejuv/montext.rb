@@ -9427,7 +9427,15 @@ MONHASH = {
       ]
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    +100 BST
+    :BaseStats => [55, 75, 80, 65, 85, 75],
+    :Abilities => [:DEBUTANTE],
+    :Height => 180,
+    :Weight => 2456,
+  },
+
+    "Mega Form" => {
       :BaseStats => [55, 55, 80, 115, 65, 105],
       :Abilities => [:ADAPTABILITY],
       :Height => 180,
@@ -24178,15 +24186,15 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-  "Angie's Walrein (Kristiline)" => {
-    # + 50 BST
-    :BaseStats => [110, 100, 100, 105, 100, 65],
+  "Angie's Walrein (Intense)" => {
+    # +60 BST
+    :BaseStats => [120, 100, 100, 120, 100, 50],
     :Abilities => [:ICEBODY],
   },
 
-  "Angie's Walrein" => {
-    # +100 BST
-    :BaseStats => [110, 110, 110, 115, 120, 65],
+  "Angie's Walrein (Kaizo)" => {
+    # +120 BST
+    :BaseStats => [120, 120, 120, 120, 120, 50],
     :Abilities => [:ICEBODY],
   },
 
@@ -56430,6 +56438,7 @@ MONHASH = {
       :BaseStats => [140, 85, 95, 145, 95, 130],
       :EVs => [0, 0, 0, 0, 0, 3],
       :Abilities => [:PRESSURE],
+      :HiddenAbilities => :LEVITATE,
       :GrowthRate => :Slow,
       :GenderRatio => :Genderless,
       :BaseEXP => 345,

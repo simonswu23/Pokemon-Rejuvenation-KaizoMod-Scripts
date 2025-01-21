@@ -53,6 +53,7 @@
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
   - Detect has a better rate when used consecutively (1/2 instead of 1/3 each successful use)
   - Dragon Pulse power buffed to 95, and never misses
+  - Wild Charge power buffed to 120
   - Explosion now has 500 base power
   - Selfdestruct now has 300 base power and matches the user's primary typing
   - Nature's Power now can never miss
