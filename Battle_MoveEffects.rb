@@ -812,6 +812,8 @@ end
 ################################################################################
 class PokeBattle_Move_016 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
+
     if !opponent.pbCanAttract?(attacker)
       return -1
     end
@@ -830,6 +832,39 @@ class PokeBattle_Move_016 < PokeBattle_Move
       getItemName(opponent.item),attacker.pbThis(true)))
     end
     return 0
+  end
+
+  def pbAdditionalEffect(attacker, opponent)
+    if !opponent.pbCanAttract?(attacker)
+      return false
+    end
+    if !@battle.pbCheckSideAbility(:AROMAVEIL,opponent).nil? && !(opponent.moldbroken)
+      return false
+    end
+
+    @battle.pbAnimation(:ATTRACT,attacker,opponent)
+    opponent.effects[:Attract]=attacker.index
+    @battle.pbCommonAnimation("Attract",opponent,nil)
+    @battle.pbDisplay(_INTL("{1} fell in love!",opponent.pbThis))
+
+    if opponent.hasWorkingItem(:DESTINYKNOT) && attacker.ability != :OBLIVIOUS && attacker.effects[:Attract]<0
+      attacker.effects[:Attract]=opponent.index
+      @battle.pbCommonAnimation("Attract",attacker,nil)
+      @battle.pbDisplay(_INTL("{1}'s {2} infatuated {3}!",opponent.pbThis,
+      getItemName(opponent.item),attacker.pbThis(true)))
+    end
+
+    return true
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    if id != :ATTRACT
+      @battle.pbAnimation(:ALLURINGVOICE,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
   end
 end
 
@@ -1680,6 +1715,23 @@ class PokeBattle_Move_036 < PokeBattle_Move
     statchange = @battle.FE == :FACTORY || @battle.FE == :CITY ? 2 : 1
     attacker.pbIncreaseStat(PBStats::ATTACK, statchange, abilitymessage: false, statsource: attacker)
     attacker.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
+
+    if attacker.crested == :KLINKLANG
+      if attacker.gear == 0
+        @battle.pbDisplay(_INTL("ATTACK MODE INITIATING"))
+        attacker.effects[:MagnetRise]=0
+        @battle.pbDisplay(_INTL("{1} stopped levitating!",attacker.pbThis))
+        @battle.pbAnimation(:MAGNETRISE,attacker,nil)
+      else
+        @battle.pbDisplay(_INTL("OVERCLOCKING SPEED",attacker.pbThis))
+        attacker.effects[:MagnetRise]=-1
+        @battle.pbAnimation(:MAGNETRISE,attacker,nil)
+        @battle.pbDisplay(_INTL("{1} levitates with electromagnetism!",attacker.pbThis))
+      end
+      # switch gears
+      attacker.gear = (attacker.gear + 1) % 2
+    end
+
     return 0
   end
 end
@@ -8272,7 +8324,7 @@ class PokeBattle_Move_118 < PokeBattle_Move
       if poke.effects[:SkyDrop]
         poke.effects[:SkyDrop]=false
       end
-      if poke.effects[:MagnetRise]>0
+      if poke.effects[:MAGNETRISE]!=0
         poke.effects[:MagnetRise]=0
       end
       if poke.effects[:Telekinesis]>0
@@ -8298,7 +8350,7 @@ class PokeBattle_Move_119 < PokeBattle_Move
     if @battle.FE != :DEEPEARTH
       if attacker.effects[:Ingrain] ||
         attacker.effects[:SmackDown] ||
-        attacker.effects[:MagnetRise]>0
+        attacker.effects[:MAGNETRISE]!=0
         @battle.pbDisplay(_INTL("But it failed!"))
         return -1
       end
@@ -8372,7 +8424,7 @@ class PokeBattle_Move_11C < PokeBattle_Move
         opponent.effects[:TwoTurnAttack] = 0
         showmsg = true
       end
-      if opponent.effects[:MagnetRise] > 0
+      if opponent.effects[:MAGNETRISE]!=0
         opponent.effects[:MagnetRise] = 0
         showmsg = true
       end
@@ -9737,6 +9789,22 @@ class PokeBattle_Move_163 < PokeBattle_Move
         @battle.pbDisplay(_INTL("But it failed!"))
         return -1
       end
+    end
+
+    if attacker.crested == :KLINKLANG
+      if attacker.gear == 0
+        @battle.pbDisplay(_INTL("ATTACK MODE INITIATING"))
+        attacker.effects[:MagnetRise]=0
+        @battle.pbDisplay(_INTL("{1} stopped levitating!",attacker.pbThis))
+        @battle.pbAnimation(:MAGNETRISE,attacker,nil)
+      else
+        @battle.pbDisplay(_INTL("OVERCLOCKING SPEED",attacker.pbThis))
+        attacker.effects[:MagnetRise]=-1
+        @battle.pbAnimation(:MAGNETRISE,attacker,nil)
+        @battle.pbDisplay(_INTL("{1} levitates with electromagnetism!",attacker.pbThis))
+      end
+      # switch gears
+      attacker.gear = (attacker.gear + 1) % 2
     end
 
     return 0

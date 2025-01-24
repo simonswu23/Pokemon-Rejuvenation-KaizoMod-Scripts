@@ -14505,6 +14505,21 @@ MOVEHASH = {
 	:desc => "Badly poisons targets, regardless of typing."
 },
 
+:GIGACHARM => {
+	:ID => 2008,
+	:name => "Giga Charm",
+	:function => 0x016,
+	:type => :FAIRY,
+	:category => :special,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllNonUsers,
+	:desc => "Badly poisons targets, regardless of typing."
+},
+
 # Handlers
 :METEORIMPACTOR => {
 	:ID => 9999,

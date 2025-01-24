@@ -1362,7 +1362,7 @@ class PokeBattle_Battle
       end
       return false
     end
-    if thispkmn.effects[:Encore] > 0 && idxMove != thispkmn.effects[:EncoreIndex] && !basemove.zmove
+    if (thispkmn.effects[:Encore] > 0 || thispkmn.debutanteCheck) && idxMove != thispkmn.effects[:EncoreIndex] && !basemove.zmove
       if showMessages
         pbDisplayPaused(_INTL("{1} can only use {2}!", thispkmn.pbThis, thispkmn.effects[:EncoreMove].name))
       end
@@ -1378,7 +1378,8 @@ class PokeBattle_Battle
       @choices[idxPokemon] = [nil]
       return true
     end
-    if thispkmn.effects[:Encore] > 0 && pbCanChooseMove?(idxPokemon, thispkmn.effects[:EncoreIndex], false)
+    pbDisplay(_INTL("debutanteCheck: {1}, {2}", thispkmn.name, thispkmn.debutanteCheck))
+    if (thispkmn.effects[:Encore] > 0 || thispkmn.debutanteCheck) && pbCanChooseMove?(idxPokemon, thispkmn.effects[:EncoreIndex], false)
       PBDebug.log("[Auto choosing Encore move...]") if $INTERNAL
       # move choice array: [:move, idxmove, obj, idxtarget]
       @choices[idxPokemon] = [:move, thispkmn.effects[:EncoreIndex], thispkmn.moves[thispkmn.effects[:EncoreIndex]], -1]  # No target chosen yet
@@ -6066,7 +6067,7 @@ class PokeBattle_Battle
     for i in priority
       next if i.isFainted?
 
-      if i.effects[:MagnetRise] > 0
+      if i.effects[:MAGNETRISE]!=0
         i.effects[:MagnetRise] -= 1
         if i.effects[:MagnetRise] == 0
           pbDisplay(_INTL("{1} stopped levitating.", i.pbThis))

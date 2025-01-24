@@ -300,6 +300,10 @@ class PokeBattle_Battler
               @ability = party[party.length-1].ability if !blacklist.include?(party[party.length-1].ability)
             end
           end
+        when :KLINKLANG
+          @attack *= 1.5 if @gear == 1
+          @spatk *= 1.5 if @gear == 1
+          @speed *=2 if @gear == 0
         end
       end
 

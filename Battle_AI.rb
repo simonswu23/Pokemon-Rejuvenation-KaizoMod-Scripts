@@ -6510,7 +6510,7 @@ class PokeBattle_AI
   end
 
   def magnocode
-    return 0 if @attacker.effects[:MagnetRise] > 0 || @attacker.effects[:Ingrain] || @attacker.effects[:SmackDown]
+    return 0 if @attacker.effects[:MAGNETRISE]!=0 || @attacker.effects[:Ingrain] || @attacker.effects[:SmackDown]
 
     miniscore = 1.0
     miniscore *= 3 if checkAIbestMove().pbType(@opponent) == :GROUND # Highest expected dam from a ground move
@@ -12768,7 +12768,7 @@ class PokeBattle_AI
     return false if battler.hasType?(:FLYING) && battler.effects[:Roost]==false && @battle.FE != :INVERSE
     return false if [:LEVITATE,:SOLARDIOL,:LUNARIDOL].include?(battler.ability)
     return false if battler.item == :AIRBALLOON && battler.itemWorks? && !battler.effects[:DesertsMark]
-    return false if battler.effects[:MagnetRise]>0
+    return false if battler.effects[:MAGNETRISE]!=0
     return false if battler.effects[:Telekinesis]>0
     return true
     end

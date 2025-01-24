@@ -86,6 +86,11 @@
         pbCommonAnimation("Poison",@battlers[index],nil)
         pbDisplay(_INTL("{1} was poisoned by its {2}!",@battlers[index].pbThis,getItemName(@battlers[index].item)))
       end
+    when :KLINKLANG
+      pbDisplay(_INTL("OVERCLOCKING SPEED"))
+      @battlers[index].effects[:MagnetRise]=-1
+      pbAnimation(:MAGNETRISE,@battlers[index],nil)
+      @battle.pbDisplay(_INTL("{1} levitates with electromagnetism!",@battlers[index].pbThis))
     end
   end
 

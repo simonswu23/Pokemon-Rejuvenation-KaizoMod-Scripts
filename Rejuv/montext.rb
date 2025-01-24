@@ -9428,25 +9428,31 @@ MONHASH = {
   },
 
   "Giga Form" => {
-    +100 BST
-    :BaseStats => [55, 75, 80, 65, 85, 75],
+    # +100 BST
+    :Type2 => :FAIRY,
+    :BaseStats => [55, 55, 80, 85, 85, 75],
     :Abilities => [:DEBUTANTE],
     :Height => 180,
     :Weight => 2456,
   },
 
-    "Mega Form" => {
-      :BaseStats => [55, 55, 80, 115, 65, 105],
-      :Abilities => [:ADAPTABILITY],
-      :Height => 180,
-      :Weight => 2456,
+  "Mega Form" => {
+    :BaseStats => [55, 55, 80, 115, 65, 105],
+    :Abilities => [:ADAPTABILITY],
+    :Height => 180,
+    :Weight => 2456,
   },
 
-    "Partner" => {
-      :BaseStats => [65, 75, 70, 65, 85, 75],
+  "Partner" => {
+    :BaseStats => [65, 75, 70, 65, 85, 75],
   },
 
   :OnCreation => {},
+  :DefaultForm => 0,
+  :GigaForm => 1,
+  :MegaForm => {
+    :EEVEETITE => 2
+  },
 },
 
 :VAPOREON => {
@@ -38956,7 +38962,22 @@ MONHASH = {
       :BattlerAltitude => 10,
   },
 
+  "Jenner's Klinklang (Intense)" => {
+    # +100 BST
+    :Type2 => :ELECTRIC,
+    :BaseStats => [60, 110, 120, 90, 90, 100],
+    :Abilities => [:NOGUARD],
+  },
+
+  "Jenner's Klinklang (Kaizo)" => {
+    # +100 BST
+    :Type2 => :ELECTRIC,
+    :BaseStats => [60, 120, 120, 110, 100, 110],
+    :Abilities => [:NOGUARD],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 1,
 },
 
 :TYNAMO => {

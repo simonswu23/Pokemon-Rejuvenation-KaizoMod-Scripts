@@ -424,6 +424,10 @@ class PokeBattle_Battler
     @weight       = nil
     @battle_bond_flags = []
 
+    @forewarn     = []
+    @anticipation = false
+    @gear         = 0        # 0 is speed gear, 1 is attack gear
+
     @lastMoveCancelled = -1
 
     pbInitEffects(false,fakebattler)
@@ -872,7 +876,7 @@ class PokeBattle_Battler
     return true if self.hasType?(:FLYING) && @effects[:Roost]==false
     return true if self.ability == :LEVITATE || self.ability == :SOLARIDOL || self.ability == :LUNARIDOL
     return true if self.hasWorkingItem(:AIRBALLOON)
-    return true if @effects[:MagnetRise]>0
+    return true if @effects[:MAGNETRISE]!=0
     return true if @effects[:Telekinesis]>0
     return false
   end
@@ -2796,6 +2800,12 @@ class PokeBattle_Battler
         when :AURABREAK then @battle.pbDisplay(_INTL("{1} reversed all other Pokémon's auras!", pbThis))
         when :NEUTRALIZINGGAS then @battle.pbDisplay(_INTL("{1}'s gas neutralized all other Pokémon's abilities!", pbThis))
         when :ASONECHILLING, :ASONEGRIM then @battle.pbDisplay(_INTL("{1} has two Abilities!", pbThis))
+        when :DEBUTANTE
+          for i in 0...4
+            next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
+            @battle.pbAnimation(:ENCORE,self,@battle.battlers[i])
+          end
+          @battle.pbDisplay(_INTL("{1}'s Debutante is asking for an encore!", pbThis))
       end
     end
 
@@ -5018,7 +5028,7 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1}'s Air Balloon makes Ground moves miss!",target.pbThis))
           return false
         end
-        if target.effects[:MagnetRise]>0
+        if target.effects[:MAGNETRISE]!=0
           @battle.pbDisplay(_INTL("{1} makes Ground moves miss with Magnet Rise!",target.pbThis))
           return false
         end
@@ -5870,7 +5880,7 @@ class PokeBattle_Battler
       PBDebug.log("[Continuing move]") if $INTERNAL
       choice[2] = PokeBattle_Move.pbFromPBMove(@battle, PBMove.new(@currentMove), self) if @currentMove != 0
       flags[:specialusage] = true
-    elsif @effects[:Encore] > 0 && !choice[2].zmove && choice[2] != @battle.struggle
+    elsif (@effects[:Encore] > 0 || self.debutanteCheck) && !choice[2].zmove && choice[2] != @battle.struggle
       if @battle.pbCanShowCommands?(@index)
         PBDebug.log("[Using Encore move]") if $INTERNAL
         if choice[1] != @effects[:EncoreIndex] # Was Encored mid-round
@@ -6971,6 +6981,39 @@ class PokeBattle_Battler
           attacker.pbPartner.effects[:RagePowder] = false
           @battle.pbDisplayBrief(_INTL("{1}'s Z-Power made it the centre of attention!", attacker.pbThis))
         end
+    end
+  end
+
+  # SWu stuff below:
+  def debutanteCheck
+    if (self.pbOpposing1.hasWorkingAbility(:DEBUTANTE)) || (self.pbOpposing2.hasWorkingAbility(:DEBUTANTE))
+      blacklist = PBStuff::BLACKLISTS[:ENCORE]
+      move = self.lastMoveUsed
+      return false if !move.is_a?(Symbol) || blacklist.include?(move) || self.effects[:ShellTrap]
+  
+      # First check if their last choice matches the encore'd move.
+      moveIndex = self.lastMoveChoice[1]
+      # Just to be safe, if it doesn't match, find it manually.
+      if self.moves[moveIndex].move != move
+        found = false
+        for i in 0...4
+          if move == self.moves[i]
+            found = true
+            moveIndex = i
+            break
+          end
+        end
+        if !found
+          return false
+        end
+      end
+      # Once it's found, make sure it has PP.
+      if self.moves[moveIndex].pp == 0
+        return false
+      end
+      self.effects[:EncoreIndex] = moveIndex
+      self.effects[:EncoreMove] = move
+      return true
     end
   end
 end

@@ -10787,4 +10787,14 @@ ITEMHASH = {
     :noUse => true,
 },
 
+:KLINCREST => {
+    :ID => 3000,
+    :name => "Klinklang Crest",
+    :desc => "Shifts between two gear modes, speed and power.",
+    :price => 0,
+    :crest => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
 }

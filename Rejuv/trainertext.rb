@@ -1,6 +1,6 @@
 TEAMARRAY = [{
 :teamid => ["SWu",:LEADER_KETA,0],
-:items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GRIMMSNARLCORE,:CORVIKNIGHTCORE],
+:items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GRIMMSNARLCORE,:CORVIKNIGHTCORE,:EEVEECORE],
 =begin
 :trainereffect => { # in party order
 	:effectmode => :Party, #effect mode switches how the effects are applied (:Party = on party index; :Fainted = first sendout after this number of pokemon are fainted)
@@ -41,11 +41,11 @@ TEAMARRAY = [{
 	# },
 },
 :mons => [{
-	:species => :CORVIKNIGHT,
+	:species => :EEVEE,
 	:level => 40,
-	:item => :TELLURICSEED,
-	:moves => [:BRAVEBIRD,nil,nil,nil],
-	:ability => :PRESSURE,
+	:item => :EVIOLITE,
+	:moves => [:ALLURINGVOICE,nil,nil,nil],
+	:ability => :DEBUTANTE,
 	:gender => "M",
 	:shiny => true,
 	:nature => :ADAMANT,
@@ -17873,14 +17873,15 @@ TEAMARRAY = [{
 {
 :teamid => ["Jenner",:PROFJENNER,0],
 :defeat => "Good, very good.",
+:items => [:EEVEECORE],
 :mons => [{
 	:species => :NOIVERN,
 	:level => 53,
 	:moves => [:BOOMBURST,:FLAMETHROWER,:HURRICANE,:DRAGONPULSE],
-	:item => :LIFEORB,
+	:item => :THROATSPRAY,
 	:ability => :INFILTRATOR,
 	:gender => "F",
-	:nature => :JOLLY,
+	:nature => :TIMID,
 	:happiness => 255,
 	:iv => 31,
 	:ev => [0,0,0,252,0,252],
@@ -17901,7 +17902,7 @@ TEAMARRAY = [{
 	:species => :TYRANTRUM,
 	:level => 51,
 	:moves => [:ROCKPOLISH,:IRONHEAD,:HEADSMASH,:OUTRAGE],
-	:item => :FOCUSSASH,
+	:item => :CHOICESCARF,
 	:ability => :ROCKHEAD,
 	:gender => "F",
 	:nature => :ADAMANT,
@@ -17912,14 +17913,14 @@ TEAMARRAY = [{
 {
 	:species => :EEVEE,
 	:level => 60,
-	:moves => [:CHARM,:RETURN,:QUICKATTACK,:WORKUP],
+	:moves => [:SHADOWBALL,:HYPERVOICE,:ALLURINGVOICE,:WORKUP],
 	:item => :EVIOLITE,
-	:ability => :DEBUTANTE,
+	:ability => :ANTICIPATION,
 	:gender => "M",
-	:nature => :ADAMANT,
+	:nature => :MODEST,
 	:happiness => 255,
 	:iv => 31,
-	:ev => [252,252,0,0,4,0],
+	:ev => [252,0,0,252,4,0],
 },
 {
 	:species => :KOMMOO,
@@ -17935,12 +17936,13 @@ TEAMARRAY = [{
 {
 	:species => :KLINKLANG,
 	:level => 55,
-	:moves => [:GEARGRIND,:WILDCHARGE,:SHIFTGEAR,:POWERGEM],
-	:ability => :CLEARBODY,
-	:item => :KLINKLANGCREST,
+	:moves => [:GEARGRIND,:ZAPCANNON,:SHIFTGEAR,:POWERGEM],
+	:ability => :NOGUARD,
+	:item => :KLINCREST,
 	:gender => "M",
 	:happiness => 255,
 	:nature => :NAUGHTY,
+	:form => 2,
 	:iv => 31,
 	:ev => [0,252,0,4,0,252],
 }]},
@@ -20333,7 +20335,6 @@ TEAMARRAY = [{
 }]},
 
 # Church of Theolia - Easy
-d
 {
 :teamid => ["Angie",:LEADER_ANGIE,100],
 :ace => "You push me this far...? I can't... It's too hot... It's too hot...",
@@ -20443,7 +20444,8 @@ d
 	:shiny => true,
 	:form => 1,
 	:iv => 31,
-	:ev => [248, 8, 0, 252, 0, 0]}]},
+	:ev => [248, 8, 0, 252, 0, 0]}
+]},
 {
 :teamid => ["Azaria",:SERVANT,100],
 :mons => [{

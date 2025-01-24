@@ -2108,4 +2108,10 @@ ABILHASH = {
     :desc => "Upon switch in, user crashes and deals massive damage, taking 50% recoil."
 },
 
+:DEBUTANTE => {
+    :ID => 383,
+    :name => "Debutante",
+    :desc => "While this pokemon is active, foes are locked into one attack."
+},
+
 }

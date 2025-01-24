@@ -447,7 +447,7 @@ class PokeBattle_Battle
       @choices[idxPokemon] = [nil]
       return
     end
-    if thispkmn.effects[:Encore]>0 &&
+    if (thispkmn.effects[:Encore]>0 || thispkmn.debutanteCheck) &&
        pbCanChooseMove?(idxPokemon,thispkmn.effects[:EncoreIndex],false)
       PBDebug.log("[Auto choosing Encore move...]") if $INTERNAL
       @choices[idxPokemon] = [:move, thispkmn.effects[:EncoreIndex], thispkmn.moves[thispkmn.effects[:EncoreIndex]], -1]  #No target chosen yet

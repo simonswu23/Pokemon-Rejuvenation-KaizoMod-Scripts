@@ -24,6 +24,9 @@
   - Meteor Impactor
     - on switch in, crash and deal big rock type damage in exchange for losing 50% hp
     - Zetta's Minior
+  - Debutante
+    - opposing pokemon are locked into a single attack
+    - Giga Eevee's ability
 
   ## Changes
   - Magma Armor protects against Frostbite
@@ -36,6 +39,9 @@
   - Unburden now gives +2 speed on trigger instead of passively doubling speed
   - Swarm, Overgrow, Blaze, Torrent now trigger at 50% or lower instead of 33%
   - Aftermath doubles the power of explosion moves
+  - Unnerve lowers foes speed on entry (same interactions as Intimidate)
+  - Pressure lowers foes special attack on entry (same interactions as Intimidate)
+  - Supersweet Syrup now can work multipel times per battle, and lowers evasion by 2 on switch in
 
 
 # Crests
@@ -43,6 +49,7 @@
   - Cicinno and Ledian Crests can now trigger side effects for all hits
   - Corviknight Crest: clears hazards and screens at the end of each turn
   - Cacturne Crest: raises offenses by 1 if attacking first
+  - Klinklang Crest: switches between speed and power mode (x2 speed and magnet rise, and x1.5 attack and special attack) using Shift Gear and Gear Up
 
 # Items
   - Pinch berries now heal 50% hp
@@ -113,11 +120,15 @@
     - Dig is immediate
     - Shadow Bone boosted x2.0 by field
     - Dig, Psychic, Stored Power, Zen Headbutt, Focus Punch, Focus Blast, Aura Sphere boosted x1.35 by field
+  
   - Forest
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
     - All Bug moves are now boosted by x1.5
     - Pokemon with Swarm get +1 attack and special attack on entry
+
+  - Frozen Dimensional Field
+    - Unnerve now lowers foes attack and special attack by 1 on entry instead of speed
 
 # Other
   - Removed data chip cost to enter password

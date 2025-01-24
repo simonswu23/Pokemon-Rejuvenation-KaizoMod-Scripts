@@ -1341,7 +1341,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :CORVIKNIGHT     then return true if move.move == :BRAVEBIRD
     when :MEOWTH          then return true if move.move == :PAYDAY
     when :PIKACHU         then return true if move.move == :VOLTTACKLE
-    when :EEVEE           then return true if move.move == :CHARM
+    when :EEVEE           then return true if move.move == :ALLURINGVOICE
     when :GRIMMSNARL      then return true if move.move == :FALSESURRENDER
     when :GENGAR          then return true if move.move == :DARKPULSE
     when :GARBODOR        then return true if move.move == :GUNKSHOT

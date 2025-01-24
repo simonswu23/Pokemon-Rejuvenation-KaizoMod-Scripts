@@ -22,8 +22,18 @@
 - Rorim B. (Gym)
 - Crawli (Gym)
 - Saki x Venam (Boom Battle)
+- Jenner (Aquamarine Cave) **UNTESTED**
 
 # Progress
+
+- 1/24/25 (@SWu)
+  - Fixed minor compilation bugs
+  - Updated magnet rise checks to be != 0 instead of > 0
+  - Created Pressure and Unnerve onactive handlers (mocked after Intimidate)
+  - Implemented Giga Eevee: Debutante, Giga Cuddle
+  - Implemented Klinklang Crest
+  - @TODO: NOT implemented Giga Eevee AI yet (pain, will need to model after choice locked items)
+  - Added attributes for anticipation and forewarn changes, have not actually implemented those changes yet
 
 - 1/17/25 (@SWu)
   - Ability Updates (Implemented)
