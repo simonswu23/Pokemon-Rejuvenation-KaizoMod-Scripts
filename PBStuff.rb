@@ -162,8 +162,9 @@ CONFUMOVE = [:CONFUSERAY,:SUPERSONIC,:FLATTER, :SWAGGER, :SWEETKISS,
 
 # moves that are learned by almost all pokemon via TM/Tutor
 ###--------------------------------------NEAR-UNIVERSAL-TMS-----------------------------------------------------###
-UNIVERSALTMS = [:ATTRACT,:CAPTIVATE,:CONFIDE,:DOUBLETEAM,:ENDURE,:FACADE,:FRUSTRATION,:HIDDENPOWER,
+UNIVERSALTMS = [:ATTRACT,:CONFIDE,:DOUBLETEAM,:ENDURE,:FACADE,:FRUSTRATION,:HIDDENPOWER,
   :NATURALGIFT,:PROTECT,:REST,:RETURN,:ROUND,:SECRETPOWER,:SLEEPTALK,:SNORE,:SUBSTITUTE,:SWAGGER,:TOXIC]
+  # @SWu removed CAPTIVATE
 
 #all the status inflicting moves
 ###--------------------------------------STATUSCONDITIONMOVE----------------------------------------------------###

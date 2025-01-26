@@ -1709,7 +1709,7 @@ class PokeBattle_Battle
       return false
     end
     # Embargo
-    if @field.effect == :DIMENSIONAL && thispkmn.effects[:Embargo] > 0
+    if @field.effect == :DIMENSIONAL && (thispkmn.effects[:Embargo] > 0 && !KAIZOMOD) || (KAIZOMOD && thispkmn.pbOwnSide.effects[:EmbargoSide] > 0)
       pbDisplayPaused(_INTL("{1} can't be switched out due to Embargo!", thispkmn.pbThis)) if showMessages
       return false
     end
@@ -2361,6 +2361,7 @@ class PokeBattle_Battle
     return false if $game_switches[:No_Mega_Evolution]==true
     return false if !@battlers[index].hasGiga?
     # return true if !pbBelongsToPlayer?(index)
+    return true if @battlers[index].issossmon
     return false if !pbHasGigaBand(index)
     return false if !pbHasGigaStone(index)
     return false if pbIsZCrystal?(@battlers[index].item)
@@ -6067,7 +6068,7 @@ class PokeBattle_Battle
     for i in priority
       next if i.isFainted?
 
-      if i.effects[:MAGNETRISE]!=0
+      if i.effects[:MagnetRise]>0
         i.effects[:MagnetRise] -= 1
         if i.effects[:MagnetRise] == 0
           pbDisplay(_INTL("{1} stopped levitating.", i.pbThis))
@@ -6116,7 +6117,8 @@ class PokeBattle_Battle
       if i.effects[:Embargo] > 0
         i.effects[:Embargo] -= 1
         if i.effects[:Embargo] == 0
-          pbDisplay(_INTL("The embargo on {1} was lifted.", i.pbThis(true)))
+          pbDisplay(_INTL("The embargo on {1} was lifted.", i.pbThis(true))) if !KAIZOMOD
+          pbDisplay(_INTL("{1}'s item was restored after the Frisk.", i.pbThis(true))) if KAIZOMOD
         end
       end
     end
@@ -6223,6 +6225,13 @@ class PokeBattle_Battle
       sides[i].effects[:LuckyChant] -= 1
       pbDisplay(_INTL("#{texts[i]} team's Lucky Chant faded!")) if sides[i].effects[:LuckyChant] == 0
     end
+    # EmbargoSide
+    for i in 0...2
+      next if sides[i].effects[:EmbargoSide] == 0
+
+      sides[i].effects[:EmbargoSide] -= 1
+      pbDisplay(_INTL("#{texts[i]} team is no longer Embargoed!")) if sides[i].effects[:EmbargoSide] == 0
+    end
     # Mud Sport
     if @state.effects[:MudSport] > 0
       @state.effects[:MudSport] -= 1
@@ -6249,6 +6258,30 @@ class PokeBattle_Battle
           pbDisplay(_INTL("The world broke apart again!"))
         else
           pbDisplay(_INTL("Gravity returned to normal."))
+        end
+      end
+    end
+
+    # Other Effects (KAIZOMOD)
+
+    # Wildfire
+    for i in priority
+      next if i.isFainted?
+      next if i.pbOwnSide.effects[:Wildfire] == 0
+      if i.burningFieldPassiveDamage?
+        eff = PBTypes.twoTypeEff(:FIRE, i.type1, i.type2)
+        if eff > 0
+          @scene.pbDamageAnimation(i, 0)
+          if [:LEAFGUARD, :ICEBODY, :FLUFFY, :GRASSPELT].include?(i.ability)
+            eff = eff * 2
+          end
+          eff = eff * 2 if i.effects[:TarShot]
+          pbDisplay(_INTL("The Pokémon were burned by the wildfire", i.pbThis)) if !endmessage
+          endmessage = true
+          i.pbReduceHP([(i.totalhp * eff / 32).floor, 1].max)
+          if i.hp <= 0
+            return if !i.pbFaint
+          end
         end
       end
     end

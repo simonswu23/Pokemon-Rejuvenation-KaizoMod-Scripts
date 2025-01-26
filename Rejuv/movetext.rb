@@ -3734,7 +3734,7 @@ MOVEHASH = {
     :function => 0x0E0,
     :type => :NORMAL,
     :category => :physical,
-    :basedamage => 300,
+    :basedamage => 200,
     :accuracy => 100,
     :maxpp => 5,
     :target => :AllNonUsers,
@@ -3900,7 +3900,7 @@ MOVEHASH = {
     :ID => 273,
     :name => "Rock Climb",
     :function => 0x013,
-    :type => :NORMAL,
+    :type => :ROCK,
     :category => :physical,
     :basedamage => 90,
     :accuracy => 85,
@@ -14517,6 +14517,21 @@ MOVEHASH = {
 	:giga => true,
     :effect => 100,
 	:target => :AllNonUsers,
+	:desc => "Infatuates the target."
+},
+
+:WILDFIRE => {
+	:ID => 2009,
+	:name => "Wildfire",
+	:function => 0x1004,
+	:type => :FIRE,
+	:category => :special,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
 	:desc => "Badly poisons targets, regardless of typing."
 },
 

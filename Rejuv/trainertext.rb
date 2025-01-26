@@ -1,6 +1,6 @@
 TEAMARRAY = [{
 :teamid => ["SWu",:LEADER_KETA,0],
-:items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GRIMMSNARLCORE,:CORVIKNIGHTCORE,:EEVEECORE],
+:items => [:SILVCREST,:SUPERPOTION,:LAPRASCORE,:GRIMMSNARLCORE,:CORVIKNIGHTCORE,:EEVEECORE,:CHARIZARDCORE],
 =begin
 :trainereffect => { # in party order
 	:effectmode => :Party, #effect mode switches how the effects are applied (:Party = on party index; :Fainted = first sendout after this number of pokemon are fainted)
@@ -41,11 +41,11 @@ TEAMARRAY = [{
 	# },
 },
 :mons => [{
-	:species => :EEVEE,
+	:species => :CHARIZARD,
 	:level => 40,
-	:item => :EVIOLITE,
-	:moves => [:ALLURINGVOICE,nil,nil,nil],
-	:ability => :DEBUTANTE,
+	:item => :AMPLIFIELDROCK,
+	:moves => [:BLASTBURN,nil,nil,nil],
+	:ability => :SOLARPOWER,
 	:gender => "M",
 	:shiny => true,
 	:nature => :ADAMANT,
@@ -17940,6 +17940,7 @@ TEAMARRAY = [{
 	:ability => :NOGUARD,
 	:item => :KLINCREST,
 	:gender => "M",
+	:shiny => true,
 	:happiness => 255,
 	:nature => :NAUGHTY,
 	:form => 2,

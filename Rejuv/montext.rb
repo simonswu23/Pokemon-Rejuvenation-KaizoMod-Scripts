@@ -360,7 +360,7 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Mega X Form" => {
+  "Mega X Form" => {
       :Type2 => :DRAGON,
       :BaseStats => [78, 130, 111, 130, 85, 100],
       :Abilities => [:TOUGHCLAWS],
@@ -369,14 +369,20 @@ MONHASH = {
       :Color => "Black",
   },
 
-    "Mega Y Form" => {
+  "Mega Y Form" => {
       :BaseStats => [78, 104, 78, 159, 115, 100],
       :Abilities => [:DROUGHT],
       :BaseEXP => 285,
       :Weight => 1005,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type1 => :FIRE,
+    :Height => 280,
+    :Weight => 2216,
+},
+
+  "Mega - Giga Form" => {
       :BaseStats => [78, 119, 98, 134, 100, 105],
       :Abilities => [:SOLARPOWER],
       :Height => 280,
@@ -385,10 +391,11 @@ MONHASH = {
 
   :OnCreation => {},
   :DefaultForm => 0,
-    :MegaForm => {
+  :GigaForm => 3,
+  :MegaForm => {
       :CHARIZARDITEX => 1,
       :CHARIZARDITEY => 2,
-      :CHARIZARDITEG => 3,
+      :CHARIZARDITEG => 4,
   },
 },
 
@@ -5469,6 +5476,7 @@ MONHASH = {
       :Moveset => [
         [1,:CURSE],
         [1,:YAWN],
+        [1,:CHILLYRECEPTION],
         [1,:TACKLE],
         [5,:GROWL],
         [9,:WATERGUN],
@@ -5511,6 +5519,7 @@ MONHASH = {
       :Abilities => [:GLUTTONY, :OWNTEMPO, :REGENERATOR],
       :Moveset => [
       [1,:TACKLE],
+      [1,:CHILLYRECEPTION],
       [1,:CURSE],
       [3,:GROWL],
       [6,:ACID],
@@ -23305,7 +23314,7 @@ MONHASH = {
       :CatchRate => 225,
       :Happiness => 35,
       :EggSteps => 6630,
-      :EggMoves => [:ASTONISH,:CONFUSERAY,:DESTINYBOND,:DISABLE,:FORESIGHT,:GUNKSHOT,:IMPRISON,:OMINOUSWIND,:PHANTOMFORCE,:PURSUIT,:SHADOWSNEAK],
+      :EggMoves => [:ASTONISH,:CONFUSERAY,:DESTINYBOND,:DISABLE,:ENCORE,:FORESIGHT,:GUNKSHOT,:IMPRISON,:OMINOUSWIND,:PHANTOMFORCE,:PURSUIT,:SHADOWSNEAK],
       :Moveset => [
         [1,:KNOCKOFF],
         [4,:SCREECH],
@@ -23349,6 +23358,7 @@ MONHASH = {
       :name => "Banette",
       :dexnum => 354,
       :Type1 => :GHOST,
+      :Type2 => :NORMAL,
       :BaseStats => [64, 115, 65, 83, 63, 65],
       :EVs => [0, 2, 0, 0, 0, 0],
       :Abilities => [:INSOMNIA, :FRISK],
@@ -23364,6 +23374,9 @@ MONHASH = {
         :form => 0
       },
       :Moveset => [
+        [0,:FAKEOUT],
+        [1,:FAKEOUT],
+        [1,:FOLLOWME],
         [1,:PHANTOMFORCE],
         [1,:KNOCKOFF],
         [1,:SCREECH],
@@ -29345,21 +29358,28 @@ MONHASH = {
       :Weight => 575,
   },
 
-  "Keta's Lucario (Sheridan)" => {
-    # +30 BST
-    :BaseStats => [70, 120, 70, 125, 70, 100],
-    :Abilities => [:DEFIANT],
+  "Keta's Lucario (Intense)" => {
+    # +0 BST
+    :BaseStats => [70, 110, 70, 115, 70, 90],
+    :Abilities => [:ADAPTABILITY],
   },
 
-  "Keta's Lucario" => {
-    # +60 BST
-    :BaseStats => [70, 120, 80, 125, 80, 110],
-    :Abilities => [:DEFIANT],
+  "Keta's Lucario (Kaizo)" => {
+    # +20 BST
+    :BaseStats => [70, 120, 70, 115, 70, 100],
+    :Abilities => [:ADAPTABILITY],
   },
 
-  "Keta's Lucario (Mega)" => {
-    # +60 BST
-    :BaseStats => [70, 155, 98, 160, 80, 122],
+  "Keta's Lucario (Intense - Mega)" => {
+    # +100 BST
+    :BaseStats => [70, 128, 100, 145, 80, 122],
+    :Abilities => [:PUREPOWER],
+  },
+
+  "Keta's Lucario (Kaizo - Mega)" => {
+    # +120 BST
+    :BaseStats => [70, 138, 100, 155, 80, 122],
+    :Abilities => [:PUREPOWER],
   },
 
   :OnCreation => {},

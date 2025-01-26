@@ -14,7 +14,7 @@
 - Alex + Sam (1), **UNTESTED**
 - Valarie (Gym)
 - Geara (Terajuma Beach)
-- Tapu Koko (Boss)
+- Tapu Koko Terajuma (Boss)
 - Zetta (Terajuma Falls)
 - Neved (Terajuma Falls)
 - Ren (Helojak)
@@ -22,9 +22,17 @@
 - Rorim B. (Gym)
 - Crawli (Gym)
 - Saki x Venam (Boom Battle)
-- Jenner (Aquamarine Cave) **UNTESTED**
+- Jenner (Aquamarine Cave)
+- Tapu Koko Magrodar (Boss)
 
 # Progress
+
+- 1/25/25 (@SWu)
+  - Embargo update needs more testing
+  - TODO: update Frisk and Embargo and Water Sport AI
+  - Fixed Magnet Rise bug (inconsistency with caps)
+  - TODO: Terrain layering (port from prev mod)
+  - TODO: Figure out Wildfire secondary effect
 
 - 1/24/25 (@SWu)
   - Fixed minor compilation bugs
@@ -32,7 +40,6 @@
   - Created Pressure and Unnerve onactive handlers (mocked after Intimidate)
   - Implemented Giga Eevee: Debutante, Giga Cuddle
   - Implemented Klinklang Crest
-  - @TODO: NOT implemented Giga Eevee AI yet (pain, will need to model after choice locked items)
   - Added attributes for anticipation and forewarn changes, have not actually implemented those changes yet
 
 - 1/17/25 (@SWu)

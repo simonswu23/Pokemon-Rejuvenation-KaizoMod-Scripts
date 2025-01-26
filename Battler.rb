@@ -851,6 +851,7 @@ class PokeBattle_Battler
     return false if @item.nil?
     return true if @crested
     return false if @effects[:Embargo]>0
+    return false if self.pbOwnSide.effects[:EmbargoSide]>0
     return false if @battle.state.effects[:MagicRoom]>0
     return false if self.ability == :KLUTZ
     return false if @pokemon.corrosiveGas
@@ -861,6 +862,7 @@ class PokeBattle_Battler
     return false if self.isFainted? if !ignorefainted
     return false if @item.nil?
     return false if @effects[:Embargo]>0
+    return false if self.pbOwnSide.effects[:EmbargoSide]>0
     return false if @battle.state.effects[:MagicRoom]>0
     return false if self.ability == :KLUTZ
     return false if @pokemon.corrosiveGas
@@ -876,7 +878,7 @@ class PokeBattle_Battler
     return true if self.hasType?(:FLYING) && @effects[:Roost]==false
     return true if self.ability == :LEVITATE || self.ability == :SOLARIDOL || self.ability == :LUNARIDOL
     return true if self.hasWorkingItem(:AIRBALLOON)
-    return true if @effects[:MAGNETRISE]!=0
+    return true if @effects[:MagnetRise]!=0
     return true if @effects[:Telekinesis]>0
     return false
   end
@@ -3109,10 +3111,11 @@ class PokeBattle_Battler
       for i in items
         itemname=getItemName(i.item)
         @battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
+        i.effects[:Embargo]=1
         if @battle.FE == :BACKALLEY
           if (i.effects[:Substitute]==0) && (i.ability != :STICKYHOLD || i.moldbroken) && self.item.nil?
             if !@battle.pbIsUnlosableItem(i,i.item) && !@battle.pbIsUnlosableItem(self,i.item)
-              self.item=i.item
+              self.item=i.item 
               i.item=nil
               if i.pokemon.corrosiveGas
                 i.pokemon.corrosiveGas=false
@@ -3352,10 +3355,20 @@ class PokeBattle_Battler
       end
     end
 
+    # KAIZOMOD abilities
+
     # Meteor Impactor
     if KAIZOMOD && self.ability == :METEORIMPACTOR && onactive
       @battle.pbDisplay(_INTL("{1} crashed into the battlefield!",self.pbThis))
       self.pbUseMoveSimple(:METEORIMPACTOR, -1, -1, false, false, false)
+    end
+
+    if KAIZOMOD && self.ability == :DAMP && onactive
+      if @battle.state.effects[:WaterSport]>=0
+        @battle.pbAnimation(:WATERSPORT,self,self.pbOpposing1)
+        @battle.state.effects[:WaterSport]+=5
+        @battle.pbDisplay(_INTL("Fire's power was weakened!"))
+      end
     end
 
   end
@@ -3606,7 +3619,7 @@ class PokeBattle_Battler
         if target.effects[:ShellTrap] && move.pbIsPhysical?(movetypes[0]) && user.pbOwnSide != target.pbOwnSide && !(user.ability == :SHEERFORCE && move.effect > 0)
           target.effects[:ShellTrap] = false
         end
-        if (target.ability == :CURSEDBODY && @battle.FE != :HOLY && (@battle.pbRandom(10) < 3 || (target.isFainted? && @battle.FE == :HAUNTED))) || target.crested == :BEHEEYEM
+        if target.ability == :CURSEDBODY && @battle.FE != :HOLY && (@battle.pbRandom(10) < 3 || (target.isFainted?)) || @battle.FE == :HAUNTED || target.crested == :BEHEEYEM
           if user.effects[:Disable] <= 0 && move.pp > 0 && !user.isFainted?
             user.effects[:Disable] = 4
             user.effects[:DisableMove] = move.move
@@ -4750,6 +4763,7 @@ class PokeBattle_Battler
     return true if self.pokemon.obedient
     if @battle.pbOwnedByPlayer?(@index) && @battle.internalbattle
       badgelevel= (@battle.pbPlayer.numbadges >= 0 && @battle.pbPlayer.numbadges < LEVELCAPS.length) ? LEVELCAPS[@battle.pbPlayer.numbadges] : LEVELCAPS[0]
+      badgelevel += 5 if KAIZOMOD # @SWu allows limited overlevelling above cap if Rare Candies are used
       move=choice[2]
       disobedient=false
       a=((@level+badgelevel)*@battle.pbRandom(256)/255.0).floor
@@ -5028,7 +5042,7 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1}'s Air Balloon makes Ground moves miss!",target.pbThis))
           return false
         end
-        if target.effects[:MAGNETRISE]!=0
+        if target.effects[:MagnetRise]!=0
           @battle.pbDisplay(_INTL("{1} makes Ground moves miss with Magnet Rise!",target.pbThis))
           return false
         end

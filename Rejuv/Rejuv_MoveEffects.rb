@@ -979,6 +979,12 @@ class PokeBattle_Move_1002 < PokeBattle_Move
     ####
     return ret
   end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:AEROBLAST,attacker,opponent,hitnum)
+  end
 end
 
 ### Honeypot
@@ -1007,5 +1013,31 @@ class PokeBattle_Move_1003 < PokeBattle_Move
       ret2 = opponent.pbPartner.pbReduceStat(PBStats::EVASION, inc, abilitymessage: false, statdropper: attacker)
     end
     return ret1 || ret2
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:SAVAGESPINOUT,attacker,opponent,hitnum)
+  end
+end
+
+### Wildfire
+class PokeBattle_Move_1004 < PokeBattle_Move
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+    ret if !@battle.canChangeFE?
+    fieldbefore = @battle.field.effect
+    duration=2
+    duration=5 if attacker.hasWorkingItem(:AMPLIFIELDROCK)
+    @battle.setField(:VOLCANIC,duration)
+    @battle.pbDisplay(_INTL("The wildfire set the field ablaze!"))
+    return ret
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:BLASTBURN,attacker,opponent,hitnum)
   end
 end

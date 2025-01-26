@@ -42,6 +42,9 @@
   - Unnerve lowers foes speed on entry (same interactions as Intimidate)
   - Pressure lowers foes special attack on entry (same interactions as Intimidate)
   - Supersweet Syrup now can work multipel times per battle, and lowers evasion by 2 on switch in
+  - Frisk suppresses found items for 1 turn
+  - Damp creates Water Sport on entry
+  - Cursed Body now always activates if the attack knocked the user out
 
 
 # Crests
@@ -64,6 +67,7 @@
   - Explosion now has 500 base power
   - Selfdestruct now has 300 base power and matches the user's primary typing
   - Nature's Power now can never miss
+  - Embargo affects the whole team side for 5 turns instead of one target
   - Guardian of Alola:
     - deals 99% of hp in damage in forest field
     - additional effect now changes depending on user:
@@ -129,6 +133,9 @@
 
   - Frozen Dimensional Field
     - Unnerve now lowers foes attack and special attack by 1 on entry instead of speed
+  
+  - Haunted
+    - Cursed Body always activates
 
 # Other
   - Removed data chip cost to enter password
@@ -136,3 +143,5 @@
   - Terajuma password is disabled
   - Crests now work on pokemon regardless of their form
   - Terapagos and Ogerpon may now mega evolve regardless of item, and do not require an item slot to do so
+  - Pokemon now obey you up to 5 levels above the level cap
+  - Captivate removed as a TM (only pokemon that learn it naturally can get access)

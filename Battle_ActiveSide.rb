@@ -25,6 +25,9 @@ class Battle_Side
     @effects[:ToxicSpikes] = 0
     # Gen 9 Mod - Last Respects count
     @effects[:LastRespects] = 0
+    # Kaizomod effects
+    @effects[:EmbargoSide]     = 0
+    @effects[:Wildfire]        = 0
   end
 
   def screenActive?(type=nil)

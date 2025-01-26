@@ -3069,12 +3069,12 @@ class PokeBattle_Scene
     if battler && (battler.effects[:SkyDrop] || battler.effects[:Commander]) # Gen 9 Mod - Battle item won't have effect on Tatsugiri in Dondozo's mouth.
       return false
     end
-    if battler && battler.effects[:Embargo]>0
+    if battler && battler.effects[:Embargo]>0 && !KAIZOMOD
       return false
     end
-    # if battler && battler.pbOwnSide.effects[:Embargo] > 0
-    #   return false
-    # end
+    if battler && battler.pbOwnSide.effects[:EmbargoSide] > 0
+      return false
+    end
     return true if pokemon.hp < pokemon.totalhp && pokemon.hp>0 && PBStuff::HPITEMS.include?(item)
     return true if pokemon.status == :POISON && PBStuff::POISONITEMS.include?(item)
     return true if pokemon.status == :PARALYSIS && PBStuff::PARAITEMS.include?(item)

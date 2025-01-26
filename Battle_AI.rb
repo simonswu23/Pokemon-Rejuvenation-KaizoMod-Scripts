@@ -1447,7 +1447,7 @@ class PokeBattle_AI
       score *= 0.9
     end
     # Pick a good move for the Choice items
-    if (@mondata.attitemworks && (@attacker.item == :CHOICEBAND || @attacker.item == :CHOICESPECS || @attacker.item == :CHOICESCARF)) || @attacker.ability == :GORILLATACTICS
+    if (@mondata.attitemworks && (@attacker.item == :CHOICEBAND || @attacker.item == :CHOICESPECS || @attacker.item == :CHOICESCARF)) || @attacker.ability == :GORILLATACTICS || (@attacker.debutanteCheck)
       if @move.basedamage==0 && @move.function!=0xF2 && @move.function!=0x13d && @move.function!=0xb4 # Trick, parting shot and sleep talk
         score*=0.1
       else
@@ -2221,7 +2221,7 @@ class PokeBattle_AI
           end
         end
       when 0x96 # Natural Gift
-        score *= 0 if @attacker.item.nil? || !pbIsBerry?(@attacker.item) || @attacker.ability == :KLUTZ || @battle.state.effects[:MagicRoom] > 0 || @attacker.effects[:Embargo] > 0 || [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(@opponent.ability)
+        score *= 0 if @attacker.item.nil? || !pbIsBerry?(@attacker.item) || @attacker.ability == :KLUTZ || @battle.state.effects[:MagicRoom] > 0 || @attacker.effects[:Embargo] > 0 || @attacker.pbOwnSide.effects[:EmbargoSide] > 0 || [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(@opponent.ability)
       when 0x97 # Trump Card
         score*=1.2 if @attacker.hp==@attacker.totalhp
         score*=1.3 if checkAIdamage()<(@attacker.hp/3.0)
@@ -6510,7 +6510,7 @@ class PokeBattle_AI
   end
 
   def magnocode
-    return 0 if @attacker.effects[:MAGNETRISE]!=0 || @attacker.effects[:Ingrain] || @attacker.effects[:SmackDown]
+    return 0 if @attacker.effects[:MagnetRise]!=0 || @attacker.effects[:Ingrain] || @attacker.effects[:SmackDown]
 
     miniscore = 1.0
     miniscore *= 3 if checkAIbestMove().pbType(@opponent) == :GROUND # Highest expected dam from a ground move
@@ -7192,7 +7192,7 @@ class PokeBattle_AI
   def flingcode
      return 0 if @attacker.item.nil? || @battle.pbIsUnlosableItem(@attacker, @attacker.item) || @attacker.ability == :KLUTZ ||
                 (pbIsBerry?(@attacker.item) && [:UNNERVE, :ASONECHILLING, :ASONEGRIM].include?(@opponent.ability)) ||
-                @attacker.effects[:Embargo] > 0 || @battle.state.effects[:MagicRoom] > 0
+                @attacker.effects[:Embargo] > 0 || @attacker.pbOwnSide.effects[:EmbargoSide] > 0 || @battle.state.effects[:MagicRoom] > 0
 
     miniscore = 1.0
     case @attacker.item
@@ -7248,8 +7248,9 @@ class PokeBattle_AI
   end
 
   def embarcode(opponent = @opponent)
-    return 0 if opponent.effects[:Embargo] > 0 && opponent.effects[:Substitute] > 0 || opponent.item.nil?
-
+    return 0 if !KAIZOMOD && opponent.effects[:Embargo] > 0 && opponent.effects[:Substitute] > 0 || opponent.item.nil?
+    return 0 if KAIZOMOD && opponent.pbOwnSide.effects[:EmbargoSide] > 0
+    
     miniscore = 1.1
     # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold
     miniscore *= 0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
@@ -8865,6 +8866,7 @@ class PokeBattle_AI
     @mondata.itemscore = {}
     return if !@battle.internalbattle
     return if @attacker.effects[:Embargo]>0
+    return if @attacker.pbOwnSide.effects[:EmbargoSide]>0
     items = @battle.pbGetOwnerItems(@index)
     return if !items || items.empty?
     party = @battle.pbPartySingleOwner(@attacker.index)
@@ -10522,7 +10524,7 @@ class PokeBattle_AI
       forcedscore+=200 if encoreScore <= 30
       forcedscore+=110 if @attacker.effects[:Torment]
     end
-    if @attacker.item == :CHOICEBAND || @attacker.item == :CHOICESPECS || @attacker.item == :CHOICESCARF || @attacker.ability == :GORILLATACTICS
+    if @attacker.item == :CHOICEBAND || @attacker.item == :CHOICESPECS || @attacker.item == :CHOICESCARF || @attacker.ability == :GORILLATACTICS || @attacker.debutanteCheck
       if @attacker.effects[:ChoiceBand] != nil
         for i in 0...@attacker.moves.length
           if @attacker.moves[i].move == @attacker.effects[:ChoiceBand]
@@ -12768,7 +12770,7 @@ class PokeBattle_AI
     return false if battler.hasType?(:FLYING) && battler.effects[:Roost]==false && @battle.FE != :INVERSE
     return false if [:LEVITATE,:SOLARDIOL,:LUNARIDOL].include?(battler.ability)
     return false if battler.item == :AIRBALLOON && battler.itemWorks? && !battler.effects[:DesertsMark]
-    return false if battler.effects[:MAGNETRISE]!=0
+    return false if battler.effects[:MagnetRise]!=0
     return false if battler.effects[:Telekinesis]>0
     return true
     end
