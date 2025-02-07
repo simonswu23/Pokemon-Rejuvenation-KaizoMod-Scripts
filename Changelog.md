@@ -41,7 +41,7 @@
   - Aftermath doubles the power of explosion moves
   - Unnerve lowers foes speed on entry (same interactions as Intimidate)
   - Pressure lowers foes special attack on entry (same interactions as Intimidate)
-  - Supersweet Syrup now can work multipel times per battle, and lowers evasion by 2 on switch in
+  - Supersweet Syrup now can trigger multiple times per battle, and lowers evasion by 2 on switch in
   - Frisk suppresses found items for 1 turn
   - Damp creates Water Sport on entry
   - Cursed Body now always activates if the attack knocked the user out
