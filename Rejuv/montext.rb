@@ -10059,17 +10059,24 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type2 => :GROUND,
+    :Height => 350,
+    :Weight => 100141,
+  },
+
+    "Mega Form" => {
       :BaseStats => [160, 140, 95, 75, 150, 20],
       :Abilities => [:THICKFAT],
       :Height => 350,
       :Weight => 100141,
   },
 
+  :GigaForm => 1,
   :OnCreation => {},
   :DefaultForm => 0,
     :MegaForm => {
-      :SNORLAXITE => 1
+      :SNORLAXITE => 2
   },
 },
 
@@ -23806,7 +23813,7 @@ MONHASH = {
       :CatchRate => 190,
       :Happiness => 70,
       :EggSteps => 5355,
-      :EggMoves => [:AVALANCHE,:BIDE,:BLOCK,:DISABLE,:FAKETEARS,:HEX,:ICICLECRASH,:ROLLOUT,:SPIKES,:SWITCHEROO,:WEATHERBALL],
+      :EggMoves => [:AVALANCHE,:BIDE,:BLOCK,:BOOMBURST,:DISABLE,:FAKETEARS,:HEX,:ICICLECRASH,:ROLLOUT,:SPIKES,:SWITCHEROO,:WEATHERBALL],
       :Moveset => [
         [1,:POWDERSNOW],
         [1,:LEER],
@@ -23907,6 +23914,7 @@ MONHASH = {
       :Moveset => [
         [0,:FREEZEDRY],
         [1,:SHEERCOLD],
+        [1,:EXTREMESPEED],
         [1,:POWDERSNOW],
         [1,:ASTONISH],
         [1,:LEER],
@@ -37299,7 +37307,22 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Madelis' Cinccino (Intense)" => {
+    # +60 BST
+    :Type2 => :ROCK,
+    :BaseStats => [75, 115, 80, 75, 60, 125],
+    :Abilities => [:TECHLINK],
+  },
+
+  "Madelis' Cinccino (Kaizo)" => {
+    # +120 BST
+    :Type2 => :ROCK,
+    :BaseStats => [75, 125, 80, 105, 60, 145],
+    :Abilities => [:TECHLINK],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :GOTHITA => {
@@ -52323,7 +52346,8 @@ MONHASH = {
         [38,:COUNTER],
         [46,:BOUNCE],
         [54,:DOUBLEEDGE],
-        [62,:COURTCHANGE]],
+        [62,:COURTCHANGE],
+        [65,:GRASSYGLIDE]],
       :compatiblemoves => [:ACROBATICS,:AGILITY,:ALLYSWITCH,:ASSURANCE,:BATONPASS,:BLASTBURN,:BLAZEKICK,:BOUNCE,:BULKUP,:COACHING,:ELECTROBALL,:FIREBLAST,:FIREFANG,:FIREPLEDGE,:FIREPUNCH,:FIRESPIN,:FLAMETHROWER,:FLAREBLITZ,:FOCUSBLAST,:FOCUSENERGY,:GIGAIMPACT,:GUNKSHOT,:HEATWAVE,:HELPINGHAND,:HYPERBEAM,:IRONHEAD,:LOWKICK,:LOWSWEEP,:MEGAKICK,:MUDSHOT,:OVERHEAT,:REVENGE,:REVERSAL,:SCORCHINGSANDS,:SHADOWBALL,:SNARL,:SUNNYDAY,:SWIFT,:TAUNT,:TEMPERFLARE,:TRAILBLAZE,:UTURN,:WORKUP,:ZENHEADBUTT,
         #Rejuv only moves
         :MAGMADRIFT,:POISONSWEEP,:STACKINGSHOT],
@@ -52339,7 +52363,13 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type2 => :FLYING,
+    :Height => 270,
+    :Weight => 1653,
+  },
+
+  "Mega Form" => {
       :BaseStats => [80, 145, 82, 102, 82, 139],
       :Abilities => [:LIBERO],
       :Height => 270,
@@ -52347,9 +52377,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :CINDERACITE => 1
+      :CINDERACITE => 2
   },
 },
 

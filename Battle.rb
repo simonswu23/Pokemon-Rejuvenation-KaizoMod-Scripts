@@ -950,6 +950,11 @@ class PokeBattle_Battle
   def pbHasGigaBand(battlerIndex)
     return true if !pbBelongsToPlayer?(battlerIndex)
     return true if $PokemonBag.pbQuantity(:GIGABAND)>0
+    # ally check
+    items=@battle.pbGetOwnerItems(battlerIndex)
+    for i in items
+      return true if i == :GIGABAND
+    end
     return false
   end
 
@@ -5200,7 +5205,7 @@ class PokeBattle_Battle
             for i in priority
               next if i.isFainted?
 
-              if (i.ability == :SOLARPOWER || (i.crested == :CASTFORM && i.form == 1)) && @field.effect != :FROZENDIMENSION
+              if !KAIZOMOD && (i.ability == :SOLARPOWER || (i.crested == :CASTFORM && i.form == 1)) && @field.effect != :FROZENDIMENSION
                 pbDisplay(_INTL("{1} was hurt by the sunlight!", i.pbThis))
                 @scene.pbDamageAnimation(i, 0)
                 i.pbReduceHP((i.totalhp / 8.0).floor)
@@ -5490,10 +5495,22 @@ class PokeBattle_Battle
       next if i.isFainted?
 
       # Meganium + Meganium Crest
+
       if i.crested == :MEGANIUM || (i.pbPartner.crested == :MEGANIUM && !i.pbPartner.isFainted?)
-        hpgain = i.pbRecoverHP((i.totalhp / 16).floor, true)
-        pbDisplay(_INTL("The Meganium Crest restored {1}'s HP a little!", i.pbThis(true))) if hpgain > 0
+        hpgain=i.pbRecoverHP((i.totalhp/16).floor,true)
       end
+
+      if i.crested == :MEGANIUM && KAIZOMOD 
+        party=@battle.pbParty(i.index)
+        for j in 0...party.length
+          next if @battle.battlers.include?(j)
+          next if !party[j] || party[j].isEgg?
+          next if party[j].hp == 0
+          party[j].healParty(((party[j].totalhp+1)/16).floor);
+        end
+        pbDisplay(_INTL("The Meganium Crest restored the team's HP a little!",i.pbThis(true)))
+      end
+
       # Rain Dish
       if ((i.ability == :RAINDISH || (i.crested == :CASTFORM && i.form == 2)) && (pbWeather == :RAINDANCE && !i.hasWorkingItem(:UTILITYUMBRELLA))) && i.effects[:HealBlock] == 0
         hpgain = i.pbRecoverHP((i.totalhp / 8.0).floor, true)

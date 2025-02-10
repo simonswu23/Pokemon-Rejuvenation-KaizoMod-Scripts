@@ -53,6 +53,7 @@
   - Corviknight Crest: clears hazards and screens at the end of each turn
   - Cacturne Crest: raises offenses by 1 if attacking first
   - Klinklang Crest: switches between speed and power mode (x2 speed and magnet rise, and x1.5 attack and special attack) using Shift Gear and Gear Up
+  - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
 
 # Items
   - Pinch berries now heal 50% hp
@@ -77,6 +78,10 @@
       - Fini: clears all stat changes + defog
   - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
 
+  ## New Attacks
+  - Chain Drain:
+    - Fairy, special, 75 bp, 100 accuracy, restores 1/16th hp to all allies (even those in party) after use
+
 # Pokemon
   ## Giga Pokemon
   
@@ -96,6 +101,11 @@
     - Stellar type (neutral relationship with every other typing)
   - Shelmet
     - learns sticky web as an egg move
+  - Snorunt, Glalie
+    - Aevian: Glalie learns Grassy Glide as a base move
+    - Regular: Glalie learns Extremespeed as a base move, Snorunt learns Boomburst as an egg move
+  - Cinderace
+    - learns Grassy Glide at level 65
 
 # Field Changes
   - Water's Surface
@@ -137,6 +147,9 @@
   - Haunted
     - Cursed Body always activates
 
+  - Cave
+    - Dig is a single-turn move
+
 # Other
   - Removed data chip cost to enter password
   - All consumed held items (including berries) are restored at the end of each battle
@@ -145,3 +158,8 @@
   - Terapagos and Ogerpon may now mega evolve regardless of item, and do not require an item slot to do so
   - Pokemon now obey you up to 5 levels above the level cap
   - Captivate removed as a TM (only pokemon that learn it naturally can get access)
+
+
+# TODO:
+  - Signature pokemon documentation
+  - Giga pokemon documentation

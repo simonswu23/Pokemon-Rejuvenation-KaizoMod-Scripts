@@ -14384,6 +14384,21 @@ MOVEHASH = {
 
 ### SWU's Moves
 
+# General Moves
+
+:CHAINDRAIN => {
+	:ID => 1500,
+	:name => "Chain Drain",
+	:function => 0x901,
+	:type => :FAIRY,
+	:category => :special,
+	:basedamage => 75,
+	:accuracy => 100,
+	:maxpp => 10,
+	:target => :SingleNonUser,
+	:healingmove => true,
+	:desc => "The user attacks the target with a life-draining magic, healing itself and all allies."
+},
 
 # Giga Moves
 
@@ -14530,9 +14545,38 @@ MOVEHASH = {
 	:accuracy => 0,
 	:maxpp => 10,
 	:giga => true,
+    :effect => 30,
+	:target => :AllOpposing,
+	:desc => "Damages opposing team, may burn."
+},
+
+:FLAMESTRIKE => {
+	:ID => 2010,
+	:name => "Flame Strike",
+	:function => 0x0AD,
+	:type => :FIRE,
+	:category => :physical,
+	:basedamage => 165,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :SingleNonUser,
+	:desc => "Ignores Abilities, fully breaks through protect."
+},
+
+:GOURMANDIZE => {
+	:ID => 2011,
+	:name => "Gourmandize",
+	:function => 0x112,
+	:type => :NORMAL,
+	:category => :physical,
+	:basedamage => 140,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
     :effect => 100,
 	:target => :SingleNonUser,
-	:desc => "Badly poisons targets, regardless of typing."
+	:desc => "Gains +1 stockpile after use."
 },
 
 # Handlers

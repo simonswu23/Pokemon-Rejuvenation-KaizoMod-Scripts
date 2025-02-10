@@ -3239,7 +3239,7 @@ class PokeBattle_AI
         if !@battle.doublebattle || @move.pbDragonDartTargetting(@attacker).length < 2
           miniscore = multihitcode()
         else
-          miniscore = 1.2 if checkAImoves(PBStuff::PROTECTMOVE) || opponent.pbPartyHasType?(:FAIRY)
+          miniscore = 1.2 if checkAImoves(PBStuff::PROTECTMOVE) || pbPartyHasType?(:FAIRY) # @SWu idk 
         end
       when 0x17F # teatime
         miniscore = teaslurpcode()
@@ -5517,7 +5517,8 @@ class PokeBattle_AI
 
   def beatupcode(score) # only partner else multihit is used
     return 0 if @battle.pbPokemonCount(@battle.pbPartySingleOwner(@attacker.index))<1
-    return 0 if @opponent.ability != :JUSTIFIED || @opponent.stages[PBStats::ATTACK]>3 || !@opponent.moves.any? {|moveloop| !moveloop.nil? && moveloop.pbIsPhysical?()} || pbRoughDamage > @opponent.hp
+    return 0 if @opponent.ability != :JUSTIFIED || @opponent.stages[PBStats::ATTACK]>3 || !@opponent.moves.any? {|moveloop| !moveloop.nil? && moveloop.pbIsPhysical?()} || pbRoughDamage > @opponent.hp ||
+                @opponent.ability != :STAMINA || !@opponent.moves.any? { |moveloop| !moveloop.nil? && moveloop.move == :RAGEFIST }
     score = 100-score
     if pbAIfaster?(nil, nil, @opponent, @attacker.pbOpposing1) && pbAIfaster?(nil, nil, @opponent, @attacker.pbOpposing2)
       score*=1.3
@@ -8513,6 +8514,9 @@ class PokeBattle_AI
         abilityscore*=1.5
       when :CUDCHEW # Gen 9 Mod - Added Cud Chew
         abilityscore*=1.2
+        # Kaizo Mod below
+      when :TECHLINK
+        abilityscore*=1.5 * 1.3
       else
         if attacker.pbPartner==opponent && abilityscore!=0
           abilityscore=200 if abilityscore>200
@@ -9682,8 +9686,8 @@ class PokeBattle_AI
             if checkAIbestMove(@opponent).contactMove? || (@opponent.pbPartner.hp > 0 && checkAIbestMove(@opponent.pbPartner).contactMove?)
               abilityscore += 30
             end
-            abilityscore += 30 if @opponent.ability == :SKILLLINK
-            abilityscore += 30 if @opponent.pbPartner.hp > 0 && @opponent.pbPartner.ability == :SKILLLINK
+            abilityscore += 30 if @opponent.ability == :SKILLLINK || @opponent.ability == :TECHLINK
+            abilityscore += 30 if @opponent.pbPartner.hp > 0 && (@opponent.pbPartner.ability == :SKILLLINK || @opponent.pbPartner.ability == :TECHLINK)
             # Gen 9 Mod - Added Loaded Dice
             abilityscore += 30 if (@opponent.item == :LOADEDDICE)
             abilityscore += 30 if (@opponent.pbPartner.item == :LOADEDDICE)
@@ -9807,8 +9811,8 @@ class PokeBattle_AI
       itemscore = 0
       if @mondata.skill>=HIGHSKILL
         if (i.item == :ROCKYHELMET)
-          itemscore+=30 if (@opponent.ability == :SKILLLINK)
-          itemscore+=30 if (@opponent.pbPartner.ability == :SKILLLINK)
+          itemscore+=30 if (@opponent.ability == :SKILLLINK || @opponent.ability == :TECHLINK)
+          itemscore+=30 if (@opponent.pbPartner.ability == :SKILLLINK || @opponent.pbPartner.ability == :TECHLINK)
           # Gen 9 Mod - Added Loaded Dice
           itemscore+=30 if (@opponent.item == :LOADEDDICE)
           itemscore+=30 if (@opponent.pbPartner.item == :LOADEDDICE)
@@ -10007,6 +10011,7 @@ class PokeBattle_AI
             fieldscore+=20 if (i.ability == :STEELWORKER)
             fieldscore+=25 if (i.ability == :DOWNLOAD)
             fieldscore+=25 if (i.ability == :TECHNICIAN)
+            fieldscore+=25 if (i.ability == :TECHLINK)
             fieldscore+=25 if (i.ability == :GALVANIZE)
         when :SHORTCIRCUIT
             fieldscore+=20 if (i.ability == :VOLTABSORB)
@@ -10262,12 +10267,13 @@ class PokeBattle_AI
             fieldscore+=25 if (i.ability == :SHELLARMOR) || (nonmegaform.ability == :SHELLARMOR)
           fieldscore+=25 if (i.ability == :MIRRORARMOR) || (nonmegaform.ability == :MIRRORARMOR)
             fieldscore+=25 if (i.ability == :MAGICGUARD) || (nonmegaform.ability == :MAGICGUARD)
-            fieldscore+=25 if i.ability == :SKILLLINK
+            fieldscore+=25 if i.ability == :SKILLLINK || i.ability == :TECHLINK
           fieldscore+=30 if i.ability == :NOGUARD || (nonmegaform.ability == :NOGUARD)
           fieldscore+=50 if (i.ability == :DAUNTLESSSHIELD)
             fieldscore+=50 if (i.ability == :INTREPIDSWORD)
         when :CONCERT1,:CONCERT2,:CONCERT3,:CONCERT4
           fieldscore+=25 if (i.ability == :TECHNICIAN)
+          fieldscore+=25 if (i.ability == :TECHLINK)
           fieldscore+=25 if ([:HEAVYMETAL,:SOLIDROCK,:PUNKROCK,:ROCKHEAD,:SOUNDPROOF].include?(i.ability))
           fieldscore+=15 if ([:HEAVYMETAL,:SOLIDROCK,:PUNKROCK,:GALVANIZE,:PLUS].include?(i.ability)) && @battle.ProgressiveFieldCheck(PBFields::CONCERT,1,3)
           fieldscore-=15 if ([:KLUTZ,:MINUS].include?(i.ability)) && @battle.ProgressiveFieldCheck(PBFields::CONCERT,2,4)
@@ -10635,7 +10641,7 @@ class PokeBattle_AI
         end
       end
       #punishing skill-link/loaded dixe multi-hit contact moves # Gen 9 Mod - Added Loaded Dice
-      if oppmon.ability == :SKILLLINK || oppmon.hasWorkingItem(:LOADEDDICE)
+      if oppmon.ability == :SKILLLINK || oppmon.hasWorkingItem(:LOADEDDICE) || oppmon.ability == :TECHLINK
         if getAIMemory(oppmon).any? {|moveloop| moveloop!=nil && moveloop.function==0xC0 && moveloop.contactMove?}
           for i in @mondata.party
             next if i.nil? || i.hp == 0 || @mondata.party.index(i) == @attacker.pokemonIndex
@@ -11182,7 +11188,7 @@ class PokeBattle_AI
     basedamage *= 4 if attacker.crested == :LEDIAN && move.punchMove?
     if attacker.crested == :CINCCINO && !move.pbIsMultiHit
       basedamage *= 0.3
-      if attacker.ability == :SKILLLINK
+      if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
         basedamage *= 5
       else
         basedamage = (basedamage * 19 / 6).floor
@@ -11415,6 +11421,7 @@ class PokeBattle_AI
       ############ ATTACKER ABILITY CHECKS ############
       case attacker.ability
         when :TECHNICIAN then basedamage = (basedamage * 1.5).round if (basedamage <= 60) || ([:FACTORY, :CONCERT1, :CONCERT2, :CONCERT3, :CONCERT4].include?(@battle.FE) && basedamage <= 80)
+        when :TECHLINK then basedamage = (basedamage * 1.5).round if (basedamage <= 60) || ([:FACTORY, :CONCERT1, :CONCERT2, :CONCERT3, :CONCERT4].include?(@battle.FE) && basedamage <= 80)
         when :IRONFIST then basedamage = (basedamage * 1.2).round if move.punchMove?
         when :STRONGJAW then basedamage = (basedamage * 1.5).round if PBStuff::BITEMOVE.include?(move.move)
         when :SHARPNESS then basedamage = (basedamage * 1.5).round if move.sharpMove?
@@ -12492,7 +12499,7 @@ class PokeBattle_AI
       when 0xBF # Triple Kick, Triple Axel, Thunder Raid
         return basedamage*6
       when 0xC0 # Bullet Seed, Pin Missile, Arm Thrust, Bone Rush, Icicle Spear, Tail Slap, Spike Cannon, Comet Punch, Furey Swipes, Barrage, Double Slap, Fury Attack, Rock Blast, Water Shuriken
-        if attacker.ability == :SKILLLINK
+        if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
           return basedamage*5
         elsif attacker.item == :LOADEDDICE
           return (basedamage*9/2).floor
@@ -12565,7 +12572,7 @@ class PokeBattle_AI
       when 0x18B # Grav Apple
         return basedamage * 1.5 if @battle.state.effects[:Gravity] != 0
       when 0x307 # Scale Shot
-        if attacker.ability == :SKILLLINK
+        if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
           return basedamage*5
         else
           return (basedamage*19/6).floor
@@ -12620,7 +12627,7 @@ class PokeBattle_AI
                               # Is it smarter for the AI to do this or to always assume 80 base power?
                               # Who knows for sure, this seems to work well enough though so I'm leaving it like this.
       when 0x914 # Population Bomb
-        if attacker.ability == :SKILLLINK     # Assumes we hit the single 90% accuracy check to not make maths egregious
+        if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK     # Assumes we hit the single 90% accuracy check to not make maths egregious
           return (basedamage*10)
         elsif attacker.item == :LOADEDDICE
           return (basedamage*7).floor         # Assumes we hit the single 90% accuracy check to not make maths egregious
@@ -12748,7 +12755,7 @@ class PokeBattle_AI
     return false if @battle.pbWeather == :SANDSTORM && !(attacker.hasType?(:ROCK) || attacker.hasType?(:GROUND) || attacker.hasType?(:STEEL) || [:SANDFORCE,:SANDRUSH,:SANDVEIL,:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability)) && !immediate
     return false if @battle.pbWeather == :SHADOWSKY && !(attacker.hasType?(:SHADOW) || [:MAGICGUARD,:OVERCOAT,:TEMPEST].include?(attacker.ability)) && !immediate
     return false if attacker.hp != attacker.totalhp
-    return false if attacker.ability == :PARENTALBOND || attacker.ability == :SKILLLINK || attacker.crested == :TYPHLOSION
+    return false if attacker.ability == :PARENTALBOND || attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK || attacker.crested == :TYPHLOSION
     bestmove, damage = checkAIMovePlusDamage(opponent, attacker)
     return false if bestmove.pbIsMultiHit && damage >= attacker.hp && !(attacker.ability == :RESUSCITATION && attacker.form == 1)
     return true  if attacker.ability == :RESUSCITATION && attacker.form == 1

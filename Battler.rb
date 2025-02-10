@@ -3371,6 +3371,22 @@ class PokeBattle_Battler
       end
     end
 
+    # Lucky Wind
+    if KAIZOMOD && self.ability == :LUCKYWIND && onactive
+      @battle.pbAnimation(:TAILWIND,self,nil)
+      self.pbOwnSide.effects[:Tailwind]+=4
+      self.pbOwnSide.effects[:Tailwind]+=6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
+      self.pbOwnSide.effects[:Tailwind]+=8 if @battle.FE == :SKY
+      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Tailwind for its team!",self.pbThis,getAbilityName(self.ability)))
+      if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :SKY) && !@battle.state.effects[:HeavyRain] && !@battle.state.effects[:HarshSunlight]
+        @battle.weather=:STRONGWINDS
+        @battle.weatherduration=6
+        @battle.weatherduration=8 if @battle.FE == :SKY
+        @battle.pbCommonAnimation("Wind",nil,nil)
+        @battle.pbDisplay(_INTL("Strong winds kicked up around the field!"))
+      end
+    end
+
   end
 
   def pbEffectsOnDealingDamage(move, user, target, damage, innards)
@@ -5380,7 +5396,7 @@ class PokeBattle_Battler
       end
       # Check success (accuracy/evasion calculation)
       # Gen 9 Mod - Added check conditions for Population Bomb, Loaded Dice (checkAccuracyEachHit is an addition)
-      checkAccuracyEachHit = [0xBF, 0x914].include?(basemove.function) && user.ability != :SKILLLINK && !user.hasWorkingItem(:LOADEDDICE) # Triple Kick, Triple Axel, Thunder Raid, Population Bomb
+      checkAccuracyEachHit = [0xBF, 0x914].include?(basemove.function) && user.ability != :SKILLLINK && user.ability != :TECHLINK && !user.hasWorkingItem(:LOADEDDICE) # Triple Kick, Triple Axel, Thunder Raid, Population Bomb
       if !nocheck && !pbSuccessCheck(basemove, user, target, flags, i == 0 || [0xBF, 0x914].include?(basemove.function), precheckedacc: precheckedacc)
        if (0xC9...0xCE).to_a.include?(basemove.function)
           @battle.scene.pbUnVanishSprite(user)
@@ -6042,7 +6058,7 @@ class PokeBattle_Battler
     # moldbreaker
     # Gen 9 Mod - Added Mycelium Might
     if (user.ability == :MOLDBREAKER || user.ability == :TERAVOLT || user.ability == :TURBOBLAZE) || (user.ability == :MYCELIUMMIGHT && basemove.basedamage == 0 && user.effects[:TwoTurnAttack] == 0) ||
-       basemove.function == 0x166 || basemove.function == 0x176 || basemove.function == 0x200 # Solgaluna/crozma signatures 
+       basemove.function == 0x166 || basemove.function == 0x176 || [:GIANTSDRUM, :FLAMESTRIKE, :HYDROSNIPE].include?(basemove.move) || basemove.function == 0x200 # Solgaluna/crozma signatures
       for i in 0..3
         # Gen 9 Mod - Added Ability Shield
         if !@battle.battlers[i].hasWorkingItem(:ABILITYSHIELD)
@@ -6212,7 +6228,7 @@ class PokeBattle_Battler
             when :CINCCINO
               hitchances = [2, 2, 3, 3, 4, 5]
               ret = hitchances[@battle.pbRandom(hitchances.length)]
-              ret = 5 if user.ability == :SKILLLINK
+              ret = 5 if user.ability == :SKILLLINK || user.ability == :TECHLINK
               numhits = ret if !basemove.pbIsMultiHit
           end
         end

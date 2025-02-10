@@ -991,6 +991,11 @@ class PokeBattle_Pokemon
     @hp=@totalhp
   end
 
+  def healParty(amount)
+    return if egg?
+    @hp = [@hp + amount, @totalhp].min
+  end
+
   def healStatus
     @status=nil
     @statusCount=0
@@ -1361,6 +1366,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :URSHIFU         then return true if move.move == :WICKEDBLOW
     when :SANDACONDA      then return true if move.move == :HURRICANE
     when :KINGLER         then return true if move.move == :XSCISSOR
+    when :SNORLAX         then return true if move.move == :RETURN
   end
   return false
 end

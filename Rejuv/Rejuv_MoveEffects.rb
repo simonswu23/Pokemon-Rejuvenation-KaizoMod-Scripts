@@ -794,6 +794,37 @@ class PokeBattle_Move_900 < PokeBattle_Move
   end
 end
 
+# Chain Drain
+class PokeBattle_Move_901 < PokeBattle_Move
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+    if opponent.damagestate.calcdamage>0
+      @battle.pbDisplay(_INTL("{1} had its energy drained!",opponent.pbThis))
+      activepkmn=[]
+      # for i in @battle.battlers
+      #   next if attacker.pbIsOpposing?(i.index)
+      #   next if i.hp == 0
+      #   i.pbRecoverHP(((attacker.totalhp+1)/16).floor,true)
+      #   activepkmn.push(i.pokemonIndex)
+      # end
+      party=@battle.pbParty(attacker.index) # NOTE: Considers both parties in multi battles
+      for i in 0...party.length
+        next if activepkmn.include?(i) || i == attacker
+        next if !party[i] || party[i].isEgg?
+        next if party[i].hp == 0
+        party[i].healParty(((party[i].totalhp+1)/16).floor);
+      end
+      @battle.pbDisplay(_INTL("{1} healed its teammates!",attacker.pbThis))
+    end
+    return ret
+  end
+end
+
+def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+  return if !showanimation
+  @battle.pbAnimation(:DRAININGKISS,attacker,opponent,hitnum)
+end
+
 ### Giga Moves Below ###
 
 # Resonance
@@ -1024,15 +1055,31 @@ end
 
 ### Wildfire
 class PokeBattle_Move_1004 < PokeBattle_Move
+  # def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+  #   ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+  #   ret if !@battle.canChangeFE?
+  #   fieldbefore = @battle.field.effect
+  #   duration=2
+  #   duration=5 if attacker.hasWorkingItem(:AMPLIFIELDROCK)
+  #   @battle.setField(:VOLCANIC,duration)
+  #   @battle.pbDisplay(_INTL("The wildfire set the field ablaze!"))
+  #   return ret
+  # end
+
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
-    ret if !@battle.canChangeFE?
-    fieldbefore = @battle.field.effect
-    duration=2
-    duration=5 if attacker.hasWorkingItem(:AMPLIFIELDROCK)
-    @battle.setField(:VOLCANIC,duration)
-    @battle.pbDisplay(_INTL("The wildfire set the field ablaze!"))
+    ret = super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
+    if !opponent.isFainted?
+      opponent.pbReduceHP((opponent.totalhp / 6.0).floor)
+      @battle.pbDisplay(_INTL("The Wildfire hurt {1}!", opponent.pbThis(true)))
+    end
     return ret
+  end
+
+  def pbAdditionalEffect(attacker,opponent)
+    return false if !opponent.pbCanBurn?(false)
+    opponent.pbBurn(attacker)
+    @battle.pbDisplay(_INTL("{1} was burned!",opponent.pbThis))
+    return true
   end
 
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)

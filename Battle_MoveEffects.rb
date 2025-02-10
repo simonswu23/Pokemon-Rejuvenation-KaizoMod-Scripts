@@ -5453,7 +5453,7 @@ class PokeBattle_Move_0C0 < PokeBattle_Move
     ret = hitchances[@battle.pbRandom(hitchances.length)]
     # Gen 9 Mod - Added Loaded Dice
     ret = 5 - rand(2) if attacker.hasWorkingItem(:LOADEDDICE)
-    ret = 5 if attacker.ability == :SKILLLINK
+    ret = 5 if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
     ret = 5 if attacker.crested == :FEAROW && @move == :FURYATTACK
     return ret
   end
@@ -5818,7 +5818,7 @@ class PokeBattle_Move_0CA < PokeBattle_Move
   def pbTwoTurnAttack(attacker, checking = false)
     @immediate = false
     if attacker.effects[:TwoTurnAttack] == 0
-      @immediate = true if Rejuv && @battle.FE == :DESERT || (@battle.FE == :ASHENBEACH && KAIZOMOD)
+      @immediate = true if Rejuv && @battle.FE == :DESERT || ((@battle.FE == :ASHENBEACH || @battle.FE == :CAVE) && KAIZOMOD)
       @immediate = true if (@battle.FE == :WATERSURFACE || @battle.FE == :MURKWATERSURFACE) && self.pbType(attacker, self.type) == :GROUND # for move failure on these fields
     end
     if !@immediate && attacker.hasWorkingItem(:POWERHERB)
@@ -8108,6 +8108,7 @@ end
 ################################################################################
 class PokeBattle_Move_112 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+    return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
     if attacker.effects[:Stockpile] >= 3
       @battle.pbDisplay(_INTL("{1} can't stockpile any more!", attacker.pbThis))
       return -1
@@ -8122,6 +8123,23 @@ class PokeBattle_Move_112 < PokeBattle_Move
       attacker.effects[:StockpileSpDef] += 1
     end
     return 0
+  end
+
+  def pbAdditionalEffect(attacker, opponent)
+    if attacker.effects[:Stockpile] >= 3
+      @battle.pbDisplay(_INTL("{1} can't stockpile any more!", attacker.pbThis))
+      return false
+    end
+    @battle.pbAnimation(:STOCKPILE,attacker,opponent)
+    attacker.effects[:Stockpile] += 1
+    @battle.pbDisplay(_INTL("{1} stockpiled {2}!", attacker.pbThis, attacker.effects[:Stockpile]))
+    if attacker.pbIncreaseStat(PBStats::DEFENSE, 1, abilitymessage: false, statsource: attacker)
+      attacker.effects[:StockpileDef] += 1
+    end
+    if attacker.pbIncreaseStat(PBStats::SPDEF, 1, abilitymessage: false, statsource: attacker)
+      attacker.effects[:StockpileSpDef] += 1
+    end
+    return true
   end
 end
 
@@ -10980,7 +10998,7 @@ class PokeBattle_Move_307 < PokeBattle_Move
     ret = hitchances[@battle.pbRandom(hitchances.length)]
     # Gen 9 Mod - Added Loaded Dice
     ret = 5 - rand(2) if attacker.hasWorkingItem(:LOADEDDICE)
-    ret = 5 if attacker.ability == :SKILLLINK
+    ret = 5 if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
     return ret
   end
 

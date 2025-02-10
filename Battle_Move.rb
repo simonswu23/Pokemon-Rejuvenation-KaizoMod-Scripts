@@ -1533,7 +1533,7 @@ class PokeBattle_Move
     attitemworks = attacker.itemWorks?(true)
     #oppitemworks = opponent.itemWorks?(true)
     case attacker.ability
-      when :TECHNICIAN
+      when :TECHNICIAN, :TECHLINK
         if basedmg <= 60
           basemult *= 1.5
         elsif (@battle.FE == :FACTORY || @battle.ProgressiveFieldCheck(PBFields::CONCERT)) && basedmg <= 80
@@ -2073,6 +2073,7 @@ class PokeBattle_Move
         when :LONGREACH then atkmult*=1.5 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :SKY)
         when :CORROSION then atkmult*=1.5 if (@battle.FE == :CORROSIVE || @battle.FE == :CORROSIVEMIST || @battle.FE == :CORRUPTED)
         when :SKILLLINK then atkmult*=1.2 if (@battle.FE == :COLOSSEUM && (@function == 0xC0 || @function == 0x307 || (attacker.crested == :CINCCINO && !pbIsMultiHit))) #0xC0: 2-5 hits; 0x307: Scale Shot
+        when :TECHLINK then atkmult*=1.2 if (@battle.FE == :COLOSSEUM && (@function == 0xC0 || @function == 0x307 || (attacker.crested == :CINCCINO && !pbIsMultiHit)))
       end
     end
     atkmult*=0.5 if opponent.ability == :THICKFAT && (type == :ICE || type == :FIRE) && !(opponent.moldbroken)
@@ -2421,6 +2422,8 @@ class PokeBattle_Move
          (opponent.pbOwnSide.effects[:WideGuard] && [:AllOpposing, :AllNonUsers].include?(attacker.pbTarget(self)))
         if @move == :UNLEASHEDPOWER
           @battle.pbDisplay(_INTL("The Interceptor's power broke through {1}'s Protect!", opponent.pbThis))
+        elsif @move == :FLAMESTRIKE
+          @battle.pbDisplay(_INTL("The powerful attack broke through {1}'s Protect!", opponent.pbThis))
         elsif !opponent.effects[:ProtectNegation]
           @battle.pbDisplay(_INTL("{1} couldn't fully protect itself!", opponent.pbThis))
           finalmult /= 4

@@ -2114,4 +2114,10 @@ ABILHASH = {
     :desc => "While this pokemon is active, foes are locked into one attack."
 },
 
+:TECHLINK => {
+    :ID => 384,
+    :name => "Tech Link",
+    :desc => "This pokemon has the combined effects of Technician and Skill Link."
+},
+
 }
