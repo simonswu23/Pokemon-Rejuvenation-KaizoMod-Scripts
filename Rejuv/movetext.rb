@@ -14400,6 +14400,20 @@ MOVEHASH = {
 	:desc => "The user attacks the target with a life-draining magic, healing itself and all allies."
 },
 
+:FLURRY => {
+    :ID => 1501,
+    :name => "Flurry",
+    :function => 0x00C,
+    :type => :ICE,
+    :category => :status,
+    :basedamage => 0,
+    :accuracy => 85,
+    :maxpp => 15,
+    :target => :SingleNonUser,
+    :magiccoat => true,
+    :desc => "The user sends a flurry of cold at the target, inflicting frostbite."
+},
+
 # Giga Moves
 
 :RESONANCE => {

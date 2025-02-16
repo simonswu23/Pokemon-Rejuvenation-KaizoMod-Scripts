@@ -596,6 +596,16 @@ class PokeBattle_Move_00C < PokeBattle_Move
     end
     return false
   end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    if id == :FLURRY
+      @battle.pbAnimation(:POWDERSNOW,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
+  end
 end
 
 ################################################################################

@@ -5517,8 +5517,10 @@ class PokeBattle_AI
 
   def beatupcode(score) # only partner else multihit is used
     return 0 if @battle.pbPokemonCount(@battle.pbPartySingleOwner(@attacker.index))<1
-    return 0 if @opponent.ability != :JUSTIFIED || @opponent.stages[PBStats::ATTACK]>3 || !@opponent.moves.any? {|moveloop| !moveloop.nil? && moveloop.pbIsPhysical?()} || pbRoughDamage > @opponent.hp ||
-                @opponent.ability != :STAMINA || !@opponent.moves.any? { |moveloop| !moveloop.nil? && moveloop.move == :RAGEFIST }
+    return 0 if @opponent.ability != :JUSTIFIED || @opponent.stages[PBStats::ATTACK]>3 || !@opponent.moves.any? {|moveloop| !moveloop.nil? && moveloop.pbIsPhysical?()} || pbRoughDamage > @opponent.hp
+    return 0 if @opponent.ability != :STAMINA || @opponent.stages[PBStats::DEFENSE]>3
+    return 999 if ragefisthelper()
+    # return 0 if !ragefisthelper()
     score = 100-score
     if pbAIfaster?(nil, nil, @opponent, @attacker.pbOpposing1) && pbAIfaster?(nil, nil, @opponent, @attacker.pbOpposing2)
       score*=1.3
@@ -5526,6 +5528,10 @@ class PokeBattle_AI
       score*=0.7
     end
     return score
+  end
+
+  def ragefisthelper()
+    return true if @opponent.moves.any? { |moveloop| !moveloop.nil? && moveloop.move == :RAGEFIST }
   end
 
   def hypercode()

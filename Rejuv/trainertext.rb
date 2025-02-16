@@ -17523,7 +17523,7 @@ TEAMARRAY = [{
 :items => [:INTELEONCORE],
 :mons => [{
 	:species => :ANNIHILAPE,
-	:level => 53,
+	:level => 52,
 	:item => :LEFTOVERS,
 	:moves => [:RAGEFIST,:DRAINPUNCH,:BULKUP,:TAUNT],
 	:ability => :DEFIANT,
@@ -17545,7 +17545,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :DHELMISE,
-	:level => 55,
+	:level => 54,
 	:item => :ASSAULTVEST,
 	:moves => [:POWERWHIP,:THUNDER,:ANCHORSHOT,:MUDDYWATER],
 	:ability => :LIGHTNINGROD,
@@ -17558,7 +17558,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :KILOWATTREL,
-	:level => 53,
+	:level => 51,
 	:item => :FLYINIUMZ,
 	:moves => [:DISCHARGE,:THUNDER,:HURRICANE,:TAILWIND],
 	:ability => :COMPETITIVE,
@@ -17569,8 +17569,8 @@ TEAMARRAY = [{
 },
 {
 	:species => :BASCULEGION,
-	:level => 53,
-	:moves => [:FLIPTURN,:WAVECRASH,:LASTRESPECTS,:AQUAJET],
+	:level => 51,
+	:moves => [:RAINDANCE,:WAVECRASH,:LASTRESPECTS,:AQUAJET],
 	:ability => :SWIFTSWIM,
 	:gender => "M",
 	:item => :LIFEORB,
@@ -17580,7 +17580,7 @@ TEAMARRAY = [{
 },
 {
 	:species => :INTELEON,
-	:level => 54,
+	:level => 52,
 	:item => :DAMPROCK,
 	:moves => [:SNIPESHOT,:SUCKERPUNCH,:ICEBEAM,:RAINDANCE],
 	:ability => :DRIZZLE,

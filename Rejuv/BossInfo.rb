@@ -610,7 +610,7 @@ BOSSINFOHASH = {
     :BELIAL => {
         :name => "Belial", # nickname
         :entryText => "A feisty Volcarona appeared!",
-        :shieldCount => 3, # number of shields
+        :shieldCount => 4, # number of shields
         :barGraphic => "",
         :immunities => { # any immunities to things 
             :moves => [],
@@ -618,66 +618,99 @@ BOSSINFOHASH = {
         },
         :moninfo => { # pokemon details
             :species => :VOLCARONA,
-            :level => 50,
+            :level => 55,
             :item => :LEFTOVERS,
-            :moves => [:MYSTICALFIRE,:BUGBUZZ,:GIGADRAIN,:SUNNYDAY],
-            :ability => :FLAMEBODY,
+            :moves => [:FIERYDANCE,:BUGBUZZ,:GIGADRAIN,:QUIVERDANCE],
+            :ability => :DESOLATELAND,
             :nature => :MODEST,
             :gender => "M",
             :iv => 31,
             :happiness => 255,
-            :ev => [0,0,4,252,0,252]
+            :ev => [252,252,252,252,252,252]
         },
         :sosDetails =>  { # pokemon details
-        :activationRequirement => "@battle.battlers[battlerIndex].shieldCount == 0",
-        :totalMonCount => 2,
+        :activationRequirement => "@battle.battlers[battlerIndex].shieldCount <= 4",
+        :totalMonCount => 5,
         :continuous => true,
         :moninfos => {
             1 => {
                 :species => :SHUCKLE,
                 :level => 40,
                 :item => :MENTALHERB,
-                :moves => [:STEALTHROCK,:INFESTATION,:STICKYWEB,:HELPINGHAND],
+                :moves => [:POWERSPLIT,:STEALTHROCK,:STICKYWEB,:HELPINGHAND],
                 :ability => :STURDY,
                 :nature => :BOLD,
                 :iv => 31,
                 :happiness => 255,
             },
             2 => {
-                :species => :MOTHIM,
+                :species => :VIVILLON,
                 :level => 40,
-                :item => :BUGGEM,
-                :moves => [:STRUGGLEBUG,:POISONPOWDER,:PROTECT,:LUNGE],
-                :ability => :TINTEDLENS,
+                :item => :DARKINIUMZ,
+                :moves => [:PUNISHMENT,:RAGEPOWDER,:TAILWIND,:LOVELYKISS],
+                :ability => :BADDREAMS,
+                :iv => 31,
+                :happiness => 255,
+                :ev => [252,252,252,252,252,252]
+            },
+            3 => {
+                :species => :PARASECT,
+                :level => 40,
+                :item => :SYNTHETICSEED,
+                :moves => [:SPORE,:RAGEPOWDER,:WIDEGUARD,:POLLENPUFF],
+                :ability => :EFFECTSPORE,
+                :iv => 31,
+                :happiness => 255,
+            },
+            4 => {
+                :species => :VOLBEAT,
+                :level => 40,
+                :item => :SYNTHETICSEED,
+                :moves => [:CHARM,:STRUGGLEBUG,:HELPINGHAND,:THUNDERWAVE],
+                :ability => :PRANKSTER,
+                :iv => 31,
+                :happiness => 255,
+            },
+            5 => {
+                :species => :ILLUMISE,
+                :level => 40,
+                :item => :SYNTHETICSEED,
+                :moves => [:CAPTIVATE,:HELPINGHAND,:SUNNYDAY,:STRUGGLEBUG],
+                :ability => :PRANKSTER,
                 :iv => 31,
                 :happiness => 255,
             },
         },
     },
         :onBreakEffects => { # in order of shield count, with the highest value being the first shield broken and the lowest the last
+            4 => {
+                :fieldChange => :INFERNAL, # field changes
+                :fieldChangeMessage => "The field broke into a hellish inferno!",
+                :abilitychange => :FLASHFIRE,
+                :threshold => 0, # if desired, shield can be broken at higher hp% than 0
+                :itemchange => :ELEMENTALSEED, # item that is given upon breaking shield
+            },
             3 => {
                 :threshold => 0, # if desired, shield can be broken at higher hp% than 0
-                :weatherChange => :SUNNYDAY, # weather to applyes
-                :weatherCount => 5, # weather turncount
-                :weatherChangeMessage => "The Sun is bright!", # weather message
-                :weatherChangeAnimation => "Sunny", # string of "Rain", "Sunny","Hail","Sandstorm"
                 :itemchange => :LEFTOVERS, # item that is given upon breaking shield
-            },
-            2 => {
-                :threshold => 0, # if desired, shield can be broken at higher hp% than 0
                 :bosssideChanges => :Safeguard,
                 :bosssideChangeCount => 5,
                 :bosssideChangeMessage => "Belial shrouded itself with a Safeguard!", # message that plays for the effect
                 :statusCure => true, # if status is cured when shield is broken
                 :statDropCure => true, # if statdrops are negated when shield is broken
-                :itemchange => :LEFTOVERS, # item that is given upon breaking shield
+            },
+            2 => {
+                :threshold => 0, # if desired, shield can be broken at higher hp% than 0
+                :fieldChange => :FLOWERGARDEN3, # field changes
+                :fieldChangeMessage => "The field is covered in flowers!", # message that plays when the field is changes
+                :abilitychange => :SWARM,
+                :itemchange => :SYNTHETICSEED, # item that is given upon breaking shield
+                :movesetUpdate => [:BUGBUZZ,:FIERYDANCE,:PETALDANCE,:QUIVERDANCE],
             },
             1 => {
                 :threshold => 0, # if desired, shield can be broken at higher hp% than 0
-                :abilitychange => :SWARM,
-                :fieldChange => :FLOWERGARDEN3, # field changes
-                :fieldChangeMessage => "The field is covered in flowers!", # message that plays when the field is changes
-                :itemchange => :LEFTOVERS, # item that is given upon breaking shield
+                :itemchange => :BUGINIUMZ, # item that is given upon breaking shield
+                :instantMove => [:BLOOMDOOM, 0],
             },
         }
     },  

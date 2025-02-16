@@ -81,6 +81,9 @@
   ## New Attacks
   - Chain Drain:
     - Fairy, special, 75 bp, 100 accuracy, restores 1/16th hp to all allies (even those in party) after use
+  - Flurry:
+    - Ice, status, 85 accuracy, inflicts frostbite on the target
+    - Learnset: Bergmite (egg), Spheal (egg)
 
 # Pokemon
   ## Giga Pokemon
@@ -158,6 +161,7 @@
   - Terapagos and Ogerpon may now mega evolve regardless of item, and do not require an item slot to do so
   - Pokemon now obey you up to 5 levels above the level cap
   - Captivate removed as a TM (only pokemon that learn it naturally can get access)
+  - Terrains (Electric, Misty, Psychic, Grassy) now override each other and cannot be manually set as field effects
 
 
 # TODO:

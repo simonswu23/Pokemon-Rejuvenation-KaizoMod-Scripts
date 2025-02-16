@@ -272,11 +272,19 @@ class PokeBattle_Battle
   def setField(fieldeffect, temp = 0, add_on: false, growth: false)
     return if @field.effect == fieldeffect
 
-    if Rejuv && [:ELECTERRAIN, :GRASSY, :MISTY, :PSYTERRAIN].include?(fieldeffect) && temp > 0 && @field.effect != :INDOOR
+    if Rejuv && [:ELECTERRAIN, :GRASSY, :MISTY, :PSYTERRAIN].include?(fieldeffect) && temp > 0 && (@field.effect != :INDOOR && !KAIZOMOD)
       @state.effects[fieldeffect] = temp
       quarkdriveCheck
+
+      # overrides all other terrains
+      for terrain in [:ELECTERRAIN,:GRASSY,:MISTY,:PSYTERRAIN]
+        if (terrain != fieldeffect && !KAIZOMOD)
+          @state.effects[terrain] = 0
+        end
+      end
       return
     end
+
     animfieldref = @field.effect
     @field.effect = fieldeffect
     @field.checkPermCondition(self)

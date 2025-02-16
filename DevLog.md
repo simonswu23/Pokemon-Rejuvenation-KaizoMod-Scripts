@@ -27,10 +27,13 @@
 
 # Progress
 
+- 2/16/25
+  - Flurry -> update learnset for pokemon
+
 - 2/7/25 (@SWu)
   - Lowkey I should figure out if/how neutralizing gas works
   - Solar Power bug? (still taking damage)
-  - Beat Up x Rage Fist AI code -- needs fixing (increased priorityscore + check to see if beat up has already been used once, also may hardcode for Neved fight?)
+  - Beat Up x Rage Fist AI code -- needs fixing (increased priorityscore + check to see if beat up has already been used once, also may hardcode for Neved fight?) + also patch for stamina
   - Dragon Darts bug in Doubles (checkType issue) -- I just removed it for now, not sure how relevant the score boost actually is
   - touched the ally Gigaband code check (maybe this fucks things up idk)
 
