@@ -304,6 +304,9 @@ class PokeBattle_Battler
           @attack *= 1.5 if @gear == 1
           @spatk *= 1.5 if @gear == 1
           @speed *=2 if @gear == 0
+        when :EMBOAR 
+          @totalhp *= 2
+          @hp *= 2
         end
       end
 

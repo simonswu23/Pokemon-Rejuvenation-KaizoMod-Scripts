@@ -2,7 +2,6 @@
 # Rejuvenation custom move functions
 # Venam's Kiss is handled in 005 (causes Poison) and pbTypeModifiers
 # Multipulse is handled in 09F (Judgment/Multiattack)
-# Barbed Web is handled in 005 (cauese Poison)
 # Cold Truth is handled in 0B7 (Torment)
 # Uproot is handled in 04F (drops Spdef by 2)
 # Heavenly Wing is handled in 050 (Clear Smog)
@@ -748,7 +747,12 @@ class PokeBattle_Move_80E < PokeBattle_Move
     if opponent.pbCanReduceStatStage?(PBStats::SPATK,false)
       opponent.pbReduceStat(PBStats::SPATK,2,abilitymessage:false, statdropper: attacker)
     end
-    opponent.effects[:ChtonicMalady] = 5
+    opponent.effects[:ChtonicMalady] = 5 if !KAIZOMOD
+    pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
+    if (opponent.effects[:PerishSong] == 0 && opponent.ability != :GOODASGOLD)
+     opponent.effects[:PerishSong] = 6
+     opponent.effects[:PerishSongUser] = attacker.index
+    end
     @battle.pbDisplay(_INTL("{1}'s end is drawing close!",opponent.pbThis))
     return 0
   end
@@ -1086,5 +1090,23 @@ class PokeBattle_Move_1004 < PokeBattle_Move
     return if !showanimation
     # replacement anim until proper one is made
     @battle.pbAnimation(:BLASTBURN,attacker,opponent,hitnum)
+  end
+end
+
+### Chi Strike
+class PokeBattle_Move_1004 < PokeBattle_Move
+
+
+  def pbAdditionalEffect(attacker,opponent)
+    worked = false
+
+    @battle.pbDisplay(_INTL("fucking do your work simon!",opponent.pbThis))
+    return worked
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:ALLOUTPUMMELING,attacker,opponent,hitnum)
   end
 end

@@ -48,12 +48,17 @@
 
 
 # Crests
+
+  ## Updates
   - Druddigon Crest healing improved to 1/8
   - Cicinno and Ledian Crests can now trigger side effects for all hits
   - Corviknight Crest: clears hazards and screens at the end of each turn
+  - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
+
+  ## New
   - Cacturne Crest: raises offenses by 1 if attacking first
   - Klinklang Crest: switches between speed and power mode (x2 speed and magnet rise, and x1.5 attack and special attack) using Shift Gear and Gear Up
-  - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
+  - Emboar Crest: doubles HP stat, and Attack stat scales with remaining HP (starting at x2)
 
 # Items
   - Pinch berries now heal 50% hp
@@ -145,13 +150,22 @@
     - Pokemon with Swarm get +1 attack and special attack on entry
 
   - Frozen Dimensional Field
-    - Unnerve now lowers foes attack and special attack by 1 on entry instead of speed
+    - Unnerve now additionally lowers foes attack and special attack by 1 on entry instead of speed
+    - x1.5 boost to ice attacks, x1.3 boost to dark
+    - Chilling Water becomes part Ice
+    - Moves that become part Ice have their base power additionally multiplied by x1.3 instead of x1.2
+  
+  - Dimensional Field
+    - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
   
   - Haunted
     - Cursed Body always activates
 
   - Cave
     - Dig is a single-turn move
+
+  - Big Top Arena
+    - Synthetic Seed boosts both Attack and Defense on entry
 
 # Other
   - Removed data chip cost to enter password
@@ -162,7 +176,6 @@
   - Pokemon now obey you up to 5 levels above the level cap
   - Captivate removed as a TM (only pokemon that learn it naturally can get access)
   - Terrains (Electric, Misty, Psychic, Grassy) now override each other and cannot be manually set as field effects
-
 
 # TODO:
   - Signature pokemon documentation

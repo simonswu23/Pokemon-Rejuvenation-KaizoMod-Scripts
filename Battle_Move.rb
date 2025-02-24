@@ -1545,11 +1545,11 @@ class PokeBattle_Move
       when :TOUGHCLAWS    then basemult *= 1.3 if contactMove?
       when :IRONFIST
         if @battle.FE == :CROWD
-          basemult *= 1.2 if punchMove?
+          basemult *= 1.5 if punchMove?
         else
-          basemult *= 1.2 if punchMove?
+          basemult *= 1.3 if punchMove?
         end
-      when :RECKLESS      then basemult *= 1.2 if @recoil > 0 || [0x130, 0x10B, 0x506].include?(@function) # Shadow End, High Jump Kick, Axe Kick
+      when :RECKLESS      then basemult *= 1.3 if @recoil > 0 || [0x130, 0x10B, 0x506].include?(@function) # Shadow End, High Jump Kick, Axe Kick
       when :FLAREBOOST    then basemult *= 1.5 if (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && pbIsSpecial?(type) && @battle.FE != :FROZENDIMENSION
       when :TOXICBOOST
         if (attacker.status == :POISON || @battle.FE == :CORROSIVE || @battle.FE == :CORROSIVEMIST || @battle.FE == :WASTELAND || @battle.FE == :MURKWATERSURFACE) && pbIsPhysical?(type)
@@ -1671,6 +1671,8 @@ class PokeBattle_Move
           when 2 then basemult *= 1.2 if @type == :NORMAL && type == :GROUND
           when 3 then basemult *= 1.2 if @type == :NORMAL && type == :ICE
         end
+      # Kaizo Mod
+      when :EMBOAR then basemult *= (2 * (attacker.hp * 1.0 / attacker.totalhp))
     end
     #type mods
     case type
@@ -2430,25 +2432,26 @@ class PokeBattle_Move
         end
       end
     end
+    ruinmult = (@battle.FE == :FROZENDIMENSION || @battle.FE == :DIMENSONAL) && !KAIZOMOD ? 0.67 : 0.75
     # Gen 9 Mod - Added Ruinous Abilities (This is scuffed imo) --> prolly should do it in finalmult instead
     if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && pbIsSpecial?(type) 
-      atkmult *= 0.75
+      atkmult *= ruinmult
     end
     if (attacker.pbOpposing1.ability == :TABLETSOFRUIN || attacker.pbOpposing2.ability == :TABLETSOFRUIN || attacker.pbPartner.ability == :TABLETSOFRUIN) && attacker.ability != :TABLETSOFRUIN && pbIsPhysical?(type)
-      atkmult *= 0.75
+      atkmult *= ruinmult
     end
     if ((opponent.pbOpposing1.ability == :SWORDOFRUIN || opponent.pbOpposing2.ability == :SWORDOFRUIN || opponent.pbPartner.ability == :SWORDOFRUIN) && opponent.ability != :SWORDOFRUIN)
       if @battle.state.effects[:WonderRoom] != 0 && pbIsSpecial?(type)
-        defmult *= 0.75
+        defmult *= ruinmult
       elsif @battle.state.effects[:WonderRoom] == 0 && pbIsPhysical?(type)
-        defmult *= 0.75
+        defmult *= ruinmult
       end
     end
     if ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN) 
       if @battle.state.effects[:WonderRoom] != 0 && pbIsPhysical?(type)
-        defmult *= 0.75
+        defmult *= ruinmult
       elsif @battle.state.effects[:WonderRoom] == 0 && pbIsSpecial?(type)
-        defmult *= 0.75
+        defmult *= ruinmult
       end
     end
     finalmult = pbModifyDamage(finalmult, attacker, opponent)

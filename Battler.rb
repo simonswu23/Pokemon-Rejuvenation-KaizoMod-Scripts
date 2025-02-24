@@ -334,7 +334,13 @@ class PokeBattle_Battler
   end
 
   def item=(value)
-    @unburdened = true if @ability == :UNBURDEN && @item && value.nil?
+    if (@ability == :UNBURDEN && @item && value.nil?)
+      if (!KAIZOMOD)
+        @unburdened = true
+      elsif (self.pbCanIncreaseStatStage?(PBStats::SPEED, true))
+        self.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: self)
+      end
+    end
     @item=value
     @pokemon.item=value if @pokemon
   end
@@ -913,13 +919,7 @@ class PokeBattle_Battler
     stage = @stages[PBStats::SPEED] + 6
     speed = (speed * PBStats::StageMul[stage]).floor
     if @unburdened
-      if (KAIZOMOD)
-        if self.item != nil
-          @unburdened = false
-        elsif self.pbCanIncreaseStatStage?(PBStats::SPEED, true)
-          self.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
-        end
-      else
+      if (!KAIZOMOD)
         if (self.ability != :UNBURDEN) || self.item != nil
           @unburdened = false
         else
@@ -4852,8 +4852,8 @@ class PokeBattle_Battler
     # !!! Dazzling / Queenly Majesty does in fact block priority spread moves - tested on showdown using gale wings Air Cutter against Tsareena with a partner.
     #     What it doesn't block is whole side or whole field affecting moves - Spikes and Grassy Terrain as respective examples.
     #     Bulbapedia's wording is confusing and can be easily misinterpreted as not blocking priority spread moves which is incorrect.
-    if ((((target.ability == :DAZZLING || target.ability == :QUEENLYMAJESTY || (@battle.FE == :STARLIGHT && target.ability == :MIRRORARMOR)) || target.ability == :ARMORTAIL || # Gen 9 Mod Added Armor Tail
-      (target.pbPartner.ability == :DAZZLING || target.pbPartner.ability == :QUEENLYMAJESTY || (@battle.FE == :STARLIGHT && target.pbPartner.ability == :MIRRORARMOR) || target.pbPartner.ability == :ARMORTAIL )) && !target.moldbroken) ||
+    if ((((target.ability == :DAZZLING || target.ability == :QUEENLYMAJESTY || (@battle.FE == :STARLIGHT && target.ability == :MIRRORARMOR)) || target.ability == :ARMORTAIL || target.ability == :QUICKREFLEX || # Gen 9 Mod Added Armor Tail
+      (target.pbPartner.ability == :DAZZLING || target.pbPartner.ability == :QUEENLYMAJESTY || (@battle.FE == :STARLIGHT && target.pbPartner.ability == :MIRRORARMOR) || target.pbPartner.ability == :ARMORTAIL || target.pbPartner.ability == :QUICKREFLEX)) && !target.moldbroken) ||
       @battle.FE == :PSYTERRAIN && !target.isAirborne?) && target.pbPartner != user
       if (basemove.priorityCheck(user) > 0) || (user.ability == :PRANKSTER && !basemove.zmove && !flags[:instructed] && @battle.choices[user.index][2] != basemove)
         @battle.pbDisplay(_INTL("{1} wasn't affected!", target.pbThis))

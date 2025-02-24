@@ -1565,7 +1565,7 @@ MONHASH = {
   },
 
     "Giga Form" => {
-      :BaseStats => [35, 60, 140, 55, 140, 30],
+      :BaseStats => [55, 80, 50, 75, 60, 120],
       :Abilities => [:STATIC],
       :Height => 210,
       :Weight => 2456,
@@ -3556,7 +3556,7 @@ MONHASH = {
   },
 
     "Giga Form" => {
-      :BaseStats => [40, 120, 65, 40, 65, 110],
+      :BaseStats => [50, 95, 50, 60, 90, 90],
       :Abilities => [:TECHNICIAN],
       :Height => 330,
       :Weight => 2456,
@@ -9439,7 +9439,7 @@ MONHASH = {
   "Giga Form" => {
     # +100 BST
     :Type2 => :FAIRY,
-    :BaseStats => [55, 55, 80, 85, 85, 75],
+    :BaseStats => [65, 75, 70, 65, 85, 75],
     :Abilities => [:DEBUTANTE],
     :Height => 180,
     :Weight => 2456,
@@ -11012,16 +11012,16 @@ MONHASH = {
   },
 
   "Zetta's Typhlosion (Intense)" => {
-    # +60 BST
+    # +50 BST
     :Type2 => :GROUND,
-    :BaseStats => [73, 104, 78, 139, 85, 115],
+    :BaseStats => [73, 104, 78, 139, 85, 105],
     :Abilities => [:DROUGHT],
   },
 
   "Zetta's Typhlosion (Kaizo)" => {
-    # +120 BST
+    # +100 BST
     :Type2 => :GROUND,
-    :BaseStats => [73, 124, 88, 149, 95, 125],
+    :BaseStats => [73, 114, 88, 149, 95, 115],
     :Abilities => [:DROUGHT],
 },
 
@@ -23368,7 +23368,7 @@ MONHASH = {
       :Type2 => :NORMAL,
       :BaseStats => [64, 115, 65, 83, 63, 65],
       :EVs => [0, 2, 0, 0, 0, 0],
-      :Abilities => [:INSOMNIA, :FRISK],
+      :Abilities => [:UNNERVE, :FRISK],
       :HiddenAbilities => :CURSEDBODY,
       :GrowthRate => :Fast,
       :GenderRatio => :FemHalf,
@@ -23995,14 +23995,14 @@ MONHASH = {
   },
 
   "Neved's Glalie (Intense)" => {
-    # +60 BST
+    # +50 BST
     :Type2 => :DARK,
-    :BaseStats => [90, 90, 90, 90, 90, 90],
+    :BaseStats => [80, 90, 90, 90, 90, 90],
     :Abilities => [:MELODRAMATIC],
   },
 
   "Mega Form (Neved Intense)" => {
-    :BaseStats => [90, 130, 90, 130, 90, 110],
+    :BaseStats => [80, 130, 90, 130, 90, 110],
     :Abilities => [:REFRIGERATE],
     :BaseEXP => 203,
     :Height => 21,
@@ -24010,14 +24010,14 @@ MONHASH = {
 },
 
   "Neved's Glalie (Kaizo)" => {
-    # +120 BST
+    # +100 BST
     :Type2 => :DARK,
-    :BaseStats => [100,100,100,100,100,100],
+    :BaseStats => [80,100,100,100,100,100],
     :Abilities => [:MELODRAMATIC],
   },
 
   "Mega Form (Neved Kaizo)" => {
-    :BaseStats => [100,140,100,140,100,120],
+    :BaseStats => [80,140,100,140,100,120],
     :Abilities => [:REFRIGERATE],
     :BaseEXP => 203,
     :Height => 21,
@@ -24214,14 +24214,14 @@ MONHASH = {
   },
 
   "Angie's Walrein (Intense)" => {
-    # +60 BST
-    :BaseStats => [120, 100, 100, 120, 100, 50],
+    # +50 BST
+    :BaseStats => [110, 90, 100, 110, 100, 60],
     :Abilities => [:ICEBODY],
   },
 
   "Angie's Walrein (Kaizo)" => {
-    # +120 BST
-    :BaseStats => [120, 120, 120, 120, 120, 50],
+    # +100 BST
+    :BaseStats => [120, 100, 110, 120, 110, 60],
     :Abilities => [:ICEBODY],
   },
 
@@ -25877,7 +25877,20 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Texen's Infernape (Intense)" => {
+    # +50 BST
+    :BaseStats => [76, 114, 81, 114, 81, 118],
+    :Abilities => [:QUICKREFLEX],
+  },
+
+  "Texen's Infernape (Kaizo)" => {
+    # +100 BST
+    :BaseStats => [76, 124, 91, 124, 91, 128],
+    :Abilities => [:QUICKREFLEX],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :PIPLUP => {
@@ -29379,15 +29392,15 @@ MONHASH = {
   },
 
   "Keta's Lucario (Intense - Mega)" => {
-    # +100 BST
-    :BaseStats => [70, 128, 100, 145, 80, 122],
-    :Abilities => [:PUREPOWER],
+    # +150 BST
+    :BaseStats => [70, 155, 98, 150, 80, 122],
+    :Abilities => [:ADAPTABILITY],
   },
 
   "Keta's Lucario (Kaizo - Mega)" => {
-    # +120 BST
-    :BaseStats => [70, 138, 100, 155, 80, 122],
-    :Abilities => [:PUREPOWER],
+    # +200 BST
+    :BaseStats => [70, 185, 118, 150, 80, 122],
+    :Abilities => [:ADAPTABILITY],
   },
 
   :OnCreation => {},
@@ -37308,16 +37321,16 @@ MONHASH = {
   },
 
   "Madelis' Cinccino (Intense)" => {
-    # +60 BST
+    # +50 BST
     :Type2 => :ROCK,
-    :BaseStats => [75, 115, 80, 75, 60, 125],
+    :BaseStats => [75, 115, 80, 65, 60, 125],
     :Abilities => [:TECHLINK],
   },
 
   "Madelis' Cinccino (Kaizo)" => {
-    # +120 BST
+    # +100 BST
     :Type2 => :ROCK,
-    :BaseStats => [75, 125, 80, 105, 60, 145],
+    :BaseStats => [75, 125, 80, 85, 60, 145],
     :Abilities => [:TECHLINK],
   },
 
@@ -39006,7 +39019,7 @@ MONHASH = {
   },
 
   "Jenner's Klinklang (Intense)" => {
-    # +100 BST
+    # +50 BST
     :Type2 => :ELECTRIC,
     :BaseStats => [60, 110, 120, 90, 90, 100],
     :Abilities => [:NOGUARD],
@@ -42692,14 +42705,14 @@ MONHASH = {
   },
 
   "Ren's Greninja (Intense)" => {
-    # +60 BST
-    :BaseStats => [72, 105, 77, 123, 71, 122],
+    # +50 BST
+    :BaseStats => [72, 115, 67, 123, 81, 122],
     :Abilities => [:PROTEAN],
   },
 
   "Ren's Greninja (Kaizo)" => {
-    # +120 BST
-    :BaseStats => [72, 135, 77, 143, 91, 132],
+    # +100 BST
+    :BaseStats => [72, 125, 77, 143, 81, 132],
     :Abilities => [:PROTEAN],
   },
 
@@ -50342,18 +50355,18 @@ MONHASH = {
 
 
   "Neved's Dhelmise (Intense)" => {
-    # +60 BST
+    # +50 BST
     :Type1 => :WATER,
     :Type2 => :STEEL,
-    :BaseStats => [70, 161, 140, 86, 90, 40],
+    :BaseStats => [70, 161, 120, 86, 90, 40],
     :Abilities => [:LIGHTNINGROD],
   },
 
   "Neved's Dhelmise (Kaizo)" => {
-    # +120 BST
+    # +100 BST
     :Type1 => :WATER,
     :Type2 => :STEEL,
-    :BaseStats => [70, 161, 130, 116, 120, 40],
+    :BaseStats => [70, 161, 130, 116, 100, 40],
     :Abilities => [:LIGHTNINGROD],
 },
 
@@ -58008,14 +58021,14 @@ MONHASH = {
   },
 
   "Rorrim's Quaquaval (Intense)" => {
-    # +60 BST
-    :BaseStats => [85, 120, 100, 105, 85, 95],
+    # +50 BST
+    :BaseStats => [85, 120, 100, 95, 85, 95],
     :Abilities => [:DANCER],
   },
 
   "Rorrim's Quaquaval (Kaizo)" => {
-    # +120 BST
-    :BaseStats => [85, 130, 120, 115, 95, 105],
+    # +100 BST
+    :BaseStats => [85, 130, 120, 95, 95, 105],
     :Abilities => [:DANCER],
 },
 

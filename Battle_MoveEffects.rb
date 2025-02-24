@@ -1280,8 +1280,8 @@ class PokeBattle_Move_023 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
-    attacker.effects[:FocusEnergy] = 2
-    attacker.effects[:FocusEnergy] = 3 if @battle.FE == :ASHENBEACH
+    attacker.effects[:FocusEnergy] += 2
+    attacker.effects[:FocusEnergy] += 3 if @battle.FE == :ASHENBEACH
     # Gen 9 Mod - Critical increase should be copied by Mirror Herb
     for i in 0...4
       next if attacker.index == i
@@ -1295,8 +1295,8 @@ class PokeBattle_Move_023 < PokeBattle_Move
   end
 
   def pbAdditionalEffect(attacker, opponent)
-    if attacker.effects[:FocusEnergy] < 2
-      attacker.effects[:FocusEnergy] = 2
+    if attacker.effects[:FocusEnergy] < 3
+      attacker.effects[:FocusEnergy] += 2
       @battle.pbDisplay(_INTL("{1} is getting pumped!", attacker.pbThis))
     end
     return true
@@ -1314,7 +1314,7 @@ class PokeBattle_Move_024 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
-    statchange = @battle.FE == :CROWD ? 2 : 1
+    statchange = @battle.FE == :CROWD || (KAIZOMOD && @battle.FE == :BIGTOP) ? 2 : 1
     for stat in [PBStats::ATTACK, PBStats::DEFENSE]
       attacker.pbIncreaseStat(stat, statchange, abilitymessage: false, statsource: attacker)
     end
@@ -12097,20 +12097,37 @@ end
 ################################################################################
 class PokeBattle_Move_907 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    if attacker.pbPartner.effects[:FocusEnergy]>=1
+    if attacker.pbPartner.effects[:FocusEnergy]>=1 && !KAIZOMOD
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
-    pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
-    attacker.pbPartner.effects[:FocusEnergy]=1
-    attacker.pbPartner.effects[:FocusEnergy]=2 if attacker.pbPartner.hasType?(:DRAGON)
-    @battle.pbDisplay(_INTL("{1}'s cheer pumped up {2}!",attacker.pbThis,attacker.pbPartner.pbThis))
-    # Gen 9 Mod - Critical increase should be copied by Mirror Herb and Opportunist
-    for i in 0...4
-      next if attacker.pbPartner.index == i
-      if @battle.battlers[i].item == :MIRRORHERB || @battle.battlers[i].ability == :OPPORTUNIST
-        @battle.battlers[i].effects[:FocusEnergy] = attacker.pbPartner.effects[:FocusEnergy]
-        @battle.pbDisplay(_INTL("{1} seized the opportunity to boost its own stats!",@battle.battlers[i].pbThis))
+    if (KAIZOMOD)
+      # Buffs both itself and partner, +2 CHR if dragon (+1 otherwise), additive
+      pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
+      inc = attacker.pbPartner.hasType?(:DRAGON) ? 2 : 1
+      attacker.pbPartner.effects[:FocusEnergy]+=inc
+      @battle.pbDisplay(_INTL("{1}'s cheer pumped up {2}!",attacker.pbThis,attacker.pbPartner.pbThis))
+      # Gen 9 Mod - Critical increase should be copied by Mirror Herb and Opportunist
+      for i in 0...4
+        next if attacker.pbPartner.index == i
+        if @battle.battlers[i].item == :MIRRORHERB || @battle.battlers[i].ability == :OPPORTUNIST
+          @battle.battlers[i].effects[:FocusEnergy] = attacker.pbPartner.effects[:FocusEnergy]
+          @battle.pbDisplay(_INTL("{1} seized the opportunity to boost its own stats!",@battle.battlers[i].pbThis))
+        end
+      end
+      pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
+      inc = attacker.hasType?(:DRAGON) ? 2 : 1
+      attacker.effects[:FocusEnergy]+=inc
+      @battle.pbDisplay(_INTL("{1}'s cheer pumped itself up!",attacker.pbThis))
+    else
+      attacker.pbPartner.effects[:FocusEnergy]=2 if attacker.pbPartner.hasType?(:DRAGON)
+      # Gen 9 Mod - Critical increase should be copied by Mirror Herb and Opportunist
+      for i in 0...4
+        next if attacker.pbPartner.index == i
+        if @battle.battlers[i].item == :MIRRORHERB || @battle.battlers[i].ability == :OPPORTUNIST
+          @battle.battlers[i].effects[:FocusEnergy] = attacker.pbPartner.effects[:FocusEnergy]
+          @battle.pbDisplay(_INTL("{1} seized the opportunity to boost its own stats!",@battle.battlers[i].pbThis))
+        end
       end
     end
     return 0

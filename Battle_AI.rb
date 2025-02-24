@@ -1226,7 +1226,7 @@ class PokeBattle_AI
       score *= 0 if !aifaster && @opponent.effects[:TwoTurnAttack] != 0
       score *= 0 if @battle.FE == :PSYTERRAIN && !@opponent.isAirborne?
       # Gen 9 Mod - Added Armor Tail
-      score *= 0 if @opponent.ability == :DAZZLING || @opponent.ability == :ARMORTAIL || @opponent.ability == :QUEENLYMAJESTY || @opponent.pbPartner.ability == :DAZZLING || @opponent.pbPartner.ability == :ARMORTAIL || @opponent.pbPartner.ability == :QUEENLYMAJESTY || ((opponent.ability == :MIRRORARMOR || opponent.pbPartner.ability == :MIRRORARMOR) && @battle.FE == :STARLIGHT)
+      score *= 0 if @opponent.ability == :DAZZLING || @opponent.ability == :ARMORTAIL || @opponent.ability == :QUICKREFLEX || @opponent.ability == :QUEENLYMAJESTY || @opponent.pbPartner.ability == :DAZZLING || @opponent.pbPartner.ability == :ARMORTAIL || @opponent.pbPartner.ability == :QUICKREFLEX || @opponent.pbPartner.ability == :QUEENLYMAJESTY || ((opponent.ability == :MIRRORARMOR || opponent.pbPartner.ability == :MIRRORARMOR) && @battle.FE == :STARLIGHT)
       score *= 0.2 if (checkAImoves([:QUICKGUARD]) || checkAImoves([:QUICKGUARD], getAIMemory(@opponent.pbPartner))) && @attacker.pbTarget(move) != :User
       PBDebug.log(sprintf("Priority Check End")) if $INTERNAL
     elsif @move.priority < 0 && pbAIfaster?()
@@ -9772,7 +9772,7 @@ class PokeBattle_AI
           when :MERCILESS
             abilityscore+=50 if @opponent.status== :POISON || (@opponent.pbPartner.hp > 0 && @opponent.pbPartner.status== :POISON)
           # Gen 9 Mod - Added  Armour Tail
-          when :DAZZLING,:QUEENLYMAJESTY, :ARMORTAIL
+          when :DAZZLING,:QUEENLYMAJESTY,:ARMORTAIL,:QUICKREFLEX
             abilityscore+=20 if checkAIpriority(aimem)
             abilityscore+=20 if checkAIpriority(aimem2) && @mondata.skill>=BESTSKILL
           when :SANDSTREAM,:SNOWWARNING,:SANDSTREAM,:SNOWWARNING,:SANDSPIT
@@ -11551,10 +11551,11 @@ class PokeBattle_AI
       end
       
       # Gen 9 Mod - Beads of Ruin, Sword of Ruin
+      ruinmult = (@battle.FE == :FROZENDIMENSION || @battle.FE == :DIMENSONAL) && !KAIZOMOD ? 0.67 : 0.75
       if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && move.pbIsSpecial?(type) 
-        basedamage=(basedamage*0.75).round
+        basedamage=(basedamage*ruinmult).round
       elsif (attacker.pbOpposing1.ability == :TABLETSOFRUIN || attacker.pbOpposing2.ability == :TABLETSOFRUIN || attacker.pbPartner.ability == :TABLETSOFRUIN) && attacker.ability != :TABLETSOFRUIN && move.pbIsPhysical?(type)
-        basedamage=(basedamage*0.75).round
+        basedamage=(basedamage*ruinmult).round
       end
 
       ############ PARTNER ABILITY CHECKS ############
@@ -11737,6 +11738,8 @@ class PokeBattle_AI
               when 2 then basedamage *= 1.2 if move.type == :NORMAL && type == :GROUND
               when 3 then basedamage *= 1.2 if move.type == :NORMAL && type == :ICE
             end
+          elsif attacker.crested == :EMBOAR
+            basedamage *= (2 * (attacker.hp * 1.0 / attacker.totalhp))
           end
         end
       end
@@ -11925,17 +11928,18 @@ class PokeBattle_AI
       elsif opponent.ability == :PROTOSYNTHESIS
         defense = (defense * 1.3).round if (opponent.effects[:Protosynthesis][0] == PBStats::DEFENSE && move.pbIsPhysical?(type)) || (opponent.effects[:Protosynthesis][0] == PBStats::SPDEF && move.pbIsSpecial?(type))
       # Gen 9 Mod - Beads of Ruin, Sword of Ruin
+      ruinmult = (@battle.FE == :FROZENDIMENSION || @battle.FE == :DIMENSONAL) && !KAIZOMOD ? 0.67 : 0.75
       elsif ((opponent.pbOpposing1.ability == :SWORDOFRUIN || opponent.pbOpposing2.ability == :SWORDOFRUIN || opponent.pbPartner.ability == :SWORDOFRUIN) && opponent.ability != :SWORDOFRUIN)
         if @battle.state.effects[:WonderRoom] != 0 && move.pbIsSpecial?(type)
-          defense = (defense * 0.75).round
+          defense = (defense * ruinmult).round
         elsif @battle.state.effects[:WonderRoom] == 0 && move.pbIsPhysical?(type)
-          defense = (defense * 0.75).round
+          defense = (defense * ruinmult).round
         end
       elsif ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN) 
         if @battle.state.effects[:WonderRoom] != 0 && move.pbIsPhysical?(type)
-          defense = (defense * 0.75).round
+          defense = (defense * ruinmult).round
         elsif @battle.state.effects[:WonderRoom] == 0 && move.pbIsSpecial?(type)
-          defense = (defense * 0.75).round
+          defense = (defense * ruinmult).round
         end
       end
       if (@battle.pbWeather == :SUNNYDAY || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED || attacker.crested == :CHERRIM || attacker.pbPartner.crested == :CHERRIM) && move.pbIsSpecial?(type) && @battle.FE != :GLITCH
@@ -12727,9 +12731,9 @@ class PokeBattle_AI
     if move.pbIsPriorityMoveAI(attacker)
       return false if (@battle.FE == :PSYTERRAIN || @battle.state.effects[:PSYTERRAIN] > 0) && !opponent.isAirborne?
       # Gen 9 Mod - Armor Tail
-      return false if opponent.ability == :DAZZLING || opponent.ability == :ARMORTAIL ||opponent.ability == :QUEENLYMAJESTY || (opponent.ability == :MIRRORARMOR && @battle.FE == :STARLIGHT)
+      return false if opponent.ability == :DAZZLING || opponent.ability == :ARMORTAIL || opponent.ability == :QUICKREFLEX ||opponent.ability == :QUEENLYMAJESTY || (opponent.ability == :MIRRORARMOR && @battle.FE == :STARLIGHT)
       # Gen 9 Mod - Armor Tail
-      return false if opponent.pbPartner.ability == :DAZZLING || opponent.pbPartner.ability == :ARMORTAIL || opponent.pbPartner.ability == :QUEENLYMAJESTY || (opponent.pbPartner.ability == :MIRRORARMOR && @battle.FE == :STARLIGHT)
+      return false if opponent.pbPartner.ability == :DAZZLING || opponent.pbPartner.ability == :ARMORTAIL || opponent.pbPartner.ability == :QUICKREFLEX || opponent.pbPartner.ability == :QUEENLYMAJESTY || (opponent.pbPartner.ability == :MIRRORARMOR && @battle.FE == :STARLIGHT)
       return false if @battle.FE != :BEWITCHED && attacker.ability == :PRANKSTER && opponent.hasType?(:DARK) && move.pbIsStatus?
     end
     return true

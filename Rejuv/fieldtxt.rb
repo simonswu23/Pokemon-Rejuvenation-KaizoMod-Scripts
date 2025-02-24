@@ -455,6 +455,7 @@ FIELDEFFECTS = {
 		:animation => :HELPINGHAND,
 		:stats => {
 			PBStats::ATTACK => 1,
+			PBStats::DEFENSE => 1,
 		},
 	},
 },
@@ -2579,8 +2580,8 @@ FIELDEFFECTS = {
 	:typeAddOns => {
 	},
 	:moveEffects => {
-		"@battle.field.counter += 1" => [:BLIZZARD, :SHEERCOLD, :COLDTRUTH],
-		"@battle.field.counter = 2" => [:ICEBURN, :FREEZESHOCK, :GLACIATE],
+		"@battle.field.counter += 1" => [:BLIZZARD, :COLDTRUTH],
+		"@battle.field.counter = 2" => [:ICEBURN, :FREEZESHOCK, :GLACIATE, :SUBZEROSLAMMER, :SHEERCOLD],
 	},
 	:typeBoosts => {
 		1.5 => [:DARK, :SHADOW],
@@ -2600,7 +2601,7 @@ FIELDEFFECTS = {
 		:FROZENDIMENSION => "@battle.field.counter > 1",
 	},
 	:fieldChange => {
-		:FROZENDIMENSION => [:BLIZZARD, :SHEERCOLD, :ICEBURN, :FREEZESHOCK, :GLACIATE, :COLDTRUTH],
+		:FROZENDIMENSION => [:BLIZZARD, :SHEERCOLD, :ICEBURN, :FREEZESHOCK, :GLACIATE, :COLDTRUTH, :SUBZEROSLAMMER],
 		:INFERNAL => [:PRECIPICEBLADES],
 		:INDOOR => [:PURIFY, :SEEDFLARE],
 	},
@@ -2634,7 +2635,7 @@ FIELDEFFECTS = {
 	:mimicry => :ICE,
 	:damageMods => {
 		1.5 => [:RAGINGFURY,:THRASH,:OUTRAGE,:STOMPINGTANTRUM,:RAGE,:LASHOUT,:FREEZINGGLARE,:FIERYWRATH,:ROAROFTIME],
-		1.2 => [:SURF, :MUDDYWATER, :WATERPULSE, :HYDROPUMP, :NIGHTSLASH, :DARKPULSE, :HYPERSPACEFURY, :HYPERSPACEHOLE],
+		1.3 => [:SURF, :MUDDYWATER, :WATERPULSE, :HYDROPUMP, :NIGHTSLASH, :DARKPULSE, :HYPERSPACEFURY, :HYPERSPACEHOLE, :CHILLINGWATER],
 		0 => [:MAGICROOM, :WONDERROOM, :TRICKROOM, :GRAVITY, :COURTCHANGE, :TEATIME, :ELECTRICTERRAIN, :GRASSYTERRAIN, :PSYCHICTERRAIN, :MISTYTERRAIN],
 	},
 	:accuracyMods => {
@@ -2647,14 +2648,15 @@ FIELDEFFECTS = {
 		"But it failed." => [:TEATIME],
 	},
 	:typeMods => {
-		:ICE => [:SURF, :MUDDYWATER, :WATERPULSE, :HYDROPUMP, :NIGHTSLASH, :DARKPULSE],
+		:ICE => [:SURF, :MUDDYWATER, :WATERPULSE, :HYDROPUMP, :NIGHTSLASH, :DARKPULSE, :CHILLINGWATER],
 	},
 	:typeAddOns => {
 	},
 	:moveEffects => {},
 	:typeBoosts => {
-		1.2 => [:ICE],
-		1.5 => [:DARK],
+		1.5 => [:ICE],
+		1.3 => [:DARK],
+		0.5 => [:FIRE],
 	},
 	:typeMessages => {
 		"The darkness is here..." => [:DARK],

@@ -11069,8 +11069,8 @@ MOVEHASH = {
     :basedamage => 90,
     :accuracy => 100,
     :maxpp => 10,
-    :effect => 10,
-    :target => :SingleNonUser,
+    :effect => 30,
+    :target => :AllOpposing,
     :desc => "The user shoots its psychic power from its eyes to attack. This may also leave the target with frostbite."
 
 },
@@ -11085,7 +11085,7 @@ MOVEHASH = {
     :accuracy => 100,
     :maxpp => 10,
     :effect => 20,
-    :target => :SingleNonUser,
+    :target => :AllOpposing,
     :desc => "The user transforms its wrath into a fire-like aura to attack. This may also make opposing Pokémon flinch."
 
 },
@@ -14591,6 +14591,23 @@ MOVEHASH = {
     :effect => 100,
 	:target => :SingleNonUser,
 	:desc => "Gains +1 stockpile after use."
+},
+
+:CHISTRIKE => {
+	:ID => 2012,
+	:name => "Chi Strike",
+    # NEED TO UPDATE
+	:function => 0x023,
+	:type => :FIGHTING,
+	:category => :physical,
+	:basedamage => 140,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
+    :highcrit => true,
+	:desc => "Raises all friendly CHR by +1 after use."
 },
 
 # Handlers

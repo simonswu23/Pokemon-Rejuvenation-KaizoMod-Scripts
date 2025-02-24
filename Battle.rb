@@ -643,7 +643,7 @@ class PokeBattle_Battle
           if Rejuv
             if (KAIZOMOD && battler.ability == :UNBURDEN)
               battler.pbIncreaseStat(PBStats::SPEED, 2, statmessage: false)
-              @battle.pbDisplay(_INTL("{1}'s Unburden sharply raised its Speed!", pbThis))
+              @battle.pbDisplay(_INTL("{1}'s Unburden sharply raised its Speed!", battler.pbThis))
             end
             battler.ability = :CLEARBODY
             battler.effects[:GorillaLock] = nil

@@ -246,7 +246,7 @@
     end
     trainereffect[:pokemonEffect].each_pair {|effect,effectval|
       val = effectval[0]
-      val = i if effect == :MeanLook
+      val = pkmn.index if effect == :MeanLook
       if (trainereffect[:pokemonEffect] == :MagicGuard)
         abil1 = effectval[3]
         abil2 = effectval[4]

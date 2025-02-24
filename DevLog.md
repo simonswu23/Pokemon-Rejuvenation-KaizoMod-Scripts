@@ -25,7 +25,97 @@
 - Jenner (Aquamarine Cave)
 - Tapu Koko Magrodar (Boss)
 
+
+# TODOs:
+
+  ## Changelog Updates:
+    - Giga Pokemon
+    - Signature Pokemon
+
+  ## Bug list:
+    - Changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
+    - Protect rate sharing does not reset after a flinch
+    - No anim for Tapu Koko's Guardian of Alola?
+
+  ## Implementation Dump
+    - Moves:
+      - Chi Strike (+1 to CHR for all allies)
+    - Abilities:
+      - Anticipation: shuddered pokemon takes 1/2 damage from first instance of SE attack
+      - Forewarn: all allies avoid the first instance of the forewarned attack
+      - Magician: uses Trick/Switcheroo when switching into battle (instead of normal effect)
+      - Aftermath: also explodes for 100 BP upon fainting (matches user's primary stab typing)
+      - Gold Envy: permanent Taunt
+      - (Giga Pikachu): all other pokemon are "paralyzed" (volatile, can stack with other conditions)
+    - Crests
+      - Vespiquen Crest:
+        - Defend Order naturally has increased priority, crested effect additionally applies quick guard, wide guard, and crafty shield
+        - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority and breaks through protect
+        - Heal Order naturally cures status effects, crested effect additionally heals friendly pokemon's hp by 25% and cures their status
+      - Ariados Crest:
+        - Make more viable on Swamp field
+          - always moves before targets with lowered speed (increased priority stage)
+          - always crits targets with lowered speed (can remove poisoned trigger)
+
+  ## Testing Backlog
+    - Chthonic Malady
+    - Barbed Web (@Ren)
+
+  ## AI implementation Backlog
+    ### Giga Evolution
+    - implement giga Evolution knowledge (like Mega -- can see core, know about typing changes, etc.)
+    - update movelist in pbGiga Evolve
+    - implement proper re-targeting for giga moves (the turn of giga evolution)
+    - add logic to discourage ineffective attacks against Giga pokemon
+    - add logic to encourage using moves that would encourage the Giga pokemon to switch out
+    - update HP and damage calculation values (ensure it's working properly)
+    - add logic to handle Giga moves
+    - flagged in Pokemon.rb
+    - giga Urshifu (yuck)
+
+    ### Moves
+    - All giga moves yippee
+    - All new moves (including ANIMATIONS)
+    - Changed Moves:
+      - Dragon Cheer, Focus Energy
+      - Chthonic Malady
+      - Embargo
+      - Barbed Web
+      - Guardian of Alola
+
+    ### Abilities
+    - Changed Abilities
+      - Frisk
+      - Damp
+      - Aftermath
+      - Unnerve
+      - Pressure
+      - Supersweet Syrup
+      - Cursed Body
+
+    - New Abilities
+      - Meteor Impactor
+      - Melodramatic
+
+    ## Crests
+    - Changed Crests
+    - New Crests
+      - Cacturne
+      - Klinklang
+      - Emboar
+
+  ## Other
+    - Learnset updates for new moves
+
 # Progress
+
+- 2/23/2025
+  - updated terrain overlaying effects (fixed on 2/23)
+  - small trainer skill bug fix (applying Mean Look)
+  - fixed Unburden bug + interaction on Swamp when consuming Telluric Seed
+  - overrode Dragon Cheer / Focus Energy incompatibility
+  - fixed targeting on Freezing Glare and Fiery Wrath
+  - standardized BST buffs for signature pokemon (+50/+100)
 
 - 2/16/25
   - Flurry -> update learnset for pokemon
@@ -39,10 +129,7 @@
 
 - 1/25/25 (@SWu)
   - Embargo update needs more testing
-  - TODO: update Frisk and Embargo and Water Sport AI
   - Fixed Magnet Rise bug (inconsistency with caps)
-  - TODO: Terrain layering (port from prev mod)
-  - TODO: Figure out Wildfire secondary effect
 
 - 1/24/25 (@SWu)
   - Fixed minor compilation bugs
@@ -50,17 +137,11 @@
   - Created Pressure and Unnerve onactive handlers (mocked after Intimidate)
   - Implemented Giga Eevee: Debutante, Giga Cuddle
   - Implemented Klinklang Crest
-  - Added attributes for anticipation and forewarn changes, have not actually implemented those changes yet
+  - Added attributes for Anticipation and Forewarn changes, have not actually implemented those changes yet
 
 - 1/17/25 (@SWu)
   - Ability Updates (Implemented)
     - Pressure, Unnerve -> Intimidate copies (including blocked abilities, adrenaline orb, guard dog etc)
-      - TODO: test, add AI
-  - Ability Updates (TODO:)
-    - Magician: uses Trick/Switcheroo when switching into battle (instead of normal effect)
-    - Frisk: disables Frisked items for 1 turn
-    - Anticipation: if the user shudders, the first SE move used against it does half
-    - Forewarn: if the target is using the forewarned move, the user has +1 priority when attacking
   - Other
     - Embargo: now effects the entire team for 5 turns
 
@@ -79,74 +160,22 @@
   - Barbed Web:
     - cursory AI implementation
     - excluded from Shield Dust / Covert Cloak / Sheer Force (like Ceaseless Edge)
-    - TODO: need to fix applied effect in doubles (happens twice)
-    - TODO (@ren): randomly apply Spikes or Toxic Spikes if Sticky Web is set up (until everything is maxxed out)
   - Giga Moves not documented yet (still not finalized)
   - fixed setweather trainer skill bug, removed double faint handler (unused)
 
 
 - 1/10/25 (@SWu)
   - Update battle.inspect to work with negative effect counters (like Taunt, Heal Block)
-  - TODO: fix protect after a flinch 
-  - TODO: change move releaner to also relearn moves from previous evolutions
 
 - 1/9/25 (@SWu)
   - Finally figured out how to make Giga moves break through protect
-  - TODO: bug -- changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
   - Fixed giga move priority on turn of giga evolution
-  - TODO: backlog AI updates (since 1/8/25 commits)
-    - missing:
-      - Crests (Cacturne, Corviknight)
-      - Meteor Impactor and Melodramatic code
-    - individually log every priority change in the future
   - Terapagos and Ogerpon mega evolution now does not require a mega slot
     - added internal mega blocker item to prevent certain battles from mega evolving them by default
     - can consider reworking to be similar to Giga evolution, requiring an item in bag
   - fully imported all trainer skill logic (runtrainerskills)
   - Corv crest erased (but logic kept as comments for future reference)
   - Defog now clears terrain overlays
-    - TODO: actually cause terrains to be separate layer (like weather), and for them to override each other
-
-
-  - (@SWu) Crawli todos:
-    - Vespiquen Crest:
-      - Defend Order naturally has increased priority, crested effect additionally applies quick guard, wide guard, and crafty shield
-      - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority and breaks through protect
-      - Heal Order naturally cures status effects, crested effect additionally heals friendly pokemon's hp by 25% and cures their status
-    - Ariados Crest:
-      - Make more viable on Swamp field
-        - always moves before targets with lowered speed (increased priority)
-        - always crits targets with lowered speed (can remove poisoned effect)
-    - Barbed Web:
-      - copy old swumod implementation
-      - TODO: update AI fully
-    - Swap field ordering: forest for gym, swamp for jynobi
-    - Giga Appletun
-      - Bug/Dragon type
-      - Honeypot max move (renamed from sweetness): cures ally status conditions
-      - Give it recycle (good enough)
-      - Un-nerf pinch berries
-  - Giga Moves should stick to canon, except:
-    - Wind Rage -> defog effect
-    - Volcalith -> fire-type stealth rock hazard
-    - Depletion -> removes all positive stat changes
-    - Meltdown -> badly poisons all targets, regardless of typing
-    - Sandblast -> desert's mark effect instead
-    - Centiferno -> burn
-    - Stun Shock -> paralysis
-    - Foam Burst -> frostbite
-    - Tartness -> harshly lowers foes evasion
-    - Volt Crash -> ignores abilities, immunities when dealing damage
-    - Gold Rush -> +1 priority, follow me
-    - Cuddlestorm (Cuddle) -> infatuates the target
-    - Giant's Drum (Drum Solo) -> normal type attack, spread attack (TODO: fix, also add AI logic here since base is now Drum Beating)
-    - Hydrosnipe -> +2 CHR
-    - Fireball -> +1 priority
-  - TODO: signature abilities for Giga Meowth, Eevee, and Pikachu
-    - Meowth: Gold Envy (permanent taunt effect)
-    - Eevee: Debutante (foes are locked into using a single attack)
-    - Pikachu: TBD (all other pokemon are "temporarily" paralyzed, except electric types, ground types, and pokemon with quick feet/limber)
-
 
 - 1/8/25 (@SWu)
  - updated Heal Block logic to check for != 0 (to allow -1 to be infinite heal block)
@@ -154,24 +183,16 @@
  - refactored show_message logic to allow for move use message suppression
  - reverted Moody nerf
  - re-ambiguated crests to allow for use regardless of pokemon form
- - Guardian of Alola rework
-  - TODO: add AI here? (default AI always uses Z-move first if possible
-  - TODO: add proper Tapu Koko anim (or debug if it exists)
- - TODO: add AI logic for Crash Landing Ability
  - Z-Move side effects can now trigger, and bypass Shield Dust / Sheer Force / Covert Cloak
-  - TODO: fix Z-moves so they bypass protect
 - reverted Ledian + Cincinno crest nerfs (allow for side effects on subsequent hits)
 - added instantmove to boss battles
 - (old) added starter skills for trainer battles
 - Darkglare (or whatever Geara's ability will be) not currently implemented
-- TODO: Update Giga pokemon in the Changelog (can paste from previous)
-- TODO: Update signature pokemon in the Changelog
 - temporarily removed terrain destroying effect of Ice Spinner
 
 - 1/2/25 (@SWu)
   - retroactively KAIZOMODDIFY some changes?
     - including move changes (can hard code them in PBMOVE)
-  - TODO: fix bug -- Z moves do not trigger side effect chances
 
 - 12/29/24 (@SWu)
   - updated Captivate x Attract to work irrespective of gender
@@ -198,16 +219,7 @@
     - kept old Mega stones intact, along with Mega logic
     - new Giga Core items created, along with Giga Band
     - implemented Lapras (for Valarie), need to update montext.rb for the other Giga forms
-  - TODO: fix Urshifu
-  - TODO: fix Giga move targeting
-    - flagged in Battler.rb
-  - TODO: implement Giga AI logic
-    - update movelist in pbGiga Evolve
-    - add logic to discourage ineffective attacks against Giga pokemon
-    - add logic to encourage using moves that would encourage the Giga pokemon to switch out
-    - update HP and damage calculation values (ensure it's working properly)
-    - add logic to handle Giga moves
-    - flagged in Pokemon.rb
+
   - changed logic so that move relearner is an egg move relearner instantly
 
 - 12/24/24 (batched with previous commits, @SWu)
@@ -220,11 +232,9 @@
     - reverted game defaults for hail/snow since it was crashing the game
     - fixed bug where snow was not properly giving ice types x1.5 defense
   - combined hail/snow implementation (including all AI implementation)
-    - TODO: currently called "Snowscape", change back to "Hail" somehow
   - grass pokemon have x1.5 defense in sun and x1.5 special defense in rain
   - replaced freeze with frostbite entirely (including all AI implementations)    
   - forced consumable item restoration (including berries) and the end of each battle
-      - TODO: might need to double-check how item stealing works here (patch if it's an issue)
   - improved wild pokemon catch chances
   - Angie and Valarie Gym Battles updated (standard and kaizo)
    - misc bug fixes
@@ -235,9 +245,6 @@
   - Added LAWDS macho brace implementation for QoL
 
 - 12/15/24 (@SWu)
-  - Venam Gym Battle updated (standard and kaizo)
-    - TODO: playtest
-  - Form data for Venam's signature Seviper added (2 versions, Gearen + Post Gearen)
   - Added bulk passwords: "standardmode" and "kaizomode"
     - includes: fullivs, noitems, freeexpall, easyhms, unrealtime, pinata, powerpack
     - additionally: forces battle to be set mode

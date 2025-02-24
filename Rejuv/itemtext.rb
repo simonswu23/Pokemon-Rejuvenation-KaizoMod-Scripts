@@ -10788,9 +10788,19 @@ ITEMHASH = {
 },
 
 :KLINCREST => {
-    :ID => 3000,
+    :ID => 3001,
     :name => "Klinklang Crest",
     :desc => "Shifts between two gear modes, speed and power.",
+    :price => 0,
+    :crest => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
+:EMBCREST => {
+    :ID => 3002,
+    :name => "Emboar Crest",
+    :desc => "Doubles HP, attack stat scales with remaining HP.",
     :price => 0,
     :crest => true,
     :noUseInBattle => true,

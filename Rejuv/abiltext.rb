@@ -2120,4 +2120,11 @@ ABILHASH = {
     :desc => "This pokemon has the combined effects of Technician and Skill Link."
 },
 
+:QUICKREFLEX => {
+    :ID => 385,
+    :name => "Quick Reflex",
+    :desc => "Prevents opponents from using priority moves...",
+    :fullDesc => "This pokemon's quick wits makes opponents unable to use priority moves against the Pokémon or its allies."
+},
+
 }
