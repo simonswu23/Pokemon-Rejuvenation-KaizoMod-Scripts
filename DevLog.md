@@ -3,27 +3,33 @@
 ## Intense
 - Venam Gym, **UNTESTED**
 - Alex + Sam (1), **UNTESTED**
-- Valarie (Gym)
-- Geara (Terajuma Beach)
-- Zetta (Terajuma Falls)
-- Neved (Terajuma Falls)
-- Ren (Helojak)
+- Valarie Gym
+- Geara Terajuma Beach
+- Zetta Terajuma Falls
+- Neved Terajuma Falls
+- Ren Helojak
 
 ## Kaizo
 - Venam Gym, **UNTESTED**
 - Alex + Sam (1), **UNTESTED**
-- Valarie (Gym)
-- Geara (Terajuma Beach)
+- Valarie Gym
+- Geara Terajuma Beach
 - Tapu Koko Terajuma (Boss)
-- Zetta (Terajuma Falls)
-- Neved (Terajuma Falls)
-- Ren (Helojak)
+- Zetta Terajuma Falls
+- Neved Terajuma Falls
+- Ren Helojak
   - used Bellibolt
-- Rorim B. (Gym)
-- Crawli (Gym)
-- Saki x Venam (Boom Battle)
-- Jenner (Aquamarine Cave)
+- Rorim B. Kakori
+- Gothitelle Kakori (Boss)
+- Crawli Gym
+- Saki x Venam Boom Battle
+- Jenner Aquamarine Cave
 - Tapu Koko Magrodar (Boss)
+- Madelis and Bart Aquamarine
+- Neved Teila
+- Belial (Boss)
+- Angie Gym
+- Texen
 
 
 # TODOs:
@@ -107,7 +113,7 @@
   ## Other
     - Learnset updates for new moves
 
-# Progress
+# Journal
 
 - 2/23/2025
   - updated terrain overlaying effects (fixed on 2/23)
