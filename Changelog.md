@@ -82,6 +82,7 @@
       - Lele: indefinite heal block + trapping effect
       - Fini: clears all stat changes + defog
   - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
+  - Matrix Shot now sets up inverse stealth rocks
 
   ## New Attacks
   - Chain Drain:
@@ -166,6 +167,12 @@
 
   - Big Top Arena
     - Synthetic Seed boosts both Attack and Defense on entry
+
+  - Deep Earth
+    - Matrix Shot x1.5 power
+
+  - Inverse Field
+    - Matrix Shot x1.5 power, becomes Matrix (rock-complement) typing
 
 # Other
   - Removed data chip cost to enter password

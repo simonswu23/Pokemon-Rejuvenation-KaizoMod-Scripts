@@ -63,6 +63,8 @@
           - always moves before targets with lowered speed (increased priority stage)
           - always crits targets with lowered speed (can remove poisoned trigger)
 
+    - All field interactions!
+
   ## Testing Backlog
     - Chthonic Malady
     - Barbed Web (@Ren)
@@ -114,6 +116,11 @@
     - Learnset updates for new moves
 
 # Journal
+
+- 2/26/2025
+  - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards
+  - Implemented Sashilan Sand Stream (perma sand, can be overridden, no damage but negates ground/rock weaknesses + grants them x1.5 spdef)
+  - Matrix shot changes (added func code to banlist for side effects that can't be blocked)
 
 - 2/23/2025
   - updated terrain overlaying effects (fixed on 2/23)
