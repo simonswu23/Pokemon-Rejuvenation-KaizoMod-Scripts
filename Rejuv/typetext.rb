@@ -138,6 +138,16 @@ TYPEHASH = {
 :STELLAR => {
     :name => "Stellar",
     :specialtype => true
-}
+},
+
+# KAIZOMOD helper types
+
+:MATRIX => {
+    :name => "Matrix",
+    # Inverse of rock type
+    :weaknesses => [:NORMAL,:FLYING,:POISON,:FIRE],
+    :resistances => [:FIGHTING,:GROUND,:STEEL,:WATER,:GRASS,:SHADOW],
+    :specialtype => true,
+},
 
 }
