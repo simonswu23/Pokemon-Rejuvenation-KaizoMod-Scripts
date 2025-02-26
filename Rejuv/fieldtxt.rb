@@ -2451,10 +2451,13 @@ FIELDEFFECTS = {
 	:naturePower => :TRICKROOM,
 	:mimicry => :NORMAL,
 	:damageMods => {
+		1.5 => [:MATRIXSHOT]
 	},
 	:accuracyMods => {},
 	:moveMessages => {
+		"The attack shattered through the matrix!" => [:MATRIXSHOT]
 	},
+	# Matrix Shot becomes a Matrix-Type attack in inverse field
 	:typeMods => {},
 	:typeAddOns => {},
 	:moveEffects => {},
@@ -3340,7 +3343,7 @@ FIELDEFFECTS = {
 	:mimicry => :GROUND,
 	:damageMods => {
 		2.0 => [:LANDSWRATH, :PRECIPICEBLADES, :MAGNETBOMB, :TECTONICRAGE, :CRUSHGRIP, :SMACKDOWN, :COREENFORCER],
-		1.5 => [:HEAVYSLAM,	:HEATCRASH, :BODYSLAM, :STOMP, :DRAGONRUSH, :STEAMROLLER, :GRAVAPPLE, :ANCIENTPOWER, :FLING, :GRASSKNOT, :LOWKICK, :SPACIALREND, :STORMTHROW, :CIRCLETHROW, :VITALTHROW, :BODYPRESS, :SUBMISSION, :ICEHAMMER, :HAMMERARM, :CRABHAMMER, :ICICLECRASH, :THOUSANDARROWS, :THOUSANDWAVES],
+		1.5 => [:HEAVYSLAM,	:HEATCRASH, :BODYSLAM, :STOMP, :DRAGONRUSH, :STEAMROLLER, :GRAVAPPLE, :ANCIENTPOWER, :FLING, :GRASSKNOT, :LOWKICK, :SPACIALREND, :STORMTHROW, :CIRCLETHROW, :VITALTHROW, :BODYPRESS, :SUBMISSION, :ICEHAMMER, :HAMMERARM, :CRABHAMMER, :ICICLECRASH, :THOUSANDARROWS, :THOUSANDWAVES, :MATRIXSHOT],
 	},
 	:accuracyMods => {
 	},
@@ -3354,7 +3357,7 @@ FIELDEFFECTS = {
 		"The power of the earth is utterly overwhelming!"  => [:THOUSANDARROWS, :THOUSANDWAVES, :LANDSWRATH, :PRECIPICEBLADES, :TECTONICRAGE],
 		"The power of ages gone by..." => [:ANCIENTPOWER],
 		"The power of the core obliterates all!" => [:COREENFORCER],
-		"The intense gravity is ruptured!" => [:SPACIALREND],
+		"The intense gravity is ruptured!" => [:SPACIALREND, :MATRIXSHOT],
 	},
 	:typeMods => {},
 	:typeAddOns => {

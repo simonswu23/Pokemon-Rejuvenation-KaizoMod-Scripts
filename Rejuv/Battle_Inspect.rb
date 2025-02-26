@@ -125,6 +125,7 @@ PokeBattle_Battler.class_eval {
       end
     end
     defense = (defense * 1.5).round if @battle.pbWeather == :SANDSTORM && self.hasType?(:ROCK) && applysandstorm
+    defense = (defense * 1.5).round if @battle.pbWeather == :SSANDSTREAM && (self.hasType?(:ROCK) || self.hasType?(:GROUND)) && applysandstorm
     defmult = (defmult * 1.5).round if @battle.FE == :MISTY && self.hasType?(:FAIRY)
     defmult = (defmult * 1.5).round if @battle.FE == :DESERT && self.hasType?(:GROUND)
     defmult = (defmult * 1.5).round if @battle.FE == :DARKCRYSTALCAVERN && (self.hasType?(:DARK) || self.hasType?(:GHOST))
@@ -163,7 +164,7 @@ PokeBattle_Battler.class_eval {
     evastage = 0 if self.effects[:Foresight] || self.effects[:MiracleEye]
     evasion = evastage >= 0 ? (evastage + 3) * 100 / 3 : 300 / (3 - evastage)
     evasion *= 1.2 if self.ability == :TANGLEDFEET && self.effects[:Confusion] > 0
-    evasion *= 1.2 if self.ability == :SANDVEIL && (@battle.pbWeather == :SANDSTORM || [:DESERT, :ASHENBEACH].include?(@battle.FE))
+    evasion *= 1.2 if self.ability == :SANDVEIL && (@battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || [:DESERT, :ASHENBEACH].include?(@battle.FE))
     evasion *= 1.2 if self.ability == :SNOWCLOAK && (@battle.pbWeather == :HAIL || [:ICY, :SNOWYMOUNTAIN].include?(@battle.FE))
     evasion *= 1.1 if self.hasWorkingItem(:BRIGHTPOWDER)
     evasion *= 1.1 if self.hasWorkingItem(:LAXINCENSE)
@@ -254,6 +255,8 @@ def pbShowBattleStats(pkmn)
     weatherreport=_INTL("Weather: Scorching Sun, {1} {2}",dur,turns) if @battle.state.effects[:HarshSunlight]
   elsif @battle.weather==:SANDSTORM
     weatherreport=_INTL("Weather: Sandstorm, {1} {2}",dur,turns)
+  elsif @battle.weather==:SSANDSTREAM
+    weatherreport=_INTL("Weather: Sashilan Sand Stream, {1} {2}",dur,turns)
   elsif @battle.weather==:HAIL
     # Gen 9 Mod - Hail/Snow/Both
     weatherreport=_INTL("Weather: " + HAILSNOWMOD + ", {1} {2}",dur,turns)
@@ -343,6 +346,9 @@ def pbShowBattleStats(pkmn)
   report.push(_INTL("Spikes: {1} layers",pkmn.pbOwnSide.effects[:Spikes])) if pkmn.pbOwnSide.effects[:Spikes]>0
   report.push(_INTL("Toxic Spikes: {1} layers",pkmn.pbOwnSide.effects[:ToxicSpikes])) if pkmn.pbOwnSide.effects[:ToxicSpikes]>0
   report.push(_INTL("Stealth Rock active")) if pkmn.pbOwnSide.effects[:StealthRock]
+  report.push(_INTL("Volcalith active")) if pkmn.pbOwnSide.effects[:Volcalith]
+  report.push(_INTL("Steelsurge active")) if pkmn.pbOwnSide.effects[:Steelsurge]
+  report.push(_INTL("Inverse Stealth Rock active")) if pkmn.pbOwnSide.effects[:InvRock]
   report.push(_INTL("Sticky Web active")) if pkmn.pbOwnSide.effects[:StickyWeb]
 
   report.push()

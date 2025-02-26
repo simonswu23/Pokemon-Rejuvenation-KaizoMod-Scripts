@@ -2127,4 +2127,11 @@ ABILHASH = {
     :fullDesc => "This pokemon's quick wits makes opponents unable to use priority moves against the Pokémon or its allies."
 },
 
+:SASHILANSANDSTREAM => {
+    :ID => 386,
+    :name => "Sashilan Sand Stream",
+    :desc => "Summons mysterious sand protecting rock and ground types...",
+    :fullDesc => "Summons sand that removes Rock/Ground-type weaknesses, while boosting their special defense by x1.5."
+},
+
 }

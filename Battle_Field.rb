@@ -225,7 +225,7 @@ class PokeBattle_Battle
         case @weather
           when :SUNNYDAY then pbDisplay(_INTL("The sunlight cannot pierce the darkness!"))
           when :RAINDANCE then pbDisplay(_INTL("The dark dimension swallowed the rain!"))
-          when :SANDSTORM then pbDisplay(_INTL("The dark dimension swallowed the sand!"))
+          when :SANDSTORM, :SSANDSTREAM then pbDisplay(_INTL("The dark dimension swallowed the sand!"))
           # Gen 9 Mod - Hail/Snow/Both
           when :HAIL then pbDisplay(_INTL("The dark dimension swallowed the " + HAILSNOWLOWMOD + "!"))
         end

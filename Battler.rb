@@ -942,7 +942,7 @@ class PokeBattle_Battler
       when :QUICKFEET
         speed *= 1.5 if !self.status.nil? || (Rejuv && @battle.FE == :ELECTERRAIN)
       when :SANDRUSH
-        speed *= 2 if @battle.pbWeather == :SANDSTORM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH
+        speed *= 2 if @battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH
       when :SLUSHRUSH
         speed *= 2 if @battle.pbWeather == :HAIL || @battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION
       when :SLOWSTART
@@ -2660,6 +2660,27 @@ class PokeBattle_Battler
         @battle.weatherduration = -1 if $game_switches[:Gen_5_Weather] == true && !@battle.isOnline?
         @battle.pbCommonAnimation("Sandstorm", nil, nil)
         @battle.pbDisplay(_INTL("{1}'s Sand Stream whipped up a sandstorm!", pbThis))
+      end
+    end
+
+    if ability == :SASHILANSANDSTREAM && onactive && @battle.weather != :SSANDSTREAM
+      if @battle.state.effects[:HeavyRain]
+        @battle.pbDisplay(_INTL("There's no relief from this heavy rain!"))
+      elsif @battle.state.effects[:HarshSunlight]
+        @battle.pbDisplay(_INTL("The extremely harsh sunlight was not lessened at all!"))
+      elsif @battle.weather == :STRONGWINDS && @battle.pbCheckGlobalAbility(:DELTASTREAM)
+        @battle.pbDisplay(_INTL("The mysterious air current blows on regardless!"))
+      elsif @battle.FE == :NEWWORLD
+        @battle.pbDisplay(_INTL("The weather disappeared into space!"))
+      elsif @battle.FE == :UNDERWATER
+        @battle.pbDisplay(_INTL("You're too deep to notice the weather!"))
+      elsif @battle.FE == :DIMENSIONAL
+        @battle.pbDisplay(_INTL("The dark dimension swallowed the sand."))
+      else
+        @battle.weather = :SSANDSTREAM
+        @battle.weatherduration = -1
+        @battle.pbCommonAnimation("Sandstorm", nil, nil)
+        @battle.pbDisplay(_INTL("{1}'s Sashilan Sand Stream whipped up a sand dream!", pbThis))
       end
     end
 
@@ -5505,7 +5526,7 @@ class PokeBattle_Battler
 
       if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
-         [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105, 0x900].include?(basemove.function)) # Selfbuffing additional effects
+         [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105, 0x204, 0x900].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect
         if (KAIZOMOD)
           addleffect = 30 if basemove.move == :FREEZINGGLARE
@@ -6701,6 +6722,7 @@ class PokeBattle_Battler
     spdefmult *= 1.5 if self.hasWorkingItem(:METALPOWDER) && self.pokemon.species == :DITTO && !self.effects[:Transform]
     spdefmult *= 1.5 if self.ability == :FLOWERGIFT && @battle.pbWeather == :SUNNYDAY || self.crested == :CHERRIM
     spdefmult *= 1.5 if @battle.pbWeather == :SANDSTORM && hasType?(:ROCK)
+    spdefmult *= 1.5 if @battle.pbWeather == :SSANDSTREAM && (hasType?(:ROCK) || hasType?(:GROUND))
 
     return [spatkmult * self.spatk, spdefmult * self.spdef].max if unaware
 

@@ -676,9 +676,9 @@ class PokeBattle_Battle
           end
 
         when :WASTELAND
-          battler.pbOwnSide.effects[:StealthRock] = true
-          battler.pbOpposingSide.effects[:StealthRock] = true
-          pbDisplay(_INTL("{1} laid Stealth Rocks everywhere!", battler.pbThis))
+          battler.pbOwnSide.effects[:Steelsurge] = true
+          battler.pbOpposingSide.effects[:Steelsurge] = true
+          pbDisplay(_INTL("{1} laid Metal Debris everywhere!", battler.pbThis))
 
         when :UNDERWATER
           battler.type1 = :WATER
@@ -3369,6 +3369,77 @@ class PokeBattle_Battle
           end
         end
       end
+      # Volcalith
+      if pkmn.pbOwnSide.effects[:Volcalith] && @field.effect != :WASTELAND
+        if pkmn.ability != :MAGICGUARD && !(pkmn.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && !pkmn.hasWorkingItem(:HEAVYDUTYBOOTS)
+          atype = :FIRE
+          atype = :ROCK if @field.effect == :ICY || @field.effect == :FROZENDIMENSION || @field.effect == :SNOWYMOUNTAIN || @field.effect == :UNDERWATER
+          
+          eff = PBTypes.twoTypeEff(atype, pkmn.type1, pkmn.type2)
+          if ($game_switches[:Inversemode] && !@battle.isOnline?) ^ (@field.effect == :INVERSE)
+            switcheff = { 16 => 1, 8 => 2, 4 => 4, 2 => 8, 1 => 16, 0 => 16 }
+            eff = switcheff[eff]
+          end
+          if eff > 0
+            if @field.effect == :INFERNAL || @field.effect == :VOLCANICTOP || @field.effect == :BURNING || @field.effect == :DRAGONSDEN
+              eff = eff * 2
+            end
+            @scene.pbDamageAnimation(pkmn, 0)
+            pkmn.pbReduceHP([(pkmn.totalhp * eff / 32).floor, 1].max)
+            if @field.effect == :ICY || @field.effect == :FROZENDIMENSION || @field.effect == :SNOWYMOUNTAIN || @field.effect == :UNDERWATER
+              pbDisplay(_INTL("{1} was hurt by the cooled rocks!", pkmn.pbThis))
+            else
+              pbDisplay(_INTL("{1} was hurt by molten rocks!", pkmn.pbThis))
+            end
+          end
+        end
+      end
+      # Steelsurge
+      if pkmn.pbOwnSide.effects[:Steelsurge] && @field.effect != :WASTELAND
+        if pkmn.ability != :MAGICGUARD && !(pkmn.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && !pkmn.hasWorkingItem(:HEAVYDUTYBOOTS)
+          atype = :STEEL
+          atype = :FIRE if @field.effect == :VOLCANICTOP || @field.effect == :INFERNAL || (Rejuv && @field.effect == :DRAGONSDEN)
+          atype = :POISON if @field.effect == :WASTELAND
+          eff = PBTypes.twoTypeEff(atype, pkmn.type1, pkmn.type2)
+          if ($game_switches[:Inversemode] && !@battle.isOnline?) ^ (@field.effect == :INVERSE)
+            switcheff = { 16 => 1, 8 => 2, 4 => 4, 2 => 8, 1 => 16, 0 => 16 }
+            eff = switcheff[eff]
+          end
+          if eff > 0
+            if @field.effect == :WASTELAND || @field.effect == :CITY || @field.effect == :FACTORY
+              eff = eff * 2
+            end
+            @scene.pbDamageAnimation(pkmn, 0)
+            pkmn.pbReduceHP([(pkmn.totalhp * eff / 32).floor, 1].max)
+            if @field.effect == :WASTELAND
+              pbDisplay(_INTL("{1} was hurt by the polluted debris!", pkmn.pbThis))
+            elsif @field.effect == :VOLCANICTOP || @field.effect == :INFERNAL || (Rejuv && @field.effect == :DRAGONSDEN)
+              pbDisplay(_INTL("{1} was hurt by the molten debris!", pkmn.pbThis))
+            else
+              pbDisplay(_INTL("{1} was hurt by metal debris!", pkmn.pbThis))
+            end
+          end
+        end
+      end
+      # Inverse Stealth Rock
+      if pkmn.pbOwnSide.effects[:InvRock] && @field.effect != :WASTELAND
+        if pkmn.ability != :MAGICGUARD && !(pkmn.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && !pkmn.hasWorkingItem(:HEAVYDUTYBOOTS)
+          atype = :MATRIX
+          eff = PBTypes.twoTypeEff(atype, pkmn.type1, pkmn.type2)
+          if ($game_switches[:Inversemode] && !@battle.isOnline?) ^ (@field.effect == :INVERSE)
+            switcheff = { 16 => 1, 8 => 2, 4 => 4, 2 => 8, 1 => 16, 0 => 16 }
+            eff = switcheff[eff]
+          end
+          if eff > 0
+            if @field.effect == :INVERSE
+              eff = eff * 2
+            end
+            @scene.pbDamageAnimation(pkmn, 0)
+            pkmn.pbReduceHP([(pkmn.totalhp * eff / 32).floor, 1].max)
+            pbDisplay(_INTL("{1} was hurt by mysterious rocks!", pkmn.pbThis))
+          end
+        end
+      end
       if pkmn.isFainted?
         pkmn.pbFaint
         pkmn.pbOwnSide.effects[:Retaliate] = true
@@ -4071,6 +4142,9 @@ class PokeBattle_Battle
     elsif @weather == :SHADOWSKY
       pbCommonAnimation("ShadowSky")
       pbDisplay(_INTL("The sky is dark."))
+    elsif @weather == :SSANDSTREAM
+      pbCommonAnimation("Sandstorm")
+      pbDisplay(_INTL("Sand swirls across the battlefield..."))
     end
     # Field Effects BEGIN UPDATE
     if @field.introMessage
@@ -5110,6 +5184,18 @@ class PokeBattle_Battle
           end
           if i.pbOwnSide.effects[:StealthRock]
             i.pbOwnSide.effects[:StealthRock] = false
+            hazardsOnSide = true
+          end
+          if i.pbOwnSide.effects[:Volcalith]
+            i.pbOwnSide.effects[:Volcalith] = false
+            hazardsOnSide = true
+          end
+          if i.pbOwnSide.effects[:Steelsurge]
+            i.pbOwnSide.effects[:Steelsurge] = false
+            hazardsOnSide = true
+          end
+          if i.pbOwnSide.effects[:InvRock]
+            i.pbOwnSide.effects[:InvRock] = false
             hazardsOnSide = true
           end
           if i.pbOwnSide.effects[:StickyWeb]
@@ -6386,6 +6472,7 @@ class PokeBattle_Battle
       for i in priority
         is_fainted_before = i.isFainted?
         partner_fainted_before = @doublebattle && i.pbPartner.isFainted?
+
         # Stealth Rock
         if i.pbOwnSide.effects[:StealthRock]
           pbDisplay(_INTL("The waste swallowed up the pointed stones!"))
@@ -6395,6 +6482,54 @@ class PokeBattle_Battle
             next if mon.isFainted? || PBStuff::TWOTURNMOVE.include?(mon.effects[:TwoTurnAttack]) || mon.ability == :MAGICGUARD
 
             eff = PBTypes.twoTypeEff(:ROCK, mon.type1, mon.type2)
+            next if eff <= 0
+
+            @scene.pbDamageAnimation(mon, 0)
+            mon.pbReduceHP([(mon.totalhp * eff / 16).floor, 1].max)
+          end
+        end
+
+        # Volcalith
+        if i.pbOwnSide.effects[:Volcalith]
+          pbDisplay(_INTL("The waste swallowed up the molten stones!"))
+          i.pbOwnSide.effects[:Volcalith] = false
+          pbDisplay(_INTL("...Molten rocks spewed out from the ground below!"))
+          for mon in [i, i.pbPartner]
+            next if mon.isFainted? || PBStuff::TWOTURNMOVE.include?(mon.effects[:TwoTurnAttack]) || mon.ability == :MAGICGUARD
+
+            eff = PBTypes.twoTypeEff(:FIRE, mon.type1, mon.type2)
+            next if eff <= 0
+
+            @scene.pbDamageAnimation(mon, 0)
+            mon.pbReduceHP([(mon.totalhp * eff / 16).floor, 1].max)
+          end
+        end
+
+        # Steelsurge
+        if i.pbOwnSide.effects[:Steelsurge]
+          pbDisplay(_INTL("The waste swallowed up the metal debris!"))
+          i.pbOwnSide.effects[:Steelsurge] = false
+          pbDisplay(_INTL("...Metal debris spewed out from the ground below!"))
+          for mon in [i, i.pbPartner]
+            next if mon.isFainted? || PBStuff::TWOTURNMOVE.include?(mon.effects[:TwoTurnAttack]) || mon.ability == :MAGICGUARD
+
+            eff = PBTypes.twoTypeEff(:Steel, mon.type1, mon.type2)
+            next if eff <= 0
+
+            @scene.pbDamageAnimation(mon, 0)
+            mon.pbReduceHP([(mon.totalhp * eff / 16).floor, 1].max)
+          end
+        end
+
+        # Inverse Rocks
+        if i.pbOwnSide.effects[:InvRock]
+          pbDisplay(_INTL("The waste swallowed up the mysterious stones!"))
+          i.pbOwnSide.effects[:InvRock] = false
+          pbDisplay(_INTL("...Mysterious rocks spewed out from the ground below!"))
+          for mon in [i, i.pbPartner]
+            next if mon.isFainted? || PBStuff::TWOTURNMOVE.include?(mon.effects[:TwoTurnAttack]) || mon.ability == :MAGICGUARD
+
+            eff = PBTypes.twoTypeEff(:MATRIX, mon.type1, mon.type2)
             next if eff <= 0
 
             @scene.pbDamageAnimation(mon, 0)

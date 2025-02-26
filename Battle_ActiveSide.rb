@@ -20,6 +20,9 @@ class Battle_Side
     @effects[:Retaliate]   = false
     @effects[:StickyWeb]   = false
     @effects[:StealthRock] = false
+    @effects[:Volcalith] = false
+    @effects[:Steelsurge] = false
+    @effects[:InvRock] = false
     #has stages of activation
     @effects[:Spikes]      = 0
     @effects[:ToxicSpikes] = 0

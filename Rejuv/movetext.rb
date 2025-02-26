@@ -12818,6 +12818,7 @@ MOVEHASH = {
     :basedamage => 90,
     :accuracy => 100,
     :maxpp => 10,
+    :effect => 100,
     :target => :SingleNonUser,
     :desc => "A rock clumped with gems is fired at the target, targetting its special defense."
 },
@@ -14607,7 +14608,23 @@ MOVEHASH = {
     :effect => 100,
 	:target => :SingleNonUser,
     :highcrit => true,
+    :contact => true,
 	:desc => "Raises all friendly CHR by +1 after use."
+},
+
+:VOLCALITH => {
+	:ID => 2013,
+	:name => "Volcalith",
+	:function => 0x105,
+	:type => :ROCK,
+	:category => :physical,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
+	:desc => "Summons Volcalith entry hazard."
 },
 
 # Handlers

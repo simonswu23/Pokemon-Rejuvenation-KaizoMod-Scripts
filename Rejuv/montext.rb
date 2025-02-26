@@ -16748,9 +16748,11 @@ MONHASH = {
       :Weight => 2550,
   },
 
-  "Adam's Tyranitar" => {
+  "Adam's Tyranitar (Kaizo)" => {
     # +100 BST
-    :BaseStats => [100, 154, 150, 95, 160, 51],
+    :Type1 => :ROCK,
+    :Type2 => :DRAGON,
+    :BaseStats => [100, 125, 150, 154, 120, 51],
     :Abilities => [:SASHILANSANDSTREAM],
   },
   
@@ -53670,7 +53672,12 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+      :Height => 420,
+      :Weight => 8845,
+  },
+
+  "Mega Form" => {
       :BaseStats => [110, 135, 150, 80, 100, 35],
       :Abilities => [:STEAMENGINE],
       :Height => 420,
@@ -53678,9 +53685,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :COALOSSALITE => 1
+      :COALOSSALITE => 2
   },
 },
 

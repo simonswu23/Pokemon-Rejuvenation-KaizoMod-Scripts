@@ -154,6 +154,26 @@ class PokeBattle_Move_203 < PokeBattle_Move
 class PokeBattle_Move_204 < PokeBattle_Move
   # Handled in superclass, do not edit!
 
+  def pbAdditionalEffect(attacker,opponent)
+    if !attacker.pbOpposingSide.effects[:InvRock]
+      @battle.pbAnimation(:STEALTHROCK,attacker,opponent)
+      attacker.pbOpposingSide.effects[:InvRock]=true
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("Mysterious stones float in the air around your foe's team!"))
+      else
+        @battle.pbDisplay(_INTL("Mysterious stones float in the air around your team!"))
+      end
+    end
+  end
+
+  def pbType(attacker,type=@type)
+    if @battle.FE == :INVERSE
+      return :MATRIX
+    else
+      return :ROCK
+    end
+  end
+
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     return if !showanimation 
@@ -971,6 +991,59 @@ class PokeBattle_Move_1002 < PokeBattle_Move
         @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
       end
     end
+          
+    # Other Rocks
+    if attacker.pbOwnSide.effects[:Volcalith]
+      attacker.pbOwnSide.effects[:Volcalith] = false
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The molten stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The molten stones disappeared from around your team!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:Volcalith]
+      attacker.pbOpposingSide.effects[:Volcalith] = false
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The molten stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The molten stones disappeared from around your team!"))
+      end
+    end
+
+    if attacker.pbOwnSide.effects[:Steelsurge]
+      attacker.pbOwnSide.effects[:Steelsurge] = false
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The metal debris disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The metal debris disappeared from around your team!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:Steelsurge]
+      attacker.pbOpposingSide.effects[:Steelsurge] = false
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The metal debris disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The metal debris disappeared from around your team!"))
+      end
+    end
+
+    if attacker.pbOwnSide.effects[:InvRock]
+      attacker.pbOwnSide.effects[:InvRock] = false
+      if @battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The mysterious stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The mysterious stones disappeared from around your team!"))
+      end
+    end
+    if attacker.pbOpposingSide.effects[:InvRock]
+      attacker.pbOpposingSide.effects[:InvRock] = false
+      if !@battle.pbIsOpposing?(attacker.index)
+        @battle.pbDisplay(_INTL("The mysterious stones disappeared from around your opponent's team!"))
+      else
+        @battle.pbDisplay(_INTL("The mysterious stones disappeared from around your team!"))
+      end
+    end
+    
     if attacker.pbOwnSide.effects[:ToxicSpikes] > 0
       attacker.pbOwnSide.effects[:ToxicSpikes] = 0
       if @battle.pbIsOpposing?(attacker.index)

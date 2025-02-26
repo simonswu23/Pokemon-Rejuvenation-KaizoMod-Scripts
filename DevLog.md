@@ -48,8 +48,8 @@
       - Chi Strike (+1 to CHR for all allies)
     - Abilities:
       - Anticipation: shuddered pokemon takes 1/2 damage from first instance of SE attack
-      - Forewarn: all allies avoid the first instance of the forewarned attack
-      - Magician: uses Trick/Switcheroo when switching into battle (instead of normal effect)
+      - Forewarn: all allies avoid all instances of the forewarned attack until the end of the turn
+      - Magician: if attacking a target with a held item, x1.3 power and steals/removes it
       - Aftermath: also explodes for 100 BP upon fainting (matches user's primary stab typing)
       - Gold Envy: permanent Taunt
       - (Giga Pikachu): all other pokemon are "paralyzed" (volatile, can stack with other conditions)

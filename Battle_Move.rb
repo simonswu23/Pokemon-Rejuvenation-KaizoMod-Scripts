@@ -428,6 +428,7 @@ class PokeBattle_Move
     # don't forget spdef
     calcspdefmult = 1.0
     calcspdefmult *= 1.5 if opponent.hasType?(:ROCK) && @battle.pbWeather == :SANDSTORM
+    calcspdefmult *= 1.5 if opponent.hasType?(:ROCK) || opponent.hasType?(:GROUND) && @battle.pbWeather == :SSANDSTREAM
     calcspdefmult *= 1.5 if (KAIZOMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :RAINDANCE
     calcspdefmult *= 1.5 if @battle.FE == :DESERT && opponent.hasType?(:GROUND)
     calcspdefmult *= 1.5 if @battle.FE == :MISTY && opponent.hasType?(:FAIRY)
@@ -600,6 +601,14 @@ class PokeBattle_Move
       mod1 = 2 if otype1 == :FLYING && mod1 > 2
       mod2 = 2 if otype2 == :FLYING && mod2 > 2
     end
+    if @battle.pbWeather == :SSANDSTREAM
+      mod1 = 2 if otype1 == :ROCK && mod1 > 2
+      mod2 = 2 if otype2 == :ROCK && mod2 > 2
+    end
+    if @battle.pbWeather == :SSANDSTREAM
+      mod1 = 2 if otype1 == :GROUND && mod1 > 2
+      mod2 = 2 if otype2 == :GROUND && mod2 > 2
+    end
     if @battle.FE == :DARKNESS3
       mod1 = 2 if [:DARK, :GHOST].include?(otype1) && mod1 > 2
       mod2 = 2 if [:DARK, :GHOST].include?(otype2) && mod2 > 2
@@ -734,6 +743,14 @@ class PokeBattle_Move
     if @battle.pbWeather == :STRONGWINDS
       mod1 = 2 if otype1 == :FLYING && mod1 > 2
       mod2 = 2 if otype2 == :FLYING && mod2 > 2
+    end
+    if @battle.pbWeather == :SSANDSTREAM
+      mod1 = 2 if otype1 == :ROCK && mod1 > 2
+      mod2 = 2 if otype2 == :ROCK && mod2 > 2
+    end
+    if @battle.pbWeather == :SSANDSTREAM
+      mod1 = 2 if otype1 == :GROUND && mod1 > 2
+      mod2 = 2 if otype2 == :GROUND && mod2 > 2
     end
     if @battle.FE == :DARKNESS3
       mod1 = 2 if [:DARK, :GHOST].include?(otype1) && mod1 > 2
@@ -1403,7 +1420,7 @@ class PokeBattle_Move
     if opponent.ability == :TANGLEDFEET && opponent.effects[:Confusion] > 0 && !opponent.moldbroken
       accuracy *= 0.5
     end
-    if opponent.ability == :SANDVEIL && (@battle.pbWeather == :SANDSTORM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && !opponent.moldbroken
+    if opponent.ability == :SANDVEIL && (@battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && !opponent.moldbroken
       accuracy *= 0.8
     end
     if opponent.ability == :SNOWCLOAK && (@battle.pbWeather == :HAIL || @battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION) && !opponent.moldbroken
@@ -1570,7 +1587,7 @@ class PokeBattle_Move
         end
       when :RIVALRY       then basemult *= attacker.gender == opponent.gender ? 1.25 : 0.75 if attacker.gender != 2
       when :MEGALAUNCHER  then basemult *= 1.5 if [:AURASPHERE, :DRAGONPULSE, :DARKPULSE, :WATERPULSE, :ORIGINPULSE, :TERRAINPULSE].include?(@move)
-      when :SANDFORCE     then basemult *= 1.3 if (@battle.pbWeather == :SANDSTORM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && (type == :ROCK || type == :GROUND || type == :STEEL)
+      when :SANDFORCE     then basemult *= 1.3 if (@battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && (type == :ROCK || type == :GROUND || type == :STEEL)
       when :ANALYTIC      then basemult *= 1.3 if (@battle.battlers.find_all { |battler| battler && battler.hp > 0 && !battler.hasMovedThisRound? && !@battle.switchedOut[battler.index] }).length == 0
       when :SHEERFORCE    then basemult *= 1.3 if effect > 0 || [0x908].include?(@function) # Gen 9 Mod - Electro Shot needs to be affected by Sheer Force.
       when :AFTERMATH     then basemult *= 2 if [:EXPLOSION, :SELFDESTRUCT, :MISTYEXPLOSION, :MELTDOWN].include?(@move)
@@ -2102,6 +2119,9 @@ class PokeBattle_Move
       defense = (defense * PBStats::StageMul[defstage]).floor
     end
     if @battle.pbWeather == :SANDSTORM && opponent.hasType?(:ROCK) && applysandstorm
+      defense = (defense * 1.5).round
+    end
+    if @battle.pbWeather == :SSANDSTREAM && (opponent.hasType?(:ROCK) || opponent.hasType?(:GROUND)) && applysandstorm
       defense = (defense * 1.5).round
     end
     if @battle.pbWeather == :HAIL && opponent.hasType?(:ICE) && !applysandstorm && (HAILSNOWMOD != "Hail" || KAIZOMOD)

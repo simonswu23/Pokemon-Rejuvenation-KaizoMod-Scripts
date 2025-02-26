@@ -12793,7 +12793,7 @@ class PokeBattle_AI
     end
 
   def secondaryEffectNegated?(move = @move, attacker = @attacker, opponent = @opponent)
-    return move.basedamage > 0 && (((opponent.ability == :SHIELDDUST || opponent.hasWorkingItem(:COVERTCLOAK)) && !([0x1C,0x1D,0x1E,0x1F,0x20,0x2D,0x2F,0x147,0x186,0x307,0x103,0x105,0x900].include?(move.function))) || attacker.ability == :SHEERFORCE) # Gen 9 Mod - Added Covert Cloak and exception for Ceaseless Edge and Stone Axe functions
+    return move.basedamage > 0 && (((opponent.ability == :SHIELDDUST || opponent.hasWorkingItem(:COVERTCLOAK)) && !([0x1C,0x1D,0x1E,0x1F,0x20,0x2D,0x2F,0x147,0x186,0x307,0x103,0x105,0x204,0x900].include?(move.function))) || attacker.ability == :SHEERFORCE) # Gen 9 Mod - Added Covert Cloak and exception for Ceaseless Edge and Stone Axe functions
   end
 
   def seedProtection?(battler = @attacker)
