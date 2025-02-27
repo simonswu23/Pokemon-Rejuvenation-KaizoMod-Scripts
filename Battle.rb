@@ -3381,7 +3381,7 @@ class PokeBattle_Battle
             eff = switcheff[eff]
           end
           if eff > 0
-            if @field.effect == :INFERNAL || @field.effect == :VOLCANICTOP || @field.effect == :BURNING || @field.effect == :DRAGONSDEN
+            if @field.effect == :INFERNAL || @field.effect == :VOLCANICTOP || @field.effect == :DRAGONSDEN || @field.effect == :VOLCANIC
               eff = eff * 2
             end
             @scene.pbDamageAnimation(pkmn, 0)

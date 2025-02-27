@@ -1491,28 +1491,73 @@ BOSSINFOHASH = {
     :BOSSGROUDON => {
         :name => "Behemoth Groudon",
         :entryText => "Groudon attacked under command!",
-        :shieldCount => 1,
+        :shieldCount => 2,
         :immunities => {
             :fieldEffectDamage => [:VOLCANIC]
         },
         :moninfo => {
             :species => :GROUDON,
-            :level => 60,
-            :moves => [:EARTHQUAKE,:ROCKSLIDE,:TOXIC,:HEATCRASH],
+            :level => 65,
+            :moves => [:EARTHQUAKE,:STONEEDGE,:SOLARBEAM,:HEATCRASH],
             :nature => :ADAMANT,
             :iv => 31,
-            :item => :SITRUSBERRY,
-            :ev => [100,252,52,0,0,100]
+            :item => :LEFTOVERS,
+            :ev => [252,252,252,252,252,252]
+        },
+        :sosDetails =>  { # pokemon details
+            :activationRequirement => "@battle.battlers[battlerIndex].shieldCount < 2",
+            # :refreshingRequirement => [0],
+            :entryMessage => ["Gouging Fire stormed into the fray!","Heatran emerged from the magma"],
+            :totalMonCount => 2,
+            :moninfos => {
+                1 => {
+                    :species => :GOUGINGFIRE,
+                    :level => 55,
+                    :item => :SITRUSBERRY,
+                    :moves => [:BREAKINGSWIPE,:HEATCRASH,:HOWL,:ROAR],
+                    :ability => :PROTOSYNTHESIS,
+                    :nature => :CAREFUL,
+                    :iv => 31,
+                    :ev => [252,4,0,0,252,0]
+                },
+                2 => {
+                    :species => :HEATRAN,
+                    :level => 55,
+                    :item => :FIRIUMZ,
+                    :moves => [:MAGMASTORM,:EARTHPOWER,:FLASHCANNON,:SMACKDOWN],
+                    :ability => :FLASHFIRE,
+                    :nature => :MODEST,
+                    :iv => 31,
+                    :ev => [252,0,0,252,0,4]
+                },
+            },
         },
         :onBreakEffects => {
-            1 => {
+            2 => {
                 :threshold => 0,
                 :message => "Groudon summoned fierce eruptions!",
-                :weatherChange => :SUNNYDAY,
-                :weatherChangeAnimation => "Sunny",
+                :formchange => 1,
+                :itemchange => :REDORB,
+                :abilitychange => :DESOLATELAND,
                 :fieldChange => :VOLCANIC,
-                :movesetUpdate => [:EARTHQUAKE,:STONEEDGE,:SWORDSDANCE,:HEATWAVE],
+                :movesetUpdate => [:PRECIPICEBLADES,:ROCKSLIDE,:REST,:LAVAPLUME],
                 :statDropCure => true,
+                :instantMove => [:VOLCALITH, 0],
+            },
+            1 => {
+                :threshold => 0,
+                :message => "Groudon is gathering strength from the magma!",
+                :bossStatChanges => {
+                    PBStats::ATTACK => 1,
+                    PBStats::DEFENSE => 1,
+                    PBStats::SPATK => 1,
+                    PBStats::SPDEF => 1,
+                    PBStats::SPEED => 1                 
+                },
+                :movesetUpdate => [:PRECIPICEBLADES,:ROCKSLIDE,:REST,:LAVAPLUME],
+                :statDropCure => true,
+                :statusCure => true,
+                :instantMove => [:TECTONICRAGE, 0],
             }
         }
     },
@@ -5152,20 +5197,50 @@ BOSSINFOHASH = {
         },
         :moninfo => {
             :species => :GROUDON,
-            :level => 55,
-            :moves => [:BULLDOZE,:ROCKSLIDE,:TOXIC,:HEATCRASH],
+            :level => 65,
+            :moves => [:EARTHQUAKE,:STONEEDGE,:SOLARBEAM,:HEATCRASH],
             :nature => :ADAMANT,
-            :item => :SITRUSBERRY,
+            :iv => 31,
+            :item => :LEFTOVERS,
+            :ev => [252,252,252,252,252,252]
+        },
+        :sosDetails =>  { # pokemon details
+            :activationRequirement => "@battle.battlers[battlerIndex].shieldCount == 0",
+            :refreshingRequirement => [0],
+            :entryMessage => ["Heatran emerged from the magma"],
+            :totalMonCount => 1,
+            :moninfos => {
+                1 => {
+                    :species => :HEATRAN,
+                    :level => 55,
+                    :item => :STEELIUMZ,
+                    :moves => [:MAGMASTORM,:EARTHPOWER,:FLASHCANNON,:SMACKDOWN],
+                    :ability => :BLAZE,
+                    :nature => :MODEST,
+                    :iv => 31,
+                    :ev => [252,0,0,252,0,4]
+                },
+            },
         },
         :onBreakEffects => {
             1 => {
                 :threshold => 0,
                 :message => "Groudon summoned fierce eruptions!",
-                :weatherChange => :SUNNYDAY,
-                :weatherChangeAnimation => "Sunny",
+                :formchange => 1,
+                :itemchange => :REDORB,
+                :bossStatChanges => {
+                    PBStats::ATTACK => 1,
+                    PBStats::DEFENSE => 1,
+                    PBStats::SPATK => 1,
+                    PBStats::SPDEF => 1,
+                    PBStats::SPEED => 1                 
+                },
+                :abilitychange => :DESOLATELAND,
                 :fieldChange => :VOLCANIC,
-                :movesetUpdate => [:BULLDOZE,:ROCKSLIDE,:SWORDSDANCE,:HEATWAVE],
+                :movesetUpdate => [:PRECIPICEBLADES,:ROCKSLIDE,:REST,:LAVAPLUME],
                 :statDropCure => true,
+                :statusCure => true,
+                :instantMove => [:TECTONICRAGE, 0],
             }
         }
     },

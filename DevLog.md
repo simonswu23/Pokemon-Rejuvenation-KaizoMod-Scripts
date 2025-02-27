@@ -42,6 +42,7 @@
     - Changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
     - Protect rate sharing does not reset after a flinch
     - No anim for Tapu Koko's Guardian of Alola?
+    - -1 Heal Block was able to use Sitrus Berry to heal?
 
   ## Implementation Dump
     - Moves:
@@ -120,7 +121,7 @@
 - 2/26/2025
   - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards
   - Implemented Sashilan Sand Stream (perma sand, can be overridden, no damage but negates ground/rock weaknesses + grants them x1.5 spdef)
-  - Matrix shot changes (added func code to banlist for side effects that can't be blocked)
+  - Matrix Shot changes (added func code to banlist for side effects that can't be blocked)
 
 - 2/23/2025
   - updated terrain overlaying effects (fixed on 2/23)

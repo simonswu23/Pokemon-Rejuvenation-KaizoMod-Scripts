@@ -83,6 +83,7 @@
       - Fini: clears all stat changes + defog
   - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
   - Matrix Shot now sets up inverse stealth rocks
+  - Weather Ball becomes ground typing in the Sashilan Sand, and is always Flying type in Strong Winds
 
   ## New Attacks
   - Chain Drain:
@@ -164,6 +165,7 @@
 
   - Cave
     - Dig is a single-turn move
+    - Magma Storm increments Volcanic counter by 1, Inferno Overdrive by 2
 
   - Big Top Arena
     - Synthetic Seed boosts both Attack and Defense on entry

@@ -1452,7 +1452,8 @@ FIELDEFFECTS = {
 		"@battle.caveCollapse(basemove, user)" => [:EARTHQUAKE, :BULLDOZE, :MAGNITUDE, :FISSURE, :TECTONICRAGE, :CONTINENTALCRUSH],
 		"@battle.field.counter2 += 1" => [:DRAGONPULSE],
 		"@battle.field.counter2 = 2" => [:DRACOMETEOR, :DEVASTATINGDRAKE],
-		"@battle.field.counter3 += 1" => [:FEVERPITCH, :MAGMADRIFT, :ERUPTION, :LAVAPLUME, :HEATWAVE, :OVERHEAT, :FUSIONFLARE],
+		"@battle.field.counter3 += 1" => [:FEVERPITCH, :MAGMADRIFT, :ERUPTION, :LAVAPLUME, :HEATWAVE, :OVERHEAT, :FUSIONFLARE, :MAGMASTORM],
+		"@battle.field.counter3 += 2" => [:INFERNOOVERDRIVE],
 		"@battle.field.counter4 += 1" => [:GRAVITY],
 	},
 	:typeBoosts => {
