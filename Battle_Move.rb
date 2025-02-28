@@ -2659,6 +2659,7 @@ class PokeBattle_Move
 
     pri = 0 if @zmove && @basedamage > 0
     pri += 1 if @move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+    pri += 1 if @move == :ATTACKORDER && attacker.crested == :VESPIQUEN
     pri += 1 if @move == :QUASH && @battle.FE == :DIMENSIONAL
     pri += 1 if @battle.FE == :CHESS && attacker.pokemon && attacker.pokemon.piece == :KING
     pri += 1 if attacker.crested == :FERALIGATR && @basedamage != 0 && attacker.turncount == 1 # Feraligatr Crest

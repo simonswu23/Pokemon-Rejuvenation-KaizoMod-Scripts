@@ -56,9 +56,9 @@
       - (Giga Pikachu): all other pokemon are "paralyzed" (volatile, can stack with other conditions)
     - Crests
       - Vespiquen Crest:
-        - Defend Order naturally has increased priority, crested effect additionally applies quick guard, wide guard, and crafty shield
-        - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority and breaks through protect
-        - Heal Order naturally cures status effects, crested effect additionally heals friendly pokemon's hp by 25% and cures their status
+        - Defend Order naturally has increased priority, crested effect additionally applies wide guard
+        - Attack Order naturally hits all foes, crested effect additionally gives it +1 priority
+        - Heal Order now operates like Jungle Healing, crested effect doubles HP restoration
       - Ariados Crest:
         - Make more viable on Swamp field
           - always moves before targets with lowered speed (increased priority stage)

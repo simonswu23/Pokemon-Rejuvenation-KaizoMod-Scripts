@@ -1434,6 +1434,23 @@ end
 ################################################################################
 class PokeBattle_Move_02A < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+    if attacker.crested == :VESPIQUEN
+      if !PBStuff::RATESHARERS.include?(attacker.previousMove)
+        attacker.effects[:ProtectRate]=0
+      end
+      priority = @battle.pbPriority
+      if (@battle.doublebattle && attacker == priority[3]) || (!@battle.doublebattle && attacker == priority[1])
+        attacker.effects[:ProtectRate]=0
+        @battle.pbDisplay(_INTL("But it failed!"))
+        return -1
+      end
+      attacker.pbOwnSide.effects[:WideGuard]=true
+      attacker.pbPartner.effects[:WideGuardUser]=false
+      attacker.effects[:WideGuardUser]=true
+      attacker.effects[:ProtectRate]+=1
+      @battle.pbAnimation(@move,attacker,nil)
+      @battle.pbDisplay(_INTL("{1} protected its team!",attacker.pbThis))
+    end
     if !attacker.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) &&
        !attacker.pbCanIncreaseStatStage?(PBStats::SPDEF, false)
       @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!", attacker.pbThis))
@@ -3540,9 +3557,9 @@ end
 class PokeBattle_Move_06F < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     dmg = (attacker.level * (@battle.pbRandom(101) + 50)/100.0).floor
-    if @battle.FE == :DEEPEARTH
+    if @battle.FE == :DEEPEARTH || attacker.hasWorkingItem(:LOADEDDICE)
       dmg = (attacker.level * (@battle.pbRandom(51) + 100)/100.0).floor
-      @battle.pbDisplay(_INTL("The core's magical forces are immense!"))
+      @battle.pbDisplay(_INTL("The core's magical forces are immense!")) if @battle.FE == :DEEPEARTH
     end
     return pbEffectFixedDamage(dmg,attacker,opponent,hitnum,alltargets,showanimation)
   end
@@ -4275,15 +4292,21 @@ class PokeBattle_Move_094 < PokeBattle_Move
 
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     @calcbasedmg=1
-    r=@battle.pbRandom(10)
+    r=@battle.pbRandom(12)
+    r=[r+4,9].min if attacker.hasWorkingItem(:LOADEDDICE)
+
     if r<4
-      @calcbasedmg=40
+      @calcbasedmg=60
       @calcbasedmg=[attacker.happiness,250].min if attacker.crested == :LUVDISC
     elsif r<7
-      @calcbasedmg=80
+      @calcbasedmg=90
       @calcbasedmg=[attacker.happiness,250].min if attacker.crested == :LUVDISC
-    elsif r<8
+    elsif r<9
       @calcbasedmg=120
+      @calcbasedmg=[attacker.happiness,250].min if attacker.crested == :LUVDISC
+    elsif r < 10
+      @calcbasedmg=150
+      @battle.pbDisplay(_INTL("Special delivery!",opponent.pbThis(true)))
       @calcbasedmg=[attacker.happiness,250].min if attacker.crested == :LUVDISC
     else
       if pbTypeModifier(@type,attacker,opponent)==0
@@ -5220,7 +5243,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
       next if move.type == :SHADOW
       possiblemoves.push(symbol)
     end
-    if @battle.FE == :GLITCH
+    if @battle.FE == :GLITCH || attacker.hasWorkingItem(:LOADEDDICE)
       possiblemoves = possiblemoves.filter { |i| $cache.moves[i].basedamage >= 70 }
     end
     move = @battle.sample(possiblemoves)
@@ -6360,7 +6383,8 @@ class PokeBattle_Move_0D5 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move,attacker,nil,hitnum,alltargets,showanimation)
-    if @battle.FE == :FOREST && (@move == :HEALORDER)
+    # Heal Order moved below
+    if @battle.FE == :FOREST && (@move == :HEALORDER) && !KAIZOMOD
       attacker.pbRecoverHP(((attacker.totalhp+1) * 0.66).floor,true)
     else
       attacker.pbRecoverHP(((attacker.totalhp+1)/2).floor,true)
@@ -8438,7 +8462,26 @@ class PokeBattle_Move_118 < PokeBattle_Move
     return true
   end
 
+  def pbAdditionalEffect(attacker, opponent)
+    @battle.pbDisplay(_INTL("Gravity intensified!")) if @battle.state.effects[:Gravity] == 0
+    inc = 5
+    inc += 3 if attacker.hasWorkingItem(:AMPLIFIELDROCK) || @battle.FE == :PSYTERRAIN
+    @battle.state.effects[:Gravity] += inc
+  end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :GRAVITAS
+      @battle.pbAnimation(:GRAVITY,attacker,opponent,hitnum)
+      @battle.pbAnimation(:EXPANDINGFORCE,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
+  end
+
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
     if @battle.FE == :DEEPEARTH
       hploss = (opponent.hp/2.0).floor
       return pbEffectFixedDamage(hploss,attacker,opponent,hitnum,alltargets,showanimation)
@@ -11386,7 +11429,9 @@ class PokeBattle_Move_318 < PokeBattle_Move
       pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation) if !didsomething
       didsomething = true
       recoveramount = (i.totalhp / 4.0).round
-      recoveramount = (i.totalhp / 3.0).round if @move == :LUNARBLESSING && (@battle.FE == :STARLIGHT || @battle.FE == :NEWWORLD)
+      recoveramount = (i.totalhp / 3.0).round if @move == :LUNARBLESSING && (@battle.FE == :STARLIGHT || @battle.FE == :NEWWORLD) ||
+                                                (@move == :HEALORDER && @battle.FE == :FOREST)
+      recoveramount *= 2 if attacker.crested == :VESPIQUEN && @move == :HEALORDER
       i.pbRecoverHP(recoveramount, true)
       @battle.pbDisplay(_INTL("{1}'s HP was restored.", i.pbThis))
     end
@@ -12998,6 +13043,7 @@ class PokeBattle_Move_923 < PokeBattle_Move
       pri = oppmovedata.priority
     end
     pri += 1 if oppmoveid == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+    pri += 1 if oppmoveid == :ATTACKORDER && opponent.crested == :VESPIQUEN
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING
     pri += 1 if opponent.crested == :FERALIGATR && oppmovedata.basedamage != 0 && opponent.turncount == 1 # Feraligatr Crest
     pri += 1 if opponent.ability == :GALEWINGS && oppmovedata.type ==:FLYING && ((opponent.hp >= opponent.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.weather == :STRONGWINDS))

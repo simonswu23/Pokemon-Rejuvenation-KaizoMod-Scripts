@@ -1367,6 +1367,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :SANDACONDA      then return true if move.move == :HURRICANE
     when :KINGLER         then return true if move.move == :XSCISSOR
     when :SNORLAX         then return true if move.move == :RETURN
+    when :ORBEETLE        then return true if move.move == :PSYCHIC
   end
   return false
 end

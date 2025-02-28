@@ -23,7 +23,7 @@ MOVEHASH = {
     :accuracy => 100,
     :maxpp => 15,
     :effect => 100,
-    :target => :SingleNonUser,
+    :target => :AllOpposing,
     :highcrit => true,
     :desc => "The user calls out its underlings to pummel the target. Critical hits land more easily."
 },
@@ -210,6 +210,7 @@ MOVEHASH = {
     :accuracy => 0,
     :maxpp => 10,
     :target => :User,
+    :priority => 3,
     :snatchable => true,
     :nonmirror => true,
     :desc => "The user calls out its underlings to shield its body, raising its Defense and Sp. Def."
@@ -14625,6 +14626,21 @@ MOVEHASH = {
     :effect => 100,
 	:target => :SingleNonUser,
 	:desc => "Summons Volcalith entry hazard."
+},
+
+:GRAVITAS => {
+	:ID => 2014,
+	:name => "Gravitas",
+	:function => 0x118,
+	:type => :PSYCHIC,
+	:category => :special,
+	:basedamage => 140,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
+	:desc => "Summons or extends gravity by 5 turns."
 },
 
 # Handlers

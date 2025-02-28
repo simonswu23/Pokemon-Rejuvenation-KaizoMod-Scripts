@@ -6157,7 +6157,7 @@ MONHASH = {
       :CatchRate => 190,
       :Happiness => 70,
       :EggSteps => 5355,
-      :EggMoves => [:ACIDSPRAY,:CURSE,:HAZE,:IMPRISON,:LICK,:MEANLOOK,:POWERUPPUNCH,:SCARYFACE,:SHADOWPUNCH,:SHADOWSNEAK,:SPITUP,:STOCKPILE,:SWALLOW],
+      :EggMoves => [:ACIDSPRAY,:CURSE,:FLING,:HAZE,:IMPRISON,:LICK,:MEANLOOK,:POWERUPPUNCH,:SCARYFACE,:SHADOWPUNCH,:SHADOWSNEAK,:SPITUP,:STOCKPILE,:SWALLOW],
       :Moveset => [
         [1,:POUND],
         [1,:POISONGAS],
@@ -6168,7 +6168,7 @@ MONHASH = {
         [18,:SMOG],
         [18,:MUDBOMB],
         [21,:MINIMIZE],
-        [26,:FLING],
+        [26,:TOXIC],
         [29,:SLUDGEBOMB],
         [32,:SLUDGEWAVE],
         [37,:SCREECH],
@@ -6200,9 +6200,10 @@ MONHASH = {
     "Alolan Form" => {
       :Type2 => :DARK,
       :Abilities => [:POISONTOUCH, :GLUTTONY, :POWEROFALCHEMY],
-      :EggMoves => [:ASSURANCE,:CLEARSMOG,:CURSE,:IMPRISON,:MEANLOOK,:POWERUPPUNCH,:PURSUIT,:SCARYFACE,:SHADOWSNEAK,:SPITE,:SPITUP,:STOCKPILE,:SWALLOW],
+      :EggMoves => [:ASSURANCE,:CLEARSMOG,:CURSE,:FLING,:IMPRISON,:MEANLOOK,:POWERUPPUNCH,:PURSUIT,:SCARYFACE,:SHADOWSNEAK,:SPITE,:SPITUP,:STOCKPILE,:SWALLOW],
       :Moveset => [
         [1,:POUND],
+        [1,:RECYCLE],
         [1,:POISONGAS],
         [4,:HARDEN],
         [7,:BITE],
@@ -6210,7 +6211,7 @@ MONHASH = {
         [15,:ACIDSPRAY],
         [18,:POISONFANG],
         [21,:MINIMIZE],
-        [26,:FLING],
+        [26,:TOXIC],
         [29,:KNOCKOFF],
         [32,:CRUNCH],
         [37,:SCREECH],
@@ -6271,7 +6272,7 @@ MONHASH = {
         [18,:SMOG],
         [18,:MUDBOMB],
         [21,:MINIMIZE],
-        [26,:FLING],
+        [26,:TOXIC],
         [29,:SLUDGEBOMB],
         [32,:SLUDGEWAVE],
         [37,:SCREECH],
@@ -6305,6 +6306,7 @@ MONHASH = {
       },
       :Moveset => [
         [0,:VENOMDRENCH],
+        [1,:RECYCLE],
         [1,:POUND],
         [1,:POISONGAS],
         [1,:HARDEN],
@@ -6314,7 +6316,7 @@ MONHASH = {
         [15,:ACIDSPRAY],
         [18,:POISONFANG],
         [21,:MINIMIZE],
-        [26,:FLING],
+        [26,:TOXIC],
         [29,:KNOCKOFF],
         [32,:CRUNCH],
         [37,:SCREECH],
@@ -16283,7 +16285,7 @@ MONHASH = {
       :CatchRate => 45,
       :Happiness => 70,
       :EggSteps => 5355,
-      :EggMoves => [:BELCH,:CURSE,:DIZZYPUNCH,:DOUBLEEDGE,:ENDURE,:FOCUSPUNCH,:HAMMERARM,:HEARTSTAMP,:HELPINGHAND,:NATURALGIFT,:PRESENT,:PUNISHMENT,:REVERSAL,:SEISMICTOSS,:SLEEPTALK],
+      :EggMoves => [:BELCH,:CURSE,:DIZZYPUNCH,:DOUBLEEDGE,:ENDURE,:FOCUSPUNCH,:HAMMERARM,:HEARTSTAMP,:HELPINGHAND,:MAGNITUDE,:METRONOME,:NATURALGIFT,:PRESENT,:PUNISHMENT,:REVERSAL,:SEISMICTOSS,:SLEEPTALK],
       :Moveset => [
         [1,:TACKLE],
         [3,:GROWL],
@@ -23323,7 +23325,7 @@ MONHASH = {
       :CatchRate => 225,
       :Happiness => 35,
       :EggSteps => 6630,
-      :EggMoves => [:ASTONISH,:CONFUSERAY,:DESTINYBOND,:DISABLE,:ENCORE,:FORESIGHT,:GUNKSHOT,:IMPRISON,:OMINOUSWIND,:PHANTOMFORCE,:PURSUIT,:SHADOWSNEAK],
+      :EggMoves => [:AFTERYOU,:ASTONISH,:CONFUSERAY,:DESTINYBOND,:DISABLE,:ENCORE,:FORESIGHT,:GUNKSHOT,:IMPRISON,:OMINOUSWIND,:PHANTOMFORCE,:PURSUIT,:SHADOWSNEAK],
       :Moveset => [
         [1,:KNOCKOFF],
         [4,:SCREECH],
@@ -48429,19 +48431,18 @@ MONHASH = {
 
   :OnCreation => {},
 
-  "Crawli's Araquanid (Kakori)" => {
-    # +60 BST
-    :BaseStats => [78, 110, 92, 60, 142, 42],
+  "Crawli's Araquanid (Intense)" => {
+    # +50 BST
+    :BaseStats => [78, 110, 92, 60, 132, 32],
     :Abilities => [:WATERBUBBLE],
   },
 
-  "Crawli's Araquanid" => {
-    # +120 BST
-    :BaseStats => [78, 120, 92, 110, 142, 42],
+  "Crawli's Araquanid (Kaizo)" => {
+    # +100 BST
+    :BaseStats => [78, 110, 102, 90, 142, 32],
     :Abilities => [:WATERBUBBLE],
   },
 
-  :OnCreation => {},
   :DefaultForm => 0,
 },
 
@@ -52989,7 +52990,12 @@ MONHASH = {
       :BattlerAltitude => 2,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Height => 140,
+    :Weight => 899
+},
+
+  "Mega Form" => {
       :BaseStats => [60, 75, 130, 95, 140, 105],
       :Abilities => [:PRANKSTER],
       :Height => 140,
@@ -52997,9 +53003,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :ORBEETLENITE => 1
+      :ORBEETLENITE => 2
   },
 },
 
@@ -53787,7 +53794,14 @@ MONHASH = {
       :BattlerAltitude => 2,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type1 => :GRASS,
+    :Type2 => :FLYING,
+    :Height => 240,
+    :Weight => 2456,
+  },
+
+  "Mega Form" => {
       :BaseStats => [70, 130, 105, 110, 80, 90],
       :Abilities => [:OWNTEMPO],
       :Height => 240,
@@ -53795,9 +53809,10 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
-      :FLAPPLETITE => 1
+      :FLAPPLETITE => 2
   },
 },
 

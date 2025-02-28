@@ -7932,6 +7932,7 @@ class PokeBattle_AI
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
       pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+      pri += 1 if battlermove.move == :ATTACKORDER && battler.crested == :VESPIQUEN
       pri += 3 if battler.ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(battlermove.function)
       pri -= 1 if @battle.FE == :DEEPEARTH && battlermove.move == :COREENFORCER
       pri -= 2 if battler.ability == :MYCELIUMMIGHT && battlermove.basedamage == 0 && battler.effects[:TwoTurnAttack] == 0 # is Status Move # Gen 9 Mod - Added Mycelium Might
