@@ -23357,8 +23357,7 @@ MONHASH = {
       :Happiness => 35,
       :EggSteps => 6630,
       :EggMoves => [:ASTONISH,:CONFUSERAY,:DESTINYBOND,:DISABLE,:FORESIGHT,:GUNKSHOT,:IMPRISON,:OMINOUSWIND,:PHANTOMFORCE,:PURSUIT,:SHADOWSNEAK,
-                    # Kaizomod
-                    :AFTERYOU,:ENCORE,:FOLLOWME],
+                    :AFTERYOU,:ENCORE,:FOLLOWME], # Kaizomod
       :Moveset => [
         [1,:KNOCKOFF],
         [4,:SCREECH],
