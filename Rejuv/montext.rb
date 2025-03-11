@@ -23851,8 +23851,7 @@ MONHASH = {
       :Happiness => 70,
       :EggSteps => 5355,
       :EggMoves => [:AVALANCHE,:BIDE,:BLOCK,:BOOMBURST,:DISABLE,:FAKETEARS,:HEX,:ICICLECRASH,:ROLLOUT,:SPIKES,:SWITCHEROO,:WEATHERBALL,
-                    # Kaizomod
-                    :BOOMBURST],
+                    :BOOMBURST], # Kaizomod
       :Moveset => [
         [1,:POWDERSNOW],
         [1,:LEER],
@@ -23896,8 +23895,7 @@ MONHASH = {
       :BaseStats => [50,50,50,50,50,50],
         :Abilities => [:GRASSPELT,:ROCKHEAD,:STAMINA],
       :EggMoves => [:BIDE,:CHIPAWAY,:DISABLE,:FAKETEARS,:LEECHSEED,:ROLLOUT,:SPIKES,:SWITCHEROO,:WEATHERBALL,:WIDEGUARD,
-                    # Kaizomod
-                    :BOOMBURST],
+                    :BOOMBURST], # Kaizomod
         :Moveset => [
         [1,:ABSORB],
         [1,:LEER],
@@ -40023,9 +40021,8 @@ MONHASH = {
       :CatchRate => 200,
       :Happiness => 70,
       :EggSteps => 3840,
-      :EggMoves => [:BATONPASS,:DOUBLEEDGE,:ENCORE,:ENDURE,:FEINT,:GUARDSPLIT,:MINDREADER,:MUDSLAP,:PURSUIT,:SPIKES,:TOXICSPIKES
-                    # Kaizomod
-                    :FOLLOWME],
+      :EggMoves => [:BATONPASS,:DOUBLEEDGE,:ENCORE,:ENDURE,:FEINT,:GUARDSPLIT,:MINDREADER,:MUDSLAP,:PURSUIT,:SPIKES,:TOXICSPIKES,
+                    :STICKYWEB], # Kaizomod
       :Moveset => [
         [1,:ABSORB],
         [4,:ACID],
@@ -45925,8 +45922,7 @@ MONHASH = {
       :Happiness => 70,
       :EggSteps => 5120,
       :EggMoves => [:AURORAVEIL,:BARRIER,:MIRRORCOAT,:MIST,:RECOVER,
-                    # Kaizomod
-                    :FLURRY],
+                    :FLURRY], # Kaizomod
       :Moveset => [
         [1,:TACKLE],
         [1,:BITE],
@@ -53846,7 +53842,6 @@ MONHASH = {
         [36,:IRONDEFENSE],
         [40,:FLY],
         [44,:DRAGONRUSH],
-
         # Kaizomod
         [1,:FIRSTIMPRESSION],
         [36,:FURYCUTTER],
@@ -53929,7 +53924,6 @@ MONHASH = {
         [36,:IRONDEFENSE],
         [40,:DRAGONPULSE],
         [44,:ENERGYBALL],
-
         # Kaizomod
         [1,:STRENGTHSAP],
         [36,:POLLENPUFF],
