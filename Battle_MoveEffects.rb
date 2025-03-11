@@ -3776,6 +3776,9 @@ class PokeBattle_Move_079 < PokeBattle_Move
     if hitnum == 1 && attacker.effects[:ParentalBond] && pbNumHits(attacker)==1
       damage /= 4
     end
+    if hitnum > 0 && attacker.effects[:HydreigonCrest] && pbNumHits(attacker)==1
+      damage /= 4
+    end
     if opponent.damagestate.typemod!=0
       if @battle.previousMove == :FUSIONFLARE
         pbShowAnimation(:FUSIONBOLT2,attacker,opponent,hitnum,alltargets,showanimation) rescue pbShowAnimation(@move,attacker,opponent,hitnum,alltargets,showanimation)
@@ -3808,6 +3811,9 @@ class PokeBattle_Move_07A < PokeBattle_Move
     end
     if hitnum == 1 && attacker.effects[:ParentalBond] &&
       pbNumHits(attacker)==1
+      damage /= 4
+    end
+    if hitnum > 0 && attacker.effects[:HydreigonCrest] && pbNumHits(attacker)==1
       damage /= 4
     end
     if opponent.damagestate.typemod!=0
@@ -3858,7 +3864,7 @@ class PokeBattle_Move_07C < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     if opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute &&
-       opponent.status== :PARALYSIS && !(attacker.ability == :PARENTALBOND && hitnum==0)
+        opponent.status== :PARALYSIS && !(attacker.ability == :PARENTALBOND && hitnum==0) && !(attacker.crested == :HYDREIGON && hitnum==0) 
       opponent.status=nil
       @battle.pbDisplay(_INTL("{1} was cured of paralysis.",opponent.pbThis))
     end
@@ -3881,7 +3887,7 @@ class PokeBattle_Move_07D < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     if opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute &&
-       opponent.status== :SLEEP && !(attacker.ability == :PARENTALBOND && hitnum==0)
+        opponent.status== :SLEEP && !(attacker.ability == :PARENTALBOND && hitnum==0) && !(attacker.crested == :HYDREIGON && hitnum==0) 
       opponent.pbCureStatus
     end
     return ret
@@ -6275,6 +6281,8 @@ class PokeBattle_Move_0D2 < PokeBattle_Move
     if opponent.damagestate.calcdamage>0 && attacker.effects[:Outrage]==0 && attacker.status!=:SLEEP  #TODO: Not likely what actually happens, but good enough
       if attacker.ability == :PARENTALBOND
         attacker.effects[:Outrage]=4+(@battle.pbRandom(2)*2)
+      elsif attacker.crested == :HYDREIGON
+        attacker.effects[:Outrage]=4+(@battle.pbRandom(2)*3)
       else
         attacker.effects[:Outrage]=2+@battle.pbRandom(2)
       end
@@ -6976,7 +6984,7 @@ class PokeBattle_Move_0EC < PokeBattle_Move
      opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute &&
      # Gen 9 Mod - Added Guard Dog
      (!(opponent.ability == :SUCTIONCUPS || opponent.ability == :GUARDDOG) || opponent.moldbroken) &&
-     !opponent.effects[:Ingrain] && !(attacker.ability == :PARENTALBOND && hitnum==0) &&
+     !opponent.effects[:Ingrain] && !(attacker.ability == :PARENTALBOND && hitnum==0) && !(attacker.crested == :HYDREIGON && hitnum==0) &&
      !(opponent.isbossmon && opponent.chargeAttack) && @battle.FE != :COLOSSEUM && !opponent.isGiga?
       if !@battle.opponent && !@battle.battlers.any?{|battler| battler.isbossmon}
         if !((opponent.level>attacker.level) || opponent.isbossmon)
@@ -7040,7 +7048,7 @@ class PokeBattle_Move_0EE < PokeBattle_Move
     attacker.vanished=true
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     if !attacker.isFainted? && @battle.pbCanChooseNonActive?(attacker.index) &&
-       !@battle.pbAllFainted?(@battle.pbParty(opponent.index)) && !(attacker.ability == :PARENTALBOND && hitnum==0)
+      !@battle.pbAllFainted?(@battle.pbParty(opponent.index)) && !(attacker.ability == :PARENTALBOND && hitnum==0) && !(attacker.crested == :HYDREIGON && hitnum==0) 
 
       if !opponent.hasWorkingItem(:EJECTBUTTON)
         attacker.userSwitch = true if pbTypeModifier(@type,attacker,opponent)!=0 && !(@battle.FE == :INVERSE)
@@ -7257,8 +7265,8 @@ class PokeBattle_Move_0F4 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
     ret = super(attacker, opponent, hitnum, alltargets, showanimation)
     if !attacker.isFainted? && opponent.damagestate.calcdamage > 0 &&
-       !opponent.damagestate.substitute && !opponent.item.nil? && pbIsBerry?(opponent.item) && !(attacker.ability == :PARENTALBOND && hitnum == 0) &&
-       !opponent.pokemon.corrosiveGas
+        !opponent.damagestate.substitute && (!opponent.item.nil? && pbIsBerry?(opponent.item)) && !(attacker.ability == :PARENTALBOND && hitnum==0) && !(attacker.crested == :HYDREIGON && hitnum==0)  && 
+        !opponent.pokemon.corrosiveGas
       if opponent.ability == :STICKYHOLD && !opponent.moldbroken
         abilityname = getAbilityName(opponent.ability)
         @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", opponent.pbThis, abilityname, @name))
@@ -7816,6 +7824,8 @@ class PokeBattle_Move_105 < PokeBattle_Move
     return if !showanimation
     if id == :VOLCALITH
       @battle.pbAnimation(:ERUPTION,attacker,opponent,hitnum)
+    elsif id == :STONESURGE 
+      @battle.pbAnimation(:WAVECRASH,attacker,opponent,hitnum)
     else
       @battle.pbAnimation(id,attacker,opponent,hitnum)
     end
@@ -8424,27 +8434,37 @@ end
 # (Follow Me, Rage Powder)
 ################################################################################
 class PokeBattle_Move_117 < PokeBattle_Move
-  def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
-    if !@battle.doublebattle
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
+    if (!@battle.doublebattle && @basedamage == 0)
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
-    pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
-    if @move == :RAGEPOWDER
-      attacker.effects[:RagePowder] = true
+    pbShowAnimation(@move,attacker,nil,hitnum,alltargets,showanimation)
+    if (@move == :RAGEPOWDER)
+      attacker.effects[:RagePowder]=true
       if !attacker.pbPartner.isFainted?
-        attacker.pbPartner.effects[:FollowMe] = false
-        attacker.pbPartner.effects[:RagePowder] = false
+        attacker.pbPartner.effects[:FollowMe]=false
+        attacker.pbPartner.effects[:RagePowder]=false
       end
     else
-      attacker.effects[:FollowMe] = true
+      attacker.effects[:FollowMe]=true
       if !attacker.pbPartner.isFainted?
-        attacker.pbPartner.effects[:FollowMe] = false
-        attacker.pbPartner.effects[:RagePowder] = false
+        attacker.pbPartner.effects[:FollowMe]=false
+        attacker.pbPartner.effects[:RagePowder]=false
       end
     end
-    @battle.pbDisplay(_INTL("{1} became the center of attention!", attacker.pbThis))
+    @battle.pbDisplay(_INTL("{1} became the center of attention!",attacker.pbThis))
     return 0
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :GOLDRUSH
+      @battle.pbAnimation(:MAKEITRAIN,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(@move,attacker,opponent,hitnum)
+    end
   end
 end
 

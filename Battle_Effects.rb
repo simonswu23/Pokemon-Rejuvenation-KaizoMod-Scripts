@@ -303,6 +303,15 @@ class PokeBattle_Battler
   end
 
   def pbParalyze(attacker)
+    if (attacker.crested == :PLUSLE)
+      self.pbBurn(attacker) if self.pbCanBurn?(true)
+      return
+    end
+    if (attacker.crested == :MINUN)
+      self.pbFreeze(attacker) if self.pbCanFreeze?(true)
+      return
+      return
+    end
     self.status = :PARALYSIS
     self.statusCount = 0
     if self.index != attacker.index

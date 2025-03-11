@@ -30,6 +30,13 @@
 - Belial (Boss)
 - Angie Gym
 - Texen
+- Adam Garufa
+- Groudon (Boss)
+- Crawli Jynobi
+- Kyogre (Boss)
+- Eli and Sharon Valor
+- Giratina Valor (Boss)
+- Geara x Zetta Valor
 
 
 # TODOs:
@@ -37,16 +44,22 @@
   ## Changelog Updates:
     - Giga Pokemon
     - Signature Pokemon
+    - *document moveset updates
 
   ## Bug list:
     - Changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
     - Protect rate sharing does not reset after a flinch
     - No anim for Tapu Koko's Guardian of Alola?
     - -1 Heal Block was able to use Sitrus Berry to heal?
+    - Giga Meowth, Eevee, Pikachu do not get updated giga abilities (does not reset)
+
+  ## Rebalancing
+    - 
 
   ## Implementation Dump
     - Moves:
       - Chi Strike (+1 to CHR for all allies)
+      - Change Gravitas (effect moved to applefall)
     - Abilities:
       - Anticipation: shuddered pokemon takes 1/2 damage from first instance of SE attack
       - Forewarn: all allies avoid all instances of the forewarned attack until the end of the turn
@@ -63,6 +76,8 @@
         - Make more viable on Swamp field
           - always moves before targets with lowered speed (increased priority stage)
           - always crits targets with lowered speed (can remove poisoned trigger)
+    - Other
+      - Petrified pokemon are also heal blocked
 
     - All field interactions!
 
@@ -117,6 +132,10 @@
     - Learnset updates for new moves
 
 # Journal
+
+- 3/10/2024
+  - Hydreigon crest shows super effective messages twice? Bug (low priority)
+  - Add +1 eviolite earlier into the game (pre-valor)
 
 - 2/26/2025
   - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards

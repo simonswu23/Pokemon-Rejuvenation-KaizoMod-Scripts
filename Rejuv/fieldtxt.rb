@@ -971,7 +971,7 @@ FIELDEFFECTS = {
 		"The dense forest canopy blocked the attack!" => [:FLYING],
 	},
 	:typeCondition => {
-		# :BUG => "self.pbIsSpecial?(type) && !KAIZOMOD",
+		:BUG => "self.pbIsSpecial?(type)",
 		:FLYING => "self.contactMove?",
 	},
 	:typeEffects => {},

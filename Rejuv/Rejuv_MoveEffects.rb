@@ -1120,6 +1120,28 @@ class PokeBattle_Move_1003 < PokeBattle_Move
     if (opponent.pbPartner && !opponent.pbPartner.isFainted?)
       ret2 = opponent.pbPartner.pbReduceStat(PBStats::EVASION, inc, abilitymessage: false, statdropper: attacker)
     end
+
+    didsomething = true
+    for i in [attacker, attacker.pbPartner]
+      next if !i || i.isFainted?
+      case i.status
+        when :PARALYSIS
+          @battle.pbDisplay(_INTL("{1} was cured of its paralysis.",i.pbThis))
+        when :SLEEP
+          @battle.pbDisplay(_INTL("{1} was woken from its sleep.",i.pbThis))
+        when :POISON
+          @battle.pbDisplay(_INTL("{1} was cured of its poisoning.",i.pbThis))
+        when :BURN
+          @battle.pbDisplay(_INTL("{1} was cured of its burn.",i.pbThis))
+        when :FROZEN
+          message = KAIZOMOD ? "{1} was cured of its frostbite" : "{1} was defrosted."
+          @battle.pbDisplay(_INTL(message,i.pbThis))
+        when :PETRIFIED
+          @battle.pbDisplay(_INTL("{1} was released from the stone.",i.pbThis))
+      end
+      i.status=nil
+      i.statusCount=0
+    end
     return ret1 || ret2
   end
 
@@ -1181,5 +1203,24 @@ class PokeBattle_Move_1004 < PokeBattle_Move
     return if !showanimation
     # replacement anim until proper one is made
     @battle.pbAnimation(:ALLOUTPUMMELING,attacker,opponent,hitnum)
+  end
+end
+
+# Other Handlers
+
+### Hydro Vortex (new)
+class PokeBattle_Move_2000 < PokeBattle_Move
+
+  def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+    if (@battle.FE== :UNDERWATER && !opponent.hasType?(:WATER) && !opponent.ability == :STURDY &&
+                                    !opponent.ability == :SWIFTSWIM && !opponent.ability == :STEELWORKER)
+      damage = pbEffectFixedDamage(opponent.totalhp, attacker, opponent, hitnum, alltargets, showanimation)
+      if opponent.hp <= 0
+        @battle.pbDisplay(_INTL("It's a one-hit KO!"))
+      end
+      return damage
+    end
+
+    return super(attacker,opponent,hitnum,alltargets,showanimation)
   end
 end

@@ -230,7 +230,7 @@ class PokeBattle_Battler
           @spatk *= 1.5
         when :STANTLER, :WYRDEER
           @attack *= 1.5
-        when :ORICORIO
+        when :ORICORIO, :PLUSLE, :MINUN
           @spatk *= 1.25
           @speed *= 1.25
         when :SEVIPER

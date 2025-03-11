@@ -2134,4 +2134,10 @@ ABILHASH = {
     :fullDesc => "Summons sand that removes Rock/Ground-type weaknesses, while boosting their special defense by x1.5."
 },
 
+:GOLDENVY => {
+	:ID => 387,
+	:name => "Gold Envy",
+	:desc => "Raptured by tremendous jealousy, the foes can only use attacking moves."
+},
+
 }

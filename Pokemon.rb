@@ -1329,6 +1329,12 @@ def makeGiga
   # @SWu TODO: only need to handle Urshifu below
   # self.form=v[@item] if v.is_a?(Hash) && v[@item].is_a?(Integer)
   # self.form=v[@item][@form] if v.is_a?(Hash) && v[@item].is_a?(Hash)
+
+  if (@species == :EEVEE || @species == :MEOWTH || @species == :PIKACHU)
+    self.originalAbility = self.ability
+    self.ability = self.abilityIndex
+  end
+
 end
 
 def pbGigaCompatibleBaseMove?(move)
@@ -1366,7 +1372,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :URSHIFU         then return true if move.move == :WICKEDBLOW
     when :SANDACONDA      then return true if move.move == :HURRICANE
     when :KINGLER         then return true if move.move == :XSCISSOR
-    when :SNORLAX         then return true if move.move == :RETURN
+    when :SNORLAX         then return true if move.move == :BODYSLAM
     when :ORBEETLE        then return true if move.move == :PSYCHIC
   end
   return false

@@ -1228,7 +1228,7 @@ BOSSINFOHASH = {
             :weatherChange => nil,
         },
         :sosDetails =>  { # pokemon details
-            :activationRequirement => "@battle.battlers[battlerIndex].shieldCount <= 2",
+            :activationRequirement => "true",
             # :refreshingRequirement => [0],
             :entryMessage => ["Charizard charged into the fight!","The Thunder Warrior revitalized Charizard's energy!","The Thunder Warrior revitalized Charizard's energy!"],
             :continuous => true,
@@ -1434,24 +1434,75 @@ BOSSINFOHASH = {
     :BOSSKYOGRE => {
         :name => "Leviathan Kyogre",
         :entryText => "Kyogre's power is overwhelming!",
-        :shieldCount => 3,
+        :shieldCount => 4,
         :immunities => {},
         :moninfo => {
             :species => :KYOGRE,
-            :level => 60,
-            :moves => [:MUDDYWATER,:ICEBEAM,:ANCIENTPOWER,:CALMMIND],
+            :level => 68,
+            :moves => [:SURF,:ICEBEAM,:THUNDERBOLT,:CALMMIND],
             :nature => :MODEST,
             :iv => 31,
-            :ev => [85,85,85,85,85,85]
+            :ev => [252,252,252,252,252,252]
+        },
+        :sosDetails =>  { # pokemon details
+            :activationRequirement => "true",
+            # :refreshingRequirement => [0],
+            :entryMessage => ["A school of Wishiwashi was summoned!","Dhelmise lurks in the deep...","Tapu Fini joins the fight!","The Sea Prince heard Kyogre's plea!"],
+            :continuous => true,
+            :totalMonCount => 4,
+            :moninfos => {
+                1 => {
+                    :species => :WISHIWASHI,
+                    :level => 50,
+                    :item => :MYSTICWATER,
+                    :moves => [:WAVECRASH,:SOAK,:HELPINGHAND,:TEARFULLOOK],
+                    :ability => :SCHOOLING,
+                    :nature => :ADAMANT,
+                    :iv => 31,
+                    :ev => [252, 0, 0, 252, 4, 0],
+                },
+                2 => {
+                    :species => :DHELMISE,
+                    :level => 50,
+                    :item => :ELEMENTALSEED,
+                    :moves => [:ANCHORSHOT,:POWERWHIP,:LIQUIDATION,:SWORDSDANCE],
+                    :ability => :STEELWORKER,
+                    :nature => :ADAMANT,
+                    :iv => 31,
+                    :ev => [252, 252, 0, 0, 4, 0],
+                },
+                3 => {
+                    :species => :TAPUFINI,
+                    :level => 55,
+                    :item => :LIGHTCLAY,
+                    :moves => [:NATURESMADNESS,:LIFEDEW,:REFLECT,:LIGHTSCREEN],
+                    :ability => :MISTYSURGE,
+                    :shiny => true,
+                    :nature => :MODEST,
+                    :iv => 31,
+                    :ev => [252, 0, 0, 252, 4, 0],
+                },
+                4 => {
+                    :species => :MANAPHY,
+                    :level => 55,
+                    :item => :WATERIUMZ,
+                    :moves => [:TAILGLOW,:MUDDYWATER,:ENERGYBALL,:DAZZLINGGLEAM],
+                    :ability => :HYDRATION,
+                    :shiny => true,
+                    :nature => :ADAMANT,
+                    :iv => 31,
+                    :ev => [252, 0, 0, 252, 4, 0],
+                },
+            },
         },
         :onBreakEffects => {
-            3 => {
+            4 => {
                 :threshold => 0,
                 :message => "Kyogre summoned a storm and flooded the arena!",
-                :weatherChange => :RAINDANCE,
-                :weatherChangeAnimation => "Rain",
                 :fieldChange => :WATERSURFACE,
-                :movesetUpdate => [:WHIRLPOOL,:THUNDERBOLT,:ANCIENTPOWER,:SCARYFACE],
+                :formchange => 1,
+                :abilitychange => :PRIMORDIALSEA,
+                :movesetUpdate => [:HURRICANE,:THUNDER,:ORIGINPULSE,:ICEBEAM],
                 :delayedaction => {
                     :delay => 1,
                     :message => "Whirlpools are forming...",
@@ -1467,24 +1518,41 @@ BOSSINFOHASH = {
                     },
                 },
             },
-            2 => {
+            3 => {
                 :threshold => 0,
                 :message => "Kyogre dragged the battle underwater!",
                 :fieldChange => :UNDERWATER,
                 :animation => :DIVE,
-                :movesetUpdate => [:DIVE,:THUNDERBOLT,:ANCIENTPOWER,:DOUBLEEDGE],
+                :movesetUpdate => [:ORIGINPULSE,:THUNDER,:AQUABATICS,:ICEBEAM],
                 :bossStatChanges => {
                     PBStats::ATTACK => 1,
-                }
+                    PBStats::DEFENSE => 1,
+                    PBStats::SPATK => 1,
+                    PBStats::SPDEF => 1,
+                    PBStats::SPEED => 1                 
+                },
             },
-            1 => {
+            2 => {
                 :threshold => 0,
                 :message => "Kyogre let out a terrifying roar!",
                 :animation => :NOBLEROAR,
+                :abilitychange => :HYDRATION,
                 :playerSideStatChanges => {
                     PBStats::ATTACK => -2,
                     PBStats::SPATK => -2,
                 },
+                :movesetUpdate => [:ORIGINPULSE,:THUNDER,:EARTHQUAKE,:ICEBEAM],
+                :statDropCure => true,
+                :statusCure => true,
+                :bossEffect => :AquaRing,
+                :bossEffectMessage => "{1} surrounded itself with a veil of water!",
+            },
+            1 => {
+                :threshold => 0,
+                :itemchange => :LIFEORB,
+                :message => "Kyogre is putting in it's all!",
+                :movesetUpdate => [:STONESURGE,:THUNDER,:REST,:EARTHQUAKE],
+                :instantMove => [:HYDROVORTEX, 0],
             }
         }
     },
@@ -1538,7 +1606,7 @@ BOSSINFOHASH = {
                 :message => "Groudon is drawing primal power from the Core!",
                 :formchange => 1,
                 :abilitychange => :DESOLATELAND,
-                :movesetUpdate => [:PRECIPICEBLADES,:ROCKSLIDE,:REST,:LAVAPLUME],
+                :movesetUpdate => [:PRECIPICEBLADES,:STONEEDGE,:REST,:LAVAPLUME],
                 :statDropCure => true,
                 :instantMove => [:VOLCALITH, 0],
             },
@@ -1553,7 +1621,7 @@ BOSSINFOHASH = {
                     PBStats::SPDEF => 1,
                     PBStats::SPEED => 1                 
                 },
-                :movesetUpdate => [:PRECIPICEBLADES,:ROCKSLIDE,:REST,:LAVAPLUME],
+                :movesetUpdate => [:PRECIPICEBLADES,:STONEEDGE,:REST,:LAVAPLUME],
                 :statDropCure => true,
                 :statusCure => true,
                 :instantMove => [:TECTONICRAGE, 0],
@@ -1563,24 +1631,65 @@ BOSSINFOHASH = {
     :VALORGIRATINA => {
         :name => "Renegade Giratina",
         :entryText => "Giratina is blocking the way forward!",
-        :shieldCount => 2,
+        :shieldCount => 5,
         :immunities => {},
         :moninfo => {
             :species => :GIRATINA,
-            :level => 55,
+            :level => 65,
             :moves => [:SHADOWFORCE,:AURASPHERE,:EARTHPOWER,:DRAGONCLAW],
             :nature => :NAUGHTY,
+            :item => :GRISEOUSORB,
             :form => 1,
             :iv => 31,
-            :ev => [85,85,85,85,85,85]
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
+            5 => {
+                :threshold => 0,
+                :message => "Giratina's form is distorting!",
+                :statusCure => true,
+                :effectClear => true,
+                :formchange => 0,
+                :itemchange => :LEFTOVERS,
+                :movesetUpdate => [:WILLOWISP,:DRAGONTAIL,:CALMMIND,:HEX],
+                :instantMove => [:TOPSYTURVY, 0],
+            },
+            4 => {
+                :threshold => 0,
+                :message => "Giratina's form is distorting!",
+                :statusCure => true,
+                :effectClear => true,
+                :formchange => 1,
+                :itemchange => :GRISEOUSORB,
+                :movesetUpdate => [:SHADOWFORCE,:AURASPHERE,:EARTHPOWER,:DRAGONCLAW],
+                :instantMove => [:SHADOWFORCE, 0],
+            },
+            3 => {
+                :threshold => 0,
+                :message => "Giratina's form is distorting!",
+                :statusCure => true,
+                :effectClear => true,
+                :formchange => 0,
+                :movesetUpdate => [:WILLOWISP,:DRAGONTAIL,:CALMMIND,:HEX],
+                :itemchange => :LEFTOVERS,
+                :instantMove => [:TOPSYTURVY, 0],
+            },
             2 => {
+                :threshold => 0,
+                :message => "Giratina's form is distorting!",
+                :statusCure => true,
+                :effectClear => true,
+                :formchange => 1,
+                :itemchange => :GRISEOUSORB,
+                :movesetUpdate => [:SHADOWFORCE,:AURASPHERE,:EARTHPOWER,:DRAGONCLAW],
+                :instantMove => [:SHADOWFORCE, 0],
+            },
+            1 => {
                 :threshold => 0,
                 :message => "Giratina drew power from the Distortion World!",
                 :statDropCure => true,
-                :formchange => 1,
-                :itemchange => :GRISEOUSORB,
+                :instantMove => [:DEVASTATINGDRAKE, 0],
+                :movesetUpdate => [:SPECTRALTHIEF,:DRACOMETEOR,:EARTHQUAKE,:DRAGONDANCE],
                 :bossStatChanges => {
                     PBStats::ATTACK => 1,
                     PBStats::DEFENSE => 1,
@@ -1635,7 +1744,7 @@ BOSSINFOHASH = {
     :LAVALAKAZAM => {
         :name => "Alakazam",
         :shieldCount => 2,
-        :immunities => {},
+        :immunities => {}, 
         :moninfo => {
             :species => :ALAKAZAM,
             :level => 65,
@@ -2406,6 +2515,25 @@ BOSSINFOHASH = {
             :form => 1,
             :iv => 31,
             :ev => [4,0,0,252,0,252]
+        },
+        :onBreakEffects => {
+        }
+    },
+    :GEARAGIRA => {
+        :name => "Giratina",
+        :entryText => "Giratina appears once again!",
+        :shieldCount => 1,
+        :immunities => {},
+        :moninfo => {
+            :species => :GIRATINA,
+            :level => 65,
+            :item => :GRISEOUSORB,
+            :moves => [:EARTHPOWER,:SHADOWSNEAK,:DRAGONPULSE,:THUNDER],
+            :ability => :LEVITATE,
+            :nature => :NAIVE,
+            :form => 1,
+            :iv => 31,
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
         }

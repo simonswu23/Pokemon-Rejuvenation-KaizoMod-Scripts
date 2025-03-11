@@ -97,7 +97,9 @@ class PokeBattle_Battler
     :ShellTrap, :SkyDrop, :SmackDown, :Snatch, :Tantrum, :TarShot, :Torment,
     :Trace, :Transform, :Truant, :TyphBond,:UsingSubstituteRightNow, :Shelter, :SwampWeb,
     # Gen 9 Mod - Added Commander/Commandee effects, Double Shock & Charge lasts until electric move is used or switches
-    :Commander, :Commandee, :DoubleShock, :Charge, :GlaiveRush, :SaltCure]
+    :Commander, :Commandee, :DoubleShock, :Charge, :GlaiveRush, :SaltCure,
+    # Kaizomod
+    :HydreigonCrest, :FlowerShield, :MagicGuard]
   
   #turn count vars
   # Gen 9 Mod - Removed Charge from TurnEff
@@ -952,6 +954,10 @@ class PokeBattle_Battler
       # Gen 9 Mod - Added Protosynthesis
       when :PROTOSYNTHESIS
         speed *= 1.5 if self.effects[:Protosynthesis][0] == PBStats::SPEED
+      when :PLUS
+        speed *=2 if self.pbPartner.ability == :PLUS && KAIZOMOD
+      when :MINUS
+        speed *=2 if self.pbPartner.ability == :MINUS && KAIZOMOD
     end
     case @battle.FE
       when :NEWWORLD
@@ -5193,6 +5199,14 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1} can't use {2} after the taunt!", pbThis,basemove.name))
       return false
     end
+    if (pbOpposing1.hasWorkingAbility(:GOLDENVY) && !pbOpposing1.moldbroken) && basemove.betterCategory(basemove.type) == :status && !choice[2].zmove
+      @battle.pbDisplay(_INTL("{1} can't use {2} due to {3}'s {4}!",self.pbThis,basemove.name,pbOpposing1.pbThis,getAbilityName(pbOpposing1.ability)))
+      return false
+    end
+    if (pbOpposing2.hasWorkingAbility(:GOLDENVY) && !pbOpposing2.moldbroken) && basemove.betterCategory(basemove.type) == :status && !choice[2].zmove
+      @battle.pbDisplay(_INTL("{1} can't use {2} due to {3}'s {4}!",self.pbThis,basemove.name,pbOpposing2.pbThis,getAbilityName(pbOpposing2.ability)))
+      return false
+    end
     if @effects[:HealBlock]!=0 && basemove.isHealingMove? && !choice[2].zmove
       @battle.pbDisplay(_INTL("{1} can't use {2} after the Heal Block!", pbThis,basemove.name))
       return false
@@ -5585,7 +5599,7 @@ class PokeBattle_Battler
       if target.damagestate.calcdamage > 0 && !target.isFainted?
         # Defrost
         # called out of method due to needing the hitcounter for parental bond
-        if (basemove.pbType(user) == :FIRE || basemove.function == 0x0A) && target.status == :FROZEN && !(user.ability == :PARENTALBOND && i == 0)
+        if (basemove.pbType(user) == :FIRE || basemove.function==0x0A) && target.status== :FROZEN && !(user.ability == (:PARENTALBOND) && i==0) && !(user.crested == :HYDREIGON && i==0) 
           target.pbCureStatus
         end
         # Rage
@@ -6291,6 +6305,24 @@ class PokeBattle_Battler
           numhits = 2 unless (targetchoices == :AllNonUsers && counter1 != 2) || (targetchoices == :AllOpposing && counter2 != 1)
         else
           user.effects[:TyphBond] = false
+        end
+        # Hydreigon Crest
+        if numhits < 3 && !choice[2].zmove && user.crested == :HYDREIGON
+          counter1=0
+          counter2=0
+          for k in @battle.battlers
+            next if k.isFainted?
+            counter1+=1
+          end
+          for j in @battle.battlers
+            next unless user.pbIsOpposing?(j.index)
+            next if j.isFainted?
+            counter2+=1
+          end
+          user.effects[:HydreigonCrest] = true unless ((targetchoices == :AllNonUsers && !(counter1==2)) || (targetchoices == :AllOpposing && !(counter2==1)))
+          numhits = 3 unless ((targetchoices == :AllNonUsers && !(counter1==2)) || (targetchoices == :AllOpposing && !(counter2==1)))
+        else
+          user.effects[:HydreigonCrest] = false
         end
         # Reset damage state, set Focus Band/Focus Sash to available
         target.damagestate.reset

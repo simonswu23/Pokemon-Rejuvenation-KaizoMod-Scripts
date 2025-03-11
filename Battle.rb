@@ -1333,6 +1333,18 @@ class PokeBattle_Battle
       end
       return false
     end
+    if (opp1.hasWorkingAbility(:GOLDENVY) && !opp1.moldbroken) && basemove.betterCategory(basemove.type) == :status && !basemove.zmove
+      if showMessages
+        pbDisplayPaused(_INTL("{1} can't use {2} due to {3}'s {4}!",thispkmn.pbThis,basemove.name,opp1.pbThis,getAbilityName(opp1.ability)))
+      end
+      return false
+    end
+    if (opp2.hasWorkingAbility(:GOLDENVY) && !opp2.moldbroken) && basemove.betterCategory(basemove.type) == :status && !basemove.zmove
+      if showMessages
+        pbDisplayPaused(_INTL("{1} can't use {2} due to {3}'s {4}!",thispkmn.pbThis,basemove.name,opp2.pbThis,getAbilityName(opp2.ability)))
+      end
+      return false
+    end
     if thispkmn.effects[:Torment] && !instructed && !basemove.zmove
       if basemove.move == thispkmn.lastRegularMoveUsed
         if showMessages
@@ -2487,6 +2499,7 @@ class PokeBattle_Battle
     # Re-update ability of giga-evolved mon
     @battlers[index].pokemon.ability = @battlers[index].backupability
     @battlers[index].giga = true
+    
     # @battlers[index].pbAbilitiesOnSwitchIn(true)
   end
 

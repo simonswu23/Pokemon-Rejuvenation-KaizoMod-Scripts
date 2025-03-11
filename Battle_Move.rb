@@ -183,6 +183,8 @@ class PokeBattle_Move
       when :SIMIPOUR  then type = :GRASS    if type == :NORMAL
       when :SIMISAGE  then type = :FIRE     if type == :NORMAL
       when :LUXRAY    then type = :ELECTRIC if type == :NORMAL
+      when :PLUSLE    then type = :FIRE     if type == :NORMAL
+      when :MINUN     then type = :ICE      if type == :NORMAL
       when :SAWSBUCK
         case attacker.form
           when 0  then type = :WATER  if type == :NORMAL
@@ -397,7 +399,7 @@ class PokeBattle_Move
     calcspatkmult *= 2 if attacker.hasWorkingItem(:DEEPSEATOOTH) && attacker.pokemon.species == :CLAMPERL
     calcspatkmult *= 2 if attacker.hasWorkingItem(:LIGHTBALL) && attacker.pokemon.species == :PIKACHU
     calcspatkmult *= 1.5 if attacker.ability == :FLAREBOOST && (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && @battle.FE != :FROZENDIMENSION
-    calcspatkmult *= 1.5 if [:MINUS, :PLUS].include?(attacker.ability) && ([:MINUS, :PLUS].include?(attacker.pbPartner.ability) || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
+    calcspatkmult *= 1.5 if !KAIZOMOD && [:MINUS, :PLUS].include?(attacker.ability) && ([:MINUS, :PLUS].include?(attacker.pbPartner.ability) || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
     calcspatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA)) && @battle.FE != :FROZENDIMENSION
     # Gen 9 Mod - Added Hadron Engine
     calcspatkmult *= (5461 / 4096.to_f) if attacker.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION
@@ -634,9 +636,17 @@ class PokeBattle_Move
       mod1 = 4 if otype1 == :STEEL
       mod2 = 4 if otype2 == :STEEL
     end
+    if @move == :ACIDROCK
+      mod1 = 1 if otype1 == :STEEL
+      mod2 = 1 if otype2 == :STEEL
+    end
     if @move == :FREEZEDRY
       mod1 = 4 if otype1 == :WATER
       mod2 = 4 if otype2 == :WATER
+    end
+    if type == :DARK && attacker.crested == :HYDREIGON
+      mod1 = 4 if otype1 == :FAIRY
+      mod2 = 4 if otype2 == :FAIRY
     end
 
     # Gen 9 Mod - Tera Shell makes moves not very effective on full HP
@@ -781,6 +791,10 @@ class PokeBattle_Move
       mod1 = 4 if otype1 == :WATER
       mod2 = 4 if otype2 == :WATER
     end
+    if type == :DARK && attacker.crested == :HYDREIGON
+      mod1 = 4 if otype1 == :FAIRY
+      mod2 = 4 if otype2 == :FAIRY
+    end
 
     # Gen 9 Mod - Tera Shell makes moves not very effective on full HP
     if opponent.ability == :TERASHELL && opponent.hp == opponent.totalhp
@@ -874,7 +888,7 @@ class PokeBattle_Move
       ((Rejuv && @battle.FE == :GLITCH && opponent.species == :GENESECT && opponent.hasWorkingItem(:DOUSEDRIVE)) && type == :WATER) ||
       ((Rejuv && @battle.FE == :GLITCH && opponent.species == :GENESECT && opponent.hasWorkingItem(:CHILLDRIVE)) && type == :ICE) ||
       ((Rejuv && @battle.FE == :DESERT) && (opponent.hasType?(:GRASS) || opponent.hasType?(:WATER)) && @battle.pbWeather == :SUNNYDAY && type == :WATER)
-      if opponent.effects[:HealBlock]==0
+      if opponent.effects[:HealBlock] ==0
         negator = getAbilityName(opponent.ability)
         # Gen 9 Mod - Added Earth Eater
         if ![:WATERABSORB,:VOLTABSORB,:DRYSKIN, :EARTHEATER].include?(opponent.ability)
@@ -965,7 +979,7 @@ class PokeBattle_Move
         end
       when :DRUDDIGON
         if type == :FIRE
-          if opponent.effects[:HealBlock]==0
+          if opponent.effects[:HealBlock] ==0
             if opponent.pbRecoverHP((opponent.totalhp/4.0).floor,true)>0
               @battle.pbDisplay(_INTL("{1}'s {2} restored its HP!",
                   opponent.pbThis,getItemName(opponent.item)))
@@ -1255,6 +1269,8 @@ class PokeBattle_Move
       when :SIMISAGE
         typemod /= 2 if inverse ? PBTypes.oneTypeEff(type, :FIRE) > 2 : (PBTypes.oneTypeEff(type, :FIRE) < 2 && !(type == :ICE && @battle.FE == :GLITCH))
         typemod = 0 if PBTypes.oneTypeEff(type, :FIRE) == 0 && !inverse
+      when :HYDREIGON
+        typemod = 2 if type == :FAIRY
     end
     typemod *= 2 if type == :FIRE && opponent.effects[:TarShot]
     return typemod
@@ -1360,6 +1376,8 @@ class PokeBattle_Move
     return true if attacker.hasType?(:POISON) && @move == :TOXIC
     return true if (@function == 0x10 || @move == :BODYSLAM || @function == 0x137 || @function == 0x9B) && opponent.effects[:Minimize] # Flying Press, Stomp, DRush
     return true if @battle.FE == :MIRROR && (PBFields::BLINDINGMOVES + [:MIRRORSHOT]).include?(@move)
+    return true if (@battle.FE == :UNDERWATER || @battle.FE == :WATERSURFACE) && @move == :ORIGINPULSE
+    return true if (@battle.FE == :VOLCANIC || @battle.FE == :VOLCANICTOP) && @move == :PRECIPICEBLADES
 
     # One-hit KO accuracy handled elsewhere
     if @function == 0x08 || @function == 0x15 # Thunder, Hurricane
@@ -1984,7 +2002,7 @@ class PokeBattle_Move
     case attacker.ability
       when :GUTS then atkmult*=1.5 if !attacker.status.nil? && pbIsPhysical?(type)
       when :PLUS, :MINUS
-        if pbIsSpecial?(type) && @battle.FE != :GLITCH
+        if pbIsSpecial?(type) && @battle.FE != :GLITCH && !KAIZOMOD
           partner=attacker.pbPartner
           if partner.ability == :PLUS || partner.ability == :MINUS
             atkmult*=1.5
@@ -2009,6 +2027,21 @@ class PokeBattle_Move
       when :ORICHALCUMPULSE then atkmult*=(5461/4096.to_f) if (@battle.pbWeather== :SUNNYDAY && pbIsPhysical?(type)) &&  @battle.FE != :FROZENDIMENSION
       when :HADRONENGINE then atkmult*=(5461/4096.to_f) if ((@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && pbIsSpecial?(type)) &&  @battle.FE != :FROZENDIMENSION
     end
+
+    if (attacker.pbPartner.ability == :PLUS || attacker.ability == :PLUS)
+      inc = 1.15
+      inc = 1.5 if attacker.pbPartner.ability == :PLUS && attacker.ability == :MINUS
+      inc = 1.5 if attacker.pbPartner.ability == :MINUS && attacker.ability == :PLUS
+      atkmult *= inc
+    end
+
+    if (attacker.pbPartner.ability == :MINUS || attacker.ability == :MINUS)
+      inc = 0.85
+      inc = 0.67 if attacker.pbPartner.ability == :PLUS && attacker.ability == :MINUS
+      inc = 0.67 if attacker.pbPartner.ability == :MINUS && attacker.ability == :PLUS
+      atkmult *= inc
+    end
+
     # Mid Battle stat multiplying crests; Spiritomb Crest, Castform Crest
     case attacker.crested
       when :CASTFORM then atkmult*=1.5 if attacker.form == 1 && (@battle.pbWeather== :SUNNYDAY && !(attitemworks && attacker.item == :UTILITYUMBRELLA)) && pbIsSpecial?(type) && (@battle.FE != :GLITCH &&  @battle.FE != :FROZENDIMENSION)
@@ -2303,6 +2336,8 @@ class PokeBattle_Move
       when :SIMISEAR then typecrest = true if type == :WATER
       when :SIMIPOUR then typecrest = true if type == :GRASS
       when :SIMISAGE then typecrest = true if type == :FIRE
+      when :PLUSLE then typecrest = true if type == :FIRE
+      when :MINUN then typecrest = true if type == :ICE
       when :ZOROARK
         party = @battle.pbPartySingleOwner(attacker.index)
         party=party.find_all {|item| item && !item.egg? && item.hp>0 }

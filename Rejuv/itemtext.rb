@@ -10807,4 +10807,34 @@ ITEMHASH = {
     :noUse => true,
 },
 
+:PLUSCREST => {
+	:ID => 3003,
+	:name => "Plusle Crest",
+	:desc => "Burn Baby Burn",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:MINCREST => {
+	:ID => 3004,
+	:name => "Minun Crest",
+	:desc => "Ice Ice Baby",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:HYDREICREST => {
+	:ID => 3005,
+	:name => "Hydreigon Crest",
+	:desc => "Die Fairies!",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
 }

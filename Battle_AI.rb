@@ -8184,11 +8184,11 @@ class PokeBattle_AI
         when :MAGNETPULL,:CONTRARY,:UNAWARE,:OBLIVIOUS   then return 0 if (type == :GROUND || (!secondtype.nil? && secondtype.include?(:GROUND))) && @battle.FE == :DEEPEARTH && !opponent.hasWorkingItem(:IRONBALL)
         when :STORMDRAIN             then return -1 if type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER))
         when :LIGHTNINGROD,:MOTORDRIVE      then return -1 if type == :ELECTRIC || (!secondtype.nil? && secondtype.include?(:ELECTRIC))
-        when :DRYSKIN               then return -1 if type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER)) && opponent.effects[:HealBlock]==0
-        when :VOLTABSORB             then return -1 if type == :ELECTRIC || (!secondtype.nil? && secondtype.include?(:ELECTRIC)) && opponent.effects[:HealBlock]==0
-        when :WATERABSORB             then return -1 if type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER)) && opponent.effects[:HealBlock]==0
+        when :DRYSKIN               then return -1 if type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER)) && opponent.effects[:HealBlock] ==0
+        when :VOLTABSORB             then return -1 if type == :ELECTRIC || (!secondtype.nil? && secondtype.include?(:ELECTRIC)) && opponent.effects[:HealBlock] ==0
+        when :WATERABSORB             then return -1 if type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER)) && opponent.effects[:HealBlock] ==0
         # Gen 9 Mod - Added Earth Eater
-        when :EARTHEATER             then return -1 if type == :GROUND || (!secondtype.nil? && secondtype.include?(:GROUND)) && opponent.effects[:HealBlock]==0
+        when :EARTHEATER             then return -1 if type == :GROUND || (!secondtype.nil? && secondtype.include?(:GROUND)) && opponent.effects[:HealBlock] ==0
         when :BULLETPROOF             then return 0 if (PBStuff::BULLETMOVE).include?(id)
         when :FLASHFIRE             then return -1 if type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))
         when :MAGMAARMOR             then return 0 if (type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))) && (@battle.FE == :DRAGONSDEN || @battle.FE == :INFERNAL || @battle.FE == :VOLCANICTOP)

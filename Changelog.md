@@ -18,15 +18,14 @@
 
 # Abilities
   ## New Abilities
-  - Melodramatic
-    - on switch in, sharply raise a random stat and lower a random stat, three times
-    - Neved's Glalie
   - Meteor Impactor
     - on switch in, crash and deal big rock type damage in exchange for losing 50% hp
     - Zetta's Minior
   - Debutante
     - opposing pokemon are locked into a single attack
     - Giga Eevee's ability
+  - Gold Envy
+    - opposing pokemon may not use status moves
 
   ## Changes
   - Magma Armor protects against Frostbite
@@ -45,6 +44,8 @@
   - Frisk suppresses found items for 1 turn
   - Damp creates Water Sport on entry
   - Cursed Body now always activates if the attack knocked the user out
+  - Plus: now provides a x1.15 boost to all friendly attacks, x1.5 if an ally has Minus. x2 speed an if ally has Plus.
+  - Minus: now provides a x0.85 reduction to all opposing attacks, x0.67 if ally has Plus. x2 speed if an ally has Minus.
 
 
 # Crests
@@ -59,9 +60,17 @@
   - Cacturne Crest: raises offenses by 1 if attacking first
   - Klinklang Crest: switches between speed and power mode (x2 speed and magnet rise, and x1.5 attack and special attack) using Shift Gear and Gear Up
   - Emboar Crest: doubles HP stat, and Attack stat scales with remaining HP (starting at x2)
+  - Plusle Crest: Normal -> Fire, paralysis effects inflict burn instead. x1.25 speed and special attack
+  - Minun Crest: Normal -> Ice, paralysis effects inflict frostbite instead. x1.25 speed and special attack
+  - Hydreigon Crest: Resists Fairy attacks, own Dark attacks SE against Fairy. Attacks hit 2 more times after the initial (25% power each)
 
 # Items
   - Pinch berries now heal 50% hp
+  - Loaded Dice now affects:
+    - Magnitude
+    - Present
+    - Psywave
+    - Metronome
 
 # Attacks
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
@@ -84,6 +93,8 @@
   - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
   - Matrix Shot now sets up inverse stealth rocks
   - Weather Ball becomes ground typing in the Sashilan Sand, and is always Flying type in Strong Winds
+  - Attack Order now naturally hits all opposing foes
+  - Defend Order now has +3 priority
 
   ## New Attacks
   - Chain Drain:
@@ -109,13 +120,46 @@
     - Shields Down: 60, 60, 120, 60, 120, 60
   - Terapagos
     - Stellar type (neutral relationship with every other typing)
+  - Krabby/Kingler
+    - Anger Shell replaces Shell Armor
+  - Kyogre
+    - Primal Kyogre has Electric sub-typing
+
+  ## Moveset Tweaks (WIP)
   - Shelmet
-    - learns sticky web as an egg move
+    - learns Sticky Web as an egg move
   - Snorunt, Glalie
     - Aevian: Glalie learns Grassy Glide as a base move
     - Regular: Glalie learns Extremespeed as a base move, Snorunt learns Boomburst as an egg move
   - Cinderace
     - learns Grassy Glide at level 65
+  - Shuppet/Banette
+    - learns After You, Encore, Follow Me as egg moves
+    - learns Fake Out on evolution and at level 1 (Banette)
+  - Muk/Grimer (both forms)
+    - learns Toxic at level 26
+  - Sewaddle/Swadloon/Leavanny (Alolan)
+    - learns Rage Powder at level 32
+  - Bergmite
+    - learns Flurry as Egg Move
+  - Spheal/Sealeo/Walrein
+    - learns Flurry at level 26
+  - Kyogre
+    - compatible with Scary Face
+  - Appletun
+    - learns Strength Sap at level 1
+    - learns Pollen Puff at level 36
+  - Flapple
+    - learns First Impression at level 1
+    - learns Fury Cutter at level 36
+  - Plusle
+    - learns Follow Me at level 1
+    - learns Fake Out at level 26
+    - learns Hyper Voice at level 40
+  - Minun
+    - learns After You at level 1
+    - learns Fake Out at level 26
+    - learns Hyper Voice at level 40
 
 # Field Changes
   - Water's Surface
@@ -126,12 +170,14 @@
     - Wave Crash added to moves boosted by field, field boost 1.2x -> 1.3x
     - speed reduction effect increased to x0.5
     - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
+    - Origin Pulse never misses
 
   - Underwater
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
     - Surf causes the battle to resurface
     - speed reduction effect increased to x0.25
     - Water Absorb and Dry Skin now restore 1/8 hp at the end of each turn
+    - Origin Pulse never misses
 
   - Swamp
     - Storm Drain now boosts the user's Special Attack by 1 at the end of each turn
@@ -148,7 +194,6 @@
   - Forest
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
-    - All Bug moves are now boosted by x1.5
     - Pokemon with Swarm get +1 attack and special attack on entry
 
   - Frozen Dimensional Field
@@ -175,6 +220,12 @@
 
   - Inverse Field
     - Matrix Shot x1.5 power, becomes Matrix (rock-complement) typing
+
+  - Volcanic
+    - Precipice Blades never misses
+
+  - Volcanic Top
+    - Precipice Blades never misses
 
 # Other
   - Removed data chip cost to enter password
