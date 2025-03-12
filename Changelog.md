@@ -55,6 +55,7 @@
   - Cicinno and Ledian Crests can now trigger side effects for all hits
   - Corviknight Crest: clears hazards and screens at the end of each turn
   - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
+  - Vespiquen Crest: additional +1 priority to all friendly bug moves
 
   ## New
   - Cacturne Crest: raises offenses by 1 if attacking first

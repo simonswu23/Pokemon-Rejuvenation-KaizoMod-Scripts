@@ -1662,7 +1662,7 @@ BOSSINFOHASH = {
                 :formchange => 1,
                 :itemchange => :GRISEOUSORB,
                 :movesetUpdate => [:SHADOWFORCE,:AURASPHERE,:EARTHPOWER,:DRAGONCLAW],
-                :instantMove => [:SHADOWFORCE, 0],
+                :instantMove => [:HYPERSPACEFURY, 0],
             },
             3 => {
                 :threshold => 0,
@@ -1682,7 +1682,7 @@ BOSSINFOHASH = {
                 :formchange => 1,
                 :itemchange => :GRISEOUSORB,
                 :movesetUpdate => [:SHADOWFORCE,:AURASPHERE,:EARTHPOWER,:DRAGONCLAW],
-                :instantMove => [:SHADOWFORCE, 0],
+                :instantMove => [:HYPERSPACEFURY, 0],
             },
             1 => {
                 :threshold => 0,
