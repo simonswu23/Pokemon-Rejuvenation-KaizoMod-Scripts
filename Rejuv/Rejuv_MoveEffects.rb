@@ -52,7 +52,7 @@ class PokeBattle_Move_200 < PokeBattle_Move
     opponent.effects[:Petrification]=attacker.index
     return 0
   end
-  
+
   def pbAdditionalEffect(attacker,opponent)
     return false if !opponent.pbCanPetrify?(false)
     opponent.pbPetrify(attacker)
@@ -70,12 +70,12 @@ class PokeBattle_Move_201 < PokeBattle_Move
 end
 
 ################################################################################
-# Power is chosen at random. 
+# Power is chosen at random.
 # Can be used while asleep and wakes user up. (Fever Pitch)
 ################################################################################
 class PokeBattle_Move_202 < PokeBattle_Move
   @calcbasedmg=0
-  
+
   def pbOnStartUse(attacker)
     basedmg=[40,50,65,70,85,100,130]
     partyhype=[
@@ -118,8 +118,8 @@ class PokeBattle_Move_202 < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:BOOMBURST,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:BOOMBURST,attacker,opponent,hitnum)
   end
 end
 
@@ -176,8 +176,8 @@ class PokeBattle_Move_204 < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:POWERGEM,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:POWERGEM,attacker,opponent,hitnum)
   end
 end
 
@@ -196,7 +196,7 @@ class PokeBattle_Move_205 < PokeBattle_Move
     if !((opponent.ability == :MULTITYPE) ||
       (opponent.ability == :RKSSYSTEM) || opponent.crested == :SILVALLY)
       opponent.type1 = :GROUND
-      opponent.type2 = nil 
+      opponent.type2 = nil
       typename=getTypeName(:GROUND)
       @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",opponent.pbThis,typename))
     end
@@ -207,7 +207,7 @@ class PokeBattle_Move_205 < PokeBattle_Move
         opponent.effects[:MultiTurnAttack]=@move
         opponent.effects[:MultiTurnUser]=attacker.index
         opponent.effects[:BindingBand] = attacker.hasWorkingItem(:BINDINGBAND)
-        @battle.pbDisplay(_INTL("{1} was trapped within a Sand Tomb!",opponent.pbThis))        
+        @battle.pbDisplay(_INTL("{1} was trapped within a Sand Tomb!",opponent.pbThis))
       end
     end
 
@@ -225,7 +225,7 @@ class PokeBattle_Move_206 < PokeBattle_Move
         self.type=:STEEL
     when 1
         self.type=:ROCK
-    when 2 
+    when 2
         self.type=:ELECTRIC
     end
     return super(attacker,opponent,hitnum,alltargets,showanimation)
@@ -241,11 +241,11 @@ class PokeBattle_Move_206 < PokeBattle_Move
 
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:BULLETSEED,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:BULLETSEED,attacker,opponent,hitnum)
   end
 end
-  
+
 ################################################################################
 # Increases the user's Special Attack and Speed by 1 stage each. (Aquabatics)
 ################################################################################
@@ -271,8 +271,8 @@ class PokeBattle_Move_207 < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:DRAGONDANCE,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:DRAGONDANCE,attacker,opponent,hitnum)
   end
 end
 
@@ -317,8 +317,8 @@ class PokeBattle_Move_208 < PokeBattle_Move
 
     # Replacement animation till a proper one is made
     def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-      return if !showanimation 
-      @battle.pbAnimation(:SHADOWCLAW,attacker,opponent,hitnum) 
+      return if !showanimation
+      @battle.pbAnimation(:SHADOWCLAW,attacker,opponent,hitnum)
     end
 end
 
@@ -341,8 +341,8 @@ class PokeBattle_Move_209 < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:BEATUP,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:BEATUP,attacker,opponent,hitnum)
   end
 end
 
@@ -370,8 +370,8 @@ class PokeBattle_Move_20A < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:SACREDSWORD,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:SACREDSWORD,attacker,opponent,hitnum)
   end
 end
 
@@ -386,7 +386,7 @@ class PokeBattle_Move_20B < PokeBattle_Move
       if attacker.pbCanIncreaseStatStage?(PBStats::DEFENSE,false)
         attacker.pbIncreaseStat(PBStats::DEFENSE,1,abilitymessage:false)
       end
-    when 1 
+    when 1
       if attacker.pbCanIncreaseStatStage?(PBStats::SPDEF,false)
         attacker.pbIncreaseStat(PBStats::SPDEF,1,abilitymessage:false)
       end
@@ -396,8 +396,8 @@ class PokeBattle_Move_20B < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:OMINOUSWIND,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:OMINOUSWIND,attacker,opponent,hitnum)
   end
 end
 
@@ -420,7 +420,7 @@ class PokeBattle_Move_20C < PokeBattle_Move
 
   def pbNumHits(attacker)
     if @move == :GILDEDHELIX
-      return 2 
+      return 2
     else
       return 1
     end
@@ -428,21 +428,21 @@ class PokeBattle_Move_20C < PokeBattle_Move
 
   # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:SACREDSWORD,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:SACREDSWORD,attacker,opponent,hitnum)
   end
 end
 
 ################################################################################
 # Becomes physical if Atk does more than Sp. Atk. May reduce defense/spdef respectively
-# (Super UMD Move) 
+# (Super UMD Move)
 ################################################################################
 class PokeBattle_Move_20D < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     smartDamageCategory(attacker,opponent)
     return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
   end
-  
+
   def pbAdditionalEffect(attacker,opponent)
     if @category == :physical
       if opponent.pbCanReduceStatStage?(PBStats::DEFENSE,false) # physical
@@ -480,8 +480,8 @@ class PokeBattle_Move_20E < PokeBattle_Move
 
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:MIRRORSHOT,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:MIRRORSHOT,attacker,opponent,hitnum)
   end
 end
 
@@ -649,8 +649,8 @@ class PokeBattle_Move_80A < PokeBattle_Move
   end
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:GIGAIMPACT,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:GIGAIMPACT,attacker,opponent,hitnum)
   end
 end
 
@@ -679,8 +679,8 @@ class PokeBattle_Move_80B < PokeBattle_Move
 
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:EXTREMESPEED,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:EXTREMESPEED,attacker,opponent,hitnum)
   end
 end
 
@@ -734,9 +734,9 @@ class PokeBattle_Move_80D < PokeBattle_Move
 
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:MAGICROOM,attacker,opponent,hitnum) 
-  end 
+    return if !showanimation
+    @battle.pbAnimation(:MAGICROOM,attacker,opponent,hitnum)
+  end
 end
 
 ################################################################################
@@ -779,8 +779,8 @@ class PokeBattle_Move_80E < PokeBattle_Move
 
 # Replacement animation till a proper one is made
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    return if !showanimation 
-    @battle.pbAnimation(:DARKVOID,attacker,opponent,hitnum) 
+    return if !showanimation
+    @battle.pbAnimation(:DARKVOID,attacker,opponent,hitnum)
   end
 end
 
@@ -797,17 +797,29 @@ class PokeBattle_Move_900 < PokeBattle_Move
       else
         @battle.pbDisplay(_INTL("A sticky web has been laid out beneath your team's feet!"))
       end
+    # if both spikes and toxic spikes can be set up, choose one randomly and set it up
     else
-      if(attacker.pbOpposingSide.effects[:Spikes] < 3)
-        attacker.pbOpposingSide.effects[:Spikes]+= 1
+      spikes, toxic_spikes = false, false
+      if attacker.pbOpposingSide.effects[:Spikes] < 3 && attacker.pbOpposingSide.effects[:ToxicSpikes] < 2
+        if rand < 0.5
+          spikes = true
+        else
+          toxic_spikes = true
+        end
+      elsif attacker.pbOpposingSide.effects[:Spikes] < 3
+        spikes = true
+      elsif attacker.pbOpposingSide.effects[:ToxicSpikes] < 2
+        toxic_spikes = true
+      end
+      if spikes
+        attacker.pbOpposingSide.effects[:Spikes] += 1
         if !@battle.pbIsOpposing?(attacker.index)
           @battle.pbDisplay(_INTL("Spikes were scattered around your foe's team's feet!"))
         else
           @battle.pbDisplay(_INTL("Spikes were scattered around your team's feet!"))
         end
-      end
-      if(attacker.pbOpposingSide.effects[:ToxicSpikes] < 2)
-        attacker.pbOpposingSide.effects[:ToxicSpikes]+= 1
+      elsif toxic_spikes
+        attacker.pbOpposingSide.effects[:ToxicSpikes] += 1
         if !@battle.pbIsOpposing?(attacker.index)
           @battle.pbDisplay(_INTL("Poison spikes were scattered around your foe's team's feet!"))
         else
@@ -888,7 +900,7 @@ class PokeBattle_Move_1001 < PokeBattle_Move
     if (opponent.pbCanSleep?(true) || opponent.effects[:Yawn]>0) && opponent.status != :SLEEP
       @battle.pbAnimation(:YAWN,opponent,attacker,hitnum)
       opponent.effects[:Yawn]=2
-      @battle.pbDisplay(_INTL("{1} made {2} drowsy!",attacker.pbThis,opponent.pbThis(true)))  
+      @battle.pbDisplay(_INTL("{1} made {2} drowsy!",attacker.pbThis,opponent.pbThis(true)))
     end
     return ret
   end
@@ -991,7 +1003,7 @@ class PokeBattle_Move_1002 < PokeBattle_Move
         @battle.pbDisplay(_INTL("The pointed stones disappeared from around your team!"))
       end
     end
-          
+
     # Other Rocks
     if attacker.pbOwnSide.effects[:Volcalith]
       attacker.pbOwnSide.effects[:Volcalith] = false
@@ -1043,7 +1055,7 @@ class PokeBattle_Move_1002 < PokeBattle_Move
         @battle.pbDisplay(_INTL("The mysterious stones disappeared from around your team!"))
       end
     end
-    
+
     if attacker.pbOwnSide.effects[:ToxicSpikes] > 0
       attacker.pbOwnSide.effects[:ToxicSpikes] = 0
       if @battle.pbIsOpposing?(attacker.index)

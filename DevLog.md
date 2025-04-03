@@ -54,7 +54,7 @@
     - Giga Meowth, Eevee, Pikachu do not get updated giga abilities (does not reset)
 
   ## Rebalancing
-    - 
+    -
 
   ## Implementation Dump
     - Moves:
@@ -132,8 +132,10 @@
     - Learnset updates for new moves
 
 # Journal
+- 4/2/2025
+  - Implemented Barbed Web to add spikes or toxic spikes randomly, and updated AI to account for this
 
-- 3/10/2024
+- 3/10/2025
   - Hydreigon crest shows super effective messages twice? Bug (low priority)
   - Add +1 eviolite earlier into the game (pre-valor)
 
@@ -236,7 +238,7 @@
   - disabled Terajuma password (softlock protection)
 
 - 12/27/2024 (@SWu)
-  - minor AI giga evolution tweaks 
+  - minor AI giga evolution tweaks
   - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
 
 - 12/26/2024 (@SWu)
@@ -266,7 +268,7 @@
     - fixed bug where snow was not properly giving ice types x1.5 defense
   - combined hail/snow implementation (including all AI implementation)
   - grass pokemon have x1.5 defense in sun and x1.5 special defense in rain
-  - replaced freeze with frostbite entirely (including all AI implementations)    
+  - replaced freeze with frostbite entirely (including all AI implementations)
   - forced consumable item restoration (including berries) and the end of each battle
   - improved wild pokemon catch chances
   - Angie and Valarie Gym Battles updated (standard and kaizo)

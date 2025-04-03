@@ -91,7 +91,7 @@
       - Bulu: heals user equal to damage dealt
       - Lele: indefinite heal block + trapping effect
       - Fini: clears all stat changes + defog
-  - Barbed Web now sets up sticky web first, then spikes/toxic spikes on subsequent hits
+  - Barbed Web now sets up sticky web first, then randomly adds spikes/toxic spikes on subsequent hits
   - Matrix Shot now sets up inverse stealth rocks
   - Weather Ball becomes ground typing in the Sashilan Sand, and is always Flying type in Strong Winds
   - Attack Order now naturally hits all opposing foes
@@ -106,7 +106,7 @@
 
 # Pokemon
   ## Giga Pokemon
-  
+
   ## Standard Pokemon
   - Varoom and Revavroom
     - ability Filter added for Varoom
@@ -191,7 +191,7 @@
     - Dig is immediate
     - Shadow Bone boosted x2.0 by field
     - Dig, Psychic, Stored Power, Zen Headbutt, Focus Punch, Focus Blast, Aura Sphere boosted x1.35 by field
-  
+
   - Forest
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
@@ -202,10 +202,10 @@
     - x1.5 boost to ice attacks, x1.3 boost to dark
     - Chilling Water becomes part Ice
     - Moves that become part Ice have their base power additionally multiplied by x1.3 instead of x1.2
-  
+
   - Dimensional Field
     - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
-  
+
   - Haunted
     - Cursed Body always activates
 
