@@ -83,7 +83,6 @@
 
   ## Testing Backlog
     - Chthonic Malady
-    - Barbed Web (@Ren)
 
   ## AI implementation Backlog
     ### Giga Evolution
@@ -104,7 +103,6 @@
       - Dragon Cheer, Focus Energy
       - Chthonic Malady
       - Embargo
-      - Barbed Web
       - Guardian of Alola
 
     ### Abilities
@@ -132,19 +130,19 @@
     - Learnset updates for new moves
 
 # Journal
-- 4/2/2025
+- 4/2/25
   - Implemented Barbed Web to add spikes or toxic spikes randomly, and updated AI to account for this
 
-- 3/10/2025
+- 3/10/25
   - Hydreigon crest shows super effective messages twice? Bug (low priority)
   - Add +1 eviolite earlier into the game (pre-valor)
 
-- 2/26/2025
+- 2/26/25
   - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards
   - Implemented Sashilan Sand Stream (perma sand, can be overridden, no damage but negates ground/rock weaknesses + grants them x1.5 spdef)
   - Matrix Shot changes (added func code to banlist for side effects that can't be blocked)
 
-- 2/23/2025
+- 2/23/25
   - updated terrain overlaying effects (fixed on 2/23)
   - small trainer skill bug fix (applying Mean Look)
   - fixed Unburden bug + interaction on Swamp when consuming Telluric Seed
