@@ -10829,6 +10829,10 @@ class PokeBattle_AI
       mon.stages[PBStats::DEFENSE]+=boost
       mon.stages[PBStats::SPDEF]+=1 if (@battle.FE == :FAIRYTALE || @battle.FE == :COLOSSEUM)
     end
+    # Anticipation
+    if mon.ability==:ANTICIPATION
+      mon.stages[PBStats::SPEED] += 1 if mon.pbAnticipationShudder
+    end
     # Steadfast
     if mon.ability==:STEADFAST && ((Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] > 0)
       mon.stages[PBStats::SPEED]+=1
