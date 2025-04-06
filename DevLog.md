@@ -55,7 +55,7 @@
     - Giga Meowth, Eevee, Pikachu do not get updated giga abilities (does not reset)
 
   ## Rebalancing
-    - 
+    -
 
   ## Implementation Dump
     - Moves:
@@ -84,7 +84,6 @@
 
   ## Testing Backlog
     - Chthonic Malady
-    - Barbed Web (@Ren)
 
   ## AI implementation Backlog
     ### Giga Evolution
@@ -105,7 +104,6 @@
       - Dragon Cheer, Focus Energy
       - Chthonic Malady
       - Embargo
-      - Barbed Web
       - Guardian of Alola
 
     ### Abilities
@@ -133,6 +131,8 @@
     - Learnset updates for new moves
 
 # Journal
+- 4/2/25
+  - Implemented Barbed Web to add spikes or toxic spikes randomly, and updated AI to account for this
 
 - 4/3/2025
   - Mass Starter updates, ability todos:
@@ -148,6 +148,7 @@
   - forceDouble param created, can be set in :trainereffect. Can copy logic to create forceSingle if needed
 
 - 3/10/2025
+- 3/10/25
   - Hydreigon crest shows super effective messages twice? Bug (low priority)
     - also secondary attacks currently have 100% power -- needs fixing
   - Gourmandize AI stops use after 3 stacks
@@ -155,12 +156,12 @@
   - TODO: Add Signature Mismagius and Honchkrow to Eli/Sharon fight!
   - TODO: Fix Grim Neigh / Chilling Neigh entry on Mountain fields
 
-- 2/26/2025
+- 2/26/25
   - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards
   - Implemented Sashilan Sand Stream (perma sand, can be overridden, no damage but negates ground/rock weaknesses + grants them x1.5 spdef)
   - Matrix Shot changes (added func code to banlist for side effects that can't be blocked)
 
-- 2/23/2025
+- 2/23/25
   - updated terrain overlaying effects (fixed on 2/23)
   - small trainer skill bug fix (applying Mean Look)
   - fixed Unburden bug + interaction on Swamp when consuming Telluric Seed
@@ -254,7 +255,7 @@
   - disabled Terajuma password (softlock protection)
 
 - 12/27/2024 (@SWu)
-  - minor AI giga evolution tweaks 
+  - minor AI giga evolution tweaks
   - fixed Protect bug? (now counter resets if the last move by the user isn't successful)
 
 - 12/26/2024 (@SWu)
@@ -284,7 +285,7 @@
     - fixed bug where snow was not properly giving ice types x1.5 defense
   - combined hail/snow implementation (including all AI implementation)
   - grass pokemon have x1.5 defense in sun and x1.5 special defense in rain
-  - replaced freeze with frostbite entirely (including all AI implementations)    
+  - replaced freeze with frostbite entirely (including all AI implementations)
   - forced consumable item restoration (including berries) and the end of each battle
   - improved wild pokemon catch chances
   - Angie and Valarie Gym Battles updated (standard and kaizo)

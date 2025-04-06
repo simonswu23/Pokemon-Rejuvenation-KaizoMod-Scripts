@@ -3239,7 +3239,7 @@ class PokeBattle_AI
         if !@battle.doublebattle || @move.pbDragonDartTargetting(@attacker).length < 2
           miniscore = multihitcode()
         else
-          miniscore = 1.2 if checkAImoves(PBStuff::PROTECTMOVE) || pbPartyHasType?(:FAIRY) # @SWu idk 
+          miniscore = 1.2 if checkAImoves(PBStuff::PROTECTMOVE) || pbPartyHasType?(:FAIRY) # @SWu idk
         end
       when 0x17F # teatime
         miniscore = teaslurpcode()
@@ -3545,12 +3545,12 @@ class PokeBattle_AI
         miniscore *= oppstatdrop([2,0,2,0,0,0,0])
       # SWu Moves
       when 0x900 # Barbed Web
-        if @attacker.pbOpposingSide.effects[:Spikes] < 3
+        if @attacker.pbOpposingSide.effects[:Spikes] < 3 || @attacker.pbOpposingSide.effects[:ToxicSpikes] < 2
           miniscore = hazardcode()
-          miniscore*=0.9 if @attacker.pbOpposingSide.effects[:Spikes]>0
+          miniscore *= 0.9 if @attacker.pbOpposingSide.effects[:Spikes] > 0 || @attacker.pbOpposingSide.effects[:ToxicSpikes] > 0
           if @mondata.skill>=BESTSKILL
-            miniscore*=0 if @battle.FE == :WATERSURFACE || @battle.FE == :MURKWATERSURFACE # (Murk)Water Surface
-            miniscore*=1.3 if Rejuv && @battle.FE == :ELECTERRAIN
+            miniscore *= 0 if @battle.FE == :WATERSURFACE || @battle.FE == :MURKWATERSURFACE # (Murk)Water Surface
+            miniscore *= 1.3 if Rejuv && @battle.FE == :ELECTERRAIN
           end
         end
       # Giga Moves
@@ -7257,7 +7257,7 @@ class PokeBattle_AI
   def embarcode(opponent = @opponent)
     return 0 if !KAIZOMOD && opponent.effects[:Embargo] > 0 && opponent.effects[:Substitute] > 0 || opponent.item.nil?
     return 0 if KAIZOMOD && opponent.pbOwnSide.effects[:EmbargoSide] > 0
-    
+
     miniscore = 1.1
     # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold
     miniscore *= 0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
@@ -7712,7 +7712,7 @@ class PokeBattle_AI
       monRoles.push(:PHAZER)     if phasemove
       monRoles.push(:SCREENER)   if mon.item==(:LIGHTCLAY) && screenmove
       # Gen 9 Mod - Added Hospitality
-      monRoles.push(:PIVOT)     if (pivotmove && healingmove) || (mon.ability == :REGENERATOR) || (mon.ability == :HOSPITALITY) 
+      monRoles.push(:PIVOT)     if (pivotmove && healingmove) || (mon.ability == :REGENERATOR) || (mon.ability == :HOSPITALITY)
       monRoles.push(:SPINNER)     if spinmove
       monRoles.push(:TANK)     if (mon.ev[0]>251 && !healingmove) || mon.item==(:ASSAULTVEST)
       monRoles.push(:BATONPASSER)   if batonmove
@@ -8257,7 +8257,7 @@ class PokeBattle_AI
 
   def pbChangeMove(move,attacker)
     return move unless [:WEATHERBALL, :HIDDENPOWER, :TERRAINPULSE, :NATUREPOWER, :IVYCUDGEL, :RAGINGBULL, :TERASTARSTORM].include?(move.move) # Gen 9 Mod - Added Ivy Cudgel, Raging Bull and Tera Starstorm
-    
+
     attacker = @opponent if caller_locations.any? {|call| call.label=="buildMoveScores"} && attacker.nil?
     #make new instance of move
     move = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(move.move),attacker)
@@ -9803,7 +9803,7 @@ class PokeBattle_AI
           when :THERMALEXCHANGE # Gen 9 Mod - Added Thermal Exchange
             abilityscore+=30 if (@opponent.pbPartner.hp > 0 && :DARK == checkAIbestMove().pbType(@opponent) || :DARK == checkAIbestMove(@opponent.pbPartner).pbType(@opponent.pbPartner))
           when :ELECTROMORPHOSIS # Gen 9 Mod - Added Electromorphosis
-            abilityscore+=30 # I got no clue on the conditions, so i'mma just leave it at just a pure 30 
+            abilityscore+=30 # I got no clue on the conditions, so i'mma just leave it at just a pure 30
         end
       end
       if transformed # pokemon has imposter ability. because we copy pokemon, we can use i to see ability opponent
@@ -11558,10 +11558,10 @@ class PokeBattle_AI
         when :REFRIGERATE then basedamage = [:ICY, :SNOWYMOUNTAIN, :FROZENDIMENSION].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.type == :NORMAL
         when :DUSKILATE then basedamage = (basedamage * 1.3).round if move.type == :NORMAL
       end
-      
+
       # Gen 9 Mod - Beads of Ruin, Sword of Ruin
       ruinmult = (@battle.FE == :FROZENDIMENSION || @battle.FE == :DIMENSONAL) && !KAIZOMOD ? 0.67 : 0.75
-      if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && move.pbIsSpecial?(type) 
+      if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && move.pbIsSpecial?(type)
         basedamage=(basedamage*ruinmult).round
       elsif (attacker.pbOpposing1.ability == :TABLETSOFRUIN || attacker.pbOpposing2.ability == :TABLETSOFRUIN || attacker.pbPartner.ability == :TABLETSOFRUIN) && attacker.ability != :TABLETSOFRUIN && move.pbIsPhysical?(type)
         basedamage=(basedamage*ruinmult).round
@@ -11944,7 +11944,7 @@ class PokeBattle_AI
         elsif @battle.state.effects[:WonderRoom] == 0 && move.pbIsPhysical?(type)
           defense = (defense * ruinmult).round
         end
-      elsif ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN) 
+      elsif ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN)
         if @battle.state.effects[:WonderRoom] != 0 && move.pbIsPhysical?(type)
           defense = (defense * ruinmult).round
         elsif @battle.state.effects[:WonderRoom] == 0 && move.pbIsSpecial?(type)
@@ -12657,7 +12657,7 @@ class PokeBattle_AI
         rageFistCounter=@battle.getBattlerHit(attacker)
         return basedamage+(50*rageFistCounter)
       # Z-moves
-      when 0x809 # Guardian of Alola        
+      when 0x809 # Guardian of Alola
         return (opponent.hp*0.99).floor if @battle.FE == :FOREST
         return (opponent.hp*0.75).floor
     end
