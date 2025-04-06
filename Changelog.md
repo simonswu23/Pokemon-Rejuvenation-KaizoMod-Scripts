@@ -351,6 +351,7 @@
   - Infernal Field
     - Immolate boosts normal moves by x1.5 power instead of x1.3
     - Centiferno is boosted in power by x2
+    - Fire Lash is boosted in power by x1.5
     - Smog is boosted in power by x5 instead of x2
 
 # Other

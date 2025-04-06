@@ -6309,7 +6309,7 @@ MOVEHASH = {
     :accuracy => 85,
     :maxpp => 20,
     :effect => 40,
-    :target => :AllOpposing,
+    :target => :SingleNonUser,
     :desc => "The target is attacked with a discharge of filthy gases. It may also poison the target."
 },
 

@@ -17149,6 +17149,7 @@ MONHASH = {
         [1,:FALSESWIPE],
         [1,:ENDEAVOR],
         [1,:ACCELEROCK],
+        [1,:ANCIENTPOWER],
         [5,:SMACKDOWN],
         [45,:ROCKSLIDE],
         [51,:METEORBEAM],
