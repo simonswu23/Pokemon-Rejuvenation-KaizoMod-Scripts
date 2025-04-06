@@ -2437,7 +2437,7 @@ class PokeBattle_Battler
     end
 
     if @battle.state.effects[:HeavyRain] || @battle.state.effects[:HarshSunlight] || @battle.weather == :STRONGWINDS
-      if !@battle.pbCheckGlobalAbility(:PRIMORDIALSEA)
+      if !@battle.pbCheckGlobalAbility(:PRIMORDIALSEA) && !@battle.keepPrimalWeather
         if @battle.state.effects[:HeavyRain]
           @battle.pbDisplay(_INTL("The heavy rain has lifted."))
           @battle.state.effects[:HeavyRain] = false
@@ -2448,7 +2448,7 @@ class PokeBattle_Battler
           end
         end
       end
-      if !@battle.pbCheckGlobalAbility(:DESOLATELAND)
+      if !@battle.pbCheckGlobalAbility(:DESOLATELAND) && !@battle.keepPrimalWeather
         if @battle.state.effects[:HarshSunlight]
           @battle.pbDisplay(_INTL("The harsh sunlight faded!"))
           @battle.state.effects[:HarshSunlight] = false
@@ -2461,7 +2461,7 @@ class PokeBattle_Battler
       end
 
       if !@battle.pbCheckGlobalAbility(:DELTASTREAM) && !@battle.pbCheckGlobalAbility(:TEMPEST) && ![:Winds,:BlowingLeaves,:SwirlingLeaves].include?($game_screen.weather_type) && !((self.pbOwnSide.effects[:Tailwind]>0 || self.pbOpposingSide.effects[:Tailwind]>0) && [:MOUNTAIN,:SNOWYMOUNTAIN,:VOLCANICTOP,:SKY].include?(@battle.FE))
-        if @battle.weather == :STRONGWINDS
+        if @battle.weather == :STRONGWINDS && !@battle.keepPrimalWeather
           @battle.pbDisplay(_INTL("The mysterious air current has dissipated!"))
           unless ((self.ability == :PRIMORDIALSEA) || (self.ability == :DESOLATELAND) || (self.ability == :DELTASTREAM)) && onactive
             @battle.weatherduration = 0
@@ -3056,6 +3056,19 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1}'s {2} boosted its Attack!", pbThis,getAbilityName(ability)))
       end
     end
+    # Kaizomod
+    if self.ability == :GRIMNEIGH && onactive &&  (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN) == :MOUNTAIN && KAIZOMOD
+      if !pbTooHigh?(PBStats::SPATK)
+        pbIncreaseStatBasic(PBStats::SPATK,1)
+        @battle.pbDisplay(_INTL("{1}'s {2} boosted its Special Attack!", pbThis,getAbilityName(ability)))
+      end
+    end
+    if self.ability == :CHILLINGNEIGH && onactive && (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN) && KAIZOMOD
+      if !pbTooHigh?(PBStats::ATTACK)
+        pbIncreaseStatBasic(PBStats::ATTACK,1)
+        @battle.pbDisplay(_INTL("{1}'s {2} boosted its Attack!", pbThis,getAbilityName(ability)))
+      end
+    end
     # Gen 9 Mod - Embody Aspect
     if self.ability == :EMBODYASPECTTEAL && !pbTooHigh?(PBStats::SPEED) && onactive
       pbIncreaseStatBasic(PBStats::SPEED,1)
@@ -3429,6 +3442,18 @@ class PokeBattle_Battler
         end
       end
     end
+    # Kaizomod Refactor
+    if target.damagestate.calcdamage > 0 && !target.damagestate.substitute && !move.zmove
+      # Gen 9 Mod - Added Toxic Chain
+      if user.ability == :TOXICCHAIN && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
+        target.pbPoison(user, true)
+        @battle.pbDisplay(_INTL("{1}'s {2} badly poisoned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
+      end
+      if user.ability == :IMMOLATE && @battle.FE == :INFERNAL && target.pbCanBurn?(false) && movetypes.include?(:FIRE)
+        target.pbBurn(user)
+        @battle.pbDisplay(_INTL("{1}'s {2} burned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
+      end
+    end
     # Gen 9 Mod - Added Punching Glove
     if target.damagestate.calcdamage > 0 && !target.damagestate.substitute && !move.zmove && move.contactMove? && user.ability != :LONGREACH && !(user.hasWorkingItem(:PUNCHINGGLOVE) && move.punchMove?)
       eschance = 3
@@ -3436,11 +3461,6 @@ class PokeBattle_Battler
       if user.ability == :POISONTOUCH && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
         target.pbPoison(user)
         @battle.pbDisplay(_INTL("{1}'s {2} poisoned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
-      end
-      # Gen 9 Mod - Added Toxic Chain
-      if user.ability == :TOXICCHAIN && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
-        target.pbPoison(user, true)
-        @battle.pbDisplay(_INTL("{1}'s {2} badly poisoned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
       end
       if user.ability == :CORROSION && @battle.FE == :WASTELAND
         if @battle.pbRandom(10) == 0
@@ -3468,7 +3488,7 @@ class PokeBattle_Battler
             @battle.pbDisplay(_INTL("{1} was caught in the aftermath!", user.pbThis))
           end
         end
-        if [:IRONBARBS, :ROUGHSKIN].include?(target.ability) && !user.isFainted? && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+        if [:IRONBARBS, :ROUGHSKIN, :PINCUSHION].include?(target.ability) && !user.isFainted? && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
           @battle.scene.pbDamageAnimation(user, 0)
           user.pbReduceHP((user.totalhp / 8.0).floor)
           @battle.pbDisplay(_INTL("{1}'s {2} hurt {3}!", target.pbThis, getAbilityName(target.ability), user.pbThis(true)))
@@ -3727,6 +3747,15 @@ class PokeBattle_Battler
              @battle.pbDisplay(_INTL("Poison spikes were scattered all around the foe's team's feet!"))
           else
              @battle.pbDisplay(_INTL("Poison spikes were scattered all around your team's feet!"))
+          end
+        end
+        # Kaizomod - Pincushion
+        if target.ability == (:PINCUSHION) && target.pbOpposingSide.effects[:Spikes] < 3 && !(@battle.FE == :WATERS || @battle.FE == :MURKWATERS)
+          target.pbOpposingSide.effects[:Spikes] += 1
+          if !@battle.pbIsOpposing?(target.index)
+            @battle.pbDisplay(_INTL("Spikes were scattered all around the foe's team's feet!"))
+          else
+            @battle.pbDisplay(_INTL("Spikes were scattered all around your team's feet!"))
           end
         end
         if target.ability == :STAMINA
@@ -6047,7 +6076,8 @@ class PokeBattle_Battler
       @effects[:SkyDroppee] = nil if basemove.move != :SKYDROP
     end
     # "X used Y!" message
-    case basemove.pbDisplayUseMessage(self, choice, showmessage)
+    # @SWu removed showmessage param
+    case basemove.pbDisplayUseMessage(self, choice)
       when 2   # Continuing Bide
         if !flags[:specialusage]
           self.lastRoundMoved = @battle.turncount

@@ -311,6 +311,9 @@ class PokeBattle_Battle
   attr_accessor(:seed)
   attr_accessor(:rageFist)        # Gen 9 Mod - Rage Fist variable array
 
+  # Kaizomod
+  attr_accessor(:keepPrimalWeather)
+
   MAXPARTYSIZE = 6
   MAXPARTYSIZE2 = 12
 
@@ -447,6 +450,9 @@ class PokeBattle_Battle
     # Gen 9 Mod - Rage Fist variable array
     @rageFist        = [Array.new(p1.length, 0), Array.new(p2.length, 0)]
     @rageFistSOS     = 0
+    
+    #Kaizomod
+    @keepPrimalWeather = false
     for i in 0...4
       battlers[i] = PokeBattle_Battler.new(self,i)
     end
@@ -1395,7 +1401,6 @@ class PokeBattle_Battle
       @choices[idxPokemon] = [nil]
       return true
     end
-    pbDisplay(_INTL("debutanteCheck: {1}, {2}", thispkmn.name, thispkmn.debutanteCheck))
     if (thispkmn.effects[:Encore] > 0 || thispkmn.debutanteCheck) && pbCanChooseMove?(idxPokemon, thispkmn.effects[:EncoreIndex], false)
       PBDebug.log("[Auto choosing Encore move...]") if $INTERNAL
       # move choice array: [:move, idxmove, obj, idxtarget]
@@ -4915,6 +4920,7 @@ class PokeBattle_Battle
             if i.ability == :FLASHFIRE
               if !i.effects[:FlashFire]
                 i.effects[:FlashFire] = true
+                pbCommonAnimation("StatUp", i, nil)
                 pbDisplay(_INTL("{1}'s {2} raised its Fire power!", i.pbThis, getAbilityName(i.ability)))
               end
             end
@@ -5020,12 +5026,14 @@ class PokeBattle_Battle
             if i.ability == :FLASHFIRE
               if !i.effects[:FlashFire]
                 i.effects[:FlashFire] = true
+                pbCommonAnimation("StatUp", i, nil)
                 pbDisplay(_INTL("{1}'s {2} raised its Fire power!", i.pbThis, getAbilityName(i.ability)))
               end
             end
             if i.ability == :BLAZE
               if !i.effects[:Blazed]
                 i.effects[:Blazed] = true
+                pbCommonAnimation("StatUp", i, nil)
                 pbDisplay(_INTL("{1}'s {2} raised its Fire power!", i.pbThis, getAbilityName(i.ability)))
               end
             end

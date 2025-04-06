@@ -11551,6 +11551,14 @@ class PokeBattle_AI
               basedamage = (basedamage * 1.3).round
             end
           end
+        when :IMMOLATE
+          if move.type == :NORMAL
+            if @battle.FE == :INFERNAL
+              basedamage = (basedamage * 1.5).round # Misty Field
+            else
+              basedamage = (basedamage * 1.3).round
+            end
+          end
         when :REFRIGERATE then basedamage = [:ICY, :SNOWYMOUNTAIN, :FROZENDIMENSION].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.type == :NORMAL
         when :DUSKILATE then basedamage = (basedamage * 1.3).round if move.type == :NORMAL
       end

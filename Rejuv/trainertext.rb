@@ -19443,71 +19443,31 @@ TEAMARRAY = [{
 :teamid => ["Amber",:LEADER_AMBER,0],
 :ace => "I'm not breakin' a sweat!",
 :defeat => "What...? But the hype was too real!",
-:items => [:CHARIZARDITEG, :CENTISKORCHITE],
+:items => [:CENTISKORCHCORE],
 :trainereffect => { 
+	:forceDouble => true,
 	:effectmode => :Party,
-	:buffactivation => :Always,
+	:buffactivation => :Limited,
 	-1 => {
 		:setWeather => [:SUNNYDAY,-1,"The sunlight became super harsh!", true],
 		:fieldChange => [:INFERNAL,"AMBER: Time to bring this party underground!",0],
 	},
 	# 0 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Typhlosion flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
+	# 	:applyStatus => [:POISON,true,0,"AMBER: Feel that punk rock in the crowd?"],
 	# },
-	# 1 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Charizard flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
-	# 2 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Houndoom flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
-	# 3 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Heatran flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
-	# 4 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Centiskorch flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
-	# 5 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Toxtricity flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
-	# 6 => {
-	# 	:message => "AMBER: let's heat things up!",
-	# 	:pokemonEffect => {
-	# 		:dummy => [false,:BURNUP,"Camerupt flared up, gaining Flash Fire!"],
-	# 	},
-	# 	:applyStatus => [:BURN, false, 0],
-	# },
+	6 => {
+		:pokemonEffect => {
+			:dummy => [true,:FIERYDANCE,"{2} flared up, acquiring Flash Fire!"], 
+		},
+	},
 },
 :mons => [
 {
 	:species => :TYPHLOSION,
 	:level => 58,
-	:item => :FOCUSSASH,
-	:moves => [:ERUPTION,:INFERNALPARADE,:INFERNO,:SOLARBEAM],
-	:ability => :FRISK,
+	:item => :ELEMENTALSEED,
+	:moves => [:ERUPTION,:INFERNALPARADE,:INFERNO,:FOCUSBLAST],
+	:ability => :QUICKFEET,
 	:gender => "F",
 	:nature => :TIMID,
 	:form => 1,
@@ -19529,9 +19489,8 @@ TEAMARRAY = [{
 	:species => :CHIYU,
 	:level => 57,
 	:item => :ELEMENTALSEED,
-	:moves => [:FIERYWRATH,:SUCKERPUNCH,:FLAMECHARGE,:HEATWAVE],
+	:moves => [:FIERYWRATH,:SMOG,:FLAMECHARGE,:INFERNO],
 	:ability => :BEADSOFRUIN,
-	:gender => "M",
 	:nature => :RASH,
 	:iv => 31,
 	:ev => [0, 4, 0, 252, 0, 252]
@@ -19540,7 +19499,7 @@ TEAMARRAY = [{
 	:species => :HEATRAN,
 	:level => 59,
 	:item => :FIGHTINIUMZ,
-	:moves => [:AURASPHERE,:EARTHPOWER,:MAGMASTORM,:DARKPULSE],
+	:moves => [:FOCUSBLAST,:EARTHPOWER,:MAGMASTORM,:SOLARBEAM],
 	:ability => :FLASHFIRE,
 	:gender => "M",
 	:nature => :MODEST,
@@ -19550,18 +19509,19 @@ TEAMARRAY = [{
 {
 	:species => :CENTISKORCH,
 	:level => 59,
-	:moves => [:FIRELASH,:POWERWHIP,:PUNISHMENT,:LEECHLIFE],
+	:item => :ELEMENTALSEED,
+	:moves => [:FIRELASH,:INFERNO,:COIL,:LEECHLIFE],
 	:ability => :FLASHFIRE,
 	:gender => "F",
-	:nature => :ADAMANT,
+	:nature => :BRAVE,
 	:iv => 31,
-	:ev => [252, 252, 0, 0, 4, 0]
+	:ev => [252, 252, 0, 4, 0, 0]
 },
 {
 	:species => :TOXTRICITY,
 	:level => 60,
 	:item => :ELEMENTALSEED,
-	:moves => [:BOOMBURST,:SMOG,:SHFITGEAR,:SUCKERPUNCH],
+	:moves => [:BOOMBURST,:SMOG,:SHIFTGEAR,:SUCKERPUNCH],
 	:ability => :IMMOLATE,
 	:gender => "F",
 	:form => 2,
@@ -19571,10 +19531,10 @@ TEAMARRAY = [{
 },
 {
 	:species => :VOLCARONA,
-	:level => 57,
-	:item => :FOCUSSASH,
-	:moves => [:RAGEPOWDER,:HEATWAVE,:BUGBUZZ,:TAILWIND],
-	:ability => :FLAMEBODY,
+	:level => 58,
+	:item => :ELEMENTALSEED,
+	:moves => [:QUIVERDANCE,:HEATWAVE,:BUGBUZZ,:SOLARBEAM],
+	:ability => :FLASHFIRE,
 	:gender => "F",
 	:nature => :TIMID,
 	:iv => 31,
@@ -19585,9 +19545,9 @@ TEAMARRAY = [{
 	:level => 59,
 	:item => :CAMERUPTITE,
 	:moves => [:NATUREPOWER,:HEATWAVE,:ROCKSLIDE,:EARTHPOWER],
-	:ability => :FLASHFIRE,
+	:ability => :MAGMAARMOR,
 	:gender => "F",
-	:nature => :BRAVE,
+	:nature => :QUIET,
 	:iv => 31,
 	:ev => [252, 4, 0, 252, 0, 0]}
 ]},
@@ -22917,26 +22877,27 @@ TEAMARRAY = [{
 :defeat => "I-Impossible! Salamence can't be defeated!",
 :mons => [{
 	:species => :SALAMENCE,
-	:level => 70,
-	:moves => [:DRAGONCLAW,:FLAMETHROWER,:ROCKSLIDE,:EARTHQUAKE],
-	:ability => :MOXIE,
+	:level => 100,
+	:item => :SALAMENCITE,
+	:moves => [:DRAGONCLAW,:FLAMETHROWER,:EARTHQUAKE,:HYPERVOICE],
+	:ability => :INTIMIDATE,
 	:gender => "M",
-	:nature => :JOLLY,
+	:nature => :NAUGHTY,
 	:iv => 31,
-	:ev => [0, 252, 0, 4, 0, 252]
+	:ev => [252, 252, 252, 252, 252, 252]
 }]},
 {
 :teamid => ["Venam",:LEADER_VENAM2,1],
 :mons => [{
 	:species => :CHARIZARD,
 	:level => 70,
-	:item => :CHARTIBERRY,
-	:moves => [:HEATWAVE,:AIRSLASH,:FOCUSBLAST,:ROOST],
-	:ability => :BLAZE,
-	:nature => :TIMID,
+	:item => :CHARIZARDITEX,
+	:moves => [:FLAREBLITZ,:DRAGONDANCE,:DRAGONCLAW,:ROOST],
+	:ability => :PRESSURE,
+	:nature => :ADAMANT,
 	:shiny => true,
 	:iv => 31,
-	:ev => [0, 0, 0, 252, 4, 252]
+	:ev => [252, 252, 0, 0, 4, 0]
 }]},
 {
 :teamid => ["Karrina",:GANGLEADER,1],

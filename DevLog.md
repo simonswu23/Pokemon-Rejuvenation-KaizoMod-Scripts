@@ -46,6 +46,7 @@
     - Signature Pokemon
     - *document moveset updates
 
+
   ## Bug list:
     - Changed abilities (like Worry Seed, etc.) do not persist past Giga evolution
     - Protect rate sharing does not reset after a flinch
@@ -135,9 +136,27 @@
 - 4/2/25 (Ren)
   - Implemented Barbed Web to add spikes or toxic spikes randomly, and updated AI to account for this
 
+- 4/3/2025
+  - Mass Starter updates, ability todos:
+    - figure out Magician
+    - TODO: Revisions:
+      - Anticipation: shudder -> +1 speed
+      - Forewarn: per each Forewarn, reduce the damage of the first instance of the Forewarned attack by x0.25 (or half if this is too strong)
+    - Pastel Veil: additionally halves poison type damage to allies
+    - Stalwart: Halves damage of any attack that would deal more than half of current HP
+    - Battle Bond: +1 attack, special attack, and speed on KO
+  - Added keepPrimalWeather field in Battle.rb to persist starting primal weather
+  - Fixed Toxic Chain implementation to work with non-contact moves
+  - forceDouble param created, can be set in :trainereffect. Can copy logic to create forceSingle if needed
+
+- 3/10/2025
 - 3/10/25
   - Hydreigon crest shows super effective messages twice? Bug (low priority)
+    - also secondary attacks currently have 100% power -- needs fixing
+  - Gourmandize AI stops use after 3 stacks
   - Add +1 eviolite earlier into the game (pre-valor)
+  - TODO: Add Signature Mismagius and Honchkrow to Eli/Sharon fight!
+  - TODO: Fix Grim Neigh / Chilling Neigh entry on Mountain fields
 
 - 2/26/25
   - Added Volcalith, Steelsurge, Inverse Stealth Rock hazards

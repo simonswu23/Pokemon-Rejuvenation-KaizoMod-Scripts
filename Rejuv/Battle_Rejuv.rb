@@ -363,6 +363,7 @@
       targetSelf = trainereffect[:applyStatus][1]
       val = trainereffect[:applyStatus][2]
       message = trainereffect[:applyStatus][3]
+      pbDisplay(_INTL(message)) if message
       if (status == :BURN)
         target = targetSelf ? pkmn : pkmn.pbOpposing1
         if (targetSelf || target.pbCanBurn?(false))
@@ -370,7 +371,20 @@
           pbDisplay(_INTL("{1} was burned!",target.pbThis))
         end
       end
-      pbDisplay(_INTL(message)) if message
+      if (status == :PARALYSIS)
+        target = targetSelf ? pkmn : pkmn.pbOpposing1
+        if (targetSelf || target.pbCanParalyze?(false))
+          target.pbParalyze(pkmn)
+          pbDisplay(_INTL("{1} was paralyzed!",target.pbThis))
+        end
+      end
+      if (status == :POISON)
+        target = targetSelf ? pkmn : pkmn.pbOpposing1
+        if (targetSelf || target.pbCanPoison(false, true))
+          target.pbPoison(pkmn)
+          pbDisplay(_INTL("{1} was badly poisoned",target.pbThis))
+        end
+      end
     end
     @scene.pbHideOpponent if showtrainer
   end
@@ -827,6 +841,12 @@ def runstarterskills()
       if trainereffect[:message] && trainereffect[:message] != ""
         pbDisplayPaused(_INTL(trainereffect[:message]))
       end
+      if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
+        fieldmessage = (trainereffect[:fieldChange][1] != "") ? trainereffect[:fieldChange][1] : "The field was changed!"
+        pbAnimation(:MAGICROOM,pkmn,nil)
+        pbDisplay(_INTL("{1}",fieldmessage))
+        setField(trainereffect[:fieldChange][0],trainereffect[:fieldChange][2])
+      end
       if trainereffect[:instantgiga]
         # giga evolve current battler
         if (pkmn && pbCanGigaEvolve?(i))
@@ -887,6 +907,7 @@ def runstarterskills()
           weatherMessage = "Strong winds picked up..."
         end
         if (primal)
+          @keepPrimalWeather = true
           if (weather == :SUNNYDAY)
             @state.effects[:HarshSunlight] = true
           elsif (weather == :RAINDANCE)
@@ -897,9 +918,7 @@ def runstarterskills()
             @state.effects[:DesertNova] = true
           elsif (weather == :STRONGWINDS)
           end
-          @permWeather = true
         end
-        
         @weatherbackup = weather
         @weatherbackupanim = weatherText
         @scene.pbShowOpponent(opponent) if trainereffect[:setWeather][4]
@@ -907,12 +926,6 @@ def runstarterskills()
         weatherMessage = trainereffect[:setWeather][2] if trainereffect[:setWeather][2]
         pbDisplay(_INTL("{1}", weatherMessage)) if weatherMessage
         @scene.pbHideOpponent if trainereffect[:setWeather][4]
-      end
-      if trainereffect[:fieldChange] && trainereffect[:fieldChange][0] != @field.effect
-        pbAnimation(:MAGICROOM,pkmn,nil)
-        setField(trainereffect[:fieldChange][0],trainereffect[:fieldChange][2])
-        fieldmessage = (trainereffect[:fieldChange][1] != "") ? trainereffect[:fieldChange][1] : "The field was changed!"
-        pbDisplay(_INTL("{1}",fieldmessage))
       end
     end
     return

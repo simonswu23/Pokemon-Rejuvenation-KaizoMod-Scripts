@@ -26,6 +26,8 @@
     - Giga Eevee's ability
   - Gold Envy
     - opposing pokemon may not use status moves
+  - Pincushion
+    - scatters a layer of spikes on the opposing team when hit by a physical attack, also damages attackers by 1/8 hp on contact
 
   ## Changes
   - Magma Armor protects against Frostbite
@@ -47,7 +49,7 @@
   - Plus: now provides a x1.15 boost to all friendly attacks, x1.5 if an ally has Minus. x2 speed an if ally has Plus.
   - Minus: now provides a x0.85 reduction to all opposing attacks, x0.67 if ally has Plus. x2 speed if an ally has Minus.
   - Anticipation: The pokemon gains +1 speed upon shuddering
-
+  - Iron Fist: now provides a x1.5 boost instead to punching attacks
 
 # Crests
 
@@ -107,6 +109,120 @@
 
 # Pokemon
   ## Giga Pokemon
+
+
+## Starter Pokemon
+- All final have BST's adjusted to hit 535  
+- Starters have an additional ability they may choose from  
+- List:
+  - **Venusaur Line**
+    - added Adaptability as an ability  
+    - new Venusaur BST: 80, 82, 83, 110, 100, 80  
+    - *Mega Venusaur*:
+      - new Mega Venusaur BST: 80, 100, 128, 126, 121, 80  
+  - **Charizard Line**
+    - added Pressure as an ability  
+    - new Charizard BST: 78, 84, 78, 110, 85, 100  
+    - *Mega Charizard X*:
+      - new Mega Charizard X BST: 78, 131, 111, 130, 85, 100  
+    - *Mega Charizard Y*:
+      - new Mega Charizard Y BST: 78, 105, 78, 159, 115, 100  
+  - **Blastoise Line**
+    - added Anger Shell as an ability  
+    - new Blastoise BST: 79, 77, 100, 95, 106, 78  
+    - *Mega Blastoise*:
+      - new Mega Blastoise BST: 79, 103, 120, 140, 115, 78  
+  - **Meganium Line**
+    - Meganium gains Fairy subtyping  
+    - added Pastel Veil and Aroma Veil as abilities (replacing Leaf Guard)  
+    - new Meganium BST: 80, 82, 100, 93, 100, 80  
+    - notable new moves: Baton Pass, Healing Wish, Wish, Strength Sap, Rage Powder, Floral Healing, Flower Shield, Play Rough, Pollen Puff, Captivate, Chain Drain, Alluring Voice, Dazzling Gleam
+  - **Typhlosion Line**
+    - added Drought as an ability  
+    - new Typhlosion BST: 78, 84, 78, 110, 85, 100  
+    - notable new moves: Earth Power
+  - **Hisuian Typhlosion**
+    - added Anticipation as an ability  
+    - new Hisuian Typhlosion BST: 73, 84, 78, 120, 85, 95  
+  - **Feraligatr Line**
+    - added Strong Jaw as an ability  
+    - new Feraligatr BST: 85, 110, 100, 79, 83, 78  
+    - notable new moves: Fishious Rend (yikes!)
+  - **Sceptile Line**
+    - Sceptile gains Rock subtyping  
+    - added Technician as an ability  
+    - new Sceptile BST: 70, 105, 65, 100, 75, 120  
+    - notable new moves: Smack Down, Swords Dance (LUM), Endeavor, Rock Blast, Tail Slap, Pin Missle, Accelerock, Meteor Beam, Power Gem
+    - *Mega Sceptile*:
+      - Sceptile's Mega Form changes from Dragon to Rock subtyping  
+      - gains Armor Tail instead of Lightningrod as an ability
+      - new Mega Sceptile BST: 70, 115, 75, 145, 85, 145  
+  - **Blaziken Line**
+    - added Inner Focus as an ability  
+    - new Blaziken BST: 80, 120, 70, 115, 70, 80  
+    - *Mega Blaziken*:
+      - new Mega Blaziken BST: 80, 160, 80, 135, 80, 100  
+  - **Swampert Line**
+    - added Stamina and Regenerator as abilities (replacing Damp)
+    - *Mega Swampert*:
+      - new Mega Swampert BST: 100, 150, 110, 95, 110, 70  
+  - **Torterra Line**
+    - added Stalwart and Mold Breaker as abilities (replacing Shell Armor)
+    - new Torterra BST: 95, 119, 105, 75, 85, 56  
+    - notable new moves: Headlong Rush
+  - **Infernape Line**
+    - added Prankster as an ability  
+    - new Infernape BST: 76, 104, 71, 104, 71, 118  
+  - **Empoleon Line**
+    - added Swift Swim as an ability  
+    - new Empoleon BST: 84, 86, 88, 116, 101, 60  
+  - **Serperior Line**
+    - Serperior gains Dragon subtyping  
+    - added Unnerve as an ability  
+    - new Serperior BST: 75, 75, 95, 75, 95, 120  
+    - notable new moves: Dragon Tail, Dragon Pulse
+  - **Emboar Line**
+    - added Magic Guard as an ability for Emboar
+    - new Emboar BST: 110, 130, 65, 100, 65, 65  
+  - **Samurott Line**
+    - Samurott gains Fighting subtyping  
+    - added Sturdy and No Guard as abilities (replacing Shell Armor)
+    - new Samurott BST: 95, 100, 85, 115, 70, 70  
+    - notable new moves: Focus Blast (LUM), Dynamic Punch
+  - **Hisuian Samurott**
+    - added Lightning Rod as an ability  
+    - new Hisuian Samurott BST: 90, 115, 80, 100, 65, 85  
+  - **Decidueye Line**
+    - added Shadow Tag as an ability  
+    - new Decidueye BST: 78, 112, 75, 100, 100, 70  
+  - **Hisuian Decidueye**
+    - added Slush Rush as an ability  
+    - new Hisuian Decidueye BST: 88, 117, 80, 95, 95, 60  
+  - **Incineroar Line**
+    - added Defiant as an ability  
+    - new Incineroar BST: 95, 115, 90, 80, 95, 60  
+  - **Primarina Line**
+    - added Misty Surge as an ability  
+    - new Primarina BST: 80, 74, 74, 126, 121, 60  
+  - **Rillaboom Line**
+    - added Soundproof as an ability  
+    - new Rillaboom BST: 100, 125, 90, 65, 70, 85  
+  - **Cinderace Line**
+    - added Quick Feet as an ability  
+    - new Cinderace BST: 80, 116, 75, 70, 75, 119  
+  - **Inteleon Line**
+    - added Drizzle as an ability  
+    - new Inteleon BST: 70, 90, 65, 125, 65, 120  
+  - **Meowscarada Line**
+    - added Illusion as an ability  
+    - new Meowscarada BST: 76, 115, 70, 81, 70, 123  
+  - **Skeledirge Line**
+    - added Perish Body as an ability for Skeledirge
+    - added Flame Body as an ability for Fuecoco and Crocalor
+    - new Skeledirge BST: 104, 75, 105, 110, 75, 66  
+  - **Quaquaval Line**
+    - added Dancer as an ability  
+    - new Quaquaval BST: 85, 120, 85, 85, 75, 85
 
   ## Standard Pokemon
   - Varoom and Revavroom
@@ -228,6 +344,14 @@
 
   - Volcanic Top
     - Precipice Blades never misses
+
+  - Crowd
+    - Iron Fist boosts punching moves by x2 instead of x1.5
+
+  - Infernal Field
+    - Immolate boosts normal moves by x1.5 power instead of x1.3
+    - Centiferno is boosted in power by x2
+    - Smog is boosted in power by x5 instead of x2
 
 # Other
   - Removed data chip cost to enter password

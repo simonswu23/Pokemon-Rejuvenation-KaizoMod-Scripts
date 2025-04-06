@@ -3005,7 +3005,8 @@ FIELDEFFECTS = {
 	:naturePower => :PUNISHMENT,
 	:mimicry => :FIRE,
 	:damageMods => {
-		2.0 => [:PUNISHMENT, :SMOG, :DREAMEATER],
+		5.0 => [:SMOG],
+		2.0 => [:PUNISHMENT, :DREAMEATER, :CENTIFERNO],
 		1.5 => [:BLASTBURN, :EARTPOWER, :INFERNOOVERDRIVE, :PRECIPICEBLADES, :INFERNO, :RAGINGFURY, :INFERNALPARADE],
 		0  => [:RAINDANCE, :HAIL],
 	},
@@ -3013,7 +3014,7 @@ FIELDEFFECTS = {
 		0 => [:WILLOWISP, :DARKVOID, :INFERNO],
 	},
 	:moveMessages => {
-		"Hellish Suffering!" => [:PUNISHMENT, :SMOG, :DREAMEATER],
+		"Hellish Suffering!" => [:PUNISHMENT, :SMOG, :DREAMEATER, :CENTIFERNO],
 		"Infernal flames strengthened the attack" => [:BLASTBURN, :EARTPOWER, :INFERNOOVERDRIVE, :PRECIPICEBLADES, :INFERNO, :RAGINGFURY, :INFERNALPARADE],
 		"The " + HAILSNOWLOWMOD + " melted away." => [:HAIL],
 		"The rain evaporated." => [:RAINDANCE],
