@@ -548,7 +548,7 @@ ABILHASH = {
     :ID => 89,
     :name => "Iron Fist",
     :desc => "Boosts the power of punching moves...",
-    :fullDesc => "Boosts the power of punching moves by 20%."
+    :fullDesc => "Boosts the power of punching moves by 50%."
 },
 
 :POISONHEAL => {
@@ -745,7 +745,7 @@ ABILHASH = {
     :ID => 120,
     :name => "Reckless",
     :desc => "Powers up moves that have recoil damage...",
-    :fullDesc => "Powers up moves that have recoil damage by 20%."
+    :fullDesc => "Powers up moves that have recoil damage by 30%."
 },
 
 :MULTITYPE => {
@@ -1132,7 +1132,7 @@ ABILHASH = {
     :ID => 181,
     :name => "Pixilate",
     :desc => "Normal-type moves become Fairy-type moves...",
-    :fullDesc => "Normal-type moves become Fairy-type moves and deal 20% more damage. This overrides Ion Deluge."
+    :fullDesc => "Normal-type moves become Fairy-type moves and deal 30% more damage. This overrides Ion Deluge."
 },
 
 :PROTEAN => {
@@ -1145,7 +1145,7 @@ ABILHASH = {
     :ID => 183,
     :name => "Refrigerate",
     :desc => "Normal-type moves become Ice-type moves...",
-    :fullDesc => "Normal-type moves become Ice-type moves and deal 20% more damage. This overrides Electrify and Ion Deluge."
+    :fullDesc => "Normal-type moves become Ice-type moves and deal 30% more damage. This overrides Electrify and Ion Deluge."
 },
 
 :STANCECHANGE => {
@@ -1271,7 +1271,7 @@ ABILHASH = {
     :ID => 203,
     :name => "Galvanize",
     :desc => "Normal-type moves become Electric-type moves...",
-    :fullDesc => "Normal-type moves become Electric-type moves and deal 20% more damage."
+    :fullDesc => "Normal-type moves become Electric-type moves and deal 30% more damage."
 },
 
 :GRASSYSURGE => {
@@ -2138,6 +2138,18 @@ ABILHASH = {
 	:ID => 387,
 	:name => "Gold Envy",
 	:desc => "Raptured by tremendous jealousy, the foes can only use attacking moves."
+},
+
+:PINCUSHION => {
+    :ID => 388,
+    :name => "Pincushion",
+    :desc => "Scatters spikes when hit by attacks, also damages foes on contact."
+},
+
+:IMMOLATE => {
+    :ID => 389,
+    :name => "Immolate",
+    :desc => "Normal-type moves become Fire-type moves and deal 30% more damage."
 },
 
 }

@@ -308,7 +308,7 @@ class PokeBattle_Battler
       return
     end
     if (attacker.crested == :MINUN)
-      self.pbFreeze(attacker) if self.pbCanFreeze?(true)
+      self.pbFreeze() if self.pbCanFreeze?(true)
       return
       return
     end

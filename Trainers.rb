@@ -75,6 +75,7 @@ end
 def findParty(type,name,id)
   trainerarray = $cache.trainers.dig(type,name)
   for trainer in trainerarray
+    # Kernel.pbMessage(_INTL("forcedouble: {1}", forcedouble))
     return trainer if trainer[0] == id
   end
   return nil
@@ -213,6 +214,13 @@ def pbDoubleTrainerBattle(trainerid1, trainername1, trainerparty1, endspeech1,
   return (decision==1)
 end
 
+def forceDouble?(type,name,id)
+  trainer = findParty(type,name,id)
+  return false if !trainer
+  return false if !trainer[5]
+  return trainer[5][:forceDouble]
+end
+
 def pbTrainerBattle(trainerid,trainername,endspeech, doublebattle=false,trainerparty=0,canlose=false,variable=Variables[:BattleResult],opponent_team: [],recorded:false, items_overwrite: nil, noexp:false, vsoutfit:0)
   $game_switches[:In_Battle] = true
   if $Trainer.pokemonCount==0
@@ -250,6 +258,9 @@ def pbTrainerBattle(trainerid,trainername,endspeech, doublebattle=false,trainerp
     pbMissingTrainer(trainerid,trainername,trainerparty)
     $game_switches[:In_Battle] = false
     return false
+  end
+  if (forceDouble?(trainerid,trainername,trainerparty))
+    doublebattle=true
   end
   trainer[0].outfit = vsoutfit if vsoutfit > 0
   if $PokemonGlobal.partner && ($PokemonTemp.waitingTrainer || doublebattle)

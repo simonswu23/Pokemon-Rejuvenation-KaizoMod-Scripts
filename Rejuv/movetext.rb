@@ -6306,10 +6306,10 @@ MOVEHASH = {
     :type => :POISON,
     :category => :special,
     :basedamage => 30,
-    :accuracy => 70,
+    :accuracy => 85,
     :maxpp => 20,
     :effect => 40,
-    :target => :SingleNonUser,
+    :target => :AllOpposing,
     :desc => "The target is attacked with a discharge of filthy gases. It may also poison the target."
 },
 
@@ -14687,6 +14687,20 @@ MOVEHASH = {
 	:target => :SingleNonUser,
 	:priority => 2,
 	:desc => "It's not about the money money money"
+},
+
+:CENTIFERNO => {
+	:ID => 2018,
+	:name => "Centiferno",
+	:function => 0x00A,
+	:type => :DRAGON,
+	:category => :special,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+	:target => :AllOpposing,
+	:desc => "Burns targets."
 },
 
 # Handlers

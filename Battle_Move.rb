@@ -176,6 +176,7 @@ class PokeBattle_Move
         when :REFRIGERATE then type = :ICE      if type == :NORMAL
         when :DUSKILATE   then type = :DARK     if type == :NORMAL && @battle.FE != :GLITCH
         when :LIQUIDVOICE then type = @battle.FE == :ICY ? :ICE : :WATER if isSoundBased?
+        when :IMMOLATE    then type = :FIRE     if type == :NORMAL
       end
     end
     case attacker.crested
@@ -1580,9 +1581,9 @@ class PokeBattle_Move
       when :TOUGHCLAWS    then basemult *= 1.3 if contactMove?
       when :IRONFIST
         if @battle.FE == :CROWD
-          basemult *= 1.5 if punchMove?
+          basemult *= 2 if punchMove?
         else
-          basemult *= 1.3 if punchMove?
+          basemult *= 1.5 if punchMove?
         end
       when :RECKLESS      then basemult *= 1.3 if @recoil > 0 || [0x130, 0x10B, 0x506].include?(@function) # Shadow End, High Jump Kick, Axe Kick
       when :FLAREBOOST    then basemult *= 1.5 if (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && pbIsSpecial?(type) && @battle.FE != :FROZENDIMENSION
@@ -1648,6 +1649,14 @@ class PokeBattle_Move
               else
                 basemult *= 1.3
               end
+          end
+        end
+      when :IMMOLATE
+        if @type == :NORMAL && (type == :FAIRY || (type == :NORMAL && @battle.FE == :GLITCH))
+          case @battle.FE
+            when :INFERNAL then basemult *= 1.5
+            else
+              basemult *= 1.3
           end
         end
       when :DUSKILATE     then basemult *= 1.3 if @type == :NORMAL && (type == :DARK || (type == :NORMAL && @battle.FE == :GLITCH))
