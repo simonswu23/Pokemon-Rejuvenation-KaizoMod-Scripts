@@ -52,6 +52,11 @@
     - No anim for Tapu Koko's Guardian of Alola?
     - -1 Heal Block was able to use Sitrus Berry to heal?
     - Giga Meowth, Eevee, Pikachu do not get updated giga abilities (does not reset)
+    - Lucky Wind
+      - needs testing
+      - double-check Angie fight with Lucky Wind
+      - should be a "synchronous effect" with Tailwind and Lucky Chant
+      - should NOT be able to "stack" with Tailwind and Lucky Chant
 
   ## Rebalancing
     -
