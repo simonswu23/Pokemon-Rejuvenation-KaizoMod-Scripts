@@ -143,6 +143,7 @@
     - x2 side effect chances for the team
     - +1 CHR for team
     - x1.1 accuracy for team
+    - protects friendly team from side effects
   - Leaf Guard also negates Grass type weaknesses in the Sun 
   - updated Forewarn (quarters damage from the first instance of the forewarned move)
   

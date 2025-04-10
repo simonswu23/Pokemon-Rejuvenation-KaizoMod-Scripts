@@ -3443,7 +3443,7 @@ class PokeBattle_Battler
     # needs to be checked before mummy/wandering spirit stench is check before ability change
     if target.damagestate.calcdamage > 0 && !target.damagestate.substitute
       # Gen 9 Mod - Added Covert Cloak
-      if (target.ability != :SHIELDDUST || target.moldbroken) && !target.hasWorkingItem(:COVERTCLOAK)
+      if (target.ability != :SHIELDDUST || target.moldbroken) && !target.hasWorkingItem(:COVERTCLOAK) && target.pbOwnSide.effects[:LuckyWind] != 0 &&
         if (user.hasWorkingItem(:KINGSROCK) || user.hasWorkingItem(:RAZORFANG)) && !move.canFlinch?
           if @battle.pbRandom(10) == 0
             target.effects[:Flinch] = true
@@ -5588,7 +5588,7 @@ class PokeBattle_Battler
         basemove.pbAdditionalEffect(user, target)
       end
 
-      if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
+      if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE && target.pbOwnSide.effects[:LuckyWind] != 0 &&
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
          [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105, 0x204, 0x900].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect

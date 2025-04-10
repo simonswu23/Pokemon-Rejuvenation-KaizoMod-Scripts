@@ -20224,7 +20224,9 @@ TEAMARRAY = [{
 	2 => {
 		:friendlyEffect => true,
 		:opposingsideChanges => {	
-			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out and use Tailwind!"],
+			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out with your Lucky Wind!"],
+			:LuckyChant = [4,:LuckyChant],
+			:LuckyWind = [4,:LuckyWind],
 		},
 	},
 	5 => {
