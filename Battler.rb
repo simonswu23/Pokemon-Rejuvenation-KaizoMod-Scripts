@@ -85,6 +85,7 @@ class PokeBattle_Battler
   def isShadow?; return false; end
 
   attr_accessor :giga
+  attr_accessor :forewarn
 
   #simple true/false vars
 
@@ -432,7 +433,7 @@ class PokeBattle_Battler
     @weight       = nil
     @battle_bond_flags = []
 
-    @forewarn     = []
+    @forewarn     = nil
     @gear         = 0        # 0 is speed gear, 1 is attack gear
 
     @lastMoveCancelled = -1
@@ -3150,7 +3151,7 @@ class PokeBattle_Battler
       for i in items
         itemname=getItemName(i.item)
         @battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
-        i.effects[:Embargo]=1
+        i.effects[:Embargo]=3
         if @battle.FE == :BACKALLEY
           if (i.effects[:Substitute]==0) && (i.ability != :STICKYHOLD || i.moldbroken) && self.item.nil?
             if !@battle.pbIsUnlosableItem(i,i.item) && !@battle.pbIsUnlosableItem(self,i.item)
@@ -3238,6 +3239,7 @@ class PokeBattle_Battler
         move=moves[chosenmovenumber]
         movename=getMoveName(move)
         @battle.pbDisplay(_INTL("{1}'s Forewarn alerted it to {2}!",pbThis,movename))
+        chosenopponent[chosenmovenumber].forewarn = movename
         # AI CHANGES
         if !@battle.isOnline?
           warnedMove = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(move),self)
@@ -3314,6 +3316,12 @@ class PokeBattle_Battler
       if pbFaintedPokemonCount > 0
         @battle.pbDisplay(_INTL("{1} gained power from their fallen allies!", pbThis))
       end
+    end
+    # Kaizomod - itchy pollen
+    if self.ability == :ITCHYPOLLEN && onactive
+      self.effects[:RagePowder] = true
+      @battle.pbAnimation(:RAGEPOWDER, self, self.pbOpposing1)
+      @battle.pbDisplay(_INTL("{1}'s Itchy Pollen made it the center of attention!", pbThis))
     end
     # Imposter
     if self.ability == :IMPOSTER && !@effects[:Transform] && onactive && pbOppositeOpposing.hp>0
@@ -3402,10 +3410,15 @@ class PokeBattle_Battler
     # Lucky Wind
     if KAIZOMOD && self.ability == :LUCKYWIND && onactive
       @battle.pbAnimation(:TAILWIND,self,nil)
-      self.pbOwnSide.effects[:Tailwind]+=4
-      self.pbOwnSide.effects[:Tailwind]+=6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
-      self.pbOwnSide.effects[:Tailwind]+=8 if @battle.FE == :SKY
-      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Tailwind for its team!",self.pbThis,getAbilityName(self.ability)))
+      @battle.pbAnimation(:LUCKYCHANT,self,nil)
+      inc = 4
+      inc = 6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
+      inc = 8 if @battle.FE == :SKY
+      self.pbOwnSide.effects[:Tailwind]+=inc
+      self.pbOwnSide.effects[:LuckyWind]+=inc
+      self.pbOwnSide.effects[:LuckyChant]+=inc
+      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Lucky Wind for its team!",self.pbThis,getAbilityName(self.ability)))
+      
       if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :SKY) && !@battle.state.effects[:HeavyRain] && !@battle.state.effects[:HarshSunlight]
         @battle.weather=:STRONGWINDS
         @battle.weatherduration=6
@@ -5585,7 +5598,7 @@ class PokeBattle_Battler
           addleffect = 20 if basemove.move == :FREEZEDRY
         end
         addleffect = 20 if basemove.move == :OMINOUSWIND && @battle.FE == :HAUNTED
-        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW
+        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW || user.pbOwnSide.effects[:LuckyWind] != 0
         addleffect = 100 if $DEBUG && Input.press?(Input::CTRL) && !@battle.isOnline?
         addleffect = 100 if basemove.move == :MIRRORSHOT && @battle.FE == :MIRROR
         addleffect = 100 if basemove.move == :STRANGESTEAM && @battle.FE == :FAIRYTALE
