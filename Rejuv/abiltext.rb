@@ -2155,7 +2155,7 @@ ABILHASH = {
 :ITCHYPOLLEN => {
     :ID => 390,
     :name => "Itchy Pollen",
-    :desc => "Normal-type moves become Fire-type moves and deal 30% more damage."
+    :desc => "Uses Rage Powder on entry."
 },
 
 }

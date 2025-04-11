@@ -145,10 +145,10 @@
   - Buffed Hapi's Lucky Wind:
     - Tailwind
     - Lucky Chant
-    - x2 side effect chances for the team
-    - +1 CHR for team
-    - x1.1 accuracy for team
-    - protects friendly team from side effects
+    - x2 side effect chances for allies
+    - +1 CHR for allies
+    - x1.15 accuracy for allies
+    - protects friendly allies from side effects
   - Leaf Guard also negates Grass type weaknesses in the Sun 
   - updated Forewarn (quarters damage from the first instance of the forewarned move)
   

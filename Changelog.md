@@ -54,6 +54,8 @@
   - Iron Fist now provides a x1.5 boost instead to punching attacks
   - Forewarn now quarters the first instance of the forewarned attack by the opponent
   - Leaf Guard now additionally negates Grass weaknesses in the Sun
+  - Victory Star now boosts friendly accuracy by x1.5
+  - Illuminate now boosts accuracy for all pokemon on the field by x1.25
 
 # Crests
 
@@ -246,6 +248,19 @@
     - Anger Shell replaces Shell Armor
   - Kyogre
     - Primal Kyogre has Electric sub-typing
+  - Hoppip, Skiploom, Jumpluff
+    - Gains Itchy Pollen instead of Leaf Guard as ability
+  - Budew, Roselia
+    - Gains Itchy Pollen instead of Leaf Guard as ability
+  - Absol
+    - Gains Forewarn instead of Justified as ability
+  - Scatterbug, Spewpa 
+    - Scatterbug gains Run Away isntead of Compoundeyes as ability
+    - Spewpa gains Itchy Pollen instead of Overcoat as ability
+  - Cutiefly, Ribombee
+    - Gains Itchy Pollen as ability
+  - Gossifleur, Eldegoss
+    - Gains Wind Rider instead of Effect Spore as ability
 
   ## Moveset Tweaks (WIP)
   - Shelmet
