@@ -9657,6 +9657,12 @@ class PokeBattle_AI
           when :INTIMIDATE, :FURCOAT, :STAMINA
             abilityscore += 40 if @opponent.attack > @opponent.spatk
             abilityscore += 40 if @opponent.pbPartner.attack > @opponent.pbPartner.spatk
+          when :PRESSURE
+            abilityscore += 40
+            abilityscore += 20 if [@opponent.attack, @opponent.spatk].max < [@opponent.defense, @opponent.spdef].max
+            partner = @opponent.pbPartner
+            abilityscore += 40 if !partner.isFainted?
+            abilityscore += 20 if [partner.attack, partner.spatk].max < [partner.defense, partner.spdef].max
           when :WONDERGUARD
             dievar = false
             instantdievar = false
