@@ -37,7 +37,7 @@ TEAMARRAY = [{
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	-1 => {
-		:fieldChange => [:SWAMP,"Hubba Hubba",0],
+		:fieldChange => [:DIMENSIONAL,"Hubba Hubba",0],
 	},
 },
 :mons => [{
@@ -20225,8 +20225,8 @@ TEAMARRAY = [{
 		:friendlyEffect => true,
 		:opposingsideChanges => {	
 			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out with your Lucky Wind!"],
-			:LuckyChant = [4,:LuckyChant],
-			:LuckyWind = [4,:LuckyWind],
+			:LuckyChant => [4,:LuckyChant],
+			:LuckyWind => [4,:LuckyWind],
 		},
 	},
 	5 => {
