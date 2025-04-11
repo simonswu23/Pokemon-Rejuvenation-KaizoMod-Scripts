@@ -6093,7 +6093,7 @@ class PokeBattle_AI
     miniscore*=0.7 if @opponent.ability == :SUPERSWEETSYRUP
     # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold.
     miniscore*=0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
-    miniscore*=0.7 if @battle.FE == :DIMENSIONAL && (@opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE)
+    miniscore*=0.7 if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
     miniscore*=0.7 if @battle.FE == :CITY && @opponent.ability == :FRISK
     miniscore*=0.7 if @opponent.crested == :THIEVUL
     # Gen 9 Mod - Added Hospitality
@@ -6118,7 +6118,13 @@ class PokeBattle_AI
     miniscore*=1.1 if @attacker.ability == :SUPERSWEETSYRUP
     # Gen 9 Mod - Great boost to miniscore if Zero To Hero and not Hero Form.
     miniscore*=2 if @attacker.ability == :ZEROTOHERO && attacker.form == 0
-    miniscore*=1.1 if @battle.FE == :DIMENSIONAL && (@opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE)
+    if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
+      if @battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSIONAL
+        miniscore *= 1.2
+      else
+        miniscore *= 1.1
+      end
+    end
     miniscore*=1.1 if @battle.FE == :CITY && @opponent.ability == :FRISK
     miniscore*=1.1 if @opponent.crested == :THIEVUL
     # Gen 9 Mod - Added Hospitality
@@ -7561,7 +7567,13 @@ class PokeBattle_AI
     miniscore*=1.1 if @opponent.ability == :INTIMIDATE
 
     miniscore*=1.1 if @attacker.ability == :SUPERSWEETSYRUP
-    miniscore*=1.1 if @battle.FE == :DIMENSIONAL && (@opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE)
+    if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
+      if @battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSIONAL
+        miniscore *= 1.2
+      else
+        miniscore *= 1.1
+      end
+    end
     miniscore*=1.1 if @battle.FE == :CITY && @opponent.ability == :FRISK
     miniscore*=1.1 if @opponent.crested == :THIEVUL
 
