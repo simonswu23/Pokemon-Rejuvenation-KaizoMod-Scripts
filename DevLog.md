@@ -114,8 +114,6 @@
       - Frisk
       - Damp
       - Aftermath
-      - Unnerve
-      - Pressure
       - Supersweet Syrup
       - Cursed Body
       - Leaf Guard
@@ -140,6 +138,12 @@
     - Learnset updates for new moves
 
 # Journal
+- 4/10 (@Ren)
+  - Implemented Pressure changes
+    - On entry, Pressure lowers opponents' defense and special defense
+    - In Dimensional fields it additionally lowers opponents' special attack
+  - Updated AI for Pressure and Unnerve
+
 - 4/9/25 (@SWu)
   - Implemented Itchy Pollen (auto-rage powder for a turn)
   - Buffed Hapi's Lucky Wind:
@@ -149,9 +153,9 @@
     - +1 CHR for allies
     - x1.15 accuracy for allies
     - protects friendly allies from side effects
-  - Leaf Guard also negates Grass type weaknesses in the Sun 
+  - Leaf Guard also negates Grass type weaknesses in the Sun
   - updated Forewarn (quarters damage from the first instance of the forewarned move)
-  
+
 - 4/4/25 (@Ren)
   - Implemented +1 speed boost for Anticipation shudders, and updated AI to account for this
 
