@@ -9671,10 +9671,17 @@ class PokeBattle_AI
             abilityscore += 40 if @opponent.pbPartner.attack > @opponent.pbPartner.spatk
           when :PRESSURE
             abilityscore += 40
-            abilityscore += 20 if [@opponent.attack, @opponent.spatk].max < [@opponent.defense, @opponent.spdef].max
+            roles = pbGetMonRoles(@opponent)
+            abilityscore += 10 if roles.include?(:PHYSICALWALL) || roles.include?(:SPECIALWALL)
             partner = @opponent.pbPartner
+            roles = pbGetMonRoles(@partner)
             abilityscore += 40 if !partner.isFainted?
-            abilityscore += 20 if [partner.attack, partner.spatk].max < [partner.defense, partner.spdef].max
+            abilityscore += 10 if roles.include?(:PHYSICALWALL) || roles.include?(:SPECIALWALL)
+          when :UNNERVE
+            abilityscore += 40
+            abilityscore += 10 if pbGetMonRoles(@opponent).include?(:SWEEPER)
+            abilityscore += 40 if !@opponent.pbPartner.isFainted?
+            abilityscore += 10 if pbGetMonRoles(@opponent.pbPartner).include?(:SWEEPER)
           when :WONDERGUARD
             dievar = false
             instantdievar = false
