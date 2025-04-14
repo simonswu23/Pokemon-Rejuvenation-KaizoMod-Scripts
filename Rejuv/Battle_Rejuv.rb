@@ -91,7 +91,13 @@
       @battlers[index].effects[:MagnetRise]=-1
       pbAnimation(:MAGNETRISE,@battlers[index],nil)
       @battle.pbDisplay(_INTL("{1} levitates with electromagnetism!",@battlers[index].pbThis))
-    end
+    when :SPINDA
+      sigmove = @battlers[index].moves[0]
+      @battle.pbDisplay(_INTL("{1}'s crest let it instantly use a signature move!",@battlers[index].pbThis))
+      if sigmove.basedamage == 0
+        @battlers[index].pbUseMoveSimple(sigmove.move, -1, -1)
+      end
+    end    
   end
 
   def pbCrestEntry(index,pokemon)

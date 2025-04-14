@@ -385,7 +385,7 @@ class PokeBattle_Move
     calcatkmult *= 2 if (attacker.ability == :PUREPOWER && @battle.FE != :PSYTERRAIN) || attacker.ability == :HUGEPOWER
     # Gen 9 Mod - Added Orichalcum Pulse
     calcatkmult *= (5461 / 4096.to_f)  if attacker.ability == :ORICHALCUMPULSE && (@battle.pbWeather== :SUNNYDAY) && @battle.FE != :FROZENDIMENSION
-    if (@battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED
+    if (@battle.pbWeather == :SUNNYDAY) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED
       calcatkmult *= 1.5 if attacker.ability == :FLOWERGIFT && attacker.species == :CHERRIM
       calcatkmult *= 1.5 if attacker.pbPartner.ability == :FLOWERGIFT && attacker.pbPartner.species == :CHERRIM
     end
@@ -401,7 +401,7 @@ class PokeBattle_Move
     calcspatkmult *= 2 if attacker.hasWorkingItem(:LIGHTBALL) && attacker.pokemon.species == :PIKACHU
     calcspatkmult *= 1.5 if attacker.ability == :FLAREBOOST && (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && @battle.FE != :FROZENDIMENSION
     calcspatkmult *= 1.5 if !KAIZOMOD && [:MINUS, :PLUS].include?(attacker.ability) && ([:MINUS, :PLUS].include?(attacker.pbPartner.ability) || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
-    calcspatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA)) && @battle.FE != :FROZENDIMENSION
+    calcspatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY) && @battle.FE != :FROZENDIMENSION
     # Gen 9 Mod - Added Hadron Engine
     calcspatkmult *= (5461 / 4096.to_f) if attacker.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION
     calcspatkmult *= 1.3 if attacker.pbPartner.ability == :BATTERY && Rejuv
@@ -435,7 +435,7 @@ class PokeBattle_Move
     calcspdefmult *= 1.5 if (KAIZOMOD) && opponent.hasType?(:GRASS) && @battle.pbWeather == :RAINDANCE
     calcspdefmult *= 1.5 if @battle.FE == :DESERT && opponent.hasType?(:GROUND)
     calcspdefmult *= 1.5 if @battle.FE == :MISTY && opponent.hasType?(:FAIRY)
-    if ((@battle.pbWeather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken
+    if ((@battle.pbWeather == :SUNNYDAY) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken
       calcspdefmult *= 1.5 if opponent.ability == :FLOWERGIFT && opponent.species == :CHERRIM
       calcspdefmult *= 1.5 if opponent.pbPartner.ability == :FLOWERGIFT && opponent.pbPartner.species == :CHERRIM
     end
@@ -1004,6 +1004,12 @@ class PokeBattle_Move
           end
           return 0
         end
+      when :VANILLUXE
+        if type == :FIRE && @battle.weather == :HAIL
+          @battle.pbDisplay(_INTL("{1}'s {2} made {3} useless in the hail!",
+              opponent.pbThis,getItemName(opponent.item),self.name))
+          return 0
+        end
     end
     return 4
   end
@@ -1154,6 +1160,12 @@ class PokeBattle_Move
           else
             @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", opponent.pbThis, getItemName(opponent.item), self.name))
           end
+          return 0
+        end
+      when :VANILLUXE
+        if type == :FIRE && @battle.weather == :HAIL
+          @battle.pbDisplay(_INTL("{1}'s {2} made {3} useless in the hail!",
+              opponent.pbThis,getItemName(opponent.item),self.name))
           return 0
         end
     end
@@ -2027,7 +2039,7 @@ class PokeBattle_Move
         else
           atkmult*=2.0 if pbIsPhysical?(type)
         end
-      when :SOLARPOWER then atkmult*=1.5 if (@battle.pbWeather== :SUNNYDAY && !(attitemworks && attacker.item == :UTILITYUMBRELLA)) && pbIsSpecial?(type) && (@battle.FE != :GLITCH &&  @battle.FE != :FROZENDIMENSION)
+      when :SOLARPOWER then atkmult*=1.5 if @battle.pbWeather== :SUNNYDAY && pbIsSpecial?(type) && (@battle.FE != :GLITCH &&  @battle.FE != :FROZENDIMENSION)
       when :SLOWSTART then atkmult*=0.5 if attacker.turncount<5 && pbIsPhysical?(type) && @battle.FE != :DEEPEARTH
       when :GORILLATACTICS then atkmult*=1.5 if pbIsPhysical?(type)
       when :QUARKDRIVE then atkmult*=1.3 if (attacker.effects[:Quarkdrive][0] == PBStats::ATTACK && pbIsPhysical?(type)) || (attacker.effects[:Quarkdrive][0] == PBStats::SPATK && pbIsSpecial?(type))
@@ -2053,7 +2065,7 @@ class PokeBattle_Move
 
     # Mid Battle stat multiplying crests; Spiritomb Crest, Castform Crest
     case attacker.crested
-      when :CASTFORM then atkmult*=1.5 if attacker.form == 1 && (@battle.pbWeather== :SUNNYDAY && !(attitemworks && attacker.item == :UTILITYUMBRELLA)) && pbIsSpecial?(type) && (@battle.FE != :GLITCH &&  @battle.FE != :FROZENDIMENSION)
+      when :CASTFORM then atkmult*=1.5 if attacker.form == 1 && (@battle.pbWeather== :SUNNYDAY) && pbIsSpecial?(type) && (@battle.FE != :GLITCH &&  @battle.FE != :FROZENDIMENSION)
       when :SPIRITOMB
           allyfainted = attacker.pbFaintedPokemonCount
           modifier = (allyfainted * 0.2) + 1.0
@@ -2065,7 +2077,7 @@ class PokeBattle_Move
       modifier = (allyfainted * 0.1) + 1.0
       atkmult *= modifier
     end
-    if ((@battle.pbWeather== :SUNNYDAY && !(attitemworks && attacker.item == :UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && pbIsPhysical?(type)
+    if ((@battle.pbWeather== :SUNNYDAY) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && pbIsPhysical?(type)
       atkmult*=1.5 if attacker.ability == :FLOWERGIFT || attacker.pbPartner.ability == :FLOWERGIFT
     end
     if (@battle.pbWeather== :SUNNYDAY) && pbIsPhysical?(type)
@@ -2194,7 +2206,7 @@ class PokeBattle_Move
         defmult *= 4.0 if contactMove? && attacker.ability != :LONGREACH && @battle.FE == :CLOUDS && !opponent.moldbroken
         defmult *= 0.5 if type == :FIRE && !opponent.moldbroken
     end
-    if ((@battle.pbWeather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken && pbIsSpecial?(type)
+    if ((@battle.pbWeather == :SUNNYDAY) || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED) && !opponent.moldbroken && pbIsSpecial?(type)
       if opponent.ability == :FLOWERGIFT && opponent.species == :CHERRIM
         defmult *= 1.5
       end
@@ -2323,13 +2335,15 @@ class PokeBattle_Move
     # Gen 9 Mod - Added Hydro Steam's Damage Calc in Sunny Weather
     case type
       when :FIRE
-        damage*=1.5 if @battle.pbWeather == :SUNNYDAY
-        damage*=0.5 if @battle.pbWeather == :RAINDANCE
+        damage*=1.5 if @battle.weather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=0.5 if @battle.weather == :RAINDANCE && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=0.5 if opponent.ability == :WATERBUBBLE
       when :WATER
-        damage*=1.5 if @battle.pbWeather == :RAINDANCE || (@battle.pbWeather == :SUNNYDAY && @move == :HYDROSTEAM)
-        damage*=0.5 if @battle.pbWeather == :SUNNYDAY && !@move == :HYDROSTEAM
+        damage*=1.5 if @battle.weather == :RAINDANCE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=0.5 if @battle.pbWeather == :SUNNYDAY && !@move == :HYDROSTEAM && !@move == :SPARKLINGARIA && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=2 if attacker.ability == :WATERBUBBLE
+      when :ICE 
+        damage*=1.5 if @battle.weather == :HAIL && attacker.crested == :VANILLUXE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
     end
     # Critical hits
     if opponent.damagestate.critical
@@ -2702,7 +2716,8 @@ class PokeBattle_Move
     pri = self.priority
 
     pri = 0 if @zmove && @basedamage > 0
-    pri += 1 if @move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+    pri += 1 if @move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+    pri += 1 if @move == :SQUALL && (@battle.pbWeather == :HAIL)
     pri += 1 if @move == :ATTACKORDER && attacker.crested == :VESPIQUEN
     pri += 1 if @move == :QUASH && @battle.FE == :DIMENSIONAL
     pri += 1 if @battle.FE == :CHESS && attacker.pokemon && attacker.pokemon.piece == :KING

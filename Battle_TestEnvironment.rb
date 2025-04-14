@@ -284,7 +284,7 @@ class PokeBattle_Battle
           next if !i.pbIsOpposing?(j.index)
           # if Pursuit and this target ("i") was chosen
           if pbChoseMoveFunctionCode?(j.index,0x88) && !j.effects[:Pursuit] && (@choices[j.index][3]==-1 || @choices[j.index][3]==i.index)
-            if j.status!=:SLEEP && (j.status!=:FROZEN || KAIZOMOD) && (!j.ability == (:TRUANT) || !j.effects[:Truant])
+            if j.status!=:SLEEP && (j.status!=:FROZEN || KAIZOMOD) && (j.status!=:FREEZE) && (!j.ability == (:TRUANT) || !j.effects[:Truant])
               #Try to Mega-evolve/Ultra-burst before using pursuit
               side=(pbIsOpposing?(j.index)) ? 1 : 0
               owner=pbGetOwnerIndex(j.index)
@@ -1540,6 +1540,7 @@ class PokeBattle_Scene
     return true if pokemon.status == :BURN && PBStuff::BURNITEMS.include?(item)
     return true if pokemon.status == :SLEEP && PBStuff::SLEEPITEMS.include?(item)
     return true if pokemon.status == :FROZEN && PBStuff::FREEZEITEMS.include?(item)
+    return true if pokemon.status == :FREEZE && PBStuff::FREEZEITEMS.include?(item)
     return true if battler && battler.effects[:Confusion]>0 && PBStuff::CONFUITEMS.include?(item)
     return true if pokemon.hp<=0 && PBStuff::REVIVEITEMS.include?(item)
     if PBStuff::PPITEMS.include?(item)

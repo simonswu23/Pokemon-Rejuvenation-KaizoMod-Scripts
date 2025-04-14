@@ -238,8 +238,11 @@ class PokeBattle_Battler
         when :DUSKNOIR
           @attack *= 1.5
         when :COFAGRIGUS
-          @spatk *=1.25
+          @spatk *= 1.25
           @spdef *= 1.25
+        when :RUNERIGUS
+          @attack *= 1.25
+          @defense *= 1.25
         when :ARIADOS
           @speed *= 1.5
         when :PHIONE
@@ -307,6 +310,13 @@ class PokeBattle_Battler
         when :EMBOAR 
           @totalhp *= 2
           @hp *= 2
+        when :SPINDA
+          maxStat = [@attack, @defense, @spatk, @spdef, @speed].max()
+          @attack = maxStat
+          @defense = maxStat
+          @spatk = maxStat
+          @spdef = maxStat
+          @speed = maxStat
         end
       end
 

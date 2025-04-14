@@ -18,7 +18,7 @@ class PokeBattle_Battler
     failure = :Substitute if (@damagestate.substitute || @effects[:Substitute] > 0) && (!@battle.lastMoveUsed.is_a?(Symbol) || !$cache.moves[@battle.lastMoveUsed].checkFlag?(:soundmove)) && !ownStatus
     failure = :SHIELD if pbShieldsUp?
     failure = :Safeguard if pbOwnSide.effects[:Safeguard] > 0 && @battle.battlers[@battle.lastMoveUser].ability != :INFILTRATOR
-    if (self.ability == :LEAFGUARD && ((@battle.pbWeather == :SUNNYDAY && !hasWorkingItem(:UTILITYUMBRELLA)) ||
+    if (self.ability == :LEAFGUARD && ((@battle.pbWeather == :SUNNYDAY) ||
       @battle.FE == :FOREST || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 2, 5) || (Rejuv && @battle.FE == :GRASSY) || @battle.state.effects[:GRASSY] > 0)) && !moldbroken
       failure = :LEAFGUARD
     end
@@ -402,6 +402,9 @@ class PokeBattle_Battler
         @battle.pbCommonAnimation("Frozen", self, nil)
         message = KAIZOMOD ? "{1} is hurt by frostbite!" : "{1} is frozen solid!" 
         @battle.pbDisplay(_INTL(message, pbThis))
+      when :FREEZE
+        @battle.pbCommonAnimation("Frozen", self, nil)
+        @battle.pbDisplay(_INTL("{1} is frozen solid!" , pbThis))
     end
     if self.isbossmon
       if self.chargeAttack

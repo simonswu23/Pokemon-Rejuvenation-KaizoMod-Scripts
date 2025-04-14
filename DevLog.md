@@ -80,6 +80,7 @@
       - Petrified pokemon are also heal blocked
 
     - All field interactions!
+    - Dynamic Speed? (yuck!)
 
   ## Testing Backlog
     - Chthonic Malady
@@ -121,15 +122,36 @@
 
     ## Crests
     - Changed Crests
+      - Cincinno
+      - Ledian
+      - Cofagrigus
     - New Crests
       - Cacturne
       - Klinklang
       - Emboar
+      - Plusle
+      - Minun
+      - Hydreigon
+      - Vanilluxe
+      - Spinda
+  
+    ## Other
+    - Utility Umbrella Changes
 
   ## Other
     - Learnset updates for new moves
 
 # Journal
+
+- 4/14/25 (SWu)
+  - TODO: refactor Battler.rb more (search for: "Kaizomod Refactor")
+  - re-implemented OG freeze for Glaciate (:FREEZE)
+  - updated Angie fight -- need to retest
+  - Vanilluxe Updates :3
+  - move relearner can learn level 0 moves (clean up montext)
+  - Utility Umbrella rework -- now only protects against the NEGATIVE impacts of sun and rain
+    - double check interactions here with Desolate Land and Primordial Sea
+
 - 4/4/25 (Ren)
   - Implemented +1 speed boost for Anticipation shudders, and updated AI to account for this
 

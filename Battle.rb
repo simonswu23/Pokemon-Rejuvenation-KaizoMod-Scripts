@@ -111,7 +111,7 @@ module PokeBattle_BattleCommon
         rareness += 3
       end
       x = (((a * 3 - b * 2) * rareness) / (a * 3))
-      if battler.status == :SLEEP || (battler.status == :FROZEN && !KAIZOMOD)
+      if battler.status == :SLEEP || (battler.status == :FROZEN && !KAIZOMOD) || battler.status == :FREEZE
         x = (x * 2.5)
       elsif !battler.status.nil?
         x = (x * 3 / 2)
@@ -1497,8 +1497,9 @@ class PokeBattle_Battle
         pri += 1 if @field.effect == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type == :FLYING && (@battlers[i].hp >= @battlers[i].totalhp / 2 || ((@field.effect == :MOUNTAIN || @field.effect == :SNOWYMOUNTAIN) && pbWeather == :STRONGWINDS))
-        pri += 1 if @choices[i][2].move == :GRASSYGLIDE && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
+        pri += 1 if @choices[i][2].move == :GRASSYGLIDE && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP || @field.effect == :BEWITCEHD)
         pri += 1 if @choices[i][2].move == :ATTACKORDER && @battlers[i].crested == :VESPIQUEN
+        pri += 1 if @choices[i][2].move == :SQUALL && (@weather == :HAIL || @field.effect == :SNOWYMOUNTAIN)
         pri += 1 if @choices[i][2].move == :QUASH && @field.effect == :DIMENSIONAL
         pri += 1 if @choices[i][2].basedamage != 0 && @battlers[i].crested == :FERALIGATR && @battlers[i].turncount == 1 # Feraligatr Crest
         pri += 3 if @battlers[i].ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(@choices[i][2].function)
@@ -4516,7 +4517,7 @@ class PokeBattle_Battle
     for i in 0...4
       if @choices[i][0] != :move && @choices[i][0] != :switch
         # @battlers[i].effects[:DestinyBond]=false # Effect gets removed on move use, NOT move choice
-        @battlers[i].effects[:Grudge] = false
+        # @battlers[i].effects[:Grudge] = false  # Grudge remains on pokemon for entire duration
       end
       if !@battlers[i].isFainted?
         @battlers[i].turncount += 1
@@ -4735,7 +4736,7 @@ class PokeBattle_Battle
 
   def pbPursuitInterrupt(pursuiter, switcher)
     newpoke = nil
-    if pursuiter.status != :SLEEP && (pursuiter.status != :FROZEN || KAIZOMOD) && !pursuiter.effects[:Truant]
+    if pursuiter.status != :SLEEP && (pursuiter.status != :FROZEN || KAIZOMOD) && pursuiter.status != :FREEZE && !pursuiter.effects[:Truant]
       @switching = true
       # Try to Mega-evolve/Ultra-burst before using pursuit
       side = pbIsOpposing?(pursuiter.index) ? 1 : 0
@@ -5566,7 +5567,7 @@ class PokeBattle_Battle
       next if i.isFainted?
 
       if i.chargeAttack
-        next if i.status == :SLEEP || (i.status == :FROZEN && !KAIZOMOD)
+        next if i.status == :SLEEP || (i.status == :FROZEN && !KAIZOMOD) || i.status == :FREEZE
 
         chargeAttack = i.chargeAttack
         if i.turncount % chargeAttack[:turns] == 0
@@ -5620,7 +5621,7 @@ class PokeBattle_Battle
       end
 
       # Rain Dish
-      if ((i.ability == :RAINDISH || (i.crested == :CASTFORM && i.form == 2)) && (pbWeather == :RAINDANCE && !i.hasWorkingItem(:UTILITYUMBRELLA))) && i.effects[:HealBlock] == 0
+      if ((i.ability == :RAINDISH || (i.crested == :CASTFORM && i.form == 2)) && (pbWeather == :RAINDANCE)) && i.effects[:HealBlock] == 0
         hpgain = i.pbRecoverHP((i.totalhp / 8.0).floor, true)
         pbDisplay(_INTL("{1}'s Rain Dish restored its HP a little!", i.pbThis)) if hpgain > 0
       end
@@ -5628,7 +5629,7 @@ class PokeBattle_Battle
       # Dry Skin
       if i.ability == :DRYSKIN
         if pbWeather == :RAINDANCE
-          if !i.hasWorkingItem(:UTILITYUMBRELLA) && i.effects[:HealBlock] == 0
+          if i.effects[:HealBlock] == 0
             hpgain = i.pbRecoverHP((i.totalhp / 8.0).floor, true)
             pbDisplay(_INTL("{1}'s Dry Skin was healed by the rain!", i.pbThis)) if hpgain > 0
           end
@@ -5737,7 +5738,7 @@ class PokeBattle_Battle
         end
       end
       # Hydration
-      if i.ability == :HYDRATION && ((pbWeather == :RAINDANCE && !i.hasWorkingItem(:UTILITYUMBRELLA)) || (@field.effect == :WATERSURFACE && !i.isAirborne?) || @field.effect == :UNDERWATER)
+      if i.ability == :HYDRATION && ((pbWeather == :RAINDANCE) || (@field.effect == :WATERSURFACE && !i.isAirborne?) || @field.effect == :UNDERWATER)
         if !i.status.nil?
           pbDisplay(_INTL("{1}'s Hydration cured its {2} problem!", i.pbThis, i.status.downcase))
           i.status = nil
@@ -6030,6 +6031,40 @@ class PokeBattle_Battle
           end
         end
       end
+
+      # Runerigus and Cofagrigus Crest
+      if i.crested == :RUNERIGUS || i.crested == :COFAGRIGUS
+        for j in priority
+          next if j == i
+          next if j.isFainted?
+          next if !i.pbIsOpposing?(j.index)
+          next if j.effects[:MeanLook]<0
+
+          hploss=(j.totalhp/16.0).floor
+          hploss= hploss * 2 if @field.effect == :WASTELAND
+          pbCommonAnimation("Curse",target=j)
+          j.pbReduceHP(hploss,true)
+
+          if j.ability == :LIQUIDOOZE
+            hploss= hploss * 2 if @field.effect == :MURKWATERSURFACE || @field.effect == :CORRUPTED || @field.effect == :WASTELAND
+            i.pbReduceHP(hploss,true)
+            pbDisplay(_INTL("{1} sucked up the liquid ooze!",i.pbThis))
+          else
+            if i.effects[:HealBlock]==0
+              i.pbRecoverHP(hploss,true)
+            end
+            pbDisplay(_INTL("{1}'s health was drained by {2}'s Crest!",i.pbThis,i.pbThis))
+          end
+
+          if j.isFainted?
+            return if !j.pbFaint
+          end
+          if i.isFainted?
+            return if !i.pbFaint
+          end
+        end
+      end
+
       # Nightmare
       if i.effects[:Nightmare] && i.ability != :MAGICGUARD && !(i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && @field.effect != :RAINBOW
         if ((i.status == :SLEEP || (i.ability == :COMATOSE && @battle.FE != :ELECTERRAIN)) || @battle.FE == :INFERNAL || i.pbOpposing1.ability == :WORLDOFNIGHTMARES || i.pbOpposing2.ability == :WORLDOFNIGHTMARES)
@@ -6851,7 +6886,7 @@ class PokeBattle_Battle
       end
       # Harvest
       if i.ability == :HARVEST && i.item.nil? && i.pokemon.itemRecycle # if an item was recycled, check
-        if pbIsBerry?(i.pokemon.itemRecycle) && (pbRandom(100) > 50 || (pbWeather == :SUNNYDAY && !i.hasWorkingItem(:UTILITYUMBRELLA)) ||
+        if pbIsBerry?(i.pokemon.itemRecycle) && (pbRandom(100) > 50 || (pbWeather == :SUNNYDAY) ||
            @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 2, 5) || (Rejuv && @battle.FE == :GRASSY))
           i.item = i.pokemon.itemRecycle
           i.pokemon.itemInitial = i.pokemon.itemRecycle

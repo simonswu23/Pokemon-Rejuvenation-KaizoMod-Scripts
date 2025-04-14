@@ -384,6 +384,8 @@ class PokemonDataBox < SpriteWrapper
         return "PAR" 
       when :PETRIFIED
         return "PTR"
+      when :FREEZE
+        return "FRZ"
     end 
     return "" 
   end 

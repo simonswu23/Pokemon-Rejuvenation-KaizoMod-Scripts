@@ -7931,7 +7931,8 @@ class PokeBattle_AI
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
-      pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+      pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+      pri += 1 if battlermove.move == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
       pri += 1 if battlermove.move == :ATTACKORDER && battler.crested == :VESPIQUEN
       pri += 3 if battler.ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(battlermove.function)
       pri -= 1 if @battle.FE == :DEEPEARTH && battlermove.move == :COREENFORCER
@@ -8199,6 +8200,7 @@ class PokeBattle_AI
       when :WHISCASH then return -1 if type == :GRASS || (!secondtype.nil? && secondtype.include?(:GRASS))
       when :SKUNTANK then return -1 if type == :GROUND || (!secondtype.nil? && secondtype.include?(:GROUND))
       when :DRUDDIGON then return -1 if type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))
+      when :VANILLUXE then return -1 if (type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))) && @battle.weather == :HAIL
     end
     if @battle.FE == :ROCKY && (opponent.effects[:Substitute] > 0 || opponent.stages[PBStats::EVASION] > 0)
       return 0 if PBStuff::BULLETMOVE.include?(id)

@@ -8127,7 +8127,7 @@ ITEMHASH = {
 :UTILITYUMBRELLA => {
     :ID => 911,
     :name => "Utility Umbrella",
-    :desc => "An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.",
+    :desc => "An item to be held by a Pokémon. This sturdy umbrella protects the holder from the negative effects of sun and rain.",
     :price => 2000,
     :noUseInBattle => true,
     :noUse => true,
@@ -10831,6 +10831,37 @@ ITEMHASH = {
 	:ID => 3005,
 	:name => "Hydreigon Crest",
 	:desc => "Die Fairies!",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:VANICREST => {
+	:ID => 3006,
+	:name => "Vanilluxe Crest",
+	:desc => "Ice Cream Sunday",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+
+:RUNECREST => {
+	:ID => 3007,
+	:name => "Runerigus Crest",
+	:desc => "Whoey?",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:SPINCREST => {
+	:ID => 3008,
+	:name => "Spinda Crest",
+	:desc => "So dizzy...",
 	:price => 0,
 	:crest => true,
 	:noUseInBattle => true,

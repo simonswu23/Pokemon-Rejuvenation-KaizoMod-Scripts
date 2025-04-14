@@ -24,7 +24,7 @@ def pbGetRelearnableMoves(pokemon)
     end
   end
   moves=tmoves+moves
-  # @SWu TODO: require move learner to be found before egg moves can be instantly relearned
+  # @SWu TODO: require move learner to be found before egg moves can be instantly relearned, can make her give you a secret item + check for that in bag
   moves= tmoves+pokemon.getEggMoveList(true)+moves if Rejuv && ($PokemonBag.pbHasItem?(:HM02) || KAIZOMOD)
   return moves|[] # remove duplicates
 end
