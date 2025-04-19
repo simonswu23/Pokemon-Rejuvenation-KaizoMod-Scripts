@@ -790,7 +790,7 @@ ABILHASH = {
 :UNNERVE => {
     :ID => 127,
     :name => "Unnerve",
-    :desc => "Makes the foe unable to eat Berries."
+    :desc => "Makes the foe unable to eat Berries and lowers the foe's Speed stat."
 },
 
 :DEFIANT => {
