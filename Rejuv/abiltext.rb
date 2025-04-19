@@ -274,7 +274,7 @@ ABILHASH = {
 :PRESSURE => {
     :ID => 46,
     :name => "Pressure",
-    :desc => "The Pokémon raises the foe's PP usage."
+    :desc => "The Pokémon raises the foe's PP usage and lowers the foe's Special Attack stat."
 },
 
 :THICKFAT => {
