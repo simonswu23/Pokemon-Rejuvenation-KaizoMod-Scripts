@@ -894,7 +894,7 @@ class PokeBattle_Battler
     return false
   end
 
-  def pbReduceStatStagePressure(opponent)
+  def pbReduceSpAtkStatStagePressure(opponent)
     # Ways Pressure doesn't work
     return false if isFainted? && !(Rejuv && isbossmon && @shieldCount > 0)
     return false if @effects[:Substitute] > 0
@@ -903,14 +903,14 @@ class PokeBattle_Battler
       abilityname = getAbilityName(self.ability)
       oppabilityname = getAbilityName(opponent.ability)
       @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!", pbThis, abilityname, opponent.pbThis(true), oppabilityname))
-      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::DEFENSE] > -6 || self.stages[PBStats::SPDEF] > -6)
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::SPATK] > -6)
         triggerAdrenalineOrb
       end
       return false
     end
     if pbOwnSide.effects[:Mist] > 0
       @battle.pbDisplay(_INTL("{1} is protected by Mist!", pbThis))
-      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::DEFENSE] > -6 || self.stages[PBStats::SPDEF] > -6)
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::SPATK] > -6)
         triggerAdrenalineOrb
       end
       return false
@@ -926,31 +926,21 @@ class PokeBattle_Battler
     if (self.ability == :GUARDDOG)
       @battle.pbDisplay(_INTL("{1} got angry!",pbThis))
       pbIncreaseStat(PBStats::ATTACK, 1)
-      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::DEFENSE] > -6 || self.stages[PBStats::SPDEF] > -6)
+      if hasWorkingItem(:ADRENALINEORB) && pbCanIncreaseStatStage?(PBStats::SPEED, false) && (self.stages[PBStats::SPATK] > -6)
         triggerAdrenalineOrb
       end
       return false
     end
 
-    spdef_success = pbReduceStat(PBStats::SPDEF, 1, statmessage: false, statdropper: opponent, defiant_proc: false)
-    def_success = pbReduceStat(PBStats::DEFENSE, 1, statmessage: false, statdropper: opponent, defiant_proc: false)
-    if spdef_success || def_success
+    if pbReduceStat(PBStats::SPATK, 1, statmessage: false, statdropper: opponent, defiant_proc: false)
       # Battle message
       oppabilityname = getAbilityName(opponent.ability)
-      if spdef_success
-        if self.ability == :CONTRARY
-          @battle.pbDisplay(_INTL("{1}'s {2} boosts {3}'s Special Defense!", opponent.pbThis, oppabilityname, pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} cuts {3}'s Special Defense!", opponent.pbThis, oppabilityname, pbThis(true)))
-        end
+      if self.ability == :CONTRARY
+        @battle.pbDisplay(_INTL("{1}'s {2} boosts {3}'s Special Attack!", opponent.pbThis, oppabilityname, pbThis(true)))
+      else
+        @battle.pbDisplay(_INTL("{1}'s {2} cuts {3}'s Special Attack!", opponent.pbThis, oppabilityname, pbThis(true)))
       end
-      if def_success
-        if self.ability == :CONTRARY
-          @battle.pbDisplay(_INTL("{1}'s {2} boosts {3}'s Defense!", opponent.pbThis, oppabilityname, pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("{1}'s {2} cuts {3}'s Defense!", opponent.pbThis, oppabilityname, pbThis(true)))
-        end
-      end
+
       if self.ability == :RATTLED && Gen > 7
         pbIncreaseStat(PBStats::SPEED, 1, statmessage: false)
         @battle.pbDisplay(_INTL("{1}'s Rattled raised its Speed!", pbThis))

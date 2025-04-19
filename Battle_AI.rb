@@ -6088,12 +6088,11 @@ class PokeBattle_AI
     miniscore*=1.3 if @opponent.status== :SLEEP
     miniscore*=1.3 if @opponent.ability == :SLOWSTART
     miniscore*=1.5 if @opponent.item.nil? && @opponent.unburdened
-    miniscore*=0.7 if @opponent.ability == :INTIMIDATE
+    miniscore*=0.7 if @opponent.ability == :INTIMIDATE || (KAIZOMOD && (@opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE))
     # Gen 9 Mod - Discourage phasing when opponent's ability is Supersweet Syrup.
     miniscore*=0.7 if @opponent.ability == :SUPERSWEETSYRUP
     # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold.
     miniscore*=0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
-    miniscore*=0.7 if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
     miniscore*=0.7 if @battle.FE == :CITY && @opponent.ability == :FRISK
     miniscore*=0.7 if @opponent.crested == :THIEVUL
     # Gen 9 Mod - Added Hospitality
@@ -6120,7 +6119,7 @@ class PokeBattle_AI
     miniscore*=2 if @attacker.ability == :ZEROTOHERO && attacker.form == 0
     if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
       if @battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSIONAL
-        miniscore *= 1.2
+        miniscore *= 1.3
       else
         miniscore *= 1.1
       end
@@ -7569,7 +7568,7 @@ class PokeBattle_AI
     miniscore*=1.1 if @attacker.ability == :SUPERSWEETSYRUP
     if @opponent.ability == :PRESSURE || @opponent.ability == :UNNERVE
       if @battle.FE == :DIMENSIONAL || @battle.FE == :FROZENDIMENSIONAL
-        miniscore *= 1.2
+        miniscore *= 1.3
       else
         miniscore *= 1.1
       end
@@ -9670,13 +9669,8 @@ class PokeBattle_AI
             abilityscore += 40 if @opponent.attack > @opponent.spatk
             abilityscore += 40 if @opponent.pbPartner.attack > @opponent.pbPartner.spatk
           when :PRESSURE
-            abilityscore += 40
-            roles = pbGetMonRoles(@opponent)
-            abilityscore += 10 if roles.include?(:PHYSICALWALL) || roles.include?(:SPECIALWALL)
-            partner = @opponent.pbPartner
-            roles = pbGetMonRoles(@partner)
-            abilityscore += 40 if !partner.isFainted?
-            abilityscore += 10 if roles.include?(:PHYSICALWALL) || roles.include?(:SPECIALWALL)
+            abilityscore += 40 if @opponent.spatk > @opponent.attack
+            abilityscore += 40 if @opponent.pbPartner.spatk > @opponent.pbPartner.atk
           when :UNNERVE
             abilityscore += 40
             abilityscore += 10 if pbGetMonRoles(@opponent).include?(:SWEEPER)

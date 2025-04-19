@@ -138,6 +138,11 @@
     - Learnset updates for new moves
 
 # Journal
+- 4/19 (@Ren)
+  - Updated Pressure to lower opponents' special attack on entry
+    - In Dimensional fields, it additionally lowers opponents' special attack
+    - Updated AI for Pressure accordingly
+
 - 4/10 (@Ren)
   - Implemented Pressure changes
     - On entry, Pressure lowers opponents' defense and special defense

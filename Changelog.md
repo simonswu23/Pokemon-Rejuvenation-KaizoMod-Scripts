@@ -43,7 +43,7 @@
   - Swarm, Overgrow, Blaze, Torrent now trigger at 50% or lower instead of 33%
   - Aftermath doubles the power of explosion moves
   - Unnerve lowers foes' speed on entry (same interactions as Intimidate)
-  - Pressure lowers foes' defenses on entry (same interactions as Intimidate)
+  - Pressure lowers foes' special attack on entry (same interactions as Intimidate)
   - Supersweet Syrup now can trigger multiple times per battle, and lowers evasion by 2 on switch in
   - Frisk suppresses found items for 3 turns
   - Damp creates Water Sport on entry
@@ -254,7 +254,7 @@
     - Gains Itchy Pollen instead of Leaf Guard as ability
   - Absol
     - Gains Forewarn instead of Justified as ability
-  - Scatterbug, Spewpa 
+  - Scatterbug, Spewpa
     - Scatterbug gains Run Away isntead of Compoundeyes as ability
     - Spewpa gains Itchy Pollen instead of Overcoat as ability
   - Cutiefly, Ribombee
@@ -335,14 +335,12 @@
 
   - Frozen Dimensional Field
     - Unnerve now additionally lowers foes' attack and special attack by 1 on entry instead of speed
-    - Pressure now additionally lowers foes' special attack by 1 on entry instead of defenses
     - x1.5 boost to ice attacks, x1.3 boost to dark
     - Chilling Water becomes part Ice
     - Moves that become part Ice have their base power additionally multiplied by x1.3 instead of x1.2
 
   - Dimensional Field
     - Unnerve now additionally lowers foes' attack and special attack by 1 on entry instead of speed
-    - Pressure now additionally lowers foes' special attack by 1 on entry instead of defenses
     - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
 
   - Haunted

@@ -1060,7 +1060,7 @@ class PokeBattle_Battler
           if pbPartner.ability == :PRESSURE
             for i in @battle.battlers
               next if i.isFainted? || !pbIsOpposing?(i.index)
-              i.pbReduceStatStagePressure(pbPartner)
+              i.pbReduceSpAtkStatStagePressure(pbPartner)
             end
           end
           if pbPartner.ability == :UNNERVE
@@ -1959,10 +1959,10 @@ class PokeBattle_Battler
         for i in 0...4
           next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
           if !KAIZOMOD
+            @battle.battlers[i].pbReduceStat(PBStats::SPATK, 1, abilitymessage: false, statdropper: self)
+          else
             @battle.battlers[i].pbReduceStat(PBStats::DEFENSE, 1, abilitymessage: false, statdropper: self)
             @battle.battlers[i].pbReduceStat(PBStats::SPDEF, 1, abilitymessage: false, statdropper: self)
-          else
-            @battle.battlers[i].pbReduceStat(PBStats::SPATK, 1, abilitymessage: false, statdropper: self)
           end
         end
       end
@@ -2938,7 +2938,7 @@ class PokeBattle_Battler
     if KAIZOMOD && self.ability == :PRESSURE && onactive
       for i in 0...4
         next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
-        @battle.battlers[i].pbReduceStatStagePressure(self)
+        @battle.battlers[i].pbReduceSpAtkStatStagePressure(self)
       end
     end
     if Rejuv
@@ -3421,7 +3421,7 @@ class PokeBattle_Battler
       self.pbOwnSide.effects[:LuckyWind]+=inc
       self.pbOwnSide.effects[:LuckyChant]+=inc
       @battle.pbDisplay(_INTL("{1}'s {2} brought in a Lucky Wind for its team!",self.pbThis,getAbilityName(self.ability)))
-      
+
       if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :SKY) && !@battle.state.effects[:HeavyRain] && !@battle.state.effects[:HarshSunlight]
         @battle.weather=:STRONGWINDS
         @battle.weatherduration=6
