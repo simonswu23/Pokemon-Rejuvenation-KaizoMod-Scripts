@@ -1760,7 +1760,7 @@ class PokeBattle_Move_036 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
-    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY ? 2 : 1
+    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY || @battle.FE == :CONCERT ? 2 : 1
     attacker.pbIncreaseStat(PBStats::ATTACK, statchange, abilitymessage: false, statsource: attacker)
     attacker.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
 

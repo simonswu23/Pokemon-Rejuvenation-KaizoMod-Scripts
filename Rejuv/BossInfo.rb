@@ -125,8 +125,8 @@ BOSSINFOHASH = {
         :immunities => {},
         :moninfo => {
             :species => :GARBODOR,
-            :level => 12,
-            :moves => [:POUND,:ACIDSPRAY,:DOUBLESLAP,:ATTRACT],
+            :level => 25,
+            :moves => [:METALCLAW,:VENOSHOCK,:ROCKBLAST,:ATTRACT],
             :ability => :STENCH,
             :gender => "M",
             :shiny => true,
@@ -139,9 +139,9 @@ BOSSINFOHASH = {
             :moninfos => {
                 1 => {
                     :species => :TRUBBISH,
-                    :level => 11,
-                    :moves => [:POUND,:POISONGAS,:THIEF,nil],
-                    :ability => :STENCH,
+                    :level => 15,
+                    :moves => [:VENOMDRENCH,:POISONGAS,:THIEF,:SELFDESTRUCT],
+                    :ability => :AFTERMATH,
                     :iv => 10,
                 },
             },
@@ -152,6 +152,16 @@ BOSSINFOHASH = {
                 :message => "Garbodor's typing changed!",
                 :animation => :NASTYPLOT,
                 :typeChange => [:POISON,:DARK],
+                :itemchange => :BLACKSLUDGE,
+                :abilitychange => :LIQUIDOOZE,
+                :statDropCure => true,
+            },
+            1 => {
+                :threshold => 0,
+                :message => "Garbodor's getting desperate!",
+                :statDropCure => true,
+                :movesetUpdate => [:SLUDGEWAVE,:STOMPINGTANTRUM,:DARKPULSE,:DRAINPUNCH],
+                :playerSideStatusChanges => [:POISON,"Poison"],
             },
         }
     },
@@ -533,7 +543,7 @@ BOSSINFOHASH = {
             #     }
             # }
             :playerEffects => :PerishSong,
-            :playerEffectsduration => 4,
+            :playerEffectsduration => 3,
             :playerEffectsAnimation => :PERISHSONG,
             :playerEffectsMessage => "Gothitelle sings a haunting tune!",
             :instantMove => [:TAUNT, 0],
@@ -546,19 +556,19 @@ BOSSINFOHASH = {
                     :delay => 2,
                     :repeat => false,
                     :playerEffects => :PerishSong,
-                    :playerEffectsduration => 4,
+                    :playerEffectsduration => 3,
                     :playerEffectsAnimation => :PERISHSONG,
                     :playerEffectsMessage => "Gothitelle's tune lingers!",
                 }
             },
             2 => {
                 :threshold => 0,
-                :movesetUpdate => [:DARKPULSE,:TAUNT,:CHARM,:PSYSHOCK],
+                :movesetUpdate => [:DARKPULSE,:TAUNT,:REST,:PSYSHOCK],
                 :delayedaction => {
                     :delay => 2,
                     :repeat => false,
                     :playerEffects => :PerishSong,
-                    :playerEffectsduration => 4,
+                    :playerEffectsduration => 3,
                     :playerEffectsAnimation => :PERISHSONG,
                     :playerEffectsMessage => "Gothitelle mocks your demise!",
                 }
@@ -575,7 +585,7 @@ BOSSINFOHASH = {
                     :delay => 2,
                     :repeat => false,
                     :playerEffects => :PerishSong,
-                    :playerEffectsduration => 4,
+                    :playerEffectsduration => 3,
                     :playerEffectsAnimation => :PERISHSONG,
                     :playerEffectsMessage => "Gothitelle sings once more!",
                 }

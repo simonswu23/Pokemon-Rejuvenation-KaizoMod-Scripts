@@ -6274,11 +6274,10 @@ class PokeBattle_Battle
     for i in priority
       next if i.isFainted?
 
-      if i.effects[:Embargo] > 0
+      if i.effects[:Embargo] > 0 && !KAIZOMOD
         i.effects[:Embargo] -= 1
         if i.effects[:Embargo] == 0
-          pbDisplay(_INTL("The embargo on {1} was lifted.", i.pbThis(true))) if !KAIZOMOD
-          pbDisplay(_INTL("{1}'s item was restored after the Frisk.", i.pbThis(true))) if KAIZOMOD
+          pbDisplay(_INTL("The embargo on {1} was lifted.", i.pbThis(true)))
         end
       end
     end

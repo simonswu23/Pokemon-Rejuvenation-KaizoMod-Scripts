@@ -2540,6 +2540,12 @@ class PokeBattle_Move
     totaldamage = (((((2.0 * attacker.level / 5 + 2).floor * basedmg * atk / defense).floor / 50.0).floor + 1) * damage * finalmult).round
     totaldamage = 1 if totaldamage < 1
     opponent.damagestate.calcdamage = totaldamage
+
+    if opponent.ability == :STALWART && !opponent.moldbroken && totaldamage > (opponent.hp / 2)
+      @battle.pbDisplay(_INTL("{1}'s Stalwart reduced the damage taken!!",opponent.name))
+      totaldamage *= 0.5
+    end
+
     return totaldamage
   end
 

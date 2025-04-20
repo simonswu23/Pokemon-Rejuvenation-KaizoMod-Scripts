@@ -85,6 +85,7 @@ class PokeBattle_Battler
   def isShadow?; return false; end
 
   attr_accessor :giga
+  attr_accessor :gear
 
   #simple true/false vars
 
@@ -3147,7 +3148,7 @@ class PokeBattle_Battler
       end
       for i in items
         itemname=getItemName(i.item)
-        @battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
+        @battle.pbDisplay(_INTL("{1} frisked {2} and suppressed its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
         i.effects[:Embargo]=1
         if @battle.FE == :BACKALLEY
           if (i.effects[:Substitute]==0) && (i.ability != :STICKYHOLD || i.moldbroken) && self.item.nil?

@@ -10868,4 +10868,14 @@ ITEMHASH = {
 	:noUse => true,
 },
 
+:MEMORYCHARM => {
+	:ID => 3009,
+	:name => "Memory Charm",
+	:desc => "A mysterious charm from the move releaner that allows Pokemon to remember egg moves.",
+    :price => 0,
+    :keyitem => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
 }

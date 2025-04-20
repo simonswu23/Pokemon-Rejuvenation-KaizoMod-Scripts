@@ -43,7 +43,7 @@
   - Unnerve lowers foes speed on entry (same interactions as Intimidate)
   - Pressure lowers foes special attack on entry (same interactions as Intimidate)
   - Supersweet Syrup now can trigger multiple times per battle, and lowers evasion by 2 on switch in
-  - Frisk suppresses found items for 1 turn
+  - Frisk suppresses found items until foes are switched out
   - Damp creates Water Sport on entry
   - Cursed Body now always activates if the attack knocked the user out
   - Plus: now provides a x1.15 boost to all friendly attacks, x1.5 if   an ally has Minus. x2 speed an if ally has Plus.
@@ -53,6 +53,9 @@
   - Cursed Body: instead of normal effect, applies curse to the attacker if this pokemon is knocked out
   - Perish Body: now triggers on hit by any attack, not just on contact
   - Aftermath: now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield
+  - Sniper: critical hits deal x3 damage instead of x1.5
+  - Stalwart: halevs move damage if incoming attack deals more than 50% of remaining HP
+  - 
 
 # Crests
 
@@ -73,7 +76,7 @@
   - Hydreigon Crest: Resists Fairy attacks, own Dark attacks SE against Fairy. Attacks hit 2 more times after the initial (25% power each)
   - Runerigus Crest: 25% boost to attack and defense. Additionally, upon hit, traps attacker and lowers their offenses harshly. Saps 1/16th hp per turn from trapped foes.
   - Spinda Crest: Spinda's base stats will always equal it's highest. If the move in the first moveslot is a status move, it will use it upon switch in.
-  - Vanilluxe Crest: immune to Fire attacks in hail. x1.5 boost to Ice moves in hail.
+  - Vanilluxe Crest: in hail, immune to Fire attacks and x1.5 boost to Ice moves
 
 # Items
   - Pinch berries now heal 50% hp
@@ -123,6 +126,8 @@
     - Learnset: Vanilluxe
   - Squall:
     - Flying, special, 80 bp, 100 accuracy, +1 priority in the hail
+  - Skydive:
+    - Flying, physical, 130 bp, 90 accuracy, 50% crash damage if misses or blocked
 
 # Pokemon
   ## Giga Pokemon
@@ -388,8 +393,9 @@
   - Volcanic Top
     - Precipice Blades never misses
 
-  - Crowd
+  - Concert
     - Iron Fist boosts punching moves by x2 instead of x1.5
+    - Shift Gear boosts attack stat by an additional +1
 
   - Infernal Field
     - Immolate boosts normal moves by x1.5 power instead of x1.3

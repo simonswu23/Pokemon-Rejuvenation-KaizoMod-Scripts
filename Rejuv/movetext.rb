@@ -14448,6 +14448,22 @@ MOVEHASH = {
 	:desc => "The user attacks targets with a sheer gust of wind. This move always goes first in the Hail."
 },
 
+:SKYDIVE => {
+    :ID => 1504,
+    :name => "Sky Dive",
+    :function => 0x10B,
+    :type => :FLYING,
+    :category => :physical,
+    :basedamage => 130,
+    :accuracy => 90,
+    :maxpp => 10,
+    :target => :SingleNonUser,
+    :contact => true,
+    :gravityblocked => true,
+    :desc => "The target crashes down at the target from the sky. If it misses, the user is hurt instead."
+},
+
+
 # Giga Moves
 
 :RESONANCE => {
