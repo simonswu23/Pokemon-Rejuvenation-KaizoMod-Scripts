@@ -150,7 +150,6 @@
     - Learnset updates for new moves
 
 # Journal
-<<<<<<< HEAD
 
 - 4/14/25 (SWu)
   - TODO: refactor Battler.rb more (search for: "Kaizomod Refactor")
@@ -161,8 +160,6 @@
   - Utility Umbrella rework -- now only protects against the NEGATIVE impacts of sun and rain
     - double check interactions here with Desolate Land and Primordial Sea
 
-- 4/4/25 (Ren)
-=======
 - 4/19 (@Ren)
   - Updated Pressure to lower opponents' special attack on entry
     - In Dimensional fields, it additionally lowers opponents' special attack
@@ -187,7 +184,6 @@
   - updated Forewarn (quarters damage from the first instance of the forewarned move)
 
 - 4/4/25 (@Ren)
->>>>>>> main
   - Implemented +1 speed boost for Anticipation shudders, and updated AI to account for this
 
 - 4/2/25 (@Ren)

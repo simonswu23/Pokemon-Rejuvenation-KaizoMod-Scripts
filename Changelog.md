@@ -41,7 +41,6 @@
   - Gale Wings now activates at above 50% hp
   - Unburden now gives +2 speed on trigger instead of passively doubling speed
   - Swarm, Overgrow, Blaze, Torrent now trigger at 50% or lower instead of 33%
-  - Aftermath doubles the power of explosion moves
   - Unnerve lowers foes' speed on entry (same interactions as Intimidate)
   - Pressure lowers foes' special attack on entry (same interactions as Intimidate)
   - Supersweet Syrup now can trigger multiple times per battle, and lowers evasion by 2 on switch in
@@ -58,7 +57,7 @@
   - Illuminate now boosts accuracy for all pokemon on the field by x1.25
   - Cursed Body: instead of normal effect, applies curse to the attacker if this pokemon is knocked out
   - Perish Body: now triggers on hit by any attack, not just on contact
-  - Aftermath: now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield
+  - Aftermath: now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield, and doubles power of explosion moves
   - Sniper: critical hits deal x3 damage instead of x1.5
   - Stalwart: halevs move damage if incoming attack deals more than 50% of remaining HP
   - 
