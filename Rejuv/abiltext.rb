@@ -274,7 +274,7 @@ ABILHASH = {
 :PRESSURE => {
     :ID => 46,
     :name => "Pressure",
-    :desc => "The Pokémon raises the foe's PP usage."
+    :desc => "The Pokémon raises the foe's PP usage and lowers the foe's Special Attack stat."
 },
 
 :THICKFAT => {
@@ -790,7 +790,7 @@ ABILHASH = {
 :UNNERVE => {
     :ID => 127,
     :name => "Unnerve",
-    :desc => "Makes the foe unable to eat Berries."
+    :desc => "Makes the foe unable to eat Berries and lowers the foe's Speed stat."
 },
 
 :DEFIANT => {
@@ -2150,6 +2150,12 @@ ABILHASH = {
     :ID => 389,
     :name => "Immolate",
     :desc => "Normal-type moves become Fire-type moves and deal 30% more damage."
+},
+
+:ITCHYPOLLEN => {
+    :ID => 390,
+    :name => "Itchy Pollen",
+    :desc => "Uses Rage Powder on entry."
 },
 
 }

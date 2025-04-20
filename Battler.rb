@@ -86,6 +86,7 @@ class PokeBattle_Battler
 
   attr_accessor :giga
   attr_accessor :gear
+  attr_accessor :forewarn
 
   #simple true/false vars
 
@@ -433,7 +434,7 @@ class PokeBattle_Battler
     @weight       = nil
     @battle_bond_flags = []
 
-    @forewarn     = []
+    @forewarn     = nil
     @gear         = 0        # 0 is speed gear, 1 is attack gear
 
     @lastMoveCancelled = -1
@@ -1060,7 +1061,7 @@ class PokeBattle_Battler
           if pbPartner.ability == :PRESSURE
             for i in @battle.battlers
               next if i.isFainted? || !pbIsOpposing?(i.index)
-              i.pbReduceSpatkStatStagePressure(pbPartner)
+              i.pbReduceSpAtkStatStagePressure(pbPartner)
             end
           end
           if pbPartner.ability == :UNNERVE
@@ -1956,9 +1957,12 @@ class PokeBattle_Battler
       if self.ability == :PRESSURE && onactive
         for i in 0...4
           next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
-
-          @battle.battlers[i].pbReduceStat(PBStats::DEFENSE, 1, abilitymessage: false, statdropper: self)
-          @battle.battlers[i].pbReduceStat(PBStats::SPDEF, 1, abilitymessage: false, statdropper: self)
+          if !KAIZOMOD
+            @battle.battlers[i].pbReduceStat(PBStats::SPATK, 1, abilitymessage: false, statdropper: self)
+          else
+            @battle.battlers[i].pbReduceStat(PBStats::DEFENSE, 1, abilitymessage: false, statdropper: self)
+            @battle.battlers[i].pbReduceStat(PBStats::SPDEF, 1, abilitymessage: false, statdropper: self)
+          end
         end
       end
       if self.ability == :UNNERVE && onactive
@@ -2933,7 +2937,7 @@ class PokeBattle_Battler
     if KAIZOMOD && self.ability == :PRESSURE && onactive
       for i in 0...4
         next if !pbIsOpposing?(i) || @battle.battlers[i].isFainted?
-        @battle.battlers[i].pbReduceSpatkStatStagePressure(self)
+        @battle.battlers[i].pbReduceSpAtkStatStagePressure(self)
       end
     end
     if Rejuv
@@ -3237,6 +3241,7 @@ class PokeBattle_Battler
         move=moves[chosenmovenumber]
         movename=getMoveName(move)
         @battle.pbDisplay(_INTL("{1}'s Forewarn alerted it to {2}!",pbThis,movename))
+        chosenopponent[chosenmovenumber].forewarn = movename
         # AI CHANGES
         if !@battle.isOnline?
           warnedMove = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(move),self)
@@ -3320,6 +3325,12 @@ class PokeBattle_Battler
       if pbFaintedPokemonCount > 0
         @battle.pbDisplay(_INTL("{1} gained power from their fallen allies!", pbThis))
       end
+    end
+    # Kaizomod - itchy pollen
+    if self.ability == :ITCHYPOLLEN && onactive
+      self.effects[:RagePowder] = true
+      @battle.pbAnimation(:RAGEPOWDER, self, self.pbOpposing1)
+      @battle.pbDisplay(_INTL("{1}'s Itchy Pollen made it the center of attention!", pbThis))
     end
     # Imposter
     if self.ability == :IMPOSTER && !@effects[:Transform] && onactive && pbOppositeOpposing.hp>0
@@ -3408,10 +3419,15 @@ class PokeBattle_Battler
     # Lucky Wind
     if KAIZOMOD && self.ability == :LUCKYWIND && onactive
       @battle.pbAnimation(:TAILWIND,self,nil)
-      self.pbOwnSide.effects[:Tailwind]+=4
-      self.pbOwnSide.effects[:Tailwind]+=6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
-      self.pbOwnSide.effects[:Tailwind]+=8 if @battle.FE == :SKY
-      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Tailwind for its team!",self.pbThis,getAbilityName(self.ability)))
+      @battle.pbAnimation(:LUCKYCHANT,self,nil)
+      inc = 4
+      inc = 6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
+      inc = 8 if @battle.FE == :SKY
+      self.pbOwnSide.effects[:Tailwind]+=inc
+      self.pbOwnSide.effects[:LuckyWind]+=inc
+      self.pbOwnSide.effects[:LuckyChant]+=inc
+      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Lucky Wind for its team!",self.pbThis,getAbilityName(self.ability)))
+
       if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :SKY) && !@battle.state.effects[:HeavyRain] && !@battle.state.effects[:HarshSunlight]
         @battle.weather=:STRONGWINDS
         @battle.weatherduration=6
@@ -3436,7 +3452,7 @@ class PokeBattle_Battler
     # needs to be checked before mummy/wandering spirit stench is check before ability change
     if target.damagestate.calcdamage > 0 && !target.damagestate.substitute
       # Gen 9 Mod - Added Covert Cloak
-      if (target.ability != :SHIELDDUST || target.moldbroken) && !target.hasWorkingItem(:COVERTCLOAK)
+      if (target.ability != :SHIELDDUST || target.moldbroken) && !target.hasWorkingItem(:COVERTCLOAK) && target.pbOwnSide.effects[:LuckyWind] != 0 &&
         if (user.hasWorkingItem(:KINGSROCK) || user.hasWorkingItem(:RAZORFANG)) && !move.canFlinch?
           if @battle.pbRandom(10) == 0
             target.effects[:Flinch] = true
@@ -5616,7 +5632,7 @@ class PokeBattle_Battler
         basemove.pbAdditionalEffect(user, target)
       end
 
-      if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE &&
+      if (!basemove.zmove) && target.damagestate.calcdamage > 0 && user.ability != :SHEERFORCE && target.pbOwnSide.effects[:LuckyWind] != 0 &&
          ((target.ability != :SHIELDDUST || target.moldbroken && !target.hasWorkingItem(:COVERTCLOAK)) ||
          [0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x2D, 0x2F, 0x147, 0x186, 0x307, 0x103, 0x105, 0x204, 0x900].include?(basemove.function)) # Selfbuffing additional effects
         addleffect = basemove.effect
@@ -5626,7 +5642,7 @@ class PokeBattle_Battler
           addleffect = 20 if basemove.move == :FREEZEDRY
         end
         addleffect = 20 if basemove.move == :OMINOUSWIND && @battle.FE == :HAUNTED
-        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW
+        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW || user.pbOwnSide.effects[:LuckyWind] != 0
         addleffect = 100 if $DEBUG && Input.press?(Input::CTRL) && !@battle.isOnline?
         addleffect = 100 if basemove.move == :MIRRORSHOT && @battle.FE == :MIRROR
         addleffect = 100 if basemove.move == :STRANGESTEAM && @battle.FE == :FAIRYTALE

@@ -44,7 +44,7 @@ TEAMARRAY = [{
 	:species => :MEOWTH,
 	:level => 40,
 	:item => :AMPLIFIELDROCK,
-	:moves => [:PAYDAY,nil,nil,nil],
+	:moves => [:GOLDRUSH,nil,nil,nil],
 	:ability => :UNNERVE,
 	:gender => "M",
 	:shiny => true,
@@ -20226,7 +20226,9 @@ TEAMARRAY = [{
 	2 => {
 		:friendlyEffect => true,
 		:opposingsideChanges => {	
-			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out and use Tailwind!"],
+			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out with your Lucky Wind!"],
+			:LuckyChant => [4,:LuckyChant],
+			:LuckyWind => [4,:LuckyWind],
 		},
 	},
 	5 => {
