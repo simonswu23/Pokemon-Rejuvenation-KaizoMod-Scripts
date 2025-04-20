@@ -41,14 +41,13 @@
   - Gale Wings now activates at above 50% hp
   - Unburden now gives +2 speed on trigger instead of passively doubling speed
   - Swarm, Overgrow, Blaze, Torrent now trigger at 50% or lower instead of 33%
-  - Aftermath doubles the power of explosion moves
   - Unnerve lowers foes' speed on entry (same interactions as Intimidate)
   - Pressure lowers foes' special attack on entry (same interactions as Intimidate)
   - Supersweet Syrup now can trigger multiple times per battle, and lowers evasion by 2 on switch in
-  - Frisk suppresses found items for 3 turns
+  - Frisk suppresses found items until foes are switched out
   - Damp creates Water Sport on entry
   - Cursed Body now always activates if the attack knocked the user out
-  - Plus now provides a x1.15 boost to all friendly attacks, x1.5 if an ally has Minus. x2 speed an if ally has Plus.
+  - Plus now provides a x1.15 boost to all friendly attacks, x1.5 if   an ally has Minus. x2 speed an if ally has Plus.
   - Minus now provides a x0.85 reduction to all opposing attacks, x0.67 if ally has Plus. x2 speed if an ally has Minus.
   - Anticipation now grants the pokemon +1 speed upon shuddering
   - Iron Fist now provides a x1.5 boost instead to punching attacks
@@ -56,6 +55,12 @@
   - Leaf Guard now additionally negates Grass weaknesses in the Sun
   - Victory Star now boosts friendly accuracy by x1.5
   - Illuminate now boosts accuracy for all pokemon on the field by x1.25
+  - Cursed Body: instead of normal effect, applies curse to the attacker if this pokemon is knocked out
+  - Perish Body: now triggers on hit by any attack, not just on contact
+  - Aftermath: now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield, and doubles power of explosion moves
+  - Sniper: critical hits deal x3 damage instead of x1.5
+  - Stalwart: halevs move damage if incoming attack deals more than 50% of remaining HP
+  - 
 
 # Crests
 
@@ -65,6 +70,7 @@
   - Corviknight Crest: clears hazards and screens at the end of each turn
   - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
   - Vespiquen Crest: additional +1 priority to all friendly bug moves
+  - Cofagrigus Crest: additionally, upon hit, traps attacker and inflicts curse on them. Saps 1/16th hp per turn from trapped foes.
 
   ## New
   - Cacturne Crest: raises offenses by 1 if attacking first
@@ -73,9 +79,13 @@
   - Plusle Crest: Normal -> Fire, paralysis effects inflict burn instead. x1.25 speed and special attack
   - Minun Crest: Normal -> Ice, paralysis effects inflict frostbite instead. x1.25 speed and special attack
   - Hydreigon Crest: Resists Fairy attacks, own Dark attacks SE against Fairy. Attacks hit 2 more times after the initial (25% power each)
+  - Runerigus Crest: 25% boost to attack and defense. Additionally, upon hit, traps attacker and lowers their offenses harshly. Saps 1/16th hp per turn from trapped foes.
+  - Spinda Crest: Spinda's base stats will always equal it's highest. If the move in the first moveslot is a status move, it will use it upon switch in.
+  - Vanilluxe Crest: in hail, immune to Fire attacks and x1.5 boost to Ice moves
 
 # Items
   - Pinch berries now heal 50% hp
+  - Utility Umbrella now does not block positive effects from the Sun and Rain, and additionally ensures the holder's Fire and Water attacks do not decrease in power in the Rain and Sun respectively
   - Loaded Dice now affects:
     - Magnitude
     - Present
@@ -105,13 +115,24 @@
   - Weather Ball becomes ground typing in the Sashilan Sand, and is always Flying type in Strong Winds
   - Attack Order now naturally hits all opposing foes
   - Defend Order now has +3 priority
+  - Glaciate now has 100% accuracy, and lowers foes speed by 3. If a target's speed cannot be lowered anymore, **freeze** them
+  - Grudge now lasts on a pokemon until it switches out
+  - Sleep Talk now cannot call Rest
 
   ## New Attacks
   - Chain Drain:
     - Fairy, special, 75 bp, 100 accuracy, restores 1/16th hp to all allies (even those in party) after use
+    - Learnset: Meganium
   - Flurry:
     - Ice, status, 85 accuracy, inflicts frostbite on the target
     - Learnset: Bergmite (egg), Spheal (egg)
+  - Sundae:
+    - Ice, special, 90 bp, 100 accuracy, 30% chance to inflict frostbite (60% chance in hail)
+    - Learnset: Vanilluxe
+  - Squall:
+    - Flying, special, 80 bp, 100 accuracy, +1 priority in the hail
+  - Skydive:
+    - Flying, physical, 130 bp, 90 accuracy, 50% crash damage if misses or blocked
 
 # Pokemon
   ## Giga Pokemon
@@ -237,8 +258,7 @@
     - abilities across evolution: Filter -> Filter, Slow Start -> Speed Boost
   - Gastly, Haunter, Gengar
     - ability Cursed Body added for Gastly, Haunter
-    - ability Perish Body, Levitate added for Gengar
-    - abilities across evolution: Levitate -> Levitate -> Levitate, Cursed Body -> Cursed Body -> Perish Body
+    - ability Levitate added for Gengar
   - Minior
     - +40 BST: 60, 120, 60, 120, 60, 120
     - Shields Down: 60, 60, 120, 60, 120, 60
@@ -261,6 +281,10 @@
     - Gains Itchy Pollen as ability
   - Gossifleur, Eldegoss
     - Gains Wind Rider instead of Effect Spore as ability
+  - Eternatus
+    - Gains Levitate as a hidden ability
+  - Spinda
+    - Gains Huge Power as an ability instead of Tangled Feet
 
   ## Moveset Tweaks (WIP)
   - Shelmet
@@ -297,6 +321,16 @@
     - learns After You at level 1
     - learns Fake Out at level 26
     - learns Hyper Voice at level 40
+  - Spinda
+    - learns U-Turn
+  - Chimchar, Monferno, Infernape
+    - learns Copycat as egg move
+    - Infernape learns Me First at level 1
+  - Vanillite, Vanillish, Vanilluxe
+    - learns Flurry at level 24
+    - Vanilluxe learns Sundae upon evolving, Squall at level 46, and Glaciate at level 100
+  - Primarina
+    - learns Boomburst at level 66
 
 # Field Changes
   - Water's Surface
@@ -333,18 +367,31 @@
     - Trailblaze raises user's speed by 2 instead of 1
     - Pokemon with Swarm get +1 attack and special attack on entry
 
+  - Icy
+    - Glaciate lowers speed by 6 instead
+    - Squall always has +1 priority
+
+  - Snowy Mountain
+    - Glaciate lowers speed by 6 instead
+    - Squall always has +1 priority
+
   - Frozen Dimensional Field
     - Unnerve now additionally lowers foes' attack and special attack by 1 on entry instead of speed
     - x1.5 boost to ice attacks, x1.3 boost to dark
     - Chilling Water becomes part Ice
     - Moves that become part Ice have their base power additionally multiplied by x1.3 instead of x1.2
+    - Glaciate lowers speed by 6 instead
+    - Squall always has +1 priority
 
   - Dimensional Field
     - Unnerve now additionally lowers foes' attack and special attack by 1 on entry instead of speed
     - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
 
+  - Bewitched Woods
+    - Grassy Glide has +1 priority
+
   - Haunted
-    - Cursed Body always activates
+    - Cursed Body also applies Grudge to the user upon switch in
 
   - Cave
     - Dig is a single-turn move
@@ -365,14 +412,18 @@
   - Volcanic Top
     - Precipice Blades never misses
 
-  - Crowd
+  - Concert
     - Iron Fist boosts punching moves by x2 instead of x1.5
+    - Shift Gear boosts attack stat by an additional +1
 
   - Infernal Field
     - Immolate boosts normal moves by x1.5 power instead of x1.3
     - Centiferno is boosted in power by x2
     - Fire Lash is boosted in power by x1.5
     - Smog is boosted in power by x5 instead of x2
+
+  - Wasteland
+    - Corrosion now applies secondary effect chance with any attack, not just on contact
 
 # Other
   - Removed data chip cost to enter password

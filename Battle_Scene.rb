@@ -3013,7 +3013,7 @@ class PokeBattle_Scene
       itemname=getItemName(item)
       command=itemscene.pbShowCommands(_INTL("{1} is selected.",itemname),commands)
       if cmdUse>=0 && command==cmdUse
-        if $game_switches[:No_Items_Password]==true && (usetype==1 || usetype==2 || usetype==5 || usetype == 7) || KAIZOMOD
+        if ($game_switches[:No_Items_Password]==true || KAIZOMOD) && (usetype==1 || usetype==2 || usetype==5 || usetype == 7) 
           Kernel.pbMessage("The 'No Items' password is on, so items can't be used in battle.") if !KAIZOMOD
           Kernel.pbMessage("In-battle items can't be used with this mod!") if KAIZOMOD
         elsif usetype!=3 && usetype!=7
@@ -3081,6 +3081,7 @@ class PokeBattle_Scene
     return true if pokemon.status == :BURN && PBStuff::BURNITEMS.include?(item)
     return true if pokemon.status == :SLEEP && PBStuff::SLEEPITEMS.include?(item)
     return true if pokemon.status == :FROZEN && PBStuff::FREEZEITEMS.include?(item)
+    return true if pokemon.status == :FREEZE && PBStuff::FREEZEITEMS.include?(item)
     return true if pokemon.status == :PETRIFIED && PBStuff::PETRIFYITEMS.include?(item)
     return true if battler && battler.effects[:Confusion]>0 && PBStuff::CONFUITEMS.include?(item)
     return true if pokemon.hp<=0 && PBStuff::REVIVEITEMS.include?(item)

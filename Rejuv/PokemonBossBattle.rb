@@ -1664,6 +1664,8 @@ class BossPokemonDataBox < SpriteWrapper
         return "Paralysis"
       when :PETRIFIED
         return "Petrified"  
+      when :FREEZE
+        return "Freeze"
     end 
     return "" 
   end 

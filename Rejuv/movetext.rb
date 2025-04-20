@@ -3539,7 +3539,7 @@ MOVEHASH = {
     :type => :ICE,
     :category => :special,
     :basedamage => 65,
-    :accuracy => 95,
+    :accuracy => 100,
     :maxpp => 10,
     :effect => 100,
     :target => :AllOpposing,
@@ -14415,6 +14415,54 @@ MOVEHASH = {
     :magiccoat => true,
     :desc => "The user sends a flurry of cold at the target, inflicting frostbite."
 },
+
+:SUNDAE => {
+    :ID => 1502,
+    :name => "Sundae",
+    :function => 0x00D,
+    :type => :ICE,
+    :category => :special,
+    :basedamage => 90,
+    :accuracy => 100,
+    :maxpp => 10,
+    :effect => 30,
+    :target => :AllOpposing,
+    :kingrock => true,
+    :windmove => true,
+	:desc => "The user attacks targets by engulfing them in frozen swirls, which may inflict frostbite."
+},
+
+:SQUALL => {
+	:ID => 1503,
+	:name => "Squall",
+	:function => 0x000,
+	:type => :FLYING,
+	:category => :special,
+	:basedamage => 80,
+	:accuracy => 100,
+	:maxpp => 10,
+	:effect => 20,
+	:target => :SingleNonUser,
+	:kingrock => true,
+    :windmove => true,
+	:desc => "The user attacks targets with a sheer gust of wind. This move always goes first in the Hail."
+},
+
+:SKYDIVE => {
+    :ID => 1504,
+    :name => "Sky Dive",
+    :function => 0x10B,
+    :type => :FLYING,
+    :category => :physical,
+    :basedamage => 130,
+    :accuracy => 90,
+    :maxpp => 10,
+    :target => :SingleNonUser,
+    :contact => true,
+    :gravityblocked => true,
+    :desc => "The target crashes down at the target from the sky. If it misses, the user is hurt instead."
+},
+
 
 # Giga Moves
 

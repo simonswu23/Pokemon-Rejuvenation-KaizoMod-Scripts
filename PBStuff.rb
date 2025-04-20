@@ -319,7 +319,7 @@ BLACKLISTS = {
 :INSTRUCT =>NOAUTOMOVE | ZMOVES | DELAYEDMOVE | TWOTURNMOVE | REPEATINGMOVE |
 [:TRANSFORM,:BELCH, :KINGSSHIELD, :BIDE, :INSTRUCT],
 ###-------------------------------------------------------------------------------------------------------------###
-:SLEEPTALK => NOAUTOMOVE | ZMOVES | DELAYEDMOVE | TWOTURNMOVE | CHARGEMOVE | [:BELCH,:CHATTER],
+:SLEEPTALK => NOAUTOMOVE | ZMOVES | DELAYEDMOVE | TWOTURNMOVE | CHARGEMOVE | [:BELCH,:CHATTER,:REST],
 ###-------------------------------------------------------------------------------------------------------------###
 :ENCORE =>NOAUTOMOVE| ZMOVES | [:TRANSFORM]
 }
@@ -644,7 +644,8 @@ POKEMONTOCREST = {
   :FURRET => :FURRCREST,              :CACTURNE => :CACTCREST,
   :KLINKLANG => :KLINCREST,           :EMBOAR => :EMBCREST,
   :PLUSLE => :PLUSCREST,              :MINUN => :MINCREST,
-  :HYDREIGON => :HYDREICREST
+  :HYDREIGON => :HYDREICREST,         :VANILLUXE => :VANICREST,
+  :SPINDA => :SPINCREST,              :RUNERIGUS => :RUNECREST,
 }
 
 SILVALLYCRESTABILITIES = {

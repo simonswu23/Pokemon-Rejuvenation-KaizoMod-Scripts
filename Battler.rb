@@ -85,6 +85,7 @@ class PokeBattle_Battler
   def isShadow?; return false; end
 
   attr_accessor :giga
+  attr_accessor :gear
   attr_accessor :forewarn
 
   #simple true/false vars
@@ -934,13 +935,13 @@ class PokeBattle_Battler
     end
    case self.ability
       when :SWIFTSWIM
-        speed *= 2 if @battle.pbWeather == :RAINDANCE && !self.hasWorkingItem(:UTILITYUMBRELLA) || @battle.FE == :UNDERWATER || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?)
+        speed *= 2 if @battle.pbWeather == :RAINDANCE || @battle.FE == :UNDERWATER || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?)
       when :SURGESURFER
         speed *= 2 if [:ELECTERRAIN, :SHORTCIRCUIT, :UNDERWATER].include?(@battle.FE) || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?) || @battle.state.effects[:ELECTERRAIN] > 0
       when :TELEPATHY
         speed *= 2 if @battle.FE == :PSYTERRAIN || @battle.state.effects[:PSYTERRAIN] > 0
       when :CHLOROPHYLL
-        speed *= 2 if (@battle.pbWeather == :SUNNYDAY || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 4, 5)) && !self.hasWorkingItem(:UTILITYUMBRELLA)
+        speed *= 2 if (@battle.pbWeather == :SUNNYDAY || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 4, 5))
       when :QUICKFEET
         speed *= 1.5 if !self.status.nil? || (Rejuv && @battle.FE == :ELECTERRAIN)
       when :SANDRUSH
@@ -1269,29 +1270,27 @@ class PokeBattle_Battler
     end
     if (self.pokemon && self.pokemon.species == :CASTFORM)
       if self.ability == :FORECAST
-        if !self.hasWorkingItem(:UTILITYUMBRELLA)
-          case @battle.pbWeather
-            when :SUNNYDAY
-              if self.form!=1
-                self.form=1
-                transformed=true
-              end
-            when :RAINDANCE
-              if self.form!=2
-                self.form=2
-                transformed=true
-              end
-            when :HAIL
-              if self.form!=3
-                self.form=3
-                transformed=true
-              end
-            else
-              if self.form!=0
-                self.form=0
-                transformed=true
-              end
-          end
+        case @battle.pbWeather
+          when :SUNNYDAY
+            if self.form!=1
+              self.form=1
+              transformed=true
+            end
+          when :RAINDANCE
+            if self.form!=2
+              self.form=2
+              transformed=true
+            end
+          when :HAIL
+            if self.form!=3
+              self.form=3
+              transformed=true
+            end
+          else
+            if self.form!=0
+              self.form=0
+              transformed=true
+            end
         end
       else
         if self.form!=0
@@ -1308,7 +1307,7 @@ class PokeBattle_Battler
     if (self.pokemon && self.pokemon.species == :CHERRIM) && !self.isFainted?
       if (self.ability == :FLOWERGIFT)
         # Cherrim Crest
-        if self.crested == :CHERRIM || (@battle.pbWeather == :SUNNYDAY && !self.hasWorkingItem(:UTILITYUMBRELLA)) ||
+        if self.crested == :CHERRIM || (@battle.pbWeather == :SUNNYDAY) ||
           @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) || @battle.FE == :BEWITCHED
           if self.form!=1
             self.form=1
@@ -3153,8 +3152,8 @@ class PokeBattle_Battler
       end
       for i in items
         itemname=getItemName(i.item)
-        @battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
-        i.effects[:Embargo]=3
+        @battle.pbDisplay(_INTL("{1} frisked {2} and suppressed its {3}!",pbThis,i.pbThis(true),itemname)) if @battle.pbOwnedByPlayer?(@index)
+        i.effects[:Embargo]=1
         if @battle.FE == :BACKALLEY
           if (i.effects[:Substitute]==0) && (i.ability != :STICKYHOLD || i.moldbroken) && self.item.nil?
             if !@battle.pbIsUnlosableItem(i,i.item) && !@battle.pbIsUnlosableItem(self,i.item)
@@ -3249,6 +3248,13 @@ class PokeBattle_Battler
           @battle.ai.addMoveToMemory(chosenopponent[chosenmovenumber], warnedMove)
         end
       end
+    end
+    # Kaizomod - Cursed Body
+    if self.ability == :CURSEDBODY && @battle.FE == :HAUNTED && onactive
+      @battle.pbDisplay(_INTL("{1}'s Cursed Body!",pbThis,movename))
+      @battle.pbCommonAnimation(:GRUDGE,self,nil)
+      self.effects[:Grudge]=true
+      @battle.pbDisplay(_INTL("{1}'s Cursed Body wants to bear a grudge!",self.pbThis))
     end
     # Gen 9 Mod - Quark Drive
     if self.ability == :QUARKDRIVE && onactive
@@ -3458,7 +3464,8 @@ class PokeBattle_Battler
         end
       end
     end
-    # Kaizomod Refactor
+
+    # Kaizomod Refactor -- no contact required
     if target.damagestate.calcdamage > 0 && !target.damagestate.substitute && !move.zmove
       # Gen 9 Mod - Added Toxic Chain
       if user.ability == :TOXICCHAIN && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
@@ -3468,15 +3475,6 @@ class PokeBattle_Battler
       if user.ability == :IMMOLATE && @battle.FE == :INFERNAL && target.pbCanBurn?(false) && movetypes.include?(:FIRE)
         target.pbBurn(user)
         @battle.pbDisplay(_INTL("{1}'s {2} burned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
-      end
-    end
-    # Gen 9 Mod - Added Punching Glove
-    if target.damagestate.calcdamage > 0 && !target.damagestate.substitute && !move.zmove && move.contactMove? && user.ability != :LONGREACH && !(user.hasWorkingItem(:PUNCHINGGLOVE) && move.punchMove?)
-      eschance = 3
-      eschance = 6 if @battle.FE == :CORRUPTED
-      if user.ability == :POISONTOUCH && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
-        target.pbPoison(user)
-        @battle.pbDisplay(_INTL("{1}'s {2} poisoned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
       end
       if user.ability == :CORROSION && @battle.FE == :WASTELAND
         if @battle.pbRandom(10) == 0
@@ -3488,21 +3486,58 @@ class PokeBattle_Battler
           end
         end
       end
+      if target.ability == :PERISHBODY && user.effects[:PerishSong] == 0 && target.effects[:PerishSong] == 0 && @battle.FE != :HOLY
+        if @battle.FE == :INFERNAL
+          @battle.pbDisplay(_INTL("Both Pokémon will faint in one turn!"))
+          user.effects[:PerishSong] = 2
+          user.effects[:PerishSongUser] = target.index
+          target.effects[:PerishSong] = 2
+          target.effects[:PerishSongUser] = target.index
+        else
+          @battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
+          user.effects[:PerishSong] = 4
+          user.effects[:PerishSongUser] = target.index
+          target.effects[:PerishSong] = 4
+          target.effects[:PerishSongUser] = target.index
+        end
+        if @battle.FE == :DIMENSIONAL || @battle.FE == :HAUNTED || @battle.FE == :INFERNAL
+          target.effects[:MeanLook] = user.index
+          @battle.pbDisplay(_INTL("{1} can't escape now!", target.pbThis))
+        end
+      end
+      if target.ability == :AFTERMATH && !user.isFainted? && target.hp <= 0 && !@battle.pbCheckGlobalAbility(:DAMP) # && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+        PBDebug.log("[#{user.pbThis} hurt by Aftermath]")
+        for i in @battle.battlers
+          next if i.isFainted? || i.ability == :MAGICGUARD || (i.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+          @battle.scene.pbDamageAnimation(i, 0)
+          if @battle.FE == :CORROSIVEMIST
+            i.pbReduceHP((i.totalhp / 2.0).floor)
+            @battle.pbDisplay(_INTL("{1} was caught in the toxic aftermath!", i.pbThis))
+          else
+            i.pbReduceHP((i.totalhp / 4.0).floor)
+            @battle.pbDisplay(_INTL("{1} was caught in the aftermath!", i.pbThis))
+          end
+        end
+      end
+      if target.ability == :CURSEDBODY && !user.isFainted? && target.hp <= 0
+        if !user.effects[:Curse]
+          user.effects[:Curse] = true
+          @battle.pbDisplay(_INTL("{1}'s Cursed Body laid a curse on {2}!", user.pbThis(true), self.pbThis))
+        end
+      end
+    end
+    # Gen 9 Mod - Added Punching Glove
+    if target.damagestate.calcdamage > 0 && !target.damagestate.substitute && !move.zmove && move.contactMove? && user.ability != :LONGREACH && !(user.hasWorkingItem(:PUNCHINGGLOVE) && move.punchMove?)
+      eschance = 3
+      eschance = 6 if @battle.FE == :CORRUPTED
+      if user.ability == :POISONTOUCH && @battle.pbRandom(10) < eschance && target.pbCanPoison?(false)
+        target.pbPoison(user)
+        @battle.pbDisplay(_INTL("{1}'s {2} poisoned {3}!", user.pbThis, getAbilityName(user.ability), target.pbThis(true)))
+      end
       if !user.hasWorkingItem(:PROTECTIVEPADS)
         if target.effects[:BeakBlast] && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && user.pbCanBurn?(false)
           user.pbBurn(target)
           @battle.pbDisplay(_INTL("{1} was burned by the heat!", user.pbThis))
-        end
-        if target.ability == :AFTERMATH && !user.isFainted? && target.hp <= 0 && !@battle.pbCheckGlobalAbility(:DAMP) && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
-          PBDebug.log("[#{user.pbThis} hurt by Aftermath]")
-          @battle.scene.pbDamageAnimation(user, 0)
-          if @battle.FE == :CORROSIVEMIST
-            user.pbReduceHP((user.totalhp / 2.0).floor)
-            @battle.pbDisplay(_INTL("{1} was caught in the toxic aftermath!", user.pbThis))
-          else
-            user.pbReduceHP((user.totalhp / 4.0).floor)
-            @battle.pbDisplay(_INTL("{1} was caught in the aftermath!", user.pbThis))
-          end
         end
         if [:IRONBARBS, :ROUGHSKIN, :PINCUSHION].include?(target.ability) && !user.isFainted? && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
           @battle.scene.pbDamageAnimation(user, 0)
@@ -3555,25 +3590,6 @@ class PokeBattle_Battler
               target.effects[:Attract] = user.index
               @battle.pbDisplay(_INTL("{1}'s {2} infatuated {3}!", user.pbThis, getItemName(user.item), target.pbThis(true)))
             end
-          end
-        end
-        if target.ability == :PERISHBODY && user.effects[:PerishSong] == 0 && target.effects[:PerishSong] == 0 && @battle.FE != :HOLY
-          if @battle.FE == :INFERNAL
-            @battle.pbDisplay(_INTL("Both Pokémon will faint in one turn!"))
-            user.effects[:PerishSong] = 2
-            user.effects[:PerishSongUser] = target.index
-            target.effects[:PerishSong] = 2
-            target.effects[:PerishSongUser] = target.index
-          else
-            @battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
-            user.effects[:PerishSong] = 4
-            user.effects[:PerishSongUser] = target.index
-            target.effects[:PerishSong] = 4
-            target.effects[:PerishSongUser] = target.index
-          end
-          if @battle.FE == :DIMENSIONAL || @battle.FE == :HAUNTED || @battle.FE == :INFERNAL
-            target.effects[:MeanLook] = user.index
-            @battle.pbDisplay(_INTL("{1} can't escape now!", target.pbThis))
           end
         end
         if target.ability == :GOOEY
@@ -3675,6 +3691,28 @@ class PokeBattle_Battler
         target.pbRecoverHP([1, (damage / 2).floor].max) if !target.isFainted?
         @battle.pbDisplay(_INTL("{1}'s crest causes {2} to take recoil damage and {3} to recover!", target.pbThis, user.pbThis(true), target.pbThis))
       end
+      if target.crested == :COFAGRIGUS
+        if (user.effects[:MeanLook]<0)
+          user.effects[:MeanLook]=target.index
+          @battle.pbDisplay(_INTL("{1} can't escape now!",user.pbThis))
+        end
+        if (!user.effects[:Curse])
+          user.effects[:Curse]=true
+          @battle.pbDisplay(_INTL("{1} laid a curse on {2}!",target.pbThis,user.pbThis))
+        end
+      end
+
+      if target.crested == :RUNERIGUS
+        if (user.effects[:MeanLook]<0)
+          user.effects[:MeanLook]=target.index
+          @battle.pbDisplay(_INTL("{1} can't escape now!",user.pbThis))
+        end
+        if (user.pbCanReduceStatStage?(PBStats::ATTACK,true) || user.pbCanReduceStatStage?(PBStats::SPATK,true))
+          user.pbReduceStat(PBStats::ATTACK,2,abilitymessage:false, statdropper: target)
+          user.pbReduceStat(PBStats::SPATK,2,abilitymessage:false, statdropper: target)
+          @battle.pbDisplay(_INTL("{1} reduced {2}'s offenses!",target.pbThis,user.pbThis))
+        end
+      end
       if target.ability == :INNARDSOUT && !user.isFainted? &&
          target.hp <= 0 && user.ability != :MAGICGUARD && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
         PBDebug.log("[#{user.pbThis} hurt by Innards Out]")
@@ -3686,11 +3724,14 @@ class PokeBattle_Battler
         if target.effects[:ShellTrap] && move.pbIsPhysical?(movetypes[0]) && user.pbOwnSide != target.pbOwnSide && !(user.ability == :SHEERFORCE && move.effect > 0)
           target.effects[:ShellTrap] = false
         end
-        if target.ability == :CURSEDBODY && @battle.FE != :HOLY && (@battle.pbRandom(10) < 3 || (target.isFainted?)) || @battle.FE == :HAUNTED || target.crested == :BEHEEYEM
+        # SWu reworking Cursed Body
+        # if target.ability == :CURSEDBODY && @battle.FE != :HOLY && (@battle.pbRandom(10) < 3 || (target.isFainted?)) || @battle.FE == :HAUNTED || target.crested == :BEHEEYEM
+        if target.crested == :BEHEEYEM
           if user.effects[:Disable] <= 0 && move.pp > 0 && !user.isFainted?
             user.effects[:Disable] = 4
             user.effects[:DisableMove] = move.move
-            @battle.pbDisplay(_INTL("{1}'s {2} disabled {3}!", target.pbThis, getAbilityName(target.ability), user.pbThis(true)))
+            @battle.pbDisplay(_INTL("{1}'s Beeheyem Crest disabled {2}!", target.pbThis, user.pbThis(true)))
+            # @battle.pbDisplay(_INTL("{1}'s {2} disabled {3}!", target.pbThis, getAbilityName(target.ability), user.pbThis(true)))
           end
         end
         if target.ability == :GULPMISSILE && target.species == :CRAMORANT && !user.isFainted? && target.form != 0
@@ -5321,7 +5362,7 @@ class PokeBattle_Battler
         end
       end
     end
-    if self.status== :FROZEN && !KAIZOMOD
+    if (self.status== :FROZEN && !KAIZOMOD) || self.status == :FREEZE
       if basemove.canThawUser?
         self.pbCureStatus(false)
         @battle.pbDisplay(_INTL("{1} was defrosted by {2}!",pbThis,basemove.name))
@@ -5608,17 +5649,12 @@ class PokeBattle_Battler
         addleffect = 100 if basemove.move == :LICK && @battle.FE == :HAUNTED
         addleffect = 100 if basemove.move == :DIRECLAW && @battle.FE == :WASTELAND
         addleffect = 100 if basemove.move == :INFERNALPARADE && @battle.FE == :INFERNAL
+        addleffect *= 2 if basemove.move == :SUNDAE && (@battle.pbWeather == :HAIL || (@battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION))
         addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1) && !KAIZOMOD
         if @battle.pbRandom(100) < addleffect
           basemove.pbAdditionalEffect(user, target)
         end
         addleffect = basemove.moreeffect
-        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW
-        addleffect = 100 if $DEBUG && Input.press?(Input::CTRL) && !@battle.isOnline?
-        addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1)
-        if @battle.pbRandom(100) < addleffect
-          basemove.pbSecondAdditionalEffect(user, target)
-        end
         # Gulp Missile
         if (self.species == :CRAMORANT) && self.ability == :GULPMISSILE && !self.isFainted? && (basemove.move == :SURF || basemove.move == :DIVE) # Surf or Dive
           if self.form==0
@@ -5652,7 +5688,7 @@ class PokeBattle_Battler
       if target.damagestate.calcdamage > 0 && !target.isFainted?
         # Defrost
         # called out of method due to needing the hitcounter for parental bond
-        if (basemove.pbType(user) == :FIRE || basemove.function==0x0A) && target.status== :FROZEN && !(user.ability == (:PARENTALBOND) && i==0) && !(user.crested == :HYDREIGON && i==0)
+        if (basemove.pbType(user) == :FIRE || basemove.function==0x0A) && (target.status == :FREEZE || (target.status== :FROZEN && !KAIZOMOD)) && !(user.ability == (:PARENTALBOND) && i==0) && !(user.crested == :HYDREIGON && i==0)
           target.pbCureStatus
         end
         # Rage

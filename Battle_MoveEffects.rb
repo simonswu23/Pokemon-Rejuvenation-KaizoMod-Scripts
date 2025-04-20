@@ -141,6 +141,16 @@ class PokeBattle_Move_000 < PokeBattle_Move
     end
     return ret
   end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :SQUALL
+      @battle.pbAnimation(:TWISTER,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
+  end
 end
 
 ################################################################################
@@ -632,6 +642,16 @@ class PokeBattle_Move_00D < PokeBattle_Move
     end
     return false
   end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :SUNDAE
+      @battle.pbAnimation(:ICYWIND,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
+  end
 end
 
 ################################################################################
@@ -1020,6 +1040,7 @@ class PokeBattle_Move_01B < PokeBattle_Move
       (attacker.status== :POISON && !opponent.pbCanPoison?(false)) ||
       (attacker.status== :BURN && !opponent.pbCanBurn?(false)) ||
       (attacker.status== :FROZEN && !opponent.pbCanFreeze?(false)) ||
+      (attacker.status== :FREEZE && !opponent.pbCanFreeze?(false)) ||
       (attacker.status== :PETRIFIED && !opponent.pbCanPetrify?(false))
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
@@ -1399,7 +1420,7 @@ class PokeBattle_Move_028 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
-    increment = @battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA) ? 2 : 1
+    increment = @battle.pbWeather == :SUNNYDAY ? 2 : 1
     if @battle.FE == :GRASSY || @battle.FE == :FOREST || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN) # Grassy/Forest/Flower Garden Field
       increment = 2
       increment = 3 if @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 3, 5)
@@ -1739,7 +1760,7 @@ class PokeBattle_Move_036 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
-    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY ? 2 : 1
+    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY || @battle.FE == :CONCERT ? 2 : 1
     attacker.pbIncreaseStat(PBStats::ATTACK, statchange, abilitymessage: false, statsource: attacker)
     attacker.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
 
@@ -2047,6 +2068,17 @@ class PokeBattle_Move_044 < PokeBattle_Move
   def pbAdditionalEffect(attacker, opponent)
     statchange = 1
     statchange = 2 if (Rejuv && ((@battle.FE == :ELECTERRAIN && @move == :ELECTROWEB) || (@battle.FE == :SWAMP && @move == :MUDSHOT)))
+    if (KAIZOMOD && @move == :GLACIATE)
+      statchange = 3 
+      statchange = 6 if (@battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION)
+      if (!opponent.pbCanReduceStatStage?(PBStats::SPEED, true)) && opponent.pbCanFreeze?(false)
+        opponent.status = :FREEZE
+        opponent.statusCount = 0
+        @battle.pbCommonAnimation("Frozen", opponent, nil)
+        @battle.pbDisplay(_INTL("{1} was frozen solid!",opponent.pbThis))
+        return true
+      end
+    end
     opponent.pbReduceStat(PBStats::SPEED, statchange, abilitymessage: false, statdropper: attacker)
     return true
   end
@@ -4070,15 +4102,13 @@ class PokeBattle_Move_087 < PokeBattle_Move
   def pbType(attacker,type=@type)
     weather=@battle.pbWeather
     type=(:NORMAL) || 0
-    if !attacker.hasWorkingItem(:UTILITYUMBRELLA)
-      type=((:FIRE) || type) if weather== :SUNNYDAY
-      type=((:WATER) || type) if weather== :RAINDANCE
-      type=((:ROCK) || type) if weather== :SANDSTORM
-      type=((:ICE)  || type) if weather== :HAIL
-      type=((:FLYING) || type) if (@battle.FE == :SKY || KAIZOMOD) && weather == :STRONGWINDS
-      type=((:GROUND || type)) if weather == :SSANDSTREAM
-      type=((:SHADOW) || type) if Rejuv && weather == :SHADOWSKY
-    end
+    type=((:FIRE) || type) if weather== :SUNNYDAY
+    type=((:WATER) || type) if weather== :RAINDANCE
+    type=((:ROCK) || type) if weather== :SANDSTORM
+    type=((:ICE)  || type) if weather== :HAIL
+    type=((:FLYING) || type) if (@battle.FE == :SKY || KAIZOMOD) && weather == :STRONGWINDS
+    type=((:GROUND || type)) if weather == :SSANDSTREAM
+    type=((:SHADOW) || type) if Rejuv && weather == :SHADOWSKY
     type=super(attacker,type)
     return type
   end
@@ -5657,7 +5687,7 @@ class PokeBattle_Move_0C4 < PokeBattle_Move
   def pbTwoTurnAttack(attacker, checking = false)
     @immediate = false
     if attacker.effects[:TwoTurnAttack] == 0
-      @immediate = true if @battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
+      @immediate = true if @battle.pbWeather == :SUNNYDAY
       @immediate = true if @battle.FE == :RAINBOW
       @immediate = true if attacker.crested == :CLAYDOL && @move == :SOLARBEAM
     end
@@ -6465,9 +6495,9 @@ class PokeBattle_Move_0D8 < PokeBattle_Move
     elsif @battle.FE == :DARKNESS3 && @move != :MOONLIGHT
       hpgain=(attacker.totalhp/8.0).floor
     else
-      if (@battle.pbWeather== :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA))
+      if (@battle.pbWeather== :SUNNYDAY)
         hpgain=(attacker.totalhp*2/3.0).floor
-      elsif (@battle.pbWeather!=0 && !attacker.hasWorkingItem(:UTILITYUMBRELLA))
+      elsif (@battle.pbWeather!=0)
         hpgain=(attacker.totalhp/4.0).floor
       else
         hpgain=(attacker.totalhp/2.0).floor
@@ -10469,7 +10499,7 @@ class PokeBattle_Move_176 < PokeBattle_Move
       spatkmult *= 1.5 if attacker.ability == :FLAREBOOST && (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && @battle.FE != :FROZENDIMENSION
       spatkmult *= 1.5 if attacker.ability == :MINUS && (attacker.pbPartner.ability == :PLUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
       spatkmult *= 1.5 if attacker.ability == :PLUS && (attacker.pbPartner.ability == :MINUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
-      spatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY && !attacker.hasWorkingItem(:UTILITYUMBRELLA)) && @battle.FE != :FROZENDIMENSION
+      spatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY) && @battle.FE != :FROZENDIMENSION
       spatkmult *= 1.3 if attacker.pbPartner.ability == :BATTERY
       spatkmult *= 2 if attacker.ability == :PUREPOWER && @battle.FE == :PSYTERRAIN
     end
@@ -11137,7 +11167,7 @@ class PokeBattle_Move_778 < PokeBattle_Move
   def pbAdditionalEffect(attacker, opponent)
     if opponent.ability != :INNERFOCUS &&
        !opponent.damagestate.substitute &&
-       opponent.status != :SLEEP && (opponent.status != :FROZEN || KAIZOMOD)
+       opponent.status != :SLEEP && (opponent.status != :FROZEN || KAIZOMOD) && opponent.status != :FREEZE
       opponent.effects[:Flinch] = true
       return true
     end
@@ -12369,7 +12399,7 @@ class PokeBattle_Move_908 < PokeBattle_Move
   def pbTwoTurnAttack(attacker)
     @immediate=false
     if attacker.effects[:TwoTurnAttack]==0
-      @immediate=true if (@battle.pbWeather== :RAINDANCE && !attacker.hasWorkingItem(:UTILITYUMBRELLA))
+      @immediate=true if (@battle.pbWeather== :RAINDANCE)
     end
     if !@immediate && attacker.hasWorkingItem(:POWERHERB)
       itemname=getItemName(attacker.item)
@@ -13062,7 +13092,8 @@ class PokeBattle_Move_923 < PokeBattle_Move
     else
       pri = oppmovedata.priority
     end
-    pri += 1 if oppmoveid == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0)
+    pri += 1 if oppmoveid == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+    pri += 1 if oppmoveid == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
     pri += 1 if oppmoveid == :ATTACKORDER && opponent.crested == :VESPIQUEN
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING
     pri += 1 if opponent.crested == :FERALIGATR && oppmovedata.basedamage != 0 && opponent.turncount == 1 # Feraligatr Crest
