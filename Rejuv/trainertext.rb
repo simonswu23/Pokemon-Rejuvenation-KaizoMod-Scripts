@@ -17985,7 +17985,7 @@ TEAMARRAY = [{
 :mons => [{
 	:species => :VANILLUXE,
 	:level => 62,
-	:moves => [:UPROAR,:AURORAVEIL,:FREEZEDRY,:SELFDESTRUCT],
+	:moves => [:UPROAR,:FREEZEDRY,:FEVERPITCH,:SELFDESTRUCT],
 	:item => :VANICREST,
 	:ability => :SNOWWARNING,
 	:gender => "M",
@@ -18009,7 +18009,7 @@ TEAMARRAY = [{
 {
 	:species => :EEVEE,
 	:level => 65,
-	:moves => [:SHADOWBALL,:HYPERVOICE,:ALLURINGVOICE,:WORKUP],
+	:moves => [:SHADOWBALL,:TRUMPCARD,:ALLURINGVOICE,:WORKUP],
 	:item => :EVIOLITE,
 	:ability => :ADAPTABILITY,
 	:gender => "M",

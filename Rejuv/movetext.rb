@@ -14596,7 +14596,8 @@ MOVEHASH = {
 	:maxpp => 10,
 	:giga => true,
     :effect => 100,
-	:target => :AllNonUsers,
+    :soundmove => true,
+	:target => :AllOpposing,
 	:desc => "Infatuates the target."
 },
 

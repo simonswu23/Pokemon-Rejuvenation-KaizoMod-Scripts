@@ -4457,10 +4457,10 @@ end
 class PokeBattle_Move_097 < PokeBattle_Move
   def pbBaseDamage(basedmg,attacker,opponent)
     return [attacker.happiness,250].min if attacker.crested == :LUVDISC
-    dmgs=[200,80,60,50,40]
+    dmgs=[250,100,80,60,40]
     ppleft=[@pp,4].min   # PP is reduced before the move is used
     basedmg=dmgs[ppleft]
-    basedmg=200 if @battle.FE == :CONCERT4
+    basedmg=250 if @battle.FE == :CONCERT4
     return basedmg
   end
 end
@@ -8729,7 +8729,8 @@ class PokeBattle_Move_11F < PokeBattle_Move
     end
     for i in @battle.battlers
       if i.hasWorkingItem(:ROOMSERVICE)
-        if i.pbReduceStat(PBStats::SPEED, 1, abilitymessage: false, statdropper: i)
+        inc = KAIZOMOD ? 6 : 1
+        if i.pbReduceStat(PBStats::SPEED, inc, abilitymessage: false, statdropper: i)
           if i.ability == :CONTRARY && !i.moldbroken
             @battle.pbDisplay(_INTL("The Room Service raised #{i.pbThis}'s Speed!"))
           else
