@@ -450,7 +450,7 @@ class PokeBattle_Battle
     # Gen 9 Mod - Rage Fist variable array
     @rageFist        = [Array.new(p1.length, 0), Array.new(p2.length, 0)]
     @rageFistSOS     = 0
-    
+
     #Kaizomod
     @keepPrimalWeather = false
     for i in 0...4
@@ -1504,7 +1504,7 @@ class PokeBattle_Battle
         pri += 1 if @choices[i][2].basedamage != 0 && @battlers[i].crested == :FERALIGATR && @battlers[i].turncount == 1 # Feraligatr Crest
         pri += 3 if @battlers[i].ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(@choices[i][2].function)
         pri = -2 if @battlers[i].ability == :MYCELIUMMIGHT && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
-        
+
         # Updating Giga Move priority here (on turn of evolution)
         # pri -= 6 if @battlers[i].species == :CORVIKNIGHT && @battlers[i].giga && @choices[i][2].move == :BRAVEBIRD
       end
@@ -2454,7 +2454,7 @@ class PokeBattle_Battle
 
     # @SWu add the specific GMax stone here
     pbDisplay(_INTL("{1} is reacting to its giga core!", @battlers[index].pbThis))
-  
+
     # Animation
     pbCommonAnimation("MegaEvolution",@battlers[index],nil)
 
@@ -2485,7 +2485,7 @@ class PokeBattle_Battle
 
       newmove=PBMove.new(PBStuff::POKEMONTOGIGAMOVE[@battlers[index].species][0])
       @battlers[index].moves[i]=PokeBattle_Move.pbFromPBMove(@battle,newmove,@battlers[index])
-      
+
       if !(@battlers[index].zmoves.nil? || @battlers[index].item == :INTERCEPTZ)
         @battle.updateZMoveIndexBattler(i,@battlers[index])
       end
@@ -2505,7 +2505,7 @@ class PokeBattle_Battle
     # Re-update ability of giga-evolved mon
     @battlers[index].pokemon.ability = @battlers[index].backupability
     @battlers[index].giga = true
-    
+
     # @battlers[index].pbAbilitiesOnSwitchIn(true)
   end
 
@@ -3394,7 +3394,7 @@ class PokeBattle_Battle
         if pkmn.ability != :MAGICGUARD && !(pkmn.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) && !pkmn.hasWorkingItem(:HEAVYDUTYBOOTS)
           atype = :FIRE
           atype = :ROCK if @field.effect == :ICY || @field.effect == :FROZENDIMENSION || @field.effect == :SNOWYMOUNTAIN || @field.effect == :UNDERWATER
-          
+
           eff = PBTypes.twoTypeEff(atype, pkmn.type1, pkmn.type2)
           if ($game_switches[:Inversemode] && !@battle.isOnline?) ^ (@field.effect == :INVERSE)
             switcheff = { 16 => 1, 8 => 2, 4 => 4, 2 => 8, 1 => 16, 0 => 16 }
@@ -5609,7 +5609,7 @@ class PokeBattle_Battle
         hpgain=i.pbRecoverHP((i.totalhp/16).floor,true)
       end
 
-      if i.crested == :MEGANIUM && KAIZOMOD 
+      if i.crested == :MEGANIUM && KAIZOMOD
         party=@battle.pbParty(i.index)
         for j in 0...party.length
           next if @battle.battlers.include?(j)
@@ -6421,7 +6421,7 @@ class PokeBattle_Battle
       next if sides[i].effects[:LuckyWind] == 0
 
       sides[i].effects[:LuckyWind] -= 1
-      pbDisplay(_INTL("#{texts[i]} team's Lucky Wind ran out!")) if sides[i].effects[:LuckyWind] == 0
+      pbDisplay(_INTL("#{texts[i]} team's Lucky Wind stopped blowing!")) if sides[i].effects[:LuckyWind] == 0
     end
     # EmbargoSide
     for i in 0...2

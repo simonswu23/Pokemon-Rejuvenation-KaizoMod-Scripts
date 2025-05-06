@@ -39,7 +39,7 @@ PokeBattle_Battler.class_eval {
     atk = (atk * atkmult * 1.0 / 0x1000).round
     return atk
   end
-  
+
   def pbCalcSpAtk()
     atk = @spatk
     atkstage = @stages[PBStats::SPATK] + 6
@@ -72,11 +72,11 @@ PokeBattle_Battler.class_eval {
     atkmult = (atkmult * 1.3).round if self.ability == :PROTOSYNTHESIS && self.effects[:Protosynthesis][0] == PBStats::SPATK # Gen 9 Mod - Added Protosynthesis
     atkmult = (atkmult * 0.75).round if @battle.pbCheckGlobalAbility(:TABLETSOFRUIN) && !self.ability == :TABLETSOFRUIN # Gen 9 Mod - Added Tablets of Ruin
     # Gen 9 Mod - Added Hadron Engine
-    atkmult = (atkmult * (5461 / 4096.to_f)).round if self.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION            
+    atkmult = (atkmult * (5461 / 4096.to_f)).round if self.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION
     atk = (atk * atkmult * 1.0 / 0x1000).round
     return atk
-  end  
-  
+  end
+
   def pbCalcDefense()
     defense = @defense
     defstage = @stages[PBStats::DEFENSE] + 6
@@ -106,10 +106,10 @@ PokeBattle_Battler.class_eval {
     defmult = (defmult * 1.3).round if self.ability == :PROTOSYNTHESIS && self.effects[:Protosynthesis][0] == PBStats::DEFENSE # Gen 9 Mod - Added Protosynthesis
     defmult = (defmult * 0.75).round if @battle.pbCheckGlobalAbility(:SWORDOFRUIN) && self.ability != :SWORDOFRUIN # Gen 9 Mod - Added Sword of Ruin
     defmult = (defmult * 0.75).round if @battle.pbCheckGlobalAbility(:BEADSOFRUIN) && self.ability != :BEADSOFRUIN && @battle.state.effects[:WonderRoom] != 0 # Gen 9 Mod - Added Beads of Ruin
-    defense = (defense * defmult * 1.0 / 0x1000).round  
+    defense = (defense * defmult * 1.0 / 0x1000).round
     return defense
-  end    
-  
+  end
+
    def pbCalcSpDef()
     defense = @spdef
     defstage = @stages[PBStats::SPDEF] + 6
@@ -145,8 +145,8 @@ PokeBattle_Battler.class_eval {
     defmult = (defmult * 0.75).round if @battle.pbCheckGlobalAbility(:SWORDOFRUIN) && self.ability != :SWORDOFRUIN && @battle.state.effects[:WonderRoom] != 0 # Gen 9 Mod - Added Sword of Ruin
     defense = (defense * defmult * 1.0 / 0x1000).round
     return defense
-  end  
-  
+  end
+
   def pbCalcAcc()
     accstage = self.stages[PBStats::ACCURACY]
     accuracy = accstage >= 0 ? (accstage + 3) * 100 / 3 : 300 / (3 - accstage)
@@ -158,7 +158,7 @@ PokeBattle_Battler.class_eval {
     accuracy *= 0.9 if self.ability == :LONGREACH && [:ROCKY, :FOREST].include?(@battle.FE)
     return accuracy.round
   end
-  
+
   def pbCalcEva()
     evastage = self.stages[PBStats::EVASION]
     evastage = 0 if self.effects[:Foresight] || self.effects[:MiracleEye]
@@ -170,7 +170,7 @@ PokeBattle_Battler.class_eval {
     evasion *= 1.1 if self.hasWorkingItem(:LAXINCENSE)
     return evasion.round
   end
-  
+
   def pbCalcCrit()
     c = 0
     c += self.effects[:FocusEnergy]
@@ -186,9 +186,9 @@ PokeBattle_Battler.class_eval {
 
 def pbShowBattleStats(pkmn)
   friend=@battle.battlers[0]
-  atksbl="+"  
+  atksbl="+"
   atksbl=" " if pkmn.stages[PBStats::ATTACK]<0
-  defsbl="+"  
+  defsbl="+"
   defsbl=" " if pkmn.stages[PBStats::DEFENSE]<0
   spasbl="+"
   spasbl=" " if pkmn.stages[PBStats::SPATK]<0
@@ -207,14 +207,14 @@ def pbShowBattleStats(pkmn)
     crit=12.5
   elsif c==2
     crit=50
-  else 
+  else
     crit=100
-  end 
+  end
   shownmon = pkmn.effects[:Illusion] ? pkmn.effects[:Illusion] : pkmn
-  if (!shownmon.type2.nil?) 
-    report = [_INTL("Type: {1}/{2}",toProperCase(shownmon.type1),toProperCase(shownmon.type2))]  
-  else  
-    report = [_INTL("Type: {1}",toProperCase(shownmon.type1))]  
+  if (!shownmon.type2.nil?)
+    report = [_INTL("Type: {1}/{2}",toProperCase(shownmon.type1),toProperCase(shownmon.type2))]
+  else
+    report = [_INTL("Type: {1}",toProperCase(shownmon.type1))]
   end
   report.push(_INTL("Level: {1}",pkmn.level))
   if @battle.pbOwnedByPlayer?(pkmn.index) || $DEBUG
@@ -324,18 +324,19 @@ def pbShowBattleStats(pkmn)
   dur="Permanent" if @battle.state.effects[:Gravity]<0
   turns="turns"
   turns="" if @battle.state.effects[:Gravity]<0
-  report.push(_INTL("Gravity: {1} {2}",dur,turns)) if @battle.state.effects[:Gravity]!=0  
-  report.push(_INTL("Tailwind: {1} turns",pkmn.pbOwnSide.effects[:Tailwind])) if pkmn.pbOwnSide.effects[:Tailwind]>0   
+  report.push(_INTL("Gravity: {1} {2}",dur,turns)) if @battle.state.effects[:Gravity]!=0
+  report.push(_INTL("Lucky Wind: {1} turns",pkmn.pbOwnSide.effects[:LuckyWind])) if KAIZOMOD && pkmn.pbOwnSide.effects[:LuckyWind]>0
+  report.push(_INTL("Tailwind: {1} turns",pkmn.pbOwnSide.effects[:Tailwind])) if pkmn.pbOwnSide.effects[:Tailwind]>0
   report.push(_INTL("Reflect: {1} turns",pkmn.pbOwnSide.effects[:Reflect])) if pkmn.pbOwnSide.effects[:Reflect]>0
   report.push(_INTL("Light Screen: {1} turns",pkmn.pbOwnSide.effects[:LightScreen])) if pkmn.pbOwnSide.effects[:LightScreen]>0
   report.push(_INTL("Aurora Veil: {1} turns",pkmn.pbOwnSide.effects[:AuroraVeil])) if pkmn.pbOwnSide.effects[:AuroraVeil]>0
   report.push(_INTL("Arenite Wall: {1} turns",pkmn.pbOwnSide.effects[:AreniteWall])) if pkmn.pbOwnSide.effects[:AreniteWall]>0
   report.push(_INTL("Safeguard: {1} turns",pkmn.pbOwnSide.effects[:Safeguard])) if pkmn.pbOwnSide.effects[:Safeguard]>0
   report.push(_INTL("Lucky Chant: {1} turns",pkmn.pbOwnSide.effects[:LuckyChant])) if pkmn.pbOwnSide.effects[:LuckyChant]>0
-  report.push(_INTL("Mist: {1} turns",pkmn.pbOwnSide.effects[:Mist])) if pkmn.pbOwnSide.effects[:Mist]>0 
+  report.push(_INTL("Mist: {1} turns",pkmn.pbOwnSide.effects[:Mist])) if pkmn.pbOwnSide.effects[:Mist]>0
   #report.push(_INTL("Altered Field: {1} turns",@battle.state.effects[:Terrain])) if @battle.state.effects[:Terrain]>0
-  #report.push(_INTL("Messed up Field: {1} turns",@battle.state.effects[:Splintered])) if @battle.state.effects[:Splintered]>0  
-  report.push(_INTL("Electric Terrain: {1} turns",@battle.state.effects[:ELECTERRAIN])) if @battle.state.effects[:ELECTERRAIN]>0  
+  #report.push(_INTL("Messed up Field: {1} turns",@battle.state.effects[:Splintered])) if @battle.state.effects[:Splintered]>0
+  report.push(_INTL("Electric Terrain: {1} turns",@battle.state.effects[:ELECTERRAIN])) if @battle.state.effects[:ELECTERRAIN]>0
   report.push(_INTL("Grassy Terrain: {1} turns",@battle.state.effects[:GRASSY])) if @battle.state.effects[:GRASSY]>0
   report.push(_INTL("Misty Terrain: {1} turns",@battle.state.effects[:MISTY])) if @battle.state.effects[:MISTY]>0
   report.push(_INTL("Psychic Terrain: {1} turns",@battle.state.effects[:PSYTERRAIN])) if @battle.state.effects[:PSYTERRAIN]>0
@@ -361,18 +362,18 @@ def pbShowBattleStats(pkmn)
   report.push(_INTL("Total fainted: {1}",pkmn.pbOwnSide.effects[:LastRespects])) if pkmn.pbOwnSide.effects[:LastRespects] > 0 # Gen 9 Mod - Added Last Respects
   Kernel.pbMessage((_INTL"Inspecting {1}:",pkmn.name),report, report.length)
 end
-#DemICE left the chat>>>>  
+#DemICE left the chat>>>>
 
-#>>>>DemICE entered the chat    
+#>>>>DemICE entered the chat
 def StatInfoTarget(index)
   for i in 0...4
-    if (index&1)==(i&1) && !@battle.battlers[i].isFainted? 
+    if (index&1)==(i&1) && !@battle.battlers[i].isFainted?
       return i
-    end  
+    end
   end
   return -1
-end 
-    
+end
+
 def pbStatInfo(index)
   @sprites["commandwindow"].visible
   curwindow=StatInfoTarget(index)
@@ -403,36 +404,36 @@ def pbStatInfo(index)
           break if !@battle.battlers[curwindow].isFainted?
         end
       elsif Input.trigger?(Input::DOWN)
-        loop do 
+        loop do
           newcurwindow=2 if curwindow==0
           newcurwindow=0 if curwindow==2
           newcurwindow=2 if curwindow==1
           newcurwindow=0 if curwindow==3
           curwindow=newcurwindow
           break if !@battle.battlers[curwindow].isFainted?
-        end  
+        end
       elsif Input.trigger?(Input::LEFT)
-        loop do 
+        loop do
           newcurwindow=3 if curwindow==0
           newcurwindow=0 if curwindow==2
           newcurwindow=2 if curwindow==1
           newcurwindow=1 if curwindow==3
           curwindow=newcurwindow
           break if !@battle.battlers[curwindow].isFainted?
-        end  
+        end
       elsif Input.trigger?(Input::UP)
-        loop do 
+        loop do
           newcurwindow=3 if curwindow==0
           newcurwindow=1 if curwindow==2
           newcurwindow=3 if curwindow==1
           newcurwindow=1 if curwindow==3
           curwindow=newcurwindow
-          break if !@battle.battlers[curwindow].isFainted?                          
+          break if !@battle.battlers[curwindow].isFainted?
         end
       end
     end
   end
-end     
+end
 
 def pbStatInfoF(index)
  # pbShowWindow(FIGHTBOX)
@@ -464,34 +465,34 @@ def pbStatInfoF(index)
           break if !@battle.battlers[curwindow].isFainted?
         end
       elsif Input.trigger?(Input::DOWN)
-        loop do 
+        loop do
           newcurwindow=2 if curwindow==0
           newcurwindow=0 if curwindow==2
           newcurwindow=2 if curwindow==1
           newcurwindow=0 if curwindow==3
           curwindow=newcurwindow
           break if !@battle.battlers[curwindow].isFainted?
-        end  
+        end
       elsif Input.trigger?(Input::LEFT)
-        loop do 
+        loop do
           newcurwindow=3 if curwindow==0
           newcurwindow=0 if curwindow==2
           newcurwindow=2 if curwindow==1
           newcurwindow=1 if curwindow==3
           curwindow=newcurwindow
           break if !@battle.battlers[curwindow].isFainted?
-        end  
+        end
       elsif Input.trigger?(Input::UP)
-        loop do 
+        loop do
           newcurwindow=3 if curwindow==0
           newcurwindow=1 if curwindow==2
           newcurwindow=3 if curwindow==1
           newcurwindow=1 if curwindow==3
           curwindow=newcurwindow
-          break if !@battle.battlers[curwindow].isFainted?                          
+          break if !@battle.battlers[curwindow].isFainted?
         end
       end
     end
   end
-end   
-#DemICE left the chat>>>> 
+end
+#DemICE left the chat>>>>
