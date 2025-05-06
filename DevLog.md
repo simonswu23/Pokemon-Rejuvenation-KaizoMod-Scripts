@@ -55,8 +55,6 @@
     - Lucky Wind
       - needs testing
       - double-check Angie fight with Lucky Wind
-      - should be a "synchronous effect" with Tailwind and Lucky Chant
-      - should NOT be able to "stack" with Tailwind and Lucky Chant
 
   ## Rebalancing
     -
@@ -142,7 +140,7 @@
       - Hydreigon
       - Vanilluxe
       - Spinda
-  
+
     ## Other
     - Utility Umbrella Changes
 
@@ -150,6 +148,17 @@
     - Learnset updates for new moves
 
 # Journal
+
+- 5/5 (@Ren)
+  - Updated Lucky Wind to be separate from Tailwind and Lucky Chant (they can stack)
+  - Updated Inspection to display Lucky Wind
+  - Fixed Lucky Wind to prevent additional effects (previously additional effects were only possible if the opponent had Lucky Wind up)
+  - Added ability description for Lucky Wind
+
+- 4/19 (@Ren)
+  - Updated Pressure to lower opponents' special attack on entry
+    - In Dimensional fields, it additionally lowers opponents' special attack
+    - Updated AI for Pressure accordingly
 
 - 4/14/25 (SWu)
   - TODO: refactor Battler.rb more (search for: "Kaizomod Refactor")
@@ -159,11 +168,6 @@
   - move relearner can learn level 0 moves (clean up montext)
   - Utility Umbrella rework -- now only protects against the NEGATIVE impacts of sun and rain
     - double check interactions here with Desolate Land and Primordial Sea
-
-- 4/19 (@Ren)
-  - Updated Pressure to lower opponents' special attack on entry
-    - In Dimensional fields, it additionally lowers opponents' special attack
-    - Updated AI for Pressure accordingly
 
 - 4/10 (@Ren)
   - Implemented Pressure changes
