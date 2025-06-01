@@ -369,6 +369,7 @@
       targetSelf = trainereffect[:applyStatus][1]
       val = trainereffect[:applyStatus][2]
       message = trainereffect[:applyStatus][3]
+      corrosion = trainereffect[:applyStatus][4] ? true : false
       pbDisplay(_INTL(message)) if message
       if (status == :BURN)
         target = targetSelf ? pkmn : pkmn.pbOpposing1
@@ -386,7 +387,7 @@
       end
       if (status == :POISON)
         target = targetSelf ? pkmn : pkmn.pbOpposing1
-        if (targetSelf || target.pbCanPoison(false, true))
+        if (targetSelf || target.pbCanPoison?(false, true, corrosion=corrosion))
           target.pbPoison(pkmn)
           pbDisplay(_INTL("{1} was badly poisoned",target.pbThis))
         end

@@ -2158,4 +2158,10 @@ ABILHASH = {
     :desc => "Uses Rage Powder on entry."
 },
 
+:DRACONIC => {
+    :ID => 391,
+    :name => "Draconic",
+    :desc => "Gains Dragon STAB and sub-typing. Normal moves become dragon with an additional x1.5 damage boost."
+},
+
 }

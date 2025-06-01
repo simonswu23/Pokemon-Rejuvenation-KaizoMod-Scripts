@@ -373,7 +373,7 @@ class PokeBattle_AI
         next if !@battle.pbCanChooseMove?(@index, moveindex, false)
 
         @move = pbChangeMove(@attacker.moves[moveindex], @attacker)
-        if @move.basedamage != 0
+        if @move.basedamage != 0 && @opponent.hp > 0
           @mondata.roughdamagearray[oppindex][moveindex] = [(pbRoughDamage * 100) / (@opponent.hp), 110].min
         # The old function makes some adjustments for two-turn moves here. I'm leaving that for later.
         else

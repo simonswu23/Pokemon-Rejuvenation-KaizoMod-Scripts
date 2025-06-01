@@ -1417,7 +1417,9 @@ MONHASH = {
         [49,:GUNKSHOT]],
       :compatiblemoves => [:AQUATAIL,:BEATUP,:BIDE,:BIND,:BODYSLAM,:BRUTALSWING,:BULLDOZE,:CRUNCH,:CURSE,:DARKPULSE,:DIG,:DOUBLEEDGE,:EARTHQUAKE,:FISSURE,:GASTROACID,:GIGADRAIN,:GUNKSHOT,:HEADBUTT,:INFESTATION,:IRONTAIL,:MIMIC,:PAYBACK,:POISONJAB,:RAGE,:RAINDANCE,:ROCKSLIDE,:ROCKTOMB,:SCARYFACE,:SCREECH,:SEEDBOMB,:SKULLBASH,:SLUDGEBOMB,:SLUDGEWAVE,:SNATCH,:SPITE,:STRENGTH,:SUCKERPUNCH,:SUNNYDAY,:TAKEDOWN,:THIEF,:TORMENT,:TRAILBLAZE,:VENOMDRENCH,:VENOSHOCK,
         #Rejuv only moves
-        :MUDBARRAGE],
+        :MUDBARRAGE, 
+        #KAIZOMOD
+        :POISONSWEEP],
       :moveexceptions => [],
       :Color => "Purple",
       :Habitat => "Grassland",
@@ -1483,7 +1485,9 @@ MONHASH = {
         [63,:GUNKSHOT]],
       :compatiblemoves => [:AQUATAIL,:BEATUP,:BIDE,:BIND,:BODYSLAM,:BRUTALSWING,:BULLDOZE,:CORROSIVEGAS,:CROSSPOISON,:CRUNCH,:CURSE,:DARKPULSE,:DIG,:DOUBLEEDGE,:DRAGONTAIL,:EARTHQUAKE,:FIREFANG,:FISSURE,:GASTROACID,:GIGADRAIN,:GIGAIMPACT,:GUNKSHOT,:HEADBUTT,:HYPERBEAM,:ICEFANG,:INFESTATION,:IRONTAIL,:MEGADRAIN,:MIMIC,:PAYBACK,:POISONJAB,:PSYCHICFANGS,:RAGE,:RAINDANCE,:ROCKSLIDE,:ROCKTOMB,:SCARYFACE,:SCREECH,:SEEDBOMB,:SKULLBASH,:SLUDGEBOMB,:SLUDGEWAVE,:SNATCH,:SPITE,:STOMPINGTANTRUM,:STRENGTH,:SUCKERPUNCH,:SUNNYDAY,:TAKEDOWN,:THIEF,:THROATCHOP,:THUNDERFANG,:TORMENT,:TRAILBLAZE,:VENOMDRENCH,:VENOSHOCK,
         #Rejuv only moves
-        :MUDBARRAGE],
+        :MUDBARRAGE,        
+        #KAIZOMOD
+        :POISONSWEEP],
       :moveexceptions => [],
       :shadowmoves => [:SHADOWRUSH,:SHADOWHALF],
       :Color => "Purple",
@@ -12103,6 +12107,24 @@ MONHASH = {
       ]
   },
 
+  "Hapi (Intense)" => {
+    :Type1 => :NORMAL,
+    :Type2 => :FAIRY,
+    :BaseStats => [35, 20, 65, 40, 65, 20],
+    :Abilities => [:MAGICGUARD],
+  },
+
+  "Hapi (Kaizo)" => {
+    :Type1 => :NORMAL,
+    :Type2 => :FAIRY,
+    # +100 BST
+    :BaseStats => [35, 20, 90, 90, 90, 20],
+    :Abilities => [:MAGICGUARD],
+  },
+
+  :OnCreation => {},
+  :DefaultForm => 1,
+
   :OnCreation => {},
 },
 
@@ -14571,7 +14593,7 @@ MONHASH = {
       :dexnum => 212,
       :Type1 => :BUG,
       :Type2 => :STEEL,
-      :BaseStats => [70, 130, 100, 55, 80, 65],
+      :BaseStats => [70, 140, 120, 65, 80, 75],
       :EVs => [0, 2, 0, 0, 0, 0],
       :Abilities => [:SWARM, :TECHNICIAN],
       :HiddenAbilities => :LIGHTMETAL,
@@ -14628,7 +14650,7 @@ MONHASH = {
   },
 
     "Mega Form" => {
-      :BaseStats => [70, 150, 140, 65, 100, 75],
+      :BaseStats => [70, 165, 140, 120, 100, 55],
       :Abilities => [:TECHNICIAN],
       :BaseEXP => 210,
       :Height => 20,
@@ -21753,7 +21775,7 @@ MONHASH = {
       :Type1 => :NORMAL,
       :BaseStats => [60, 60, 60, 60, 60, 60],
       :EVs => [0, 0, 0, 1, 0, 0],
-      :Abilities => [:OWNTEMPO, :HUGEPOWER],
+      :Abilities => [:HUGEPOWER, :TANGLEDFEET],
       :HiddenAbilities => :CONTRARY,
       :GrowthRate => :Fast,
       :GenderRatio => :FemHalf,
@@ -33959,12 +33981,22 @@ MONHASH = {
         [23,:DETECT],
         [27,:TAUNT],
         [32,:AIRSLASH],
-        [36,:RAZORWIND],
-        [41,:FEATHERDANCE],
-        [45,:SWAGGER],
-        [50,:FACADE],
+        # [36,:RAZORWIND],
+        # [41,:FEATHERDANCE],
+        # [45,:SWAGGER],
+        # [50,:FACADE],
         [54,:TAILWIND],
-        [59,:SKYATTACK]],
+        [59,:SKYATTACK],
+
+        # KAIZOMOD
+        [0,:AERIALACE],
+        [29,:SLASH],
+        [36,:FEATHERDANCE],
+        [41,:SWAGGER],
+        [45,:FACADE],
+        [50,:BRAVEBIRD],
+      
+      ],
       :compatiblemoves => [:AERIALACE,:AGILITY,:AIRCUTTER,:AIRSLASH,:DEFOG,:DUALWINGBEAT,:ECHOEDVOICE,:FLY,:FOCUSENERGY,:HEATWAVE,:PLUCK,:RAINDANCE,:ROOST,:SKYATTACK,:STEELWING,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,:UPROAR,:UTURN,:WORKUP],
       :moveexceptions => [],
       :shadowmoves => [:SHADOWBLAST,:SHADOWSKY],
@@ -33986,14 +34018,14 @@ MONHASH = {
 },
 
 :UNFEZANT => {
-    "Normal Form" => {
+    "Male" => {
       :name => "Unfezant",
       :dexnum => 521,
       :Type1 => :NORMAL,
       :Type2 => :FLYING,
       :BaseStats => [80, 115, 80, 65, 55, 93],
       :EVs => [0, 3, 0, 0, 0, 0],
-      :Abilities => [:BIGPECKS, :SUPERLUCK],
+      :Abilities => [:OPPORTUNIST, :DAZZLING],
       :HiddenAbilities => :RIVALRY,
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
@@ -34018,13 +34050,26 @@ MONHASH = {
         [23,:DETECT],
         [27,:TAUNT],
         [33,:AIRSLASH],
-        [38,:RAZORWIND],
-        [44,:FEATHERDANCE],
-        [49,:SWAGGER],
-        [55,:FACADE],
+        # [38,:RAZORWIND],
+        # [44,:FEATHERDANCE],
+        # [49,:SWAGGER],
+        # [55,:FACADE],
         [60,:TAILWIND],
-        [66,:SKYATTACK]],
-      :compatiblemoves => [:AERIALACE,:AGILITY,:AIRCUTTER,:AIRSLASH,:BRAVEBIRD,:DEFOG,:DUALWINGBEAT,:ECHOEDVOICE,:FLY,:FOCUSENERGY,:GIGAIMPACT,:HEATWAVE,:HURRICANE,:HYPERBEAM,:PLUCK,:PSYCHUP,:RAINDANCE,:ROOST,:SKYATTACK,:STEELWING,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,:UPROAR,:UTURN,:WORKUP],
+        [66,:DRAGONASCENT],
+
+        # Kaizomod
+        [0,:DRAGONDANCE],
+        [1,:SKYATTACK],
+        [1,:DRAGONCLAW],
+        [1,:AERIALACE],
+        [30,:SLASH],
+        [38,:FEATHERDANCE],
+        [44,:SWAGGER],
+        [49,:FACADE],
+        [55,:BRAVEBIRD],
+      ],
+      :compatiblemoves => [:AERIALACE,:AGILITY,:AIRCUTTER,:AIRSLASH,:BRAVEBIRD,:DEFOG,:DUALWINGBEAT,:ECHOEDVOICE,:FLY,:FOCUSENERGY,:GIGAIMPACT,:HEATWAVE,:HURRICANE,:HYPERBEAM,:PLUCK,:PSYCHUP,:RAINDANCE,:ROOST,:SKYATTACK,:STEELWING,:SUNNYDAY,:SWIFT,:TAILWIND,:TAUNT,:UPROAR,:UTURN,:WORKUP,
+                          :DRAGONCLAW], #KAIZOMOD
       :moveexceptions => [],
       :shadowmoves => [:SHADOWBLAST,:SHADOWSKY,:SHADOWHALF],
       :Color => "Gray",
@@ -34036,6 +34081,11 @@ MONHASH = {
       :BattlerPlayerY => 14,
       :BattlerEnemyY => 21,
       :BattlerAltitude => 0,
+  },
+
+  "Female" => {
+    :Abilities => [:DRACONIC, :SUPERLUCK],
+    :HiddenAbilities => :RIVALRY,
   },
 
   :OnCreation => {},
@@ -57377,7 +57427,7 @@ MONHASH = {
       :dexnum => 900,
       :Type1 => :BUG,
       :Type2 => :ROCK,
-      :BaseStats => [70, 135, 95, 45, 70, 85],
+      :BaseStats => [70, 145, 95, 45, 70, 115],
       :EVs => [0, 0, 0, 1, 0, 0],
       :Abilities => [:SWARM, :SHEERFORCE],
       :HiddenAbilities => :SHARPNESS,
@@ -58021,7 +58071,7 @@ MONHASH = {
       :Type2 => :GHOST,
       :BaseStats => [104, 75, 105, 110, 75, 66],
       :EVs => [0, 0, 0, 3, 0, 0],
-      :Abilities => [:BLAZE, :UNAWARE, :PERISHBODY],
+      :Abilities => [:BLAZE, :UNAWARE, :FLAMEBODY],
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemEighth,
       :BaseEXP => 265,
@@ -59928,7 +59978,8 @@ MONHASH = {
         [40,:SUBSTITUTE],
         [45,:KNOCKOFF],
         [51,:GUNKSHOT]],
-      :compatiblemoves => [:ACIDSPRAY,:ACROBATICS,:BATONPASS,:CROSSPOISON,:DIG,:ENCORE,:FLING,:FOULPLAY,:GIGAIMPACT,:GUNKSHOT,:HELPINGHAND,:HYPERBEAM,:KNOCKOFF,:LOWKICK,:LOWSWEEP,:METRONOME,:MUDSHOT,:MUDSLAP,:NASTYPLOT,:POISONJAB,:POISONTAIL,:POUNCE,:RAINDANCE,:SCARYFACE,:SHADOWCLAW,:SLUDGEBOMB,:SUNNYDAY,:SUPERFANG,:SWORDSDANCE,:TAKEDOWN,:TAUNT,:THIEF,:TRAILBLAZE,:UTURN,:VENOSHOCK,:XSCISSOR],
+      :compatiblemoves => [:ACIDSPRAY,:ACROBATICS,:BATONPASS,:CROSSPOISON,:DIG,:ENCORE,:FLING,:FOULPLAY,:GIGAIMPACT,:GUNKSHOT,:HELPINGHAND,:HYPERBEAM,:KNOCKOFF,:LOWKICK,:LOWSWEEP,:METRONOME,:MUDSHOT,:MUDSLAP,:NASTYPLOT,:POISONJAB,:POISONTAIL,:POUNCE,:RAINDANCE,:SCARYFACE,:SHADOWCLAW,:SLUDGEBOMB,:SUNNYDAY,:SUPERFANG,:SWORDSDANCE,:TAKEDOWN,:TAUNT,:THIEF,:TRAILBLAZE,:UTURN,:VENOSHOCK,:XSCISSOR,
+                           :HYPERVOICE], # Kaizomod
       :moveexceptions => [],
       :Color => "Gray",
       :Habitat => "Forest",

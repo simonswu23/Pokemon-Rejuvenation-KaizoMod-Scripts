@@ -47,7 +47,7 @@
   - Frisk suppresses found items until foes are switched out
   - Damp creates Water Sport on entry
   - Cursed Body now always activates if the attack knocked the user out
-  - Plus now provides a x1.15 boost to all friendly attacks, x1.5 if   an ally has Minus. x2 speed an if ally has Plus.
+  - Plus now provides a x1.15 boost to all friendly attacks, x1.5 if an ally has Minus. x2 speed an if ally has Plus.
   - Minus now provides a x0.85 reduction to all opposing attacks, x0.67 if ally has Plus. x2 speed if an ally has Minus.
   - Anticipation now grants the pokemon +1 speed upon shuddering
   - Iron Fist now provides a x1.5 boost instead to punching attacks
@@ -55,12 +55,13 @@
   - Leaf Guard now additionally negates Grass weaknesses in the Sun
   - Victory Star now boosts friendly accuracy by x1.5
   - Illuminate now boosts accuracy for all pokemon on the field by x1.25
-  - Cursed Body: instead of normal effect, applies curse to the attacker if this pokemon is knocked out
-  - Perish Body: now triggers on hit by any attack, not just on contact
-  - Aftermath: now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield, and doubles power of explosion moves
-  - Sniper: critical hits deal x3 damage instead of x1.5
-  - Stalwart: halevs move damage if incoming attack deals more than 50% of remaining HP
-  - 
+  - Cursed Body, instead of normal effect, applies curse to the attacker if this pokemon is knocked out
+  - Perish Body now triggers on hit by any attack, not just on contact
+  - Aftermath now triggers on hit by any attack, not just contact, and harms all other pokemon on battlefield, and doubles power of explosion moves
+  - Sniper now causes critical hits deal x3 damage instead of x1.5
+  - Stalwart now halves move damage if incoming attack deals more than 50% of remaining HP
+  - Tangled Feet now, instead of its normal effect, doubles the confusion self-hit chance for all other pokemon on the field
+  - Rivalry now gives a flat 2x damage boost against pokemon that share the same typing as the user
 
 # Crests
 
@@ -118,6 +119,7 @@
   - Glaciate now has 100% accuracy, and lowers foes speed by 3. If a target's speed cannot be lowered anymore, **freeze** them
   - Grudge now lasts on a pokemon until it switches out
   - Sleep Talk now cannot call Rest
+  - Poison Sweep base power now boosted to 65 and always lowers speed
 
   ## New Attacks
   - Chain Drain:
@@ -244,8 +246,7 @@
     - added Illusion as an ability
     - new Meowscarada BST: 76, 115, 70, 81, 70, 123
   - **Skeledirge Line**
-    - added Perish Body as an ability for Skeledirge
-    - added Flame Body as an ability for Fuecoco and Crocalor
+    - added Flame Body as an ability
     - new Skeledirge BST: 104, 75, 105, 110, 75, 66
   - **Quaquaval Line**
     - added Dancer as an ability
@@ -284,7 +285,15 @@
   - Eternatus
     - Gains Levitate as a hidden ability
   - Spinda
-    - Gains Huge Power as an ability instead of Tangled Feet
+    - Gains Huge Power as an ability instead of Own Tempo
+  - Scizor
+    - +50 BST: 70, 140, 120, 65, 80, 75
+    - Mega: 70, 165, 140, 120, 100, 55
+  - Kleavor
+    - +50 BST: 70, 145, 95, 45, 70, 115
+  - Unfezant
+    - Male: Abilites -> Opportunist, Dazzling, Rivalry
+    - Female: Abilities -> Draconic, Super Luck, Rivalry
 
   ## Moveset Tweaks (WIP)
   - Shelmet
@@ -324,13 +333,24 @@
   - Spinda
     - learns U-Turn
   - Chimchar, Monferno, Infernape
-    - learns Copycat as egg move
+    - learns Copycat as egg moves
     - Infernape learns Me First at level 1
   - Vanillite, Vanillish, Vanilluxe
     - learns Flurry at level 24
     - Vanilluxe learns Sundae upon evolving, Squall at level 46, and Glaciate at level 100
   - Primarina
     - learns Boomburst at level 66
+  - Ekans, Arbok
+    - learns Poison Sweep by TM
+  - Tranquill, Unfezant
+    - Tranquill learns Aerial Ace upon evolution
+    - Unfezant learns Dragon Dance upon evolution
+    - Unfezant learns Slash at level 30
+    - Unfezant learns Brave Bird at level 55
+    - Unfezant learns Dragon Ascent at level 66
+    - Unfezant learns Dragon Claw by TM
+  - Grafaiai
+    - learns Hyper Voice by tutor
 
 # Field Changes
   - Water's Surface
@@ -366,6 +386,9 @@
     - Slash and Burn, Trailblaze are boosted x1.5 by field
     - Trailblaze raises user's speed by 2 instead of 1
     - Pokemon with Swarm get +1 attack and special attack on entry
+    - Pokemon with Tangled Feet have doubled evasion
+    - Chlorophyll is always active
+    - Grasswhistle accuracy is improved to 85%
 
   - Icy
     - Glaciate lowers speed by 6 instead
@@ -414,7 +437,10 @@
 
   - Concert
     - Iron Fist boosts punching moves by x2 instead of x1.5
-    - Shift Gear boosts attack stat by an additional +1
+    - Shift Gear boosts attack stat by an additional +1, and increases HYPE by 1 stage
+    - Snarl now lowers foes special attack by 2 stages
+    - Sonic Boom's fixed damage is doubled
+    - 
 
   - Infernal Field
     - Immolate boosts normal moves by x1.5 power instead of x1.3
