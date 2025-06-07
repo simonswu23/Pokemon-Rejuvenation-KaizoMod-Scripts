@@ -177,6 +177,7 @@ class PokeBattle_Move
         when :DUSKILATE   then type = :DARK     if type == :NORMAL && @battle.FE != :GLITCH
         when :LIQUIDVOICE then type = @battle.FE == :ICY ? :ICE : :WATER if isSoundBased?
         when :IMMOLATE    then type = :FIRE     if type == :NORMAL
+        when :DRACONIC    then type = :DRAGON   if type == :NORMAL
       end
     end
     case attacker.crested
@@ -1289,6 +1290,10 @@ class PokeBattle_Move
       when :HYDREIGON
         typemod = 2 if type == :FAIRY
     end
+    if (opponent.ability == :DRACONIC && !opponent.hasType?(:DRAGON))
+      typemod /= 2 if inverse ? PBTypes.oneTypeEff(type, :DRAGON) > 2 : PBTypes.oneTypeEff(type, :DRAGON) < 2
+      typemod *= 2 if !inverse ? PBTypes.oneTypeEff(type, :DRAGON) > 2 : PBTypes.oneTypeEff(type, :DRAGON) < 2
+    end
     typemod *= 2 if type == :FIRE && opponent.effects[:TarShot]
     return typemod
   end
@@ -1456,7 +1461,7 @@ class PokeBattle_Move
         accuracy *= 0.5
       end
     end
-    if opponent.ability == :TANGLEDFEET && opponent.effects[:Confusion] > 0 && !opponent.moldbroken
+    if opponent.ability == :TANGLEDFEET && ((opponent.effects[:Confusion] > 0 && !KAIZOMOD) || @battle.FE == :FOREST) && !opponent.moldbroken
       accuracy *= 0.5
     end
     if opponent.ability == :SANDVEIL && (@battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && !opponent.moldbroken
@@ -1625,7 +1630,8 @@ class PokeBattle_Move
               basemult *= 1.3
           end
         end
-      when :RIVALRY       then basemult *= attacker.gender == opponent.gender ? 1.25 : 0.75 if attacker.gender != 2
+      # when :RIVALRY       then basemult *= attacker.gender == opponent.gender ? 1.25 : 0.75 if attacker.gender != 2
+      when :RIVALRY       then basemult *= 2   if opponent.hasType?(attacker.type1) || (!attacker.type2.nil? && opponent.hasType?(attacker.type2))
       when :MEGALAUNCHER  then basemult *= 1.5 if [:AURASPHERE, :DRAGONPULSE, :DARKPULSE, :WATERPULSE, :ORIGINPULSE, :TERRAINPULSE].include?(@move)
       when :SANDFORCE     then basemult *= 1.3 if (@battle.pbWeather == :SANDSTORM || @battle.pbWeather == :SSANDSTREAM || @battle.FE == :DESERT || @battle.FE == :ASHENBEACH) && (type == :ROCK || type == :GROUND || type == :STEEL)
       when :ANALYTIC      then basemult *= 1.3 if (@battle.battlers.find_all { |battler| battler && battler.hp > 0 && !battler.hasMovedThisRound? && !@battle.switchedOut[battler.index] }).length == 0
@@ -1678,6 +1684,14 @@ class PokeBattle_Move
             when :INFERNAL then basemult *= 1.5
             else
               basemult *= 1.3
+          end
+        end
+      when :DRACONIC
+        if @type == :NORMAL && (type == :FAIRY || (type == :NORMAL && @battle.FE == :GLITCH))
+          case @battle.FE
+            when :DRAGONSDEN then basemult *= 2
+            else
+              basemult *= 1.5
           end
         end
       when :DUSKILATE     then basemult *= 1.3 if @type == :NORMAL && (type == :DARK || (type == :NORMAL && @battle.FE == :GLITCH))
@@ -2400,6 +2414,9 @@ class PokeBattle_Move
     if (((attacker.ability == :EMBODYASPECTWELLSPRING) || (attacker.ability == :EMBODYASPECTHEARTHFLAME) || (attacker.ability == :EMBODYASPECTCORNERSTONE)) && type == :GRASS)
       damage*=1.5
     end
+    if (attacker.ability == :DRACONIC && !attacker.hasType?(type) && type == :DRAGON)
+      damage*=1.5
+    end
     # Gen 9 Mod - Moves of each type used by Mega (Terastalized) Terapagos will get a boost.
     if (attacker.species == :TERAPAGOS && attacker.form == 2)
       # Gen 9 Mod - Normal moves will get 2x boost (this includes STAB).
@@ -2467,7 +2484,7 @@ class PokeBattle_Move
     # Gen 9 Mod - Moves will deal double damage to an opponent that last used Glaive Rush. Also includes Electro Drift and Collision Course.
     finalmult *= 2.0 if opponent.effects[:GlaiveRush] == true
     finalmult *= (5461 / 4096.to_f) if [:ELECTRODRIFT, :COLLISIONCOURSE].include?(@move) && opponent.damagestate.typemod > 4
-    if attacker.forewarn == getMoveName(@move)
+    if @move != nil && attacker.forewarn == getMoveName(@move)
       finalmult *= 0.25
       @battle.pbDisplay(_INTL("The opposing team is prepared for the forewarned attack!"))
       attacker.forewarn = nil

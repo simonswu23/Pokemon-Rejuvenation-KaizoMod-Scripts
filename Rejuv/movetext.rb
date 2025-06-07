@@ -12932,10 +12932,10 @@ MOVEHASH = {
     :function => 0x044,
     :type => :POISON,
     :category => :physical,
-    :basedamage => 50,
+    :basedamage => 65,
     :accuracy => 100,
     :maxpp => 10,
-    :effect => 30,
+    :effect => 100,
     :target => :SingleNonUser,
     :contact => true,
     :desc => "The user engulfs their foot with poison and proceeds to knock over their opponent. It may lower speed."
@@ -14596,7 +14596,8 @@ MOVEHASH = {
 	:maxpp => 10,
 	:giga => true,
     :effect => 100,
-	:target => :AllNonUsers,
+    :soundmove => true,
+	:target => :AllOpposing,
 	:desc => "Infatuates the target."
 },
 

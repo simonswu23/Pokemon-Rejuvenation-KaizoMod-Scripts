@@ -10,7 +10,7 @@
 - Ren Helojak
 
 ## Kaizo
-- Venam Gym, **UNTESTED**
+- Venam Gym
 - Alex + Sam (1), **UNTESTED**
 - Valarie Gym
 - Geara Terajuma Beach
@@ -114,10 +114,20 @@
       - Damp
       - Aftermath
       - Supersweet Syrup
-      - Cursed Body
-      - Leaf Guard
       - FIX: Toxic Chain (works on non-contact moves)
       - Forewarn
+      - Tangled Feet
+      - Rivalry
+      - Stalwart
+      - Sniper
+      - Iron Fist
+      - Illuminate
+      - Victory Star
+      - Cursed Body
+      - Perish Body
+      - Leaf Guard
+      - Plus
+      - Minus
 
     - New Abilities
       - Meteor Impactor
@@ -125,6 +135,7 @@
       - Pincushion
       - Itchy Pollen
       - Lucky Wind
+      - Draconic
 
     ## Crests
     - Changed Crests
@@ -148,6 +159,11 @@
     - Learnset updates for new moves
 
 # Journal
+
+- 6/1/25 (SWu)
+  - minor bug fixes Forewarn and (having to deal with base damage calc?)
+  - Lucky Wind logic inversion
+  - Didn't test Draconic, should do so (and female Unfezant)
 
 - 5/5 (@Ren)
   - Updated Lucky Wind to be separate from Tailwind and Lucky Chant (they can stack)

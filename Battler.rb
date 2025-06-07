@@ -944,7 +944,7 @@ class PokeBattle_Battler
       when :TELEPATHY
         speed *= 2 if @battle.FE == :PSYTERRAIN || @battle.state.effects[:PSYTERRAIN] > 0
       when :CHLOROPHYLL
-        speed *= 2 if (@battle.pbWeather == :SUNNYDAY || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 4, 5))
+        speed *= 2 if (@battle.pbWeather == :SUNNYDAY || @battle.ProgressiveFieldCheck(PBFields::FLOWERGARDEN, 4, 5)) || @battle.FE == :FOREST
       when :QUICKFEET
         speed *= 1.5 if !self.status.nil? || (Rejuv && @battle.FE == :ELECTERRAIN)
       when :SANDRUSH
@@ -5421,7 +5421,7 @@ class PokeBattle_Battler
         pbCureConfusion
       else
         pbContinueConfusion
-        if @battle.pbRandom(3)==0
+        if @battle.pbRandom(3)==0 || (@battle.pbRandom(3)==1 && self.ability != :TANGLEDFEET && @battle.pbCheckGlobalAbility(:TANGLEDFEET))
           @battle.pbDisplay(_INTL("It hurt itself from its confusion!"))
           pbConfusionDamage
           if self.isbossmon

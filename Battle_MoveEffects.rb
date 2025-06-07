@@ -1760,7 +1760,7 @@ class PokeBattle_Move_036 < PokeBattle_Move
       return -1
     end
     pbShowAnimation(@move, attacker, nil, hitnum, alltargets, showanimation)
-    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY || @battle.FE == :CONCERT ? 2 : 1
+    statchange = @battle.FE == :FACTORY || @battle.FE == :CITY || @battle.ProgressiveFieldCheck(PBFields::CONCERT) ? 2 : 1
     attacker.pbIncreaseStat(PBStats::ATTACK, statchange, abilitymessage: false, statsource: attacker)
     attacker.pbIncreaseStat(PBStats::SPEED, 2, abilitymessage: false, statsource: attacker)
 
@@ -2104,7 +2104,7 @@ class PokeBattle_Move_045 < PokeBattle_Move
 
   def pbAdditionalEffect(attacker, opponent)
     statchange = 1
-    statchange = 2 if (Rejuv && @battle.FE == :SWAMP && @move == :STRUGGLEBUG) || ((@battle.FE == :FROZENDIMENSION || @battle.FE == :BACKALLEY) && @move == :SNARL)
+    statchange = 2 if (Rejuv && @battle.FE == :SWAMP && @move == :STRUGGLEBUG) || ((@battle.FE == :FROZENDIMENSION || @battle.FE == :BACKALLEY || @battle.ProgressiveFieldCheck(PBFields::CONCERT)) && @move == :SNARL)
     opponent.pbReduceStat(PBStats::SPATK, statchange, abilitymessage: false, statdropper: attacker)
     return true
   end
@@ -3519,6 +3519,9 @@ class PokeBattle_Move_06A < PokeBattle_Move
     if @battle.FE == :RAINBOW # Rainbow Field
       @battle.pbDisplay(_INTL("It's a Sonic Rainboom!"))
       return pbEffectFixedDamage(140,attacker,opponent,hitnum,alltargets,showanimation)
+    elsif @battle.ProgressiveFieldCheck(PBFields::CONCERT)
+      @battle.pbDisplay(_INTL("The attack echoed throughout the venue!"))
+      return pbEffectFixedDamage(40,attacker,opponent,hitnum,alltargets,showanimation)
     else
       return pbEffectFixedDamage(20,attacker,opponent,hitnum,alltargets,showanimation)
     end
@@ -4457,10 +4460,10 @@ end
 class PokeBattle_Move_097 < PokeBattle_Move
   def pbBaseDamage(basedmg,attacker,opponent)
     return [attacker.happiness,250].min if attacker.crested == :LUVDISC
-    dmgs=[200,80,60,50,40]
+    dmgs=[250,100,80,60,40]
     ppleft=[@pp,4].min   # PP is reduced before the move is used
     basedmg=dmgs[ppleft]
-    basedmg=200 if @battle.FE == :CONCERT4
+    basedmg=250 if @battle.FE == :CONCERT4
     return basedmg
   end
 end
@@ -6955,7 +6958,7 @@ class PokeBattle_Move_0EB < PokeBattle_Move
       @battle.pbDisplay(_INTL("What are ya doin' in my swamp?!"))
     end
     if (@battle.FE == :COLOSSEUM || @battle.ProgressiveFieldCheck(PBFields::CONCERT)) && @move == :ROAR
-      attacker.pbIncreaseStatBasic(PBStats::ATTACK, 2, statsource: attacker)
+      attacker.pbIncreaseStat(PBStats::ATTACK, 2, statsource: attacker)
       if @battle.FE == :COLOSSEUM
         @battle.pbDisplay(_INTL("{1} stands their ground in the arena!!", opponent.pbThis))
         return -1
@@ -7401,7 +7404,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
       @battle.pbDisplay(_INTL("{1} flung its {2}!", attacker.pbThis, getItemName(attacker.item)))
     end
     ret = super(attacker, opponent, hitnum, alltargets, showanimation)
-    if opponent.damagestate.calcdamage > 0 && !opponent.damagestate.substitute && opponent.pbOwnSide.effects[:LuckyWind] != 0 &&
+    if opponent.damagestate.calcdamage > 0 && !opponent.damagestate.substitute && opponent.pbOwnSide.effects[:LuckyWind] == 0 &&
        ((opponent.ability != :SHIELDDUST || opponent.moldbroken) && opponent.item != :COVERTCLOAK) # Gen 9 Mod - Added Covert Cloak
       if @item.pbGetPocket(attacker.item) == 5
         @battle.pbDisplay(_INTL("{1} ate the {2}!", opponent.pbThis, getItemName(attacker.item)))
@@ -8729,7 +8732,8 @@ class PokeBattle_Move_11F < PokeBattle_Move
     end
     for i in @battle.battlers
       if i.hasWorkingItem(:ROOMSERVICE)
-        if i.pbReduceStat(PBStats::SPEED, 1, abilitymessage: false, statdropper: i)
+        inc = KAIZOMOD ? 6 : 1
+        if i.pbReduceStat(PBStats::SPEED, inc, abilitymessage: false, statdropper: i)
           if i.ability == :CONTRARY && !i.moldbroken
             @battle.pbDisplay(_INTL("The Room Service raised #{i.pbThis}'s Speed!"))
           else
@@ -12810,7 +12814,7 @@ class PokeBattle_Move_918 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     # Gen 9 Mod - Added Covert Cloak
-    if !opponent.isFainted? && opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute && opponent.ability != :SHIELDDUST && opponent.item != :COVERTCLOAK && attacker.ability != :SHEERFORCE && opponent.pbOwnSide.effects[:LuckyWind] != 0
+    if !opponent.isFainted? && opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute && opponent.ability != :SHIELDDUST && opponent.item != :COVERTCLOAK && attacker.ability != :SHEERFORCE && opponent.pbOwnSide.effects[:LuckyWind] == 0
       if !opponent.effects[:SaltCure]
          opponent.effects[:SaltCure] = true
          @battle.pbDisplay(_INTL("{1} is being salt cured!",opponent.pbThis))
@@ -12935,7 +12939,7 @@ class PokeBattle_Move_91E < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     # Gen 9 Mod - Added Covert Cloak
-    if !opponent.isFainted? && opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute && ((opponent.ability != :SHIELDDUST || opponent.moldbroken) && opponent.item != :COVERTCLOAK) && (attacker.ability != :SHEERFORCE || attacker.moldbroken) && opponent.pbOwnSide.effects[:LuckyWind] != 0
+    if !opponent.isFainted? && opponent.damagestate.calcdamage>0 && !opponent.damagestate.substitute && ((opponent.ability != :SHIELDDUST || opponent.moldbroken) && opponent.item != :COVERTCLOAK) && (attacker.ability != :SHEERFORCE || attacker.moldbroken) && opponent.pbOwnSide.effects[:LuckyWind] == 0
       opponent.effects[:SyrupBomb] = 4
       opponent.effects[:SyrupBombUser] = attacker.index
       @battle.pbDisplay(_INTL("{1} was covered in sticky syrup!",opponent.pbThis))
