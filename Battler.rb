@@ -933,6 +933,9 @@ class PokeBattle_Battler
     if self.pbOwnSide.effects[:Tailwind] > 0
       speed = speed * 2
     end
+    if KAIZOMOD && self.pbOwnSide.effects[:LuckyWind] > 0
+      speed = speed * 2
+    end
    case self.ability
       when :SWIFTSWIM
         speed *= 2 if @battle.pbWeather == :RAINDANCE || @battle.FE == :UNDERWATER || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?)
@@ -2463,7 +2466,7 @@ class PokeBattle_Battler
         end
       end
 
-      if !@battle.pbCheckGlobalAbility(:DELTASTREAM) && !@battle.pbCheckGlobalAbility(:TEMPEST) && ![:Winds,:BlowingLeaves,:SwirlingLeaves].include?($game_screen.weather_type) && !((self.pbOwnSide.effects[:Tailwind]>0 || self.pbOpposingSide.effects[:Tailwind]>0) && [:MOUNTAIN,:SNOWYMOUNTAIN,:VOLCANICTOP,:SKY].include?(@battle.FE))
+      if !@battle.pbCheckGlobalAbility(:DELTASTREAM) && !@battle.pbCheckGlobalAbility(:TEMPEST) && ![:Winds,:BlowingLeaves,:SwirlingLeaves].include?($game_screen.weather_type) && !((self.pbOwnSide.effects[:Tailwind]>0 || self.pbOpposingSide.effects[:Tailwind]>0 || (KAIZOMOD && (self.pbOwnSide.effects[:LuckyWind] > 0 || self.pbOpposingSide.effects[:LuckyWind] > 0))) && [:MOUNTAIN,:SNOWYMOUNTAIN,:VOLCANICTOP,:SKY].include?(@battle.FE))
         if @battle.weather == :STRONGWINDS && !@battle.keepPrimalWeather
           @battle.pbDisplay(_INTL("The mysterious air current has dissipated!"))
           unless ((self.ability == :PRIMORDIALSEA) || (self.ability == :DESOLATELAND) || (self.ability == :DELTASTREAM)) && onactive
@@ -2604,7 +2607,7 @@ class PokeBattle_Battler
     end
 
     # Gen 9 Mod - Added Wind Rider
-    if self.ability == (:WINDRIDER) && onactive && pbOwnSide.effects[:Tailwind] > 0
+    if self.ability == (:WINDRIDER) && onactive && (pbOwnSide.effects[:Tailwind] > 0 || (KAIZOMOD && pbOwnSide.effects[:LuckyWind] > 0))
       self.pbIncreaseStatBasic(PBStats::ATTACK, 1)
       @battle.pbCommonAnimation("StatUp", self, nil)
       @battle.pbDisplay(_INTL("{1}'s Wind Rider raised its Attack!", pbThis))
@@ -3423,11 +3426,10 @@ class PokeBattle_Battler
       inc = 4
       inc = 6 if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :CLOUDS)
       inc = 8 if @battle.FE == :SKY
-      self.pbOwnSide.effects[:Tailwind]+=inc
-      self.pbOwnSide.effects[:LuckyWind]+=inc
-      self.pbOwnSide.effects[:LuckyChant]+=inc
-      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Lucky Wind for its team!",self.pbThis,getAbilityName(self.ability)))
 
+      # if there is an existing Lucky Wind, the counter is set to whichever is longer
+      self.pbOwnSide.effects[:LuckyWind]=inc if inc > self.pbOwnSide.effects[:LuckyWind]
+      @battle.pbDisplay(_INTL("{1}'s {2} brought in a Lucky Wind for its team!",self.pbThis,getAbilityName(self.ability)))
       if (@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP || @battle.FE == :SKY) && !@battle.state.effects[:HeavyRain] && !@battle.state.effects[:HarshSunlight]
         @battle.weather=:STRONGWINDS
         @battle.weatherduration=6
@@ -5642,7 +5644,7 @@ class PokeBattle_Battler
           addleffect = 20 if basemove.move == :FREEZEDRY
         end
         addleffect = 20 if basemove.move == :OMINOUSWIND && @battle.FE == :HAUNTED
-        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW || user.pbOwnSide.effects[:LuckyWind] != 0
+        addleffect *= 2 if user.ability == :SERENEGRACE || @battle.FE == :RAINBOW || user.pbOwnSide.effects[:LuckyWind] > 0
         addleffect = 100 if $DEBUG && Input.press?(Input::CTRL) && !@battle.isOnline?
         addleffect = 100 if basemove.move == :MIRRORSHOT && @battle.FE == :MIRROR
         addleffect = 100 if basemove.move == :STRANGESTEAM && @battle.FE == :FAIRYTALE

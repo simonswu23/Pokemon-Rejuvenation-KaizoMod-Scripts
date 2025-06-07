@@ -657,7 +657,7 @@ class PokeBattle_Move
 
     # Gen 9 Mod - Tera Shell makes moves not very effective on full HP
     if opponent.ability == :TERASHELL && opponent.hp == opponent.totalhp
-      if mod1 * mod2 == 0 
+      if mod1 * mod2 == 0
         return 0
       else
         return 2
@@ -804,7 +804,7 @@ class PokeBattle_Move
 
     # Gen 9 Mod - Tera Shell makes moves not very effective on full HP
     if opponent.ability == :TERASHELL && opponent.hp == opponent.totalhp
-      if mod1 * mod2 == 0 
+      if mod1 * mod2 == 0
         return 0
       else
         return 2
@@ -1437,7 +1437,7 @@ class PokeBattle_Move
     if attacker.hasWorkingItem(:WIDELENS)
       accuracy *= 1.1
     end
-    if attacker.pbOwnSide.effects[:LuckyWind] != 0
+    if attacker.pbOwnSide.effects[:LuckyWind] > 0
       accuracy *= 1.15
     end
     # Hypno Crest, Stantler Crest
@@ -1486,7 +1486,7 @@ class PokeBattle_Move
   def pbCritRate?(attacker, opponent)
     return -1 if self.is_a?(PokeBattle_Confusion)
     return -1 if (opponent.ability == :BATTLEARMOR || opponent.ability == :SHELLARMOR) && !opponent.moldbroken
-    return -1 if opponent.pbOwnSide.effects[:LuckyChant] > 0
+    return -1 if opponent.pbOwnSide.effects[:LuckyChant] > 0 || (KAIZOMOD && opponent.pbOwnSide.effects[:LuckyWind] > 0)
     return 3 if attacker.effects[:LaserFocus] > 0 || @function == 0xA0 || @function == 0x319 || @function == 0x90B # Frost Breath, Surging Strikes, # Gen 9 Mod - Added Flower Trick
     return 3 if @function == 0x201 && attacker.hp <= ((attacker.totalhp) * 0.5).floor # Gale Strike
     return 3 if attacker.ability == :MERCILESS && (opponent.status == :POISON || @battle.FE == :CORROSIVEMIST || ([:CORROSIVE, :WASTELAND, :MURKWATERSURFACE].include?(@battle.FE) && !attacker.isAirborne?))
@@ -1499,7 +1499,7 @@ class PokeBattle_Move
     c += 1 if !@data.nil? && highCritRate?
     c += 1 if attacker.inHyperMode? && getMoveType(@move) == :SHADOW
     c += 1 if attacker.ability == :SUPERLUCK
-    c += 1 if attacker.pbOwnSide.effects[:LuckyWind] != 0
+    c += 1 if attacker.pbOwnSide.effects[:LuckyWind] > 0
     c += 2 if attacker.hasWorkingItem(:STICK) && (attacker.pokemon.species == :FARFETCHD || attacker.pokemon.species == :SIRFETCHD)
     c += 2 if attacker.hasWorkingItem(:LUCKYPUNCH) && (attacker.pokemon.species == :CHANSEY)
     if @battle.FE == :MIRROR
@@ -2365,7 +2365,7 @@ class PokeBattle_Move
         damage*=1.5 if @battle.weather == :RAINDANCE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=0.5 if @battle.pbWeather == :SUNNYDAY && !@move == :HYDROSTEAM && !@move == :SPARKLINGARIA && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=2 if attacker.ability == :WATERBUBBLE
-      when :ICE 
+      when :ICE
         damage*=1.5 if @battle.weather == :HAIL && attacker.crested == :VANILLUXE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
     end
     # Critical hits
@@ -2543,7 +2543,7 @@ class PokeBattle_Move
     end
     ruinmult = (@battle.FE == :FROZENDIMENSION || @battle.FE == :DIMENSONAL) && !KAIZOMOD ? 0.67 : 0.75
     # Gen 9 Mod - Added Ruinous Abilities (This is scuffed imo) --> prolly should do it in finalmult instead
-    if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && pbIsSpecial?(type) 
+    if (attacker.pbOpposing1.ability == :VESSELOFRUIN || attacker.pbOpposing2.ability == :VESSELOFRUIN || attacker.pbPartner.ability == :VESSELOFRUIN) && attacker.ability != :VESSELOFRUIN && pbIsSpecial?(type)
       atkmult *= ruinmult
     end
     if (attacker.pbOpposing1.ability == :TABLETSOFRUIN || attacker.pbOpposing2.ability == :TABLETSOFRUIN || attacker.pbPartner.ability == :TABLETSOFRUIN) && attacker.ability != :TABLETSOFRUIN && pbIsPhysical?(type)
@@ -2556,7 +2556,7 @@ class PokeBattle_Move
         defmult *= ruinmult
       end
     end
-    if ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN) 
+    if ((opponent.pbOpposing1.ability == :BEADSOFRUIN || opponent.pbOpposing2.ability == :BEADSOFRUIN || opponent.pbPartner.ability == :BEADSOFRUIN) && opponent.ability != :BEADSOFRUIN)
       if @battle.state.effects[:WonderRoom] != 0 && pbIsPhysical?(type)
         defmult *= ruinmult
       elsif @battle.state.effects[:WonderRoom] == 0 && pbIsSpecial?(type)
@@ -2764,7 +2764,7 @@ class PokeBattle_Move
     pri += 3 if attacker.ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@function)
     pri -= 1 if @battle.FE == :DEEPEARTH && @move == :COREENFORCER
     pri -= 2 if attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
-    
+
     # Giga updates here
     # pri -= 6 if attacker.species == :CORVIKNIGHT && attacker.giga && @move == :BRAVEBIRD
 

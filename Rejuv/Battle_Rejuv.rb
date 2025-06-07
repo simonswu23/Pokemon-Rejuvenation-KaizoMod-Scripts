@@ -1,4 +1,4 @@
- class PokeBattle_Battle 
+ class PokeBattle_Battle
   attr_accessor :zettacounter
   attr_accessor :snapshot
 
@@ -72,13 +72,13 @@
     when :PROBOPASS
       @battlers[index].effects[:MagnetRise]=8
       pbAnimation(:MAGNETRISE,@battlers[index],nil) # Magnet Rise animation
-    when :PHIONE 
+    when :PHIONE
       @battlers[index].effects[:AquaRing]=true
       pbAnimation(:AQUARING,@battlers[index],nil) # Aqua Ring animation
     when :VESPIQUEN
       @battlers[index].effects[:VespiCrest] = true
-      @battlers[index].pbIncreaseStatBasic(PBStats::ATTACK,1)  
-      @battlers[index].pbIncreaseStatBasic(PBStats::SPATK,1)  
+      @battlers[index].pbIncreaseStatBasic(PBStats::ATTACK,1)
+      @battlers[index].pbIncreaseStatBasic(PBStats::SPATK,1)
     when :ZANGOOSE
       if @battlers[index].status!=:POISON
         @battlers[index].status=:POISON
@@ -97,7 +97,7 @@
       if sigmove.basedamage == 0
         @battlers[index].pbUseMoveSimple(sigmove.move, -1, -1)
       end
-    end    
+    end
   end
 
   def pbCrestEntry(index,pokemon)
@@ -123,7 +123,7 @@
         @battlers[index].type1 = :FIGHTING
       end
     end
-  
+
   end
 
   def pbCanRun?(idxPokemon)
@@ -184,7 +184,7 @@
         trainereffect = trainer.trainereffect[pkmn.pbFaintedPokemonCount]
         if trainer.trainereffect[:buffactivation] == :Limited
           return if trainer.trainereffectused.include?(pkmn.pbFaintedPokemonCount)
-          trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)      
+          trainer.trainereffectused.push(pkmn.pbFaintedPokemonCount)
         end
       end
     else
@@ -353,11 +353,6 @@
       trainer.trainerdelaycounter = (trainereffect[:delayedaction][:delay])
     end
     if trainereffect[:changeAbility]
-      if (pkmn.ability == :LUCKYWIND)
-        pbAnimation(:TAILWIND,anim,nil)
-        pkmn.pbOwnSide.effects[:Tailwind]+=4
-        @battle.pbDisplay(_INTL("{1}'s {2} brought in a Tailwind for its team!",pkmn.pbThis,getAbilityName(pkmn.ability)))
-      end
       pkmn.ability = trainereffect[:changeAbility][0]
       animation = trainereffect[:changeAbility][1]
       message = trainereffect[:changeAbility][2]
