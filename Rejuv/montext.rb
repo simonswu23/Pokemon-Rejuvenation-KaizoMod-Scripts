@@ -37176,7 +37176,7 @@ MONHASH = {
 
     "Rift Form" => {
       :Type2 => :DARK,
-      :BaseStats => [120, 80, 190, 120, 190, 10],
+      :BaseStats => [220, 80, 190, 120, 190, 20],
       :Abilities => [:POISONHEAL],
       :ExcludeDex => true,
       :toobig => true,
