@@ -5436,6 +5436,7 @@ class PokeBattle_Battle
                   pbDisplay(_INTL("The Pokémon were buffeted by the hail!", i.pbThis)) if !endmessage
                   endmessage = true
                   @scene.pbDamageAnimation(i, 0, quick: true)
+                  if @field.effect == :FROZENDIMENSION || @field.effect == :ICY || @field.effect == :SNOWYMOUNTAIN
                     reductions.push [i, (i.totalhp / 8.0).floor]
                   else
                     reductions.push [i, (i.totalhp / 16.0).floor]
