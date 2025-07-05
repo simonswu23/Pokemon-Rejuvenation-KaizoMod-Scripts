@@ -30,6 +30,8 @@
     - scatters a layer of spikes on the opposing team when hit by a physical attack, also damages attackers by 1/8 hp on contact
   - Itchy Pollen
     - upon entry, uses Rage Powder (effect lasts until the end of the turn)
+  - Hydro Veil
+    - upon entry, uses Aqua Ring
 
   ## Changes
   - Magma Armor protects against Frostbite
@@ -62,6 +64,10 @@
   - Stalwart now halves move damage if incoming attack deals more than 50% of remaining HP
   - Tangled Feet now, instead of its normal effect, doubles the confusion self-hit chance for all other pokemon on the field
   - Rivalry now gives a flat 2x damage boost against pokemon that share the same typing as the user
+  - Mycelium Might now allows user's status-inflicting moves to ignore immunities (e.g. spore on grass types), and removes the going-last restriction
+  - Healer now doubles all friendly HP restoration instead of its normal effect
+  - Shed Skin now has a 1/2 chance to cure status at the end of each turn
+  - Flower Gift now additionally boosts speed by x1.5 for all allies in the Sun
 
 # Crests
 
@@ -72,6 +78,8 @@
   - Meganium Crest: additionally heals all non-fainted party members at the end of each turn
   - Vespiquen Crest: additional +1 priority to all friendly bug moves
   - Cofagrigus Crest: additionally, upon hit, traps attacker and inflicts curse on them. Saps 1/16th hp per turn from trapped foes.
+  - Shiinotic Crest: always drains 1/16 hp at the end of each turn from foes, doubled if foe is statused
+  - Cherrim Crest: summons sun on entry for 5 turns
 
   ## New
   - Cacturne Crest: raises offenses by 1 if attacking first
@@ -94,6 +102,7 @@
     - Metronome
 
 # Attacks
+  - Double Team and Minimize are banned and fail upon use
   - Blizzard, Freeze Dry have their base effect chance improved to 20%
   - Freezing Glare has its base effect chance improved to 30%
   - Chilling Water now has a 30% chance to freeze, and its base power is increased to 75
@@ -120,6 +129,13 @@
   - Grudge now lasts on a pokemon until it switches out
   - Sleep Talk now cannot call Rest
   - Poison Sweep base power now boosted to 65 and always lowers speed
+  - Aqua Ring now has a 1/4 chance to cure status conditions at the end of each turn
+  - Lucky Chant additionally grants allies +1 CHR while active
+  - Punishment now ignores defensive boosts when dealing damage
+  - Meteor Beam now requires no charging turn in the sun
+  - Heal Pulse and Coaching now bypasses protect
+  - Eternabeam has 500 base power
+  - Misty Explosion has 250 base power, and deals double damage in Misty Terrain. If the terrain is not active, sets Misty Terrain up for 5 turns upon fainting.
 
   ## New Attacks
   - Chain Drain:
@@ -133,8 +149,12 @@
     - Learnset: Vanilluxe
   - Squall:
     - Flying, special, 80 bp, 100 accuracy, +1 priority in the hail
+    - Learnset: Vanilluxe
   - Skydive:
     - Flying, physical, 130 bp, 90 accuracy, 50% crash damage if misses or blocked
+  - Blossom Storm
+    - Fairy, physical, 140 bp, 100 accuracy, -1 attack and special defense after use (except in sunlight)
+    - Learnset: Cherrim
 
 # Pokemon
   ## Giga Pokemon
@@ -294,6 +314,27 @@
   - Unfezant
     - Male: Abilites -> Opportunist, Dazzling, Rivalry
     - Female: Abilities -> Draconic, Super Luck, Rivalry
+  - Vaporeon
+    - Gains Hydro Veil as ability instead of Hydration
+  - Umbreon
+    - Gains Poison Heal as ability instead of Synchronize
+  - Leafeon 
+    - Gains Sharpness as ability instead of Leaf Guard
+  - Glaceon
+    - Gains Sheer Force as ability instead of Ice Body
+  - Sylveon
+    - Gains Magic Guard as ability instead of Cute Charm
+  - Rotom 
+    - Gains Volt Absorb as an additional ability
+  - Volbeat
+    - gains the Normal typing
+  - Illumise
+    - gains the Fairy typing
+  - Cherrim
+    - Sunshine form bst (+100): 70, 90, 70, 107, 98, 115
+  - Toedscool and Toedscruel
+    - Toedscool gains Friend Guard as an ability
+    - Toedscruel gains Dry Skin as an ability
 
   ## Moveset Tweaks (WIP)
   - Shelmet
@@ -351,6 +392,16 @@
     - Unfezant learns Dragon Claw by TM
   - Grafaiai
     - learns Hyper Voice by tutor
+  - Umbreon
+    - learns Toxic at level 1
+  - Volbeat
+    - learns Follow Me as an egg move
+  - Illumise
+    - learns After You at an egg move
+  - Espurr
+    - learns After You and Calm Mind as egg moves
+  - Toedscool
+    - learns Rage Powder as an egg move
 
 # Field Changes
   - Water's Surface
@@ -393,10 +444,12 @@
   - Icy
     - Glaciate lowers speed by 6 instead
     - Squall always has +1 priority
+    - Hail damage is doubled
 
   - Snowy Mountain
     - Glaciate lowers speed by 6 instead
     - Squall always has +1 priority
+    - Hail damage is doubled
 
   - Frozen Dimensional Field
     - Unnerve now additionally lowers foes' attack and special attack by 1 on entry instead of speed
@@ -411,7 +464,19 @@
     - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
 
   - Bewitched Woods
-    - Grassy Glide has +1 priority
+    - Ingrained pokemon may switch out, and gain +1 defense and special defense at the end of each turn
+    - Lucky Chant reduces incoming damage to x0.66 and grants a 1/20 chance to negate all damage
+    - Trick Room fails when used
+    - Pastel Veil grants allies immunity to poison attacks
+    - Hospitality doubles all healing
+    - Matcha Gotcha has a 100% burn chance
+    - Nature Power becomes Moonblast
+    - Magical moves are boosted in power by x1.3 instead x1.4
+    - Moonblast / Dark Pulse / Night Daze are boosted in power by x1.3 instead of x1.2
+
+  - Murkwater Surface
+    - Muddy Water and Surf are boosted by x1.5
+    - Muddy Water becomes part Poison type
 
   - Haunted
     - Cursed Body also applies Grudge to the user upon switch in
@@ -439,8 +504,8 @@
     - Iron Fist boosts punching moves by x2 instead of x1.5
     - Shift Gear boosts attack stat by an additional +1, and increases HYPE by 1 stage
     - Snarl now lowers foes special attack by 2 stages
-    - Sonic Boom's fixed damage is doubled
-    - 
+    - Sonic Boom hits 1-5 times (depending on hype) and can never miss
+    - Steam Roller is boosted in power by x1.5
 
   - Infernal Field
     - Immolate boosts normal moves by x1.5 power instead of x1.3
@@ -450,6 +515,9 @@
 
   - Wasteland
     - Corrosion now applies secondary effect chance with any attack, not just on contact
+
+  - Electric Terrain
+    - Wild Charge has no recoli damage
 
 # Other
   - Removed data chip cost to enter password

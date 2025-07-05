@@ -6838,6 +6838,7 @@ MOVEHASH = {
     :magiccoat => true,
     :nonmirror => true,
     :healingmove => true,
+    :bypassprotect => true,
     :desc => "The user emits a healing pulse which restores the target's HP by up to half of its max HP."
 },
 
@@ -10641,7 +10642,7 @@ MOVEHASH = {
     :function => 0x0C2,
     :type => :DRAGON,
     :category => :special,
-    :basedamage => 160,
+    :basedamage => 500,
     :accuracy => 90,
     :maxpp => 5,
     :target => :SingleNonUser,
@@ -10819,7 +10820,7 @@ MOVEHASH = {
     :function => 0x30A,
     :type => :FAIRY,
     :category => :special,
-    :basedamage => 100,
+    :basedamage => 250,
     :accuracy => 100,
     :maxpp => 5,
     :target => :AllNonUsers,
@@ -10953,6 +10954,7 @@ MOVEHASH = {
     :basedamage => 0,
     :accuracy => 0,
     :maxpp => 10,
+    :bypassprotect => true,
     :target => :SingleNonUser,
     :desc => "The user properly coaches its ally Pokémon, boosting their Attack and Defense stats."
 
@@ -12755,18 +12757,19 @@ MOVEHASH = {
     :desc => "The user emits a rocking hot sound, getting stronger with more hype."
 },
 
-:THUNDERRAID => {
+:POWERSURGE => {
     :ID => 639,
-    :name => "Thunder Raid",
-    :function => 0x0BF,
+    :name => "Power Surge",
+    :function => 0x311,
     :type => :ELECTRIC,
-    :category => :physical,
-    :basedamage => 20,
+    :category => :special,
+    :basedamage => 75,
     :accuracy => 100,
     :maxpp => 20,
     :effect => 100,
+    :recoil => 0.33,
     :target => :SingleNonUser,
-    :desc => "Quickly strikes the target up to three times, each hit increasing in power."
+    :desc => "Erick's signature move. Boosted by electric terrain."
 },
 
 :UPROOT => {
@@ -14463,6 +14466,36 @@ MOVEHASH = {
     :desc => "The target crashes down at the target from the sky. If it misses, the user is hurt instead."
 },
 
+:BLOSSOMSTORM => {
+	:ID => 1505,
+	:name => "Blossom Storm",
+	:function => 0x902,
+	:type => :FAIRY,
+	:category => :physical,
+	:basedamage => 140,
+	:accuracy => 100,
+	:maxpp => 10,
+	:target => :AllOpposing,
+	:desc => "Attacks with a torrent of cherry blossom petals at foes. Lowers attack and special defense outside of sun."
+},
+
+# NPC Signature Moves 
+
+:ESCAPEROOT => {
+    :ID => 1900,
+    :name => "Escape Root",
+    :function => 0x0EE,
+    :type => :GRASS,
+    :category => :physical,
+    :basedamage => 95,
+    :accuracy => 100,
+    :maxpp => 20,
+    :effect => 100,
+    :target => :SingleNonUser,
+    :priority => 1,
+    :desc => "After making its attack, the user switches places with a party Pokémon in waiting."
+},
+
 
 # Giga Moves
 
@@ -14742,15 +14775,77 @@ MOVEHASH = {
 	:ID => 2018,
 	:name => "Centiferno",
 	:function => 0x00A,
-	:type => :DRAGON,
+	:type => :FIRE,
+	:category => :special,
+	:basedamage => 200,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllOpposing,
+	:desc => "Burns targets."
+},
+
+:KINGTIDE => {
+	:ID => 2019,
+	:name => "King Tide",
+	:function => 0x00D,
+	:type => :WATER,
+	:category => :special,
+	:basedamage => 200,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllOpposing,
+	:desc => "Frostbites targets."
+},
+
+:SMITE => {
+	:ID => 2020,
+	:name => "Smite",
+	:function => 0x013,
+	:type => :FAIRY,
+	:category => :special,
+	:basedamage => 120,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllOpposing,
+	:desc => "Confuses targets. Power doubles against confused targets."
+},
+
+:OVERGROWTH => {
+	:ID => 2021,
+	:name => "Overgrowth",
+	:function => 0x0DC,
+	:type => :GRASS,
+	:category => :physical,
+	:basedamage => 150,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :AllOpposing,
+	:desc => "Inflicts leech seed on the targets."
+},
+
+:VINELASH => {
+	:ID => 2022,
+	:name => "Vine Lash",
+	:function => 0x1006,
+	:type => :GRASS,
 	:category => :special,
 	:basedamage => 150,
 	:accuracy => 0,
 	:maxpp => 10,
 	:giga => true,
+    :effect => 30,
 	:target => :AllOpposing,
-	:desc => "Burns targets."
+	:desc => "Damages opposing team, may paralyze."
 },
+
 
 # Handlers
 :METEORIMPACTOR => {
@@ -14764,6 +14859,19 @@ MOVEHASH = {
 	:maxpp => 16,
 	:target => :AllNonUsers,
 	:desc => "called for ability" 
+},
+
+:ACIDDOWNPOUR2 => {
+    :name => "Acid Downpour",
+    :function => 0x800,
+    :type => :POISON,
+    :category => :special,
+    :basedamage => 180,
+    :accuracy => 0,
+    :maxpp => 0,
+    :target => :AllOpposing,
+    :zmove => true,
+    :desc => "The user creates a poisonous swamp using its Z-Power and sinks the target into it at full force. The power varies, depending on the original move."
 },
 
 }

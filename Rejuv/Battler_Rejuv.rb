@@ -317,6 +317,10 @@ class PokeBattle_Battler
           @spatk = maxStat
           @spdef = maxStat
           @speed = maxStat
+        # when :CHERRIM
+        #   @attack *= 1.33
+        #   @spdef *= 1.33
+        #   @speed *= 1.33
         end
       end
 

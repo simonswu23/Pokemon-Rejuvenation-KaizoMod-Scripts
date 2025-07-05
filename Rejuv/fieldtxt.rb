@@ -1625,12 +1625,12 @@ FIELDEFFECTS = {
 	},
 	:accuracyMods => {},
 	:moveMessages => {
-		"The toxic water strengthened the attack!" => [:MUDBOMB, :MUDSLAP, :MUDSHOT, :SMACKDOWN, :ACID, :ACIDSPRAY, :THOUSANDWAVES, :APPLEACID],
+		"The toxic water strengthened the attack!" => [:MUDBOMB, :MUDSLAP, :MUDSHOT, :SMACKDOWN, :ACID, :ACIDSPRAY, :THOUSANDWAVES, :APPLEACID, :MUDDYWATER, :SURF],
 		"Stinging!" => [:BRINE],
 		"...The spikes sank into the water and vanished!" => [:SPIKES, :TOXICSPIKES],
 	},
 	:typeMods => {
-		:POISON => [:MUDBOMB, :MUDSLAP, :MUDSHOT, :MUDBARRAGE, :SMACKDOWN, :THOUSANDWAVES, :APPLEACID],
+		:POISON => [:MUDBOMB, :MUDSLAP, :MUDSHOT, :MUDBARRAGE, :SMACKDOWN, :THOUSANDWAVES, :APPLEACID, :MUDDYWATER],
 		:WATER => [:SLUDGEWAVE],
 	},
 	:typeAddOns => {
@@ -2807,7 +2807,7 @@ FIELDEFFECTS = {
 	},
 	:statusMods => [:NIGHTMARE, :SPITE, :CURSE, :DESTINYBOND, :MEANLOOK, :SCARYFACE, :MAGICPOWDER, :HYPNOSIS, :WILLOWISP],
 	:changeEffects => {
-		"@battle.mistExplosion" => [:HEATWAVE, :ERUPTION, :LAVAPLUME, :BLASTBURN, :INFERNOOVERDRIVE],
+		"@battle.mistExplosion(basemove, user)" => [:HEATWAVE, :ERUPTION, :LAVAPLUME, :BLASTBURN, :INFERNOOVERDRIVE],
 	},
 	:seed => {
 		:seedtype => :SYNTHETICSEED,
@@ -2827,12 +2827,11 @@ FIELDEFFECTS = {
 	],
 	:graphic => ["Darchlight"],
 	:secretPower => "NEEDLEARM",
-	:naturePower => :DAZZLINGGLEAM,
+	:naturePower => :MOONBLAST,
 	:mimicry => :FAIRY,
 	:damageMods => {
 		1.5 => [:HEX, :MYSTICALFIRE, :SPIRITBREAK],
-		1.4 => [:ICEBEAM, :HYPERBEAM, :SIGNALBEAM, :AURORABEAM, :CHARGEBEAM, :PSYBEAM, :FLASHCANNON, :MIRRORBEAM, :MAGICALLEAF, :BUBBLEBEAM],
-		1.2 => [:DARKPULSE, :NIGHTDAZE, :MOONBLAST],
+		1.3 => [:ICEBEAM, :HYPERBEAM, :SIGNALBEAM, :AURORABEAM, :CHARGEBEAM, :PSYBEAM, :FLASHCANNON, :MIRRORBEAM, :MAGICALLEAF, :BUBBLEBEAM, :DARKPULSE, :NIGHTDAZE, :MOONBLAST],
 	},
 	:accuracyMods => {
 		85 => [:SLEEPPOWDER, :POISONPOWDER, :STUNSPORE, :GRASSWHISTLE],
@@ -3075,14 +3074,14 @@ FIELDEFFECTS = {
 	:naturePower => :HYPERVOICE,
 	:mimicry => :NORMAL,
 	:damageMods => {
-		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW,:RAGE,:THRASH,:FRUSTRATION,:OUTRAGE,:STOMPINGTANTRUM],
+		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW,:RAGE,:THRASH,:FRUSTRATION,:OUTRAGE,:STOMPINGTANTRUM,:STEAMROLLER],
 	},
 	:accuracyMods => {
 		100 => [:SING],
 	},
 	:moveMessages => {
 		"Face melting!" => [:ACID,:ACIDSPRAY,:APPLEACID],
-		"Rock and roll!" => [:ROLLOUT],
+		"Rock and roll!" => [:ROLLOUT,:STEAMROLLER],
 		"An amazing drumsolo!" => [:DRUMBEATING],
 		"What an opening act!" => [:FIRSTIMPRESSION,:FAKEOUT],
 		"MOSHPIT!!!" => [:DRAGONTAIL,:CIRCLETHROW],
@@ -3140,14 +3139,14 @@ FIELDEFFECTS = {
 	:naturePower => :HYPERVOICE,
 	:mimicry => :NORMAL,
 	:damageMods => {
-		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW,:RAGE,:THRASH,:FRUSTRATION,:OUTRAGE,:STOMPINGTANTRUM],
+		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW,:RAGE,:THRASH,:FRUSTRATION,:OUTRAGE,:STOMPINGTANTRUM, :STEAMROLLER],
 	},
 	:accuracyMods => {
 		100 => [:SING],
 	},
 	:moveMessages => {
 		"Face melting!" => [:ACID,:ACIDSPRAY,:APPLEACID],
-		"Rock and roll!" => [:ROLLOUT],
+		"Rock and roll!" => [:ROLLOUT, :STEAMROLLER],
 		"An amazing drumsolo!" => [:DRUMBEATING],
 		"What an opening act!" => [:FIRSTIMPRESSION,:FAKEOUT],
 		"MOSHPIT!!!" => [:DRAGONTAIL,:CIRCLETHROW],
@@ -3212,14 +3211,14 @@ FIELDEFFECTS = {
 	:naturePower => :HYPERVOICE,
 	:mimicry => :NORMAL,
 	:damageMods => {
-		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW],
+		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW, :STEAMROLLER],
 	},
 	:accuracyMods => {
 		100 => [:SING],
 	},
 	:moveMessages => {
 		"Face melting!" => [:ACID,:ACIDSPRAY,:APPLEACID],
-		"Rock and roll!" => [:ROLLOUT],
+		"Rock and roll!" => [:ROLLOUT, :STEAMROLLER],
 		"An amazing drumsolo!" => [:DRUMBEATING],
 		"What an opening act!" => [:FIRSTIMPRESSION,:FAKEOUT],
 		"MOSHPIT!!!" => [:DRAGONTAIL,:CIRCLETHROW],
@@ -3283,14 +3282,14 @@ FIELDEFFECTS = {
 	:naturePower => :HYPERVOICE,
 	:mimicry => :NORMAL,
 	:damageMods => {
-		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW],
+		1.5 => [:ACID,:ACIDSPRAY,:DRUMBEATING,:FAKEOUT,:ROLLOUT,:FIRSTIMPRESSION,:DRAGONTAIL,:CIRCLETHROW, :STEAMROLLER],
 	},
 	:accuracyMods => {
 		100 => [:SING],
 	},
 	:moveMessages => {
 		"Face melting!" => [:ACID,:ACIDSPRAY,:APPLEACID],
-		"Rock and roll!" => [:ROLLOUT],
+		"Rock and roll!" => [:ROLLOUT, :STEAMROLLER],
 		"An amazing drumsolo!" => [:DRUMBEATING],
 		"What an opening act!" => [:FIRSTIMPRESSION,:FAKEOUT],
 		"MOSHPIT!!!" => [:DRAGONTAIL,:CIRCLETHROW],

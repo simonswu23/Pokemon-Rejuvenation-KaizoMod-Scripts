@@ -273,12 +273,13 @@ class PokeBattle_Battle
     return if @field.effect == fieldeffect
 
     if Rejuv && [:ELECTERRAIN, :GRASSY, :MISTY, :PSYTERRAIN].include?(fieldeffect) && temp > 0 && (@field.effect != :INDOOR || KAIZOMOD)
+      return if @state.effects[fieldeffect] != 0
       @state.effects[fieldeffect] = temp
       quarkdriveCheck
 
       # overrides all other terrains
       for terrain in [:ELECTERRAIN,:GRASSY,:MISTY,:PSYTERRAIN]
-        if (terrain != fieldeffect && !KAIZOMOD)
+        if (terrain != fieldeffect && KAIZOMOD)
           @state.effects[terrain] = 0
         end
       end

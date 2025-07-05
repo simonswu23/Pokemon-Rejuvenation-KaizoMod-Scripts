@@ -1712,29 +1712,31 @@ BOSSINFOHASH = {
     },
     :DARCHGIRATINA => {
         :name => "Clown Caricature",
-        :shieldCount => 3,
+        :shieldCount => 4,
         :immunities => {},
         :moninfo => {
             :species => :GIRATINA,
-            :level => 64,
+            :level => 100,
             :moves => [:SLUDGEWAVE,:DRAGONPULSE,:DARKPULSE,:FIREBLAST],
             :nature => :NAUGHTY,
             :iv => 31,
-            :ev => [85,85,85,85,85,85]
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
-            3 => {
+            4 => {
                 :threshold => 0,
-                :speciesUpdate => :PORYGONZ,
+                :speciesUpdate => :XURKITREE,
+                :movesetUpdate => [:FUSIONBOLT,:FUSIONFLARE,:GLACIATE,:TRUMPCARD],
                 :message => "a Vir us in  d e  ed ",
                 :abilitychange => :WONDERGUARD,
-                :itemchange => :TOXICORB,
+                :itemchange => :AIRBALLOON,
             },
-            2 => {
+            3 => {
                 :threshold => 0,
                 :speciesUpdate => :BLACEPHALON,
-                :movesetUpdate => [:MINDBLOWN,:SHADOWBALL,:NASTYPLOT,:PRESENT],
+                :movesetUpdate => [:SUNSTEELSTRIKE,:MOONGEISTBEAM,:PHOTONGEYSER,:PRESENT],
                 :message => "F u n t i m e s w i t h e v e r y o n e ' s b a d e n d i n g",
+                :abilitychange => :HUGEPOWER,
                 :statDropCure => true,
                 :bossStatChanges => {
                     PBStats::ATTACK => 1,
@@ -1744,10 +1746,26 @@ BOSSINFOHASH = {
                     PBStats::SPEED =>1                        
                 },
             },
+            2 => {
+                :threshold => 0,
+                :speciesUpdate => :ETERNATUS,
+                :formchange => 1,
+                :movesetUpdate => [:ETERNABEAM,:ACIDROCK,:CENTIFERNO,:KINGTIDE],
+                :message => "What is THIS?!?!?!?!?!???!?!",
+                :abilitychange => :IMPOSTER,
+            },
             1 => {
                 :threshold => 0,
-                :speciesUpdate => :PIDGEY,
-                :message => "Can you even beat a Pidgey? Likely not.",
+                :speciesUpdate => :SHEDINJA,
+                :abilitychange => :STURDY,
+                :statusCure => true,
+                :effectClear => true,
+                :bossEffect => :MagicCoat, # effect that applies on the boss when breaking shield
+                :bossEffectduration => true, # duration of the effect(some effects are booleans, double check)
+                :bossEffectMessage => "{1} shrouded itself with Magic Coat!", # message that plays for the effect
+                :movesetUpdate => [:ENDEAVOR,:EXTREMESPEED,:FORESIGHT,:SPECTRALTHIEF],
+                :itemchange => :SAFETYGOGGLES,
+                :message => "Can you even beat a Pidgey? Likely not... wait, that's not a Pidgey!",
             }
         }
     },
@@ -1829,60 +1847,38 @@ BOSSINFOHASH = {
         },
         :onBreakEffects => {
 
-        # :statusCure => true, # if status is cured when shield is broken
-        #         :effectClear => true, # if effects are cleared when shield is broken
-        #         :bossSideStatusChanges => [:PARALYSIS,"Paralysis"], # what status gets inflicted on a boss/player pokemon when shield is broken. array has 2 elements, first the status symbol, then a string for the animation
-        #         :playerSideStatusChanges => [:PARALYSIS,"Paralysis"], # what status gets inflicted on a boss/player pokemon when shield is broken. array has 2 elements, first the status symbol, then a string for the animation
-        #         :statDropCure => true, # if statdrops are negated when shield is broken
-        #         :playerEffects => :Curse, # effects applied upon enemies on breaking shield
-        #         :playerEffectsduration => true, # enemy effect durration
-        #         :playerEffectsAnimation => :CURSE, # enemyeffect animation
-        #         :playerEffectsMessage => "A curse was inflicted on the opposing side!", # enemy effect message
-        #         :stateChanges => :TrickRoom, # handles state changes found in the Battle_Global class(in Battle_ActiveSide file + Trick Room
-        #         :stateChangeAnimation => :TRICKROOM, # state change animation
-        #         :stateChangeCount => 5, # state change turncount
-        #         :stateChangeMessage => "The dimensions were changed!", # statechange messages
-        #         :playersideChanges => :ToxicSpikes, # handles side changes found in the Battle_Side class(in Battle_ActiveSide file) 
-        #         :playersideChangeAnimation => :TOXICSPIKES, # side change animation
-        #         :playersideChangeCount => 1, # side change turncount
-        #         :playersideChangeMessage => "Toxic Spikes was set up!", # statechange messages
-        #         :bosssideChanges => :ToxicSpikes, # handles side changes found in the Battle_Side class(in Battle_ActiveSide file) 
-        #         :bosssideChangeAnimation => :TOXICSPIKES, # side change animation
-        #         :bosssideChangeCount => 1, # side change turncount
-        #         :bosssideChangeMessage => "Toxic Spikes was set up!", # statechange messages
-        #         :itemchange => :LEFTOVERS, # item that is given upon breaking shield
-
             3 => {
                 :threshold => 0,
                 :message => "Garbodor gorged itself on rotten berries!",
                 :typeChange => [:POISON,:GRASS],
-                :movesetUpdate => [:DRAINPUNCH,:GIGADRAIN,:LAVAPLUME,:BELCH],
-                :itemchange => :SITRUSBERRY,
+                :movesetUpdate => [:DRAINPUNCH,:GIGADRAIN,:MAGMADRIFT,:BELCH],
+                :itemchange => :BLACKSLUDGE,
                 :bossStatChanges => {
-                    PBStats::ATTACK => 1,
-                    PBStats::SPATK => 1,                
+                    PBStats::ATTACK => 2,
+                    PBStats::SPATK => 2,                
                 },
                 :statDropCure => true,
-                :statusCure => true,
-                :effectClear => true,
+                :instantMove => [:ACIDDOWNPOUR2, 0],
             },
             2 => {
                 :threshold => 0,
                 :message => "Garbodor gorged itself on scrap metal!",
                 :typeChange => [:POISON,:STEEL],
-                :movesetUpdate => [:DRAINPUNCH,:GIGADRAIN,:GYROBALL,:BELCH],
-                :itemchange => :METALCOAT,
+                :movesetUpdate => [:SLUDGEWAVE,:GIGADRAIN,:GYROBALL,:MAGMADRIFT],
+                :itemchange => :BLACKSLUDGE,
                 :bossStatChanges => {
-                    PBStats::DEFENSE => 1,
-                    PBStats::SPDEF => 1,                
+                    PBStats::DEFENSE => 2,
+                    PBStats::SPDEF => 2,                
                 },
                 :statDropCure => true,
+                :instantMove => [:ACIDDOWNPOUR2, 0],
             },
             1 => {
                 :threshold => 0,
                 :message => "Garbodor desperately gorged itself on nearby rocks!",
                 :typeChange => [:POISON,:ROCK],
-                :movesetUpdate => [:SALTCURE,:SHOREUP,:DIAMONDSTORM,:BELCH],
+                :movesetUpdate => [:SALTCURE,:SHOREUP,:DIAMONDSTORM,:SLUDGEWAVE],
+                :abilitychange => :EARTHEATER,
                 :itemchange => :ROCKYHELMET,
                 :bossStatChanges => {
                     PBStats::ATTACK => 2,
@@ -1890,6 +1886,8 @@ BOSSINFOHASH = {
                     PBStats::SPATK => 2,   
                     PBStats::SPDEF => -1,                
                 },
+                :instantMove => [:ACIDDOWNPOUR2, 0],
+                :effectClear => true,
                 :statDropCure => true,
             },
         }

@@ -1,21 +1,170 @@
-    def pbGetTutorableMoves
-        tutormoveslist = []
-        if !($Trainer.tutorlist)
-            $Trainer.tutorlist=[]
-        end
-        if $Trainer.tutorlist.any?{|i| i.is_a?(Integer) }
-          for i in 0...$Trainer.tutorlist.length
-            next if !$Trainer.tutorlist[i].is_a?(Integer)
-            for j in $cache.moves.keys
-              if $cache.moves[j].checkFlag?(:ID) == $Trainer.tutorlist[i]
-                $Trainer.tutorlist[i] = $cache.moves[j].move
-              end
-            end
+def pbGetTutorableMoves
+  tutormoves = [
+    # Group 1
+    [
+      :INFESTATION, :WHIRLPOOL, :FLASH, :HIDDENPOWER, :MAGICALLEAF,
+      :BIND, :COVET, :BLOCK, :SPITE, :SWIFT,
+      :AFTERYOU, :GRAVITY, :MAGICCOAT, :VENOMDRENCH, :POISONSWEEP
+    ],
+
+    # Group 2
+    [
+      :QUASH, :ROCKSMASH, :ECHOEDVOICE, :SECRETPOWER, :EMBARGO,
+      :VENOSHOCK, :FIRESPIN, :FLAMECHARGE, :STACKINGSHOT
+    ],
+
+    # Group 3
+    [
+      :PROTECT, :CUT, :FALSESWIPE, :FACADE
+    ],
+
+    # Group 4
+    [
+      :RECYCLE, :WORRYSEED, :SNORE, :SHOCKWAVE, :WATERPULSE,
+      :SNATCH, :WONDERROOM, :MAGICROOM, :ROLEPLAY, :BULLDOZE,
+      :SCREECH, :PAYDAY, :ROUND, :PAYBACK, :INCINERATE,
+      :ROCKTOMB, :SHADOWBALL
+    ],
+
+    # Group 5
+    [
+      :NATUREPOWER, :CONFIDE, :ATTRACT, :BRINE, :ASSURANCE,
+      :BULLETSEED
+    ],
+
+    # Group 6
+    [
+      :SURF, :SUPERFANG, :TRICK, :DUALCHOP, :HELPINGHAND,
+      :GIGADRAIN, :SYNTHESIS, :MAGNETRISE, :UPROAR, :TELEKINESIS,
+      :STRUGGLEBUG, :CROSSPOISON, :HEX, :SANDTOMB, :POWERUPPUNCH,
+      :FLING, :LOWSWEEP, :SWAGGER, :RAZORSHELL, :BEATUP,
+      :SKYDROP, :REST, :THIEF, :PINMISSILE, :TORMENT,
+      :BRUTALSWING, :SLEEPTALK, :CHARGEBEAM, :MUDBARRAGE,
+      :IRRITATION, :XSCISSOR
+    ],
+
+    # Group 7
+    [
+      :ROAR, :SAFEGUARD, :ROCKCLIMB, :MUDSHOT, :DELUGE,
+      :WORKUP, :ROCKPOLISH, :SHADOWCLAW, :DOUBLETEAM
+    ],
+
+    # Group 8
+    [
+      :BUGBITE, :BOUNCE, :DRILLRUN, :ELECTROWEB, :GASTROACID,
+      :FOCUSENERGY, :SKILLSWAP, :SIGNALBEAM, :COACHING, :AVALANCHE,
+      :ZAPCANNON, :METRONOME, :RETALIATE, :DYANMICPUNCH, :VACUUMWAVE,
+      :TRIATTACK, :ICEFANG, :FIREFANG, :THUNDERFANG, :PSYCHOCUT,
+      :BREAKINGSWIPE, :THUNDERWAVE, :HAIL, :FROSTBREATH, :MAGMADRIFT,
+      :POWERSWAP, :GUARDSWAP, :SPEEDSWAP, :SCARYFACE, :ICICLESPEAR,
+      :TAILSLAP, :ROCKBLAST, :STEELWING, :SLUDGEBOMB, :GRASSKNOT,
+      :FIREPUNCH, :ICEPUNCH, :THUNDERPUNCH, :HEALBELL, :BURNINGJEALOUSY,
+      :SKITTERSMACK, :STOMPINGTANTRUM, :IRONTAIL, :ENDEAVOR,
+      :IRONDEFENSE, :LASHOUT, :CORROSIVEGAS, :FIREPLEDGE,
+      :WATERPLEDGE, :GRASSPLEDGE, :OVERHEAT
+    ],
+
+    # Group 9
+    [
+      :TRICKROOM, :AERIALACE, :POISONJAB, :FAKETEARS,
+      :FRUSTRATION, :PSYCHUP, :EXPLOSION, :VOLTSWITCH
+    ],
+
+    # Group 10
+    [
+      :AQUATAIL, :LASERFOCUS, :SPIKES, :REVERSAL, :ENDURE,
+      :AMNESIA, :ELECTROBALL, :ALLYSWITCH, :HYPERVOICE,
+      :SELFDESTRUCT, :SLASHANDBURN, :DRAININGKISS, :SNARL,
+      :RAINDANCE, :AIRSLASH, :SMACKDOWN, :MEGAPUNCH,
+      :DARKPULSE, :ENERGYBALL
+    ],
+
+    # Group 11
+    [
+      :STRENGTH, :TAUNT, :LEECHLIFE, :SECRETPOWER, :EARTHPOWER,
+      :FOCUSPUNCH, :DRAINPUNCH, :PAINSPLIT, :MISTYEXPLOSION,
+      :FIREPLEDGE, :WATERPLEDGE, :GRASSPLEDGE, :DIVE,
+      :BRICKBREAK, :ROOST, :DREAMEATER, :PSYCHIC
+    ],
+
+    # Group 12
+    [
+      :SKYATTACK, :ICYWIND, :TAILWIND, :BATONPASS, :ENCORE,
+      :AGILITY, :CRUNCH, :FLAMETHROWER, :SOLARBLADE, :ACROBATICS
+    ],
+
+    # Group 13
+    [
+      :GIGAIMPACT, :SANDSTORM, :PHANTOMFORCE, :SKYATTACK,
+      :SKILLSWAP, :MAGNETRISE, :GRAVITY, :RECYCLE, :RETURN,
+      :FLY, :IRONHEAD, :FOULPLAY, :KNOCKOFF, :POLTERGEIST,
+      :BUGBUZZ, :LASTRESORT, :OUTRAGE, :LOWKICK, :STEELROLLER,
+      :POWERGEM, :INFESTATION, :THUNDERBOLT, :SUNNYDAY,
+      :SOLARBEAM, :WILLOWISP, :WEATHERBALL, :ICEBEAM,
+      :HONECLAWS, :MEGAKICK, :SUCKERPUNCH, :CHARM,
+      :EERIEIMPULSE, :GYROBALL, :ROCKSLIDE
+    ],
+
+    # Group 14
+    [
+      :SUPERPOWER, :HEATWAVE, :STEALTHROCK, :FUTURESIGHT,
+      :FLIPTURN, :REFLECT, :LIGHTSCREEN, :SMARTSTRIKE,
+      :BODYSLAM, :SEEDBOMB, :DRAGONPULSE, :MEGAHORN,
+      :SCORCHINGSANDS, :ZENHEADBUTT, :LIQUIDATION, :MUDDYWATER,
+      :DEFOG, :DUALWINGBEAT, :BULKUP, :WILDCHARGE, :ARENITEWALL
+    ],
+
+    # Group 15
+    [
+      :DIG, :GRASSYTERRAIN, :ELECTRICTERRAIN, :MISTYTERRAIN,
+      :PSYCHICTERRAIN, :SLUDGEWAVE, :SCALD, :SUBSTITUTE,
+      :WATERFALL, :UTURN, :DRAGONTAIL, :FLASHCANNON
+    ],
+
+    # Group 16 (Karma Files)
+    [
+      :DRACOMETEOR, :COSMICPOWER, :LEAFBLADE, :TOXICSPIKES,
+      :AURASPHERE, :HEAVYSLAM, :HEATCRASH, :GUNKSHOT,
+      :POLLENPUFF, :TERRAINPULSE
+    ]
+  ]
+
+  tutormoveslist = []
+
+  if (KAIZOMOD)
+    for i in 0..$Trainer.numbadges
+      for currmove in tutormoves[i]
+        for j in $cache.moves.keys
+          # Kernel.pbMessage(_INTL("Move: {1}", $cache.moves[j].move))
+
+          if $cache.moves[j].move == currmove
+            tutormoveslist.append($cache.moves[j].move)
           end
         end
-        $Trainer.tutorlist.each{|i| tutormoveslist.push(i) }
-        return tutormoveslist|[] # remove duplicates
+      end
     end
+  else
+
+    if !($Trainer.tutorlist)
+      $Trainer.tutorlist=[]
+    end
+
+    if $Trainer.tutorlist.any?{|i| i.is_a?(Integer) }
+      for i in 0...$Trainer.tutorlist.length
+        next if !$Trainer.tutorlist[i].is_a?(Integer)
+        for j in $cache.moves.keys
+          if $cache.moves[j].checkFlag?(:ID) == $Trainer.tutorlist[i]
+            $Trainer.tutorlist[i] = $cache.moves[j].move
+          end
+        end
+      end
+    end
+    $Trainer.tutorlist.each{|i| tutormoveslist.push(i) }
+
+  end
+
+  return tutormoveslist|[] # remove duplicates
+end
 
 
 
@@ -200,6 +349,8 @@
   
     def pbStartScreen
       moves=pbGetTutorableMoves
+      # Kernel.pbMessage(_INTL("MoveList: {1}", moves))
+
       if moves == []
         Kernel.pbMessage(_INTL("You don't have any registered moves."))
         return false

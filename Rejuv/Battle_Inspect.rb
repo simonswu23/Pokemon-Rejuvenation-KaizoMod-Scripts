@@ -48,7 +48,7 @@ PokeBattle_Battler.class_eval {
     if self.ability == :PLUS || self.ability == :MINUS
       if self.pbPartner.ability == :PLUS || self.pbPartner.ability == :MINUS
         atkmult = (atkmult * 1.5).round
-      elsif @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] > 0
+      elsif @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] != 0
         atkmult = (atkmult * 1.5).round
       end
     end
@@ -72,7 +72,7 @@ PokeBattle_Battler.class_eval {
     atkmult = (atkmult * 1.3).round if self.ability == :PROTOSYNTHESIS && self.effects[:Protosynthesis][0] == PBStats::SPATK # Gen 9 Mod - Added Protosynthesis
     atkmult = (atkmult * 0.75).round if @battle.pbCheckGlobalAbility(:TABLETSOFRUIN) && !self.ability == :TABLETSOFRUIN # Gen 9 Mod - Added Tablets of Ruin
     # Gen 9 Mod - Added Hadron Engine
-    atkmult = (atkmult * (5461 / 4096.to_f)).round if self.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION
+    atkmult = (atkmult * (5461 / 4096.to_f)).round if self.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) &&  @battle.FE != :FROZENDIMENSION
     atk = (atk * atkmult * 1.0 / 0x1000).round
     return atk
   end
@@ -305,7 +305,8 @@ def pbShowBattleStats(pkmn)
   report.push(_INTL("Syrup Bomb: {1}",pkmn.effects[:SyrupBomb])) if pkmn.effects[:SyrupBomb]>0 # Gen 9 Mod - Added Syrup Bomb
   report.push(_INTL("Syrup Bomb used by: {1}",@battle.battlers[pkmn.effects[:SyrupBombUser]].name)) if pkmn.effects[:SyrupBomb]>0 # Gen 9 Mod - Added Syrup Bomb
   report.push(_INTL("Air Balloon")) if pkmn.hasWorkingItem(:AIRBALLOON)
-  report.push(_INTL("Magnet Rise: {1} turns",pkmn.effects[:MagnetRise])) if pkmn.effects[:MagnetRise]!=0
+  report.push(_INTL("Magnet Rise: {1} turns",pkmn.effects[:MagnetRise])) if pkmn.effects[:MagnetRise]>0
+  report.push(_INTL("Magnet Rise: permanent")) if pkmn.effects[:MagnetRise]<0
   report.push(_INTL("Telekinesis: {1} turns",pkmn.effects[:Telekinesis])) if pkmn.effects[:Telekinesis]!=0
   report.push(_INTL("Heal Block: {1} turns",pkmn.effects[:HealBlock])) if pkmn.effects[:HealBlock]!=0
   if (KAIZOMOD)
@@ -333,10 +334,12 @@ def pbShowBattleStats(pkmn)
   report.push(_INTL("Arenite Wall: {1} turns",pkmn.pbOwnSide.effects[:AreniteWall])) if pkmn.pbOwnSide.effects[:AreniteWall]>0
   report.push(_INTL("Safeguard: {1} turns",pkmn.pbOwnSide.effects[:Safeguard])) if pkmn.pbOwnSide.effects[:Safeguard]>0
   report.push(_INTL("Lucky Chant: {1} turns",pkmn.pbOwnSide.effects[:LuckyChant])) if pkmn.pbOwnSide.effects[:LuckyChant]>0
+  report.push(_INTL("Lucky Chant: permanent")) if pkmn.pbOwnSide.effects[:LuckyChant]<0
   report.push(_INTL("Mist: {1} turns",pkmn.pbOwnSide.effects[:Mist])) if pkmn.pbOwnSide.effects[:Mist]>0
   #report.push(_INTL("Altered Field: {1} turns",@battle.state.effects[:Terrain])) if @battle.state.effects[:Terrain]>0
   #report.push(_INTL("Messed up Field: {1} turns",@battle.state.effects[:Splintered])) if @battle.state.effects[:Splintered]>0
-  report.push(_INTL("Electric Terrain: {1} turns",@battle.state.effects[:ELECTERRAIN])) if @battle.state.effects[:ELECTERRAIN]>0
+  report.push(_INTL("Electric Terrain: {1} turns",@battle.state.effects[:ELECTERRAIN])) if @battle.state.effects[:ELECTERRAIN] > 0
+  report.push(_INTL("Electric Terrain: permanent")) if @battle.state.effects[:ELECTERRAIN] < 0
   report.push(_INTL("Grassy Terrain: {1} turns",@battle.state.effects[:GRASSY])) if @battle.state.effects[:GRASSY]>0
   report.push(_INTL("Misty Terrain: {1} turns",@battle.state.effects[:MISTY])) if @battle.state.effects[:MISTY]>0
   report.push(_INTL("Psychic Terrain: {1} turns",@battle.state.effects[:PSYTERRAIN])) if @battle.state.effects[:PSYTERRAIN]>0

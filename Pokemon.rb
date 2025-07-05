@@ -1295,6 +1295,8 @@ end
 def hasGigaForm?
   v = $cache.pkmn[@species].formData.dig(:GigaForm)
   return false if !v
+  # @SWu Ferrothorn Exception (for Flora)
+  return true if @species == :FERROTHORN
   # check if current species form *can* Mega
   if !self.isGiga? # don't do this check if you are already a Mega
     k = $cache.pkmn[@species].formData.dig(:DefaultForm)
@@ -1366,7 +1368,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :VANILLUXE       then return true if move.move == :BLIZZARD
     when :MACHAMP         then return true if move.move == :CROSSCHOP
     when :CHARIZARD       then return true if move.move == :BLASTBURN
-    when :VENUSUAR        then return true if move.move == :FRENZYPLANT
+    when :VENUSAUR        then return true if move.move == :FRENZYPLANT
     when :BLASTOISE       then return true if move.move == :HYDROCANNON
     when :FERROTHORN      then return true if move.move == :POWERWHIP
     when :URSHIFU         then return true if move.move == :WICKEDBLOW

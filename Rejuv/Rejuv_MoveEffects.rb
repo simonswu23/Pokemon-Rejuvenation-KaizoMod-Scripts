@@ -861,6 +861,29 @@ def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=t
   @battle.pbAnimation(:DRAININGKISS,attacker,opponent,hitnum)
 end
 
+################################################################################
+# Blossom Storm
+################################################################################
+class PokeBattle_Move_902 < PokeBattle_Move
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
+    if opponent.damagestate.calcdamage>0
+      for stat in [PBStats::ATTACK,PBStats::SPDEF]
+        if attacker.pbCanReduceStatStage?(stat,false,true) && (@battle.pbWeather != :SUNNYDAY) && (attacker.crested != :CHERRIM)
+          attacker.pbReduceStat(stat,1,abilitymessage:false, statdropper: attacker)
+        end
+      end
+    end
+    return ret
+  end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    @battle.pbAnimation(:PETALBLIZZARD,attacker,opponent,hitnum)
+  end
+end
+
 ### Giga Moves Below ###
 
 # Resonance
@@ -1089,7 +1112,7 @@ class PokeBattle_Move_1002 < PokeBattle_Move
       end
     end
     if (@battle.state.effects[:PSYTERRAIN] > 0 || @battle.state.effects[:GRASSY] > 0 ||
-      @battle.state.effects[:ELECTERRAIN] > 0 || @battle.state.effects[:MISTY] > 0)
+      @battle.state.effects[:ELECTERRAIN] != 0 || @battle.state.effects[:MISTY] > 0)
       @battle.state.effects[:PSYTERRAIN] = 0
       @battle.state.effects[:GRASSY] = 0
       @battle.state.effects[:ELECTERRAIN] = 0
@@ -1166,16 +1189,6 @@ end
 
 ### Wildfire
 class PokeBattle_Move_1004 < PokeBattle_Move
-  # def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-  #   ret=super(attacker,opponent,hitnum,alltargets,showanimation)
-  #   ret if !@battle.canChangeFE?
-  #   fieldbefore = @battle.field.effect
-  #   duration=2
-  #   duration=5 if attacker.hasWorkingItem(:AMPLIFIELDROCK)
-  #   @battle.setField(:VOLCANIC,duration)
-  #   @battle.pbDisplay(_INTL("The wildfire set the field ablaze!"))
-  #   return ret
-  # end
 
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret = super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
@@ -1201,7 +1214,7 @@ class PokeBattle_Move_1004 < PokeBattle_Move
 end
 
 ### Chi Strike
-class PokeBattle_Move_1004 < PokeBattle_Move
+class PokeBattle_Move_1005 < PokeBattle_Move
 
 
   def pbAdditionalEffect(attacker,opponent)
@@ -1215,6 +1228,32 @@ class PokeBattle_Move_1004 < PokeBattle_Move
     return if !showanimation
     # replacement anim until proper one is made
     @battle.pbAnimation(:ALLOUTPUMMELING,attacker,opponent,hitnum)
+  end
+end
+
+### Wildfire
+class PokeBattle_Move_1006 < PokeBattle_Move
+
+  def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    ret = super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
+    if !opponent.isFainted?
+      opponent.pbReduceHP((opponent.totalhp / 6.0).floor)
+      @battle.pbDisplay(_INTL("The Vine Lash hurt {1}!", opponent.pbThis(true)))
+    end
+    return ret
+  end
+
+  def pbAdditionalEffect(attacker,opponent)
+    return false if !opponent.pbCanParalyze?(false)
+    opponent.pbParalyze(attacker)
+    @battle.pbDisplay(_INTL("{1} was paralyzed!",opponent.pbThis))
+    return true
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    @battle.pbAnimation(:FRENZYPLANT,attacker,opponent,hitnum)
   end
 end
 

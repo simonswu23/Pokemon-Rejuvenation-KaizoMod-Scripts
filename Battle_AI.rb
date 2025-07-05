@@ -1394,7 +1394,7 @@ class PokeBattle_AI
       end
     end
     # Don't use powder moves if they don't do anything
-    if PBStuff::POWDERMOVES.include?(@move.move) && (@opponent.hasType?(:GRASS) || @opponent.ability == :OVERCOAT || (@mondata.oppitemworks && @opponent.item == :SAFETYGOGGLES))
+    if PBStuff::POWDERMOVES.include?(@move.move) && ((@opponent.hasType?(:GRASS) && @attacker.ability != :MYCELIUMMIGHT) || @opponent.ability == :OVERCOAT || (@mondata.oppitemworks && @opponent.item == :SAFETYGOGGLES))
       $ai_log_data[@attacker.index].final_score_moves.push(0)
       return 0
     end
@@ -2868,7 +2868,7 @@ class PokeBattle_AI
         end
       when 0x119 # Magnet Rise
         miniscore = magnocode()
-        miniscore*=1.3 if @mondata.skill>=BESTSKILL && (@battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY || @battle.FE == :SHORTCIRCUIT || @battle.state.effects[:ELECTERRAIN] > 0)
+        miniscore*=1.3 if @mondata.skill>=BESTSKILL && (@battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY || @battle.FE == :SHORTCIRCUIT || @battle.state.effects[:ELECTERRAIN] != 0)
       when 0x11a # Telekineis
         score = telecode()
       #when 0x11b # Sky Uppercut
@@ -3282,7 +3282,7 @@ class PokeBattle_AI
         miniscore *= selfstatdrop([0,1,0,0,0,0,0],score)
       when 0x308 # Meteor Beam
         miniscore = selfstatboost([0,0,1,0,0,0,0])
-        miniscore *= weaselslashcode() unless @battle.FE == :STARLIGHT || @battle.FE == :NEWWORLD
+        miniscore *= weaselslashcode() unless @battle.FE == :STARLIGHT || @battle.FE == :NEWWORLD || @battle.pbWeather == :SUNNYDAY
       when 0x309 # Shell Side Arm
         miniscore = poisoncode()
       when 0x313 # Burning Jealousy, # Gen 9 Mod - Alluring Voice
@@ -6080,7 +6080,7 @@ class PokeBattle_AI
 
   def phasecode
     # Gen 9 Mod - Added Guard Dog
-    return @move.basedamage > 0 ? 1 : 0 if @opponent.effects[:Ingrain] || @opponent.ability == :SUCTIONCUPS || @opponent.ability == :GUARDDOG || @opponent.pbNonActivePokemonCount==0 || @battle.FE == :COLOSSEUM
+    return @move.basedamage > 0 ? 1 : 0 if (@opponent.effects[:Ingrain] && @battle.FE != :BEWITCHED) || @opponent.ability == :SUCTIONCUPS || @opponent.ability == :GUARDDOG || @opponent.pbNonActivePokemonCount==0 || @battle.FE == :COLOSSEUM
     return @move.basedamage > 0 ? 1 : 0 if @opponent.effects[:PerishSong]>0 || @opponent.effects[:Yawn]>0
     miniscore=1.0
     miniscore*=0.8 if pbAIfaster?()
@@ -6194,7 +6194,7 @@ class PokeBattle_AI
 
   def meanlookcode
     miniscore=1.0
-    if @opponent.effects[:MeanLook]>=0 || @opponent.effects[:Ingrain] ||
+    if @opponent.effects[:MeanLook]>=0 || (@opponent.effects[:Ingrain] && @battle.FE != :BEWITCHED) ||
       (@opponent.hasType?(:GHOST) && @move.move == :THOUSANDWAVES) ||
       secondaryEffectNegated?() || @opponent.effects[:Substitute]>0 || @battle.pbPokemonCount(@battle.pbPartySingleOwner(@opponent.index))==1
       return (@move.basedamage > 0) ? miniscore : 0
@@ -6602,7 +6602,7 @@ class PokeBattle_AI
   end
 
   def powdercode
-    return 0 if @opponent.hasType?(:GRASS) || @opponent.ability == :OVERCOAT || (@mondata.oppitemworks && @opponent.item == :SAFETYGOGGLES)
+    return 0 if (@opponent.hasType?(:GRASS) && @attacker.ability != :MYCELIUMMIGHT) || @opponent.ability == :OVERCOAT || (@mondata.oppitemworks && @opponent.item == :SAFETYGOGGLES)
     return 0 if getAIMemory().length >= 4 && !getAIMemory().any? {|moveloop| moveloop!=nil && moveloop.pbType(@opponent)==:FIRE}
     # Gen 9 Mod - Discourage status moves when current opponent has Good as Gold
     return 0 if @opponent.ability == :GOODASGOLD && @move.category == :status && !(moldBreakerCheck(@attacker) || myceliumMightCheck(@attacker))
@@ -6976,7 +6976,7 @@ class PokeBattle_AI
   def electricterraincode
     return @move.basedamage > 0 ? 1 : 0 if @battle.FE == :ELECTERRAIN || @battle.FE == :UNDERWATER || @battle.FE == :NEWWORLD || (Rejuv && @battle.FE == :DRAGONSDEN)
     if Rejuv && @battle.FE != :INDOOR
-      return @move.basedamage > 0 ? 1 : 0 if @battle.state.effects[:ELECTERRAIN] > 0 || @battle.FE == :FROZENDIMENSION
+      return @move.basedamage > 0 ? 1 : 0 if @battle.state.effects[:ELECTERRAIN] != 0 || @battle.FE == :FROZENDIMENSION
       miniscore = 1
       miniscore*=1.5 if @attacker.ability == :SURGESURFER
       miniscore*=1.3 if @attacker.hasType?(:ELECTRIC)
@@ -6986,6 +6986,7 @@ class PokeBattle_AI
       miniscore*=1.6 if checkAImoves(PBStuff::SLEEPMOVE)
       miniscore*=2 if @mondata.attitemworks && @attacker.item == :AMPLIFIELDROCK
       miniscore*=3 if @attacker.ability == :HADRONENGINE # Gen 9 Mod - Added Hadron Engine
+      miniscore*=3 if @attacker.moves.any? {|moveloop| moveloop!=nil && moveloop.function==0x311}
     else
       miniscore = getFieldDisruptScore(@attacker,@opponent)
       miniscore*=1.5 if @attacker.ability == :SURGESURFER
@@ -7942,12 +7943,13 @@ class PokeBattle_AI
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
-      pri += 1 if battlermove.move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+      pri += 1 if (battlermove.move == :GRASSYGLIDE || battlermove.move == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+      pri += 1 if battlermove.move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
       pri += 1 if battlermove.move == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
       pri += 1 if battlermove.move == :ATTACKORDER && battler.crested == :VESPIQUEN
       pri += 3 if battler.ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(battlermove.function)
       pri -= 1 if @battle.FE == :DEEPEARTH && battlermove.move == :COREENFORCER
-      pri -= 2 if battler.ability == :MYCELIUMMIGHT && battlermove.basedamage == 0 && battler.effects[:TwoTurnAttack] == 0 # is Status Move # Gen 9 Mod - Added Mycelium Might
+      pri -= 2 if !KAIZOMOD && battler.ability == :MYCELIUMMIGHT && battlermove.basedamage == 0 && battler.effects[:TwoTurnAttack] == 0 # is Status Move # Gen 9 Mod - Added Mycelium Might
       # pri = -6 if battler.species == :CORVIKNIGHT && battler.giga && battlermove.move == :BRAVEBIRD
 
       priorityarray[index][0] = pri
@@ -9505,7 +9507,7 @@ class PokeBattle_AI
         if theseRoles.include?(:WEATHERSETTER)
           rolescore+=30
           # Gen 9 Mod - Added Orichalcum Pulse
-          if (i.ability == :DROUGHT) || (nonmegaform.ability == :DROUGHT) || i.pbHasMove?(:SUNNYDAY || i.ability == :ORICHALCUMPULSE)
+          if (i.ability == :DROUGHT) || (nonmegaform.ability == :DROUGHT) || i.pbHasMove?(:SUNNYDAY || i.ability == :ORICHALCUMPULSE) || i.crested == :CHERRIM
             rolescore+=60 if @battle.weather!=:SUNNYDAY
           elsif (i.ability == :DRIZZLE) || (nonmegaform.ability == :DRIZZLE) || i.pbHasMove?(:RAINDANCE)
             rolescore+=60 if @battle.weather!=:RAINDANCE
@@ -9672,7 +9674,7 @@ class PokeBattle_AI
             abilityscore += 40 if @opponent.pbPartner.attack > @opponent.pbPartner.spatk
           when :PRESSURE
             abilityscore += 40 if @opponent.spatk > @opponent.attack
-            abilityscore += 40 if @opponent.pbPartner.spatk > @opponent.pbPartner.atk
+            abilityscore += 40 if @opponent.pbPartner.spatk > @opponent.pbPartner.attack
           when :UNNERVE
             abilityscore += 40
             abilityscore += 10 if pbGetMonRoles(@opponent).include?(:SWEEPER)
@@ -10855,7 +10857,7 @@ class PokeBattle_AI
       mon.stages[PBStats::SPEED] += 1 if mon.pbAnticipationShudder
     end
     # Steadfast
-    if mon.ability==:STEADFAST && ((Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] > 0)
+    if mon.ability==:STEADFAST && ((Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] != 0)
       mon.stages[PBStats::SPEED]+=1
     end
     # Light Metal
@@ -11369,7 +11371,7 @@ class PokeBattle_AI
           end
         when :SHORTCIRCUIT
           if type == :ELECTRIC
-            damageroll = @battle.field.getRoll(update_roll: false, maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+            damageroll = @battle.field.getRoll(update_roll: false, maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
             damageroll = ((damageroll - 1.0) / 2.0) + 1.0 if $game_variables[:DifficultyModes] == 1 && !$game_switches[:FieldFrenzy]
             damageroll = ((damageroll - 1.0) * 2.0) + 1.0 if $game_variables[:DifficultyModes] != 1 && $game_switches[:FieldFrenzy] && damageroll > 1
             damageroll = damageroll / 2.0 if $game_variables[:DifficultyModes] != 1 && $game_switches[:FieldFrenzy] && damageroll < 1
@@ -11490,7 +11492,7 @@ class PokeBattle_AI
             partner = attacker.pbPartner
             if partner.ability == :PLUS || partner.ability == :MINUS
               atk = (atk * 1.5).round
-            elsif (@battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] > 0) && @mondata.skill >= BESTSKILL
+            elsif (@battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] != 0) && @mondata.skill >= BESTSKILL
               atk = (atk * 1.5).round
             end
           end
@@ -11527,7 +11529,7 @@ class PokeBattle_AI
         when :PROTOSYNTHESIS then basedamage = (basedamage * 1.3).round if (attacker.effects[:Protosynthesis][0] == PBStats::ATTACK && move.pbIsPhysical?(type)) || (attacker.effects[:Protosynthesis][0] == PBStats::SPATK && move.pbIsSpecial?(type))
         # Gen 9 Mod - Hadron Engine
         when :HADRONENGINE
-          if ((@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && move.pbIsSpecial?(type)) &&  @battle.FE != :FROZENDIMENSION
+          if ((@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) && move.pbIsSpecial?(type)) &&  @battle.FE != :FROZENDIMENSION
             basedamage=(basedamage*((5461/4096.to_f))).round
           end
         # Gen 9 Mod - Orichalcum Pulse
@@ -11556,7 +11558,7 @@ class PokeBattle_AI
         when :AERILATE then basedamage = [:MOUNTAIN, :SNOWYMOUNTAIN, :SKY].include?(@battle.FE) ? (basedamage * 1.5).round : (basedamage * 1.3).round if move.type == :NORMAL
         when :GALVANIZE
           if move.type == :NORMAL
-            if @battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY || @battle.state.effects[:ELECTERRAIN] > 0 # Electric or Factory Fields
+            if @battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY || @battle.state.effects[:ELECTERRAIN] != 0 # Electric or Factory Fields
               basedamage = (basedamage * 1.5).round
             elsif @battle.FE == :SHORTCIRCUIT # Short-Circuit Field
               basedamage = (basedamage * 2).round
@@ -12113,6 +12115,8 @@ class PokeBattle_AI
       when :SIMISAGE then typecrest = true if type == :FIRE
       when :GOTHITELLE then typecrest = true if type == :PSYCHIC || type == :DARK
       when :REUNICLUS then typecrest = true if type == :PSYCHIC || type == :FIGHTING
+      when :PLUSLE then typecrest = true if type == :FIRE
+      when :MINUN then tyepcrest = true if type == :ICE
       when :ZOROARK
         party = @battle.pbParty(attacker.index)
         party = party.find_all { |item| item && !item.egg? && item.hp > 0 }
@@ -12622,10 +12626,10 @@ class PokeBattle_AI
           return (basedamage*19/6).floor
         end
       when 0x30A # Misty explosion
-        return basedamage * 1.5 if @battle.FE == :MISTY || @battle.state.effects[:MISTY] > 0
+        return basedamage * 2 if @battle.FE == :MISTY || @battle.state.effects[:MISTY] > 0
       when 0x311 # Rising Voltage, # Gen 9 Mod - Psyblade
-        return basedamage*2 if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && !opponent.isAirborne? && @move.move == :RISINGVOLTAGE
-        return basedamage*1.5 if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && !opponent.isAirborne? && @move.move == :PSYBLADE
+        return basedamage*2 if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) && !opponent.isAirborne? && (@move.move == :RISINGVOLTAGE || @move.move == :POWERSURGE)
+        return basedamage*1.5 if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) && @move.move == :PSYBLADE
       when 0x314 # Lash Out
         # I GENUINELY do not know when this moves condition is ever gonna be fulfilled while the AI choses a move but just in case - Fal
         return basedamage*2 if attacker.effects[:LashOut]
