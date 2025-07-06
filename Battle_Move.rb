@@ -401,10 +401,10 @@ class PokeBattle_Move
     calcspatkmult *= 2 if attacker.hasWorkingItem(:DEEPSEATOOTH) && attacker.pokemon.species == :CLAMPERL
     calcspatkmult *= 2 if attacker.hasWorkingItem(:LIGHTBALL) && attacker.pokemon.species == :PIKACHU
     calcspatkmult *= 1.5 if attacker.ability == :FLAREBOOST && (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && @battle.FE != :FROZENDIMENSION
-    calcspatkmult *= 1.5 if !KAIZOMOD && [:MINUS, :PLUS].include?(attacker.ability) && ([:MINUS, :PLUS].include?(attacker.pbPartner.ability) || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
+    calcspatkmult *= 1.5 if [:MINUS, :PLUS].include?(attacker.ability) && ([:MINUS, :PLUS].include?(attacker.pbPartner.ability) || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] != 0
     calcspatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY) && @battle.FE != :FROZENDIMENSION
     # Gen 9 Mod - Added Hadron Engine
-    calcspatkmult *= (5461 / 4096.to_f) if attacker.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) &&  @battle.FE != :FROZENDIMENSION
+    calcspatkmult *= (5461 / 4096.to_f) if attacker.ability == :HADRONENGINE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) &&  @battle.FE != :FROZENDIMENSION
     calcspatkmult *= 1.3 if attacker.pbPartner.ability == :BATTERY && Rejuv
     calcspatkmult *= 2 if attacker.ability == :PUREPOWER && @battle.FE == :PSYTERRAIN
     # end spatk boosts
@@ -634,15 +634,15 @@ class PokeBattle_Move
       mod2 = 2 if otype2 == :DRAGON && opponent.ability == :MULTISCALE && !opponent.moldbroken && mod2 > 2
     end
     if @battle.FE == :BEWITCHED
-      mod1 = 2 if otype1 == :FAIRY && (opponent.ability == :PASTELVEIL || opponent.pbPartner.ability == :PASTELVEIL) && !opponent.moldbroken && mod1 > 2
-      mod2 = 2 if otype2 == :FAIRY && (opponent.ability == :PASTELVEIL || opponent.pbPartner.ability == :PASTELVEIL) && !opponent.moldbroken && mod2 > 2
+      mod1 = 0 if (opponent.ability == :PASTELVEIL || opponent.pbPartner.ability == :PASTELVEIL) && !opponent.moldbroken && type == :POISON
+      mod2 = 0 if (opponent.ability == :PASTELVEIL || opponent.pbPartner.ability == :PASTELVEIL) && !opponent.moldbroken && type == :POISON   
     end
     # effects that ignore Inverse battles entirely
     if @move == :VENAMSKISS || @move == :ACIDROCK
       mod1 = 4 if otype1 == :STEEL
       mod2 = 4 if otype2 == :STEEL
     end
-    if @move == :ACIDROCK
+    if @move == :ACIDROCK || @move == :ACIDDOWNPOUR2
       mod1 = 1 if otype1 == :STEEL
       mod2 = 1 if otype2 == :STEEL
     end
@@ -827,7 +827,7 @@ class PokeBattle_Move
     if (opponent.ability == :STORMDRAIN && type == :WATER) || (opponent.ability == :LIGHTNINGROD && type == :ELECTRIC) && !(opponent.moldbroken)
       if opponent.pbCanIncreaseStatStage?(PBStats::SPATK)
         if (Rejuv && @battle.FE == :SHORTCIRCUIT) && opponent.ability == :LIGHTNINGROD
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           statboosts = [1,2,0,1,3]
           arrStatTexts=[_INTL("{1}'s {2} raised its Special Attack!",opponent.pbThis,getAbilityName(opponent.ability)), _INTL("{1}'s {2} sharply raised its Special Attack!",opponent.pbThis,getAbilityName(opponent.ability)),
             _INTL("{1}'s {2} drastically raised its Special Attack!",opponent.pbThis,getAbilityName(opponent.ability))]
@@ -864,7 +864,7 @@ class PokeBattle_Move
           @battle.pbDisplay(_INTL("{1}'s {2} sharply raised its Speed!",
           opponent.pbThis,negator))
         elsif (Rejuv && @battle.FE == :SHORTCIRCUIT)
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           statboosts = [1,2,0,1,3]
           arrStatTexts=[_INTL("{1}'s {2} raised its Speed!",opponent.pbThis,negator), _INTL("{1}'s {2} sharply raised its Speed!",opponent.pbThis,negator),
             _INTL("{1}'s {2} drastically raised its Speed!",opponent.pbThis,negator)]
@@ -902,7 +902,7 @@ class PokeBattle_Move
           negator = "unquenchable thirst" if (Rejuv && @battle.FE == :DESERT) && (opponent.hasType?(:GRASS) || opponent.hasType?(:WATER)) && @battle.pbWeather == :SUNNYDAY
         end
         if (Rejuv && @battle.FE == :SHORTCIRCUIT) && opponent.ability == :VOLTABSORB
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           if opponent.pbRecoverHP(((opponent.totalhp/4.0)*damageroll).floor,true)>0
             @battle.pbDisplay(_INTL("{1}'s {2} restored its HP!",
               opponent.pbThis,negator))
@@ -1010,7 +1010,7 @@ class PokeBattle_Move
           return 0
         end
       when :VANILLUXE
-        if type == :FIRE && @battle.weather == :HAIL
+        if type == :FIRE && @battle.pbWeather == :HAIL
           @battle.pbDisplay(_INTL("{1}'s {2} made {3} useless in the hail!",
               opponent.pbThis,getItemName(opponent.item),self.name))
           return 0
@@ -1035,7 +1035,7 @@ class PokeBattle_Move
        (opponent.ability == :LIGHTNINGROD && (type == :ELECTRIC || (!secondtype.nil? && secondtype.include?(:ELECTRIC))))) && !opponent.moldbroken
       if opponent.pbCanIncreaseStatStage?(PBStats::SPATK)
         if (Rejuv && @battle.FE == :SHORTCIRCUIT) && opponent.ability == :LIGHTNINGROD
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           statboosts = [1, 2, 0, 1, 3]
           arrStatTexts = [
             _INTL("{1}'s {2} raised its Special Attack!", opponent.pbThis, getAbilityName(opponent.ability)),
@@ -1074,7 +1074,7 @@ class PokeBattle_Move
           @battle.pbCommonAnimation("StatUp", opponent, nil)
           @battle.pbDisplay(_INTL("{1}'s {2} sharply raised its Speed!", opponent.pbThis, negator))
         elsif Rejuv && @battle.FE == :SHORTCIRCUIT
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           statboosts = [1, 2, 0, 1, 3]
           arrStatTexts = [
             _INTL("{1}'s {2} raised its Speed!", opponent.pbThis, negator),
@@ -1115,7 +1115,7 @@ class PokeBattle_Move
           negator = "unquenchable thirst" if (Rejuv && @battle.FE == :DESERT) && (opponent.hasType?(:GRASS) || opponent.hasType?(:WATER)) && @battle.pbWeather == :SUNNYDAY
         end
         if Rejuv && @battle.FE == :SHORTCIRCUIT && opponent.ability == :VOLTABSORB
-          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll: (@battle.state.effects[:ELECTERRAIN] != 0))
           if opponent.pbRecoverHP(((opponent.totalhp / 4.0) * damageroll).floor, true) > 0
             @battle.pbDisplay(_INTL("{1}'s {2} restored its HP!", opponent.pbThis, negator))
           else
@@ -1168,7 +1168,7 @@ class PokeBattle_Move
           return 0
         end
       when :VANILLUXE
-        if type == :FIRE && @battle.weather == :HAIL
+        if type == :FIRE && @battle.pbWeather == :HAIL
           @battle.pbDisplay(_INTL("{1}'s {2} made {3} useless in the hail!",
               opponent.pbThis,getItemName(opponent.item),self.name))
           return 0
@@ -1400,6 +1400,7 @@ class PokeBattle_Move
     return true if @battle.FE == :MIRROR && (PBFields::BLINDINGMOVES + [:MIRRORSHOT]).include?(@move)
     return true if (@battle.FE == :UNDERWATER || @battle.FE == :WATERSURFACE) && @move == :ORIGINPULSE
     return true if (@battle.FE == :VOLCANIC || @battle.FE == :VOLCANICTOP) && @move == :PRECIPICEBLADES
+    return true if @battle.ProgressiveFieldCheck(PBFields::CONCERT) && @move == :SONICBOOM
 
     # One-hit KO accuracy handled elsewhere
     if @function == 0x08 || @function == 0x15 # Thunder, Hurricane
@@ -1486,7 +1487,7 @@ class PokeBattle_Move
   def pbCritRate?(attacker, opponent)
     return -1 if self.is_a?(PokeBattle_Confusion)
     return -1 if (opponent.ability == :BATTLEARMOR || opponent.ability == :SHELLARMOR) && !opponent.moldbroken
-    return -1 if opponent.pbOwnSide.effects[:LuckyChant] > 0 || (KAIZOMOD && opponent.pbOwnSide.effects[:LuckyWind] > 0)
+    return -1 if opponent.pbOwnSide.effects[:LuckyChant] != 0 || (KAIZOMOD && opponent.pbOwnSide.effects[:LuckyWind] > 0)
     return 3 if attacker.effects[:LaserFocus] > 0 || @function == 0xA0 || @function == 0x319 || @function == 0x90B # Frost Breath, Surging Strikes, # Gen 9 Mod - Added Flower Trick
     return 3 if @function == 0x201 && attacker.hp <= ((attacker.totalhp) * 0.5).floor # Gale Strike
     return 3 if attacker.ability == :MERCILESS && (opponent.status == :POISON || @battle.FE == :CORROSIVEMIST || ([:CORROSIVE, :WASTELAND, :MURKWATERSURFACE].include?(@battle.FE) && !attacker.isAirborne?))
@@ -1513,6 +1514,7 @@ class PokeBattle_Move
     end
     c += 1 if attacker.hasWorkingItem(:RAZORCLAW)
     c += 1 if attacker.hasWorkingItem(:SCOPELENS)
+    c += 1 if attacker.pbOwnSide.effects[:LuckyChant] != 0
     c += 2 if @move == :HYDROSNIPE
     c += 3 if sharpMove? && attacker.crested == :SAMUROTT
     c += 1 if attacker.crested == :FEAROW # Fearow Crest
@@ -1651,7 +1653,7 @@ class PokeBattle_Move
             when :ELECTERRAIN, :FACTORY then basemult *= 1.5
             when :SHORTCIRCUIT then basemult *= 2
             else
-              if @battle.state.effects[:ELECTERRAIN] > 0
+              if @battle.state.effects[:ELECTERRAIN] != 0
                 basemult *= 1.5
               else
                 basemult *= 1.3
@@ -1881,7 +1883,7 @@ class PokeBattle_Move
         end
       when :SHORTCIRCUIT
         if type == :ELECTRIC
-          damageroll = @battle.field.getRoll(maximize_roll:(@battle.state.effects[:ELECTERRAIN] > 0))
+          damageroll = @battle.field.getRoll(maximize_roll:(@battle.state.effects[:ELECTERRAIN] != 0))
           messageroll = ["Bzzt.", "Bzzapp!" , "Bzt...", "Bzap!", "BZZZAPP!"][PBStuff::SHORTCIRCUITROLLS.index(damageroll)]
           @battle.pbDisplay(messageroll) if !@fieldmessageshown
           damageroll = ((damageroll-1.0)/2.0)+1.0 if $game_variables[:DifficultyModes]==1 && !$game_switches[:FieldFrenzy]
@@ -2050,7 +2052,7 @@ class PokeBattle_Move
           partner=attacker.pbPartner
           if partner.ability == :PLUS || partner.ability == :MINUS
             atkmult*=1.5
-          elsif @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] > 0
+          elsif @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN) || @battle.state.effects[:ELECTERRAIN] != 0
             atkmult*=1.5
           end
         end
@@ -2069,7 +2071,7 @@ class PokeBattle_Move
       # Gen 9 Mod - Added Protosynthesis, Hadron Engine and Orichalcum Pulse
       when :PROTOSYNTHESIS then atkmult*=1.3 if (attacker.effects[:Protosynthesis][0] == PBStats::ATTACK && pbIsPhysical?(type)) || (attacker.effects[:Protosynthesis][0] == PBStats::SPATK && pbIsSpecial?(type))
       when :ORICHALCUMPULSE then atkmult*=(5461/4096.to_f) if (@battle.pbWeather== :SUNNYDAY && pbIsPhysical?(type)) &&  @battle.FE != :FROZENDIMENSION
-      when :HADRONENGINE then atkmult*=(5461/4096.to_f) if ((@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && pbIsSpecial?(type)) &&  @battle.FE != :FROZENDIMENSION
+      when :HADRONENGINE then atkmult*=(5461/4096.to_f) if ((@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) && pbIsSpecial?(type)) &&  @battle.FE != :FROZENDIMENSION
     end
 
     if (attacker.pbPartner.ability == :PLUS || attacker.ability == :PLUS)
@@ -2192,6 +2194,7 @@ class PokeBattle_Move
     end
     if attacker.ability != :UNAWARE
       defstage = 6 if @function == 0xA9 # Chip Away (ignore stat stages)
+      defstage = 6 if @move == :PUNISHMENT
       defstage = 6 if opponent.damagestate.critical && defstage > 6
       defense = (defense * PBStats::StageMul[defstage]).floor
     end
@@ -2358,15 +2361,15 @@ class PokeBattle_Move
     # Gen 9 Mod - Added Hydro Steam's Damage Calc in Sunny Weather
     case type
       when :FIRE
-        damage*=1.5 if @battle.weather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
-        damage*=0.5 if @battle.weather == :RAINDANCE && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=1.5 if @battle.pbWeather == :SUNNYDAY && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=0.5 if @battle.pbWeather == :RAINDANCE && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=0.5 if opponent.ability == :WATERBUBBLE
       when :WATER
-        damage*=1.5 if @battle.weather == :RAINDANCE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=1.5 if @battle.pbWeather == :RAINDANCE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=0.5 if @battle.pbWeather == :SUNNYDAY && !@move == :HYDROSTEAM && !@move == :SPARKLINGARIA && !attacker.hasWorkingItem(:UTILITYUMBRELLA)
         damage*=2 if attacker.ability == :WATERBUBBLE
       when :ICE
-        damage*=1.5 if @battle.weather == :HAIL && attacker.crested == :VANILLUXE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
+        damage*=1.5 if @battle.pbWeather == :HAIL && attacker.crested == :VANILLUXE && !opponent.hasWorkingItem(:UTILITYUMBRELLA)
     end
     # Critical hits
     if opponent.damagestate.critical
@@ -2452,6 +2455,16 @@ class PokeBattle_Move
       end
       if opponent.pbOwnSide.effects[:AreniteWall] > 0 && opponent.damagestate.typemod > 4
         finalmult *= 0.5
+      end
+      if @battle.FE == :BEWITCHED && opponent.pbOwnSide.effects[:LuckyChant] != 0
+        # 1 in 20 chance to negate damage
+        if (@battle.pbRandom(20) == 0)
+          finalmult *= 0
+          @battle.pbDisplay(_INTL("The fairy chant dispelled the attack!"))
+        else
+          @battle.pbDisplay(_INTL("The fairy chant softened the attack!"))
+          finalmult *= 0.66
+        end
       end
     end
     finalmult *= 0.67 if opponent.crested == :BEHEEYEM && (!opponent.hasMovedThisRound? || @battle.switchedOut[opponent.index])
@@ -2753,7 +2766,8 @@ class PokeBattle_Move
     pri = self.priority
 
     pri = 0 if @zmove && @basedamage > 0
-    pri += 1 if @move == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+    pri += 1 if (@move == :GRASSYGLIDE || @move == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+    pri += 1 if @move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
     pri += 1 if @move == :SQUALL && (@battle.pbWeather == :HAIL)
     pri += 1 if @move == :ATTACKORDER && attacker.crested == :VESPIQUEN
     pri += 1 if @move == :QUASH && @battle.FE == :DIMENSIONAL
@@ -2763,7 +2777,7 @@ class PokeBattle_Move
     pri += 1 if attacker.ability == :GALEWINGS && @type==:FLYING && ((attacker.hp >= attacker.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
     pri += 3 if attacker.ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@function)
     pri -= 1 if @battle.FE == :DEEPEARTH && @move == :COREENFORCER
-    pri -= 2 if attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
+    pri -= 2 if !KAIZOMOD && attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
 
     # Giga updates here
     # pri -= 6 if attacker.species == :CORVIKNIGHT && attacker.giga && @move == :BRAVEBIRD

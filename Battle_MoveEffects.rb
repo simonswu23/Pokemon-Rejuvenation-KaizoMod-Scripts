@@ -219,7 +219,7 @@ class PokeBattle_Move_003 < PokeBattle_Move
     return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
     if opponent.pbCanSleep?(true)
       if (@move == :SPORE) || (@move == :SLEEPPOWDER)
-        if opponent.hasType?(:GRASS)
+        if (opponent.hasType?(:GRASS) && attacker.ability != :MYCELIUMMIGHT)
           @battle.pbDisplay(_INTL("It doesn't affect {1}...",opponent.pbThis(true)))
           return -1
         elsif opponent.ability == :OVERCOAT && !(opponent.moldbroken)
@@ -275,7 +275,7 @@ class PokeBattle_Move_005 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
     if (@move == :POISONPOWDER)
-      if opponent.hasType?(:GRASS)
+      if (opponent.hasType?(:GRASS) && attacker.ability != :MYCELIUMMIGHT)
         @battle.pbDisplay(_INTL("It doesn't affect {1}...",opponent.pbThis(true)))
         return -1
       elsif (opponent.ability == :OVERCOAT) && !(opponent.moldbroken)
@@ -431,7 +431,7 @@ class PokeBattle_Move_007 < PokeBattle_Move
     return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
     return -1 if !opponent.pbCanParalyze?(true)
     if (@move == :STUNSPORE)
-      if opponent.hasType?(:GRASS)
+      if (opponent.hasType?(:GRASS) && attacker.ability != :MYCELIUMMIGHT)
         @battle.pbDisplay(_INTL("It doesn't affect {1}...",opponent.pbThis(true)))
         return -1
       elsif (opponent.ability == :OVERCOAT) && !(opponent.moldbroken)
@@ -446,7 +446,7 @@ class PokeBattle_Move_007 < PokeBattle_Move
     else
       if (@move == :THUNDERWAVE)
         typemod=pbTypeModifier(@type,attacker,opponent)
-        if typemod==0
+        if typemod==0 && attacker.ability != :MYCELIUMMIGHT
           @battle.pbDisplay(_INTL("It doesn't affect {1}...",opponent.pbThis(true)))
           return -1
         end
@@ -794,6 +794,23 @@ class PokeBattle_Move_013 < PokeBattle_Move
       return 0
     end
     return -1
+  end
+
+  def pbBaseDamage(basedmg,attacker,opponent)
+    if (@move == :SMITE && opponent.effects[:Confusion] != 0)
+      return basedmg*2
+    end
+    return basedmg
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    if id == :SMITE
+      @battle.pbAnimation(:TWINKLETACKLE,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
   end
 
   def pbAdditionalEffect(attacker, opponent)
@@ -1272,6 +1289,10 @@ end
 class PokeBattle_Move_022 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
     return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
+    if (KAIZOMOD)
+      @battle.pbDisplay(_INTL("Evasion moves are banned in Kaizomod!"))
+      return -1
+    end
     return -1 if !attacker.pbCanIncreaseStatStage?(PBStats::EVASION, true)
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
@@ -1710,6 +1731,10 @@ end
 class PokeBattle_Move_034 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
     return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
+    if (KAIZOMOD)
+      @battle.pbDisplay(_INTL("Evasion moves are banned in Kaizomod!"))
+      return -1
+    end
     return -1 if !attacker.pbCanIncreaseStatStage?(PBStats::EVASION, true)
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
@@ -2419,7 +2444,7 @@ class PokeBattle_Move_049 < PokeBattle_Move
       end
     end
     if (@battle.state.effects[:PSYTERRAIN] > 0 || @battle.state.effects[:GRASSY] > 0 ||
-      @battle.state.effects[:ELECTERRAIN] > 0 || @battle.state.effects[:MISTY] > 0)
+      @battle.state.effects[:ELECTERRAIN] != 0 || @battle.state.effects[:MISTY] > 0)
       @battle.state.effects[:PSYTERRAIN] = 0
       @battle.state.effects[:GRASSY] = 0
       @battle.state.effects[:ELECTERRAIN] = 0
@@ -2547,7 +2572,7 @@ class PokeBattle_Move_04D < PokeBattle_Move
     return -1 if !opponent.pbCanReduceStatStage?(PBStats::SPEED, true)
 
     if @move == :COTTONSPORE
-      if opponent.hasType?(:GRASS)
+      if (opponent.hasType?(:GRASS) && attacker.ability != :MYCELIUMMIGHT)
         @battle.pbDisplay(_INTL("It doesn't affect {1}...", opponent.pbThis(true)))
         return -1
       elsif opponent.ability == :OVERCOAT && !opponent.moldbroken
@@ -3519,12 +3544,23 @@ class PokeBattle_Move_06A < PokeBattle_Move
     if @battle.FE == :RAINBOW # Rainbow Field
       @battle.pbDisplay(_INTL("It's a Sonic Rainboom!"))
       return pbEffectFixedDamage(140,attacker,opponent,hitnum,alltargets,showanimation)
-    elsif @battle.ProgressiveFieldCheck(PBFields::CONCERT)
-      @battle.pbDisplay(_INTL("The attack echoed throughout the venue!"))
-      return pbEffectFixedDamage(40,attacker,opponent,hitnum,alltargets,showanimation)
     else
+      @battle.pbDisplay(_INTL("The attack echoed throughout the venue!")) if @battle.ProgressiveFieldCheck(PBFields::CONCERT)
       return pbEffectFixedDamage(20,attacker,opponent,hitnum,alltargets,showanimation)
     end
+  end
+
+  def pbNumHits(attacker)
+    return 1 if !@battle.ProgressiveFieldCheck(PBFields::CONCERT)
+    hitchances = [1, 2, 3]
+    hitchances = [1] if @battle.FE == :CONCERT1
+    hitchances = [2, 2, 3, 4, 5] if @battle.FE == :CONCERT4
+    ret = hitchances[@battle.pbRandom(hitchances.length)]
+    # Gen 9 Mod - Added Loaded Dice
+    ret = hitchances.length - rand(2) if attacker.hasWorkingItem(:LOADEDDICE)
+    ret = hitchances.length if attacker.ability == :SKILLLINK || attacker.ability == :TECHLINK
+    ret = hitchances.length if attacker.crested == :FEAROW && @move == :FURYATTACK
+    return ret
   end
 end
 
@@ -4681,7 +4717,7 @@ end
 ################################################################################
 class PokeBattle_Move_0A1 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    if attacker.pbOwnSide.effects[:LuckyChant]>0
+    if attacker.pbOwnSide.effects[:LuckyChant]!=0
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -6582,6 +6618,7 @@ end
 ################################################################################
 class PokeBattle_Move_0DC < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return super(attacker,opponent,hitnum,alltargets,showanimation) if @basedamage>0
     if opponent.effects[:LeechSeed]>=0 || opponent.effects[:Substitute]>0
       @battle.pbDisplay(_INTL("{1} evaded the attack!",opponent.pbThis))
       return -1
@@ -6595,6 +6632,29 @@ class PokeBattle_Move_0DC < PokeBattle_Move
     opponent.effects[:LeechSeed]=attacker.index
     @battle.pbDisplay(_INTL("{1} was seeded!",opponent.pbThis))
     return 0
+  end
+
+  def pbAdditionalEffect(attacker,opponent)
+    if opponent.effects[:LeechSeed]>=0 || opponent.effects[:Substitute]>0
+      return false
+    end
+    if opponent.hasType?(:GRASS)
+      return false
+    end
+    pbShowAnimation(:LEECHSEED,attacker,opponent)
+    opponent.effects[:LeechSeed]=attacker.index
+    @battle.pbDisplay(_INTL("{1} was seeded!",opponent.pbThis))
+    return true
+  end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :OVERGROWTH
+      @battle.pbAnimation(:FRENZYPLANT,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
   end
 end
 
@@ -7128,6 +7188,28 @@ class PokeBattle_Move_0EE < PokeBattle_Move
     end
     return ret
   end
+
+  def pbAdditionalEffect(attacker,opponent)
+    if (@move == :ESCAPEROOT)
+      success = @battle.pbMoveLast(opponent)
+      if success
+        @battle.pbDisplay(_INTL("{1} got tangled in the roots!", opponent.pbThis))
+      end
+      return true
+    end
+    return false
+  end
+
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    # replacement anim until proper one is made
+    if id == :ESCAPEROOT
+      @battle.pbAnimation(:FRENZYPLANT,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
+  end
+
 end
 
 ################################################################################
@@ -8596,7 +8678,7 @@ class PokeBattle_Move_119 < PokeBattle_Move
       pbShowAnimation(@move,attacker,nil,hitnum,alltargets,showanimation)
       attacker.effects[:MagnetRise]=5
       if @battle.FE == :ELECTERRAIN || @battle.FE == :FACTORY ||
-        @battle.FE == :SHORTCIRCUIT || @battle.state.effects[:ELECTERRAIN] > 0 # Electric/Factory Field
+        @battle.FE == :SHORTCIRCUIT || @battle.state.effects[:ELECTERRAIN] != 0 # Electric/Factory Field
             attacker.effects[:MagnetRise]=8
       end
       @battle.pbDisplay(_INTL("{1} levitated with electromagnetism!",attacker.pbThis))
@@ -8726,9 +8808,21 @@ class PokeBattle_Move_11F < PokeBattle_Move
         @battle.trickroom = 3 + rnd
       end
       @battle.pbDisplay(_INTL("{1} twisted the dimensions!", attacker.pbThis))
+      if (@battle.FE == :BEWITCHED)
+        pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
+        @battle.pbDisplay(_INTL("...but the playful sprites twisted them right back!", attacker.pbThis))
+        @battle.trickroom = 0
+        return -1
+      end
     else
       @battle.trickroom = 0
       @battle.pbDisplay(_INTL("The twisted dimensions returned to normal!", attacker.pbThis))
+      if (@battle.FE == :BEWITCHED)
+        pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
+        @battle.pbDisplay(_INTL("...but the playful sprites twisted them right back!", attacker.pbThis))
+        @battle.trickroom = 0
+        return -1
+      end
     end
     for i in @battle.battlers
       if i.hasWorkingItem(:ROOMSERVICE)
@@ -8897,7 +8991,7 @@ end
 ################################################################################
 class PokeBattle_Move_134 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
-    if !((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || (@battle.canChangeFE?([:ELECTERRAIN, :DRAGONSDEN]) && !(@battle.state.effects[:ELECTERRAIN] > 0)))
+    if !((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || (@battle.canChangeFE?([:ELECTERRAIN, :DRAGONSDEN]) && !(@battle.state.effects[:ELECTERRAIN] != 0)))
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     end
@@ -9657,7 +9751,7 @@ class PokeBattle_Move_152 < PokeBattle_Move
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
     return super(attacker, opponent) if @basedamage > 0
 
-    if !opponent.effects[:Powder] && (!(opponent.ability == :OVERCOAT) || opponent.moldbroken) && !opponent.hasType?(:GRASS) && !opponent.hasWorkingItem(:SAFETYGOGGLES)
+    if !opponent.effects[:Powder] && (!(opponent.ability == :OVERCOAT) || opponent.moldbroken) && !(opponent.hasType?(:GRASS) && attacker.ability != :MYCELIUMMIGHT) && !opponent.hasWorkingItem(:SAFETYGOGGLES)
       @battle.pbAnimation(@move, attacker, opponent)
       @battle.pbDisplay(_INTL("{1} was covered in a thin powder!", opponent.pbThis))
       opponent.effects[:Powder] = true
@@ -10501,8 +10595,8 @@ class PokeBattle_Move_176 < PokeBattle_Move
       spatkmult *= 2 if attacker.hasWorkingItem(:DEEPSEATOOTH) && attacker.pokemon.species == :CLAMPERL
       spatkmult *= 2 if attacker.hasWorkingItem(:LIGHTBALL) && attacker.pokemon.species == :PIKACHU
       spatkmult *= 1.5 if attacker.ability == :FLAREBOOST && (attacker.status == :BURN || @battle.FE == :BURNING || @battle.FE == :VOLCANIC || @battle.FE == :INFERNAL) && @battle.FE != :FROZENDIMENSION
-      spatkmult *= 1.5 if attacker.ability == :MINUS && (attacker.pbPartner.ability == :PLUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
-      spatkmult *= 1.5 if attacker.ability == :PLUS && (attacker.pbPartner.ability == :MINUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] > 0
+      spatkmult *= 1.5 if attacker.ability == :MINUS && (attacker.pbPartner.ability == :PLUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] != 0
+      spatkmult *= 1.5 if attacker.ability == :PLUS && (attacker.pbPartner.ability == :MINUS || @battle.FE == :SHORTCIRCUIT || (Rejuv && @battle.FE == :ELECTERRAIN)) || @battle.state.effects[:ELECTERRAIN] != 0
       spatkmult *= 1.5 if attacker.ability == :SOLARPOWER && (@battle.pbWeather == :SUNNYDAY) && @battle.FE != :FROZENDIMENSION
       spatkmult *= 1.3 if attacker.pbPartner.ability == :BATTERY
       spatkmult *= 2 if attacker.ability == :PUREPOWER && @battle.FE == :PSYTERRAIN
@@ -11237,6 +11331,10 @@ class PokeBattle_Move_308 < PokeBattle_Move
   def pbTwoTurnAttack(attacker)
     @immediate = false
     @immediate = true if attacker.crested == :CLAYDOL
+    if attacker.effects[:TwoTurnAttack]==0
+      @immediate=true if (@battle.pbWeather== :SUNNYDAY)
+      @battle.pbDisplay(_INTL("{1} absorbed the solar energy!", attacker.pbThis))
+    end
     if @battle.FE == :STARLIGHT || @battle.FE == :NEWWORLD
       @immediate = true
       @battle.pbDisplay(_INTL("{1} absorbed the starlight!", attacker.pbThis)) if @battle.FE == :STARLIGHT
@@ -11275,7 +11373,7 @@ class PokeBattle_Move_309 < PokeBattle_Move
     return true if pbIsPhysical?(@type)
     return super
   end
-  def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+  def pbEffect(attacker, opponent, hcitnum = 0, alltargets = nil, showanimation = true)
     smartDamageCategory(attacker, opponent)
 
     return super(attacker, opponent, hitnum, alltargets, showanimation) if @basedamage > 0
@@ -11306,9 +11404,18 @@ class PokeBattle_Move_30A < PokeBattle_Move
     return true
   end
 
+  def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+    ret = super(attacker, opponent, hitnum, alltargets, showanimation)
+    @battle.setField(:MISTY,5)
+    @battle.pbDisplay(_INTL("The terrain became misty!"))
+    return ret
+  end
+
+  
+
   def pbBaseDamage(basedmg, attacker, opponent)
     if @battle.FE == :MISTY || @battle.state.effects[:MISTY] > 0
-      return basedmg * 1.5
+      return basedmg * 2
     end
 
     return basedmg
@@ -11331,14 +11438,24 @@ end
 ################################################################################
 class PokeBattle_Move_311 < PokeBattle_Move
   def pbBaseDamage(basedmg,attacker,opponent)
-    if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && !opponent.isAirborne?
+    if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
       if @move == :PSYBLADE
         return basedmg*1.5
-      else
+      elsif !opponent.isAirborne?
         return basedmg*2
       end
     end
     return basedmg
+  end
+
+  # Replacement animation till a proper one is made
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    if id == :POWERSURGE
+      @battle.pbAnimation(:RISINGVOLTAGE,attacker,opponent,hitnum)
+    else
+      @battle.pbAnimation(id,attacker,opponent,hitnum)
+    end
   end
 end
 
@@ -11804,6 +11921,12 @@ class PokeBattle_Move_800 < PokeBattle_Move
     end
     return ret
   end
+
+  # Handler anim
+  def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
+    return if !showanimation
+    @battle.pbAnimation(:ACIDDOWNPOUR,attacker,opponent,hitnum)
+  end
 end
 
 ################################################################################
@@ -11812,7 +11935,7 @@ end
 class PokeBattle_Move_801 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
-    if @battle.canChangeFE?([:GRASSY,:FOREST,:FLOWERGARDEN1,:FLOWERGARDEN2,:FLOWERGARDEN3,:FLOWERGARDEN4,:FLOWERGARDEN5])
+    if @battle.canChangeFE?([:GRASSY,:FOREST,:FLOWERGARDEN1,:FLOWERGARDEN2,:FLOWERGARDEN3,:FLOWERGARDEN4,:FLOWERGARDEN5]) && !KAIZOMOD
       @battle.setField(:GRASSY,3)
       @battle.pbDisplay(_INTL("The terrain became grassy!"))
     end
@@ -12589,9 +12712,9 @@ end
 ################################################################################
 class PokeBattle_Move_912 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
-    ret=super(attacker,opponent,hitnum,alltargets,showanimation)
-    if opponent.damagestate.calcdamage>0
-      hpgain=((opponent.damagestate.hplost+1)/2).floor
+    damage = super(attacker, opponent, hitnum, alltargets, showanimation)
+    if opponent.damagestate.calcdamage>0 && !opponent.damagestate.disguise
+      hpgain = ((damage + 1) / 2).floor
       if opponent.ability == :LIQUIDOOZE
         hpgain*=2 if @battle.FE == :WASTELAND || @battle.FE == :MURKWATERSURFACE || @battle.FE == :CORRUPTED
         attacker.pbReduceHP(hpgain,true)
@@ -12612,7 +12735,7 @@ class PokeBattle_Move_912 < PokeBattle_Move
         end
       end
     end
-    return ret
+    return damage
   end
 
   def pbAdditionalEffect(attacker,opponent)
@@ -13096,7 +13219,7 @@ class PokeBattle_Move_923 < PokeBattle_Move
     else
       pri = oppmovedata.priority
     end
-    pri += 1 if oppmoveid == :GRASSYGLIDE && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP || @battle.FE == :BEWITCHED)
+    pri += 1 if (oppmoveid == :GRASSYGLIDE || oppmoveid == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
     pri += 1 if oppmoveid == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
     pri += 1 if oppmoveid == :ATTACKORDER && opponent.crested == :VESPIQUEN
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING

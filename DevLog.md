@@ -10,33 +10,46 @@
 - Ren Helojak
 
 ## Kaizo
-- Venam Gym
+- Garbodor (Boss)
+- Venam (Gym)
+- Melia (Goldenwood)
+- Eli x Sharon (Goldenwood)
+- Zetta (Goldenwood)
 - Alex + Sam (1), **UNTESTED**
-- Valarie Gym
-- Geara Terajuma Beach
-- Tapu Koko Terajuma (Boss)
-- Zetta Terajuma Falls
-- Neved Terajuma Falls
-- Ren Helojak
+- Valarie (Gym)
+- Geara (Terajuma Beach)
+- Tapu Koko (Terajuma) (Boss)
+- Zetta (Terajuma Falls)
+- Neved (Terajuma Falls)
+- Ren (Helojak)
   - used Bellibolt
-- Rorim B. Kakori
-- Gothitelle Kakori (Boss)
-- Crawli Gym
-- Saki x Venam Boom Battle
-- Jenner Aquamarine Cave
-- Tapu Koko Magrodar (Boss)
-- Madelis and Bart Aquamarine
-- Neved Teila
+- Rorim B. (Kakori)
+- Gothitelle (Kakori) (Boss)
+- Crawli (Gym)
+- Saki x Venam (Boom Battle)
+- Jenner (Aquamarine Cave)
+- Tapu Koko (Magrodar) (Boss)
+- Madelis and Bart (Aquamarine)
+- Neved (Teila)
 - Belial (Boss)
-- Angie Gym
-- Texen
-- Adam Garufa
+- Angie (Gym)
+- Texen (Gym)
+- Adam (Garufa)
 - Groudon (Boss)
-- Crawli Jynobi
+- Crawli (Jynobi)
 - Kyogre (Boss)
-- Eli and Sharon Valor
+- Eli and Sharon (Valor)
 - Giratina Valor (Boss)
-- Geara x Zetta Valor
+- Geara x Zetta (Valor)
+- Amber (Gym)
+- Karrina (Amberette)
+- Spirit Jenner
+- Garbodor (Boss)
+- Amanda (West Gearen)
+- Erick (Gym)
+- Clown Caricature (Boss)
+- Flora (Gym)
+- Florin (Gym)
 
 
 # TODOs:
@@ -86,6 +99,7 @@
 
   ## Testing Backlog
     - Chthonic Malady
+    - Mycelium Might
 
   ## AI implementation Backlog
     ### Giga Evolution
@@ -128,6 +142,7 @@
       - Leaf Guard
       - Plus
       - Minus
+      - Pastel Veil
 
     - New Abilities
       - Meteor Impactor
@@ -159,6 +174,18 @@
     - Learnset updates for new moves
 
 # Journal
+
+- 7/5/25 (SWu)
+  - pushed terrain fix
+  - updated calls of @battle.weather to @battle.pbWeather
+  - minor AI fix for Pressure
+  - Updated Lucky Chant + Electric Terrain logic to != 0
+  - banned evasion moves (Double Team, Minimize)
+  - fixed Matcha Gotcha implementation
+  - fixed call to @battle.mistExplosion for corrupted field
+
+- 6/9/25 (SWu)
+  - TODO: fix speedcreep? (disable IV setting with Macho Brace and force 31 IVs on everything)
 
 - 6/1/25 (SWu)
   - minor bug fixes Forewarn and (having to deal with base damage calc?)

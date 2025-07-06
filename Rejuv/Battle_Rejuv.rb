@@ -207,6 +207,12 @@
     if trainereffect[:message] && trainereffect[:message] != ""
       pbDisplayPaused(_INTL(trainereffect[:message]))
     end
+    if trainereffect[:kaizoHelper]
+      case trainereffect[:kaizoHelper]
+        when "dummy"
+          # do nothing
+      end
+    end
     if trainereffect[:instantgiga]
       # giga evolve current battler
       if (pkmn && pbCanGigaEvolve?(pkmn.index))
@@ -386,6 +392,13 @@
           target.pbPoison(pkmn)
           pbDisplay(_INTL("{1} was badly poisoned",target.pbThis))
         end
+      end
+    end
+    if trainereffect[:kaizoHelper2]
+      case trainereffect[:kaizoHelper2]
+        when "ERICK"
+          pkmn.kaizoHelper = "ERICK"
+          quarkdriveCheck
       end
     end
     @scene.pbHideOpponent if showtrainer
@@ -928,6 +941,9 @@ def runstarterskills()
         weatherMessage = trainereffect[:setWeather][2] if trainereffect[:setWeather][2]
         pbDisplay(_INTL("{1}", weatherMessage)) if weatherMessage
         @scene.pbHideOpponent if trainereffect[:setWeather][4]
+      end
+      if trainereffect[:message2] && trainereffect[:message2] != ""
+        pbDisplayPaused(_INTL(trainereffect[:message2]))
       end
     end
     return

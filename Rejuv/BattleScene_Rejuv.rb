@@ -162,7 +162,7 @@ class PokemonDataBox < SpriteWrapper
   #### StatBoosts - START
   def aGetStage(i)
     if i == 3
-      return -6 if @battler.pbOpposingSide.effects[:LuckyChant] > 0
+      return -6 if @battler.pbOpposingSide.effects[:LuckyChant] != 0
       return 6 if @battler.effects[:LaserFocus]
       return @battler.effects[:FocusEnergy]
     else

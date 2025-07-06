@@ -518,10 +518,10 @@ class PokeBattle_Battle
 
   def quarkdriveCheck
     priority = pbPriority
-    if @field.effect == :ELECTERRAIN || @state.effects[:ELECTERRAIN] > 0
+    if @field.effect == :ELECTERRAIN || @state.effects[:ELECTERRAIN] != 0
       for i in priority
         next if i.isFainted?
-        next if i.ability != :QUARKDRIVE
+        next if i.ability != :QUARKDRIVE && i.kaizoHelper != "ERICK"
         next if i.effects[:Quarkdrive][0] > 0
         aBoost = (i.attack * PBStats::StageMul[i.stages[PBStats::ATTACK]]).floor
         dBoost = (i.defense * PBStats::StageMul[i.stages[PBStats::DEFENSE]]).floor
@@ -534,7 +534,7 @@ class PokeBattle_Battle
         @battle.pbDisplay(_INTL("{1}'s Quark Drive heightened its {2}!", i.pbThis, i.pbGetStatName(boostStat)))
       end
     end
-    if @field.effect != :ELECTERRAIN && @state.effects[:ELECTERRAIN] < 1
+    if @field.effect != :ELECTERRAIN && @state.effects[:ELECTERRAIN] == 0
       for i in priority
         next if i.isFainted?
         next if i.effects[:Quarkdrive][0] == 0
@@ -1497,13 +1497,14 @@ class PokeBattle_Battle
         pri += 1 if @field.effect == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type == :FLYING && (@battlers[i].hp >= @battlers[i].totalhp / 2 || ((@field.effect == :MOUNTAIN || @field.effect == :SNOWYMOUNTAIN) && pbWeather == :STRONGWINDS))
-        pri += 1 if @choices[i][2].move == :GRASSYGLIDE && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP || @field.effect == :BEWITCEHD)
+        pri += 1 if (@choices[i][2].move == :GRASSYGLIDE || @choices[i][2].move == :ESCAPEROOT) && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
+        pri += 1 if @choices[i][2].move == :POWERSURGE && (@field.effect == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
         pri += 1 if @choices[i][2].move == :ATTACKORDER && @battlers[i].crested == :VESPIQUEN
         pri += 1 if @choices[i][2].move == :SQUALL && (@weather == :HAIL || @field.effect == :SNOWYMOUNTAIN)
         pri += 1 if @choices[i][2].move == :QUASH && @field.effect == :DIMENSIONAL
         pri += 1 if @choices[i][2].basedamage != 0 && @battlers[i].crested == :FERALIGATR && @battlers[i].turncount == 1 # Feraligatr Crest
         pri += 3 if @battlers[i].ability == :TRIAGE && PBStuff::HEALFUNCTIONS.include?(@choices[i][2].function)
-        pri = -2 if @battlers[i].ability == :MYCELIUMMIGHT && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
+        pri = -2 if !KAIZOMOD && @battlers[i].ability == :MYCELIUMMIGHT && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might
 
         # Updating Giga Move priority here (on turn of evolution)
         # pri -= 6 if @battlers[i].species == :CORVIKNIGHT && @battlers[i].giga && @choices[i][2].move == :BRAVEBIRD
@@ -1728,7 +1729,7 @@ class PokeBattle_Battle
       return false
     end
     # Ingrain
-    if thispkmn.effects[:Ingrain]
+    if thispkmn.effects[:Ingrain] && (@battle.FE != :BEWITCHED || !KAIZOMOD)
       pbDisplayPaused(_INTL("{1} can't be switched out!", thispkmn.pbThis)) if showMessages
       return false
     end
@@ -5167,7 +5168,7 @@ class PokeBattle_Battle
             i.status = nil
           end
       end
-      if @state.effects[:ELECTERRAIN] > 0
+      if @state.effects[:ELECTERRAIN] != 0
        next if i.hp <= 0
 
         if i.ability == :VOLTABSORB && i.effects[:HealBlock] == 0
@@ -5435,7 +5436,7 @@ class PokeBattle_Battle
                   pbDisplay(_INTL("The Pokémon were buffeted by the hail!", i.pbThis)) if !endmessage
                   endmessage = true
                   @scene.pbDamageAnimation(i, 0, quick: true)
-                  if @field.effect == :FROZENDIMENSION
+                  if @field.effect == :FROZENDIMENSION || @field.effect == :ICY || @field.effect == :SNOWYMOUNTAIN
                     reductions.push [i, (i.totalhp / 8.0).floor]
                   else
                     reductions.push [i, (i.totalhp / 16.0).floor]
@@ -5704,7 +5705,7 @@ class PokeBattle_Battle
 
       # Shed Skin
       if i.ability == :SHEDSKIN
-        if (pbRandom(10) < 3 || @field.effect == :DRAGONSDEN) && !i.status.nil?
+        if (pbRandom(10) < 5 || @field.effect == :DRAGONSDEN) && !i.status.nil?
           pbDisplay(_INTL("{1}'s Shed Skin cured its {2} problem!", i.pbThis, i.status.downcase))
           i.status = nil
           i.statusCount = 0
@@ -5757,7 +5758,7 @@ class PokeBattle_Battle
         end
       end
       # Healer
-      if i.ability == :HEALER
+      if i.ability == :HEALER && !KAIZOMOD
         partner = i.pbPartner
         if pbRandom(10) < 3 && partner.hp > 0 && !partner.status.nil?
           pbDisplay(_INTL("{1}'s Healer cured its partner's {2} problem!", i.pbThis, partner.status.downcase))
@@ -5802,6 +5803,11 @@ class PokeBattle_Battle
           hpgain = i.pbRecoverHP(hpgain, true)
           pbDisplay(_INTL("{1}'s Aqua Ring restored its HP a little!", i.pbThis)) if hpgain > 0
         end
+        if !i.status.nil? && @battle.pbRandom(4) == 0
+          pbDisplay(_INTL("{1}'s {2} was cured by Aqua Ring!",i.pbThis,i.status.downcase))
+          i.status=nil
+          i.statusCount=0
+        end
       end
     end
     # Ingrain
@@ -5835,6 +5841,13 @@ class PokeBattle_Battle
             hpgain = (hpgain * 1.3).floor if i.crested == :SHIINOTIC
             hpgain = i.pbRecoverHP(hpgain, true)
             pbDisplay(_INTL("{1} absorbed nutrients with its roots!", i.pbThis)) if hpgain > 0
+          end
+        end
+
+        if (@battle.FE == :BEWITCHED && (i.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) || i.pbCanIncreaseStatStage?(PBStats::SPDEF, false)))      
+          pbDisplay(_INTL("{1} was strengthened by the magical soil!", i.pbThis))
+          for stat in [PBStats::DEFENSE, PBStats::SPDEF]
+            i.pbIncreaseStat(stat, 1, abilitymessage: false, statsource: i)
           end
         end
       end
@@ -5990,38 +6003,30 @@ class PokeBattle_Battle
         i.pbContinueStatus
         i.pbReduceHP((mult * i.totalhp/16.0).floor)
       end
+
       # Shiinotic Crest
       if i.crested == :SHIINOTIC
         for j in priority
           next if j == i
           next if j.isFainted?
-          next if j.status.nil?
-
-          hploss = (j.totalhp / 16.0).floor
-          hploss = hploss * 2 if @field.effect == :WASTELAND
-          pbCommonAnimation("LeechSeed", i, j)
-          j.pbReduceHP(hploss, true)
+          next if !i.pbIsOpposing?(j.index)
+          mult = 1
+          mult = 2 if !j.status.nil?
+          hploss=(j.totalhp/16.0 * mult).floor
+          hploss= hploss * 2 if @field.effect == :WASTELAND
+          pbCommonAnimation("LeechSeed",i,j)
+          j.pbReduceHP(hploss,true)
           if j.ability == :LIQUIDOOZE
-            hploss = hploss * 2 if @field.effect == :MURKWATERSURFACE || @field.effect == :CORRUPTED || @field.effect == :WASTELAND
-            if Rejuv && @battle.FE == :GRASSY
-              hploss = (hploss * 1.6).floor if i.hasWorkingItem(:BIGROOT)
-            else
-              hploss = (hploss * 1.3).floor if i.hasWorkingItem(:BIGROOT)
-            end
-            hploss = (hploss * 1.3).floor if i.crested == :SHIINOTIC
-            i.pbReduceHP(hploss, true)
-            pbDisplay(_INTL("{1} sucked up the liquid ooze!", i.pbThis))
+            hploss= hploss * 2 if @field.effect == :MURKWATERSURFACE || @field.effect == :CORRUPTED || @field.effect == :WASTELAND
+            hploss=(hploss*1.3).floor if i.crested == :SHIINOTIC
+            i.pbReduceHP(hploss,true)
+            pbDisplay(_INTL("{1} sucked up the liquid ooze!",i.pbThis))
           else
-            if i.effects[:HealBlock] == 0
-              if Rejuv && @battle.FE == :GRASSY
-                hploss = (hploss * 1.6).floor if i.hasWorkingItem(:BIGROOT)
-              else
-                hploss = (hploss * 1.3).floor if i.hasWorkingItem(:BIGROOT)
-              end
-              hploss = (hploss * 1.3).floor if i.crested == :SHIINOTIC
-              i.pbRecoverHP(hploss, true)
+            if i.effects[:HealBlock]==0
+              hploss=(hploss*1.3).floor
+              i.pbRecoverHP(hploss,true)
             end
-            pbDisplay(_INTL("{1}'s health was sapped by {2}'s Crest!", i.pbThis, i.pbThis))
+            pbDisplay(_INTL("{1}'s health was sapped by {2}'s Crest!",i.pbThis,i.pbThis))
           end
           if j.isFainted?
             return if !j.pbFaint
@@ -6466,20 +6471,20 @@ class PokeBattle_Battle
       end
     end
     # Terrain overlays
-    if @state.effects[:ELECTERRAIN] > 0
+    if @state.effects[:ELECTERRAIN] != 0
       @state.effects[:ELECTERRAIN] -= 1 if @field.effect != :FROZENDIMENSION
       pbDisplay(_INTL("The surging electricity dissipated.")) if @state.effects[:ELECTERRAIN] == 0
       quarkdriveCheck
     end
-    if @state.effects[:GRASSY] > 0
+    if @state.effects[:GRASSY] != 0
       @state.effects[:GRASSY] -= 1 if @field.effect != :FROZENDIMENSION
       pbDisplay(_INTL("The surrounding grass withered.")) if @state.effects[:GRASSY] == 0
     end
-    if @state.effects[:MISTY] > 0
+    if @state.effects[:MISTY] != 0
       @state.effects[:MISTY] -= 1 if @field.effect != :FROZENDIMENSION
       pbDisplay(_INTL("The surrounding mist dispersed.")) if @state.effects[:MISTY] == 0
     end
-    if @state.effects[:PSYTERRAIN] > 0
+    if @state.effects[:PSYTERRAIN] != 0
       @state.effects[:PSYTERRAIN] -= 1 if @field.effect != :FROZENDIMENSION
       pbDisplay(_INTL("The psychic energy left as mysteriously as it came.")) if @state.effects[:PSYTERRAIN] == 0
     end

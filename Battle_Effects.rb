@@ -11,7 +11,7 @@ class PokeBattle_Battler
 
   def pbCanStatus?(showMessages, ignorestatus = false, moldbroken = self.moldbroken, ownStatus = false) # catchall true/false for situations where one can't be statused
     failure = :none
-    failure = :FLOWERVEIL if ((@ability == :FLOWERVEIL || pbPartner.ability == :FLOWERVEIL) && (hasType?(:GRASS) || @battle.FE == :BEWITCHED)) && !moldbroken
+    failure = :FLOWERVEIL if @effects[:FlowerVeil] || ((@ability == :FLOWERVEIL || pbPartner.ability == :FLOWERVEIL) && (hasType?(:GRASS) || @battle.FE == :BEWITCHED)) && !moldbroken
     failure = :MISTY if (@battle.FE == :MISTY || @battle.state.effects[:MISTY] > 0) && !isAirborne? # Misty Field
     failure = :AMULETCOIN if Rejuv && @battle.FE == :DRAGONSDEN && hasWorkingItem(:AMULETCOIN) # Dragon's Den
     failure = :STATUSED if (!ignorestatus && !self.status.nil?) || (self.ability == :COMATOSE && @battle.FE != :ELECTERRAIN)
@@ -671,7 +671,7 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1}'s {2} prevents Accuracy loss!", pbThis, abilityname)) if showMessages
         return false
       end
-      if ((ability == :FLOWERVEIL || pbPartner.ability == :FLOWERVEIL) && (hasType?(:GRASS) || @battle.FE == :BEWITCHED)) && !self.moldbroken
+      if @effects[:FlowerVeil] || ((ability == :FLOWERVEIL || pbPartner.ability == :FLOWERVEIL) && (hasType?(:GRASS) || @battle.FE == :BEWITCHED)) && !self.moldbroken
         @battle.pbDisplay(_INTL("{1} is protected by Flower Veil!", pbThis)) if showMessages
         return false
       end

@@ -10775,6 +10775,16 @@ ITEMHASH = {
 	:noUse => true,
 },
 
+:FERROTHORNCORE => {
+  :ID => 2034,
+  :name => "Ferrothorn Core",
+  :desc => "One variety of Giga Stone. This stone will enable Ferrothorn to Giga Evolve in battle.",
+  :price => 999,
+  :crystal => true,
+  :noUseInBattle => true,
+  :noUse => true,
+},
+
 ### Other SWu ###
 
 :CACTCREST => {
@@ -10877,5 +10887,36 @@ ITEMHASH = {
     :noUseInBattle => true,
     :noUse => true,
 },
+
+:ELECTICREST => {
+	:ID => 3010,
+	:name => "Electivire Crest",
+	:desc => "POWERING UP",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:BELLICREST => {
+	:ID => 3011,
+	:name => "Bellibolt Crest",
+	:desc => "Metsu?",
+	:price => 0,
+	:crest => true,
+	:noUseInBattle => true,
+	:noUse => true,
+},
+
+:SCEPTILITEF => {
+    :ID => 661,
+    :name => "Florin's Sceptilite",
+    :desc => "One variety of Mega Stone. Have Sceptile hold it, and this stone will enable it to Mega Evolve in battle.",
+    :price => 999,
+    :crystal => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
 
 }

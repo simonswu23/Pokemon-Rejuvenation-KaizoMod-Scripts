@@ -2169,5 +2169,12 @@ ABILHASH = {
     :name => "Lucky Wind",
     :desc => "Summons a Lucky Wind that boosts allies' Speed, Accuracy, and likelihood of added effects and critical hits while preventing opponents' critical hits and added effects.",
     :fullDesc => "Summons a Lucky Wind on entry that buffs allies for four turns, doubling their Speed and likelihood of added effects, boosting their accuracy by 15%, and boosting their critical-hit ratios by 1 stage, while protecting them from the opponents' critical hits and added effects."
-}
+},
+
+:HYDROVEIL => {
+	:ID => 393,
+	:name => "Hydro Veil",
+	:desc => "Summons Aqua Ring for the user upon switching into battle."
+},
+
 }

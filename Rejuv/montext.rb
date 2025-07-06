@@ -178,7 +178,13 @@ MONHASH = {
       :Weight => 1555,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+      :Type2 => :GROUND,
+      :Height => 240,
+      :Weight => 2216,
+  },
+
+  "Mega - Giga Form" => {
       :BaseStats => [80, 107, 108, 125, 125, 80],
       :Abilities => [:CHLOROPHYLL],
       :Height => 240,
@@ -187,6 +193,7 @@ MONHASH = {
 
   :OnCreation => {},
   :DefaultForm => 0,
+  :GigaForm => 2,
   :MegaForm => {
       :VENUSAURITE => 1,
       :VENUSAURITEG => 2,
@@ -9515,7 +9522,7 @@ MONHASH = {
       :BaseStats => [130, 65, 60, 110, 95, 65],
       :EVs => [2, 0, 0, 0, 0, 0],
       :Abilities => [:WATERABSORB, :WATERABSORB],
-      :HiddenAbilities => :HYDRATION,
+      :HiddenAbilities => :HYDROVEIL,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemEighth,
       :BaseEXP => 184,
@@ -12123,7 +12130,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 
   :OnCreation => {},
 },
@@ -12199,7 +12206,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 },
 
 :NATU => {
@@ -13536,8 +13543,8 @@ MONHASH = {
       :Type1 => :DARK,
       :BaseStats => [95, 65, 110, 60, 130, 65],
       :EVs => [0, 0, 0, 0, 2, 0],
-      :Abilities => [:SYNCHRONIZE, :SYNCHRONIZE],
-      :HiddenAbilities => :INNERFOCUS,
+      :Abilities => [:INNERFOCUS, :INNERFOCUS],
+      :HiddenAbilities => :POISONHEAL,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemEighth,
       :BaseEXP => 184,
@@ -13567,7 +13574,11 @@ MONHASH = {
         [37,:MEANLOOK],
         [40,:DARKPULSE],
         [41,:LASTRESORT],
-        [45,:GUARDSWAP]],
+        [45,:GUARDSWAP],
+
+        # KAIZOMOD
+        [1,:TOXIC],
+      ],
       :compatiblemoves => [:ALLURINGVOICE,:ASSURANCE,:BABYDOLLEYES,:BATONPASS,:BIDE,:BODYSLAM,:CALMMIND,:CELEBRATE,:CHARM,:COVET,:CRUNCH,:CURSE,:CUT,:DARKPULSE,:DETECT,:DIG,:DOUBLEEDGE,:DREAMEATER,:ECHOEDVOICE,:FAKETEARS,:FLASH,:FOCUSENERGY,:FOULPLAY,:GIGAIMPACT,:GUARDSWAP,:HEADBUTT,:HEALBELL,:HELPINGHAND,:HYPERBEAM,:HYPERVOICE,:IRONTAIL,:LASERFOCUS,:LASHOUT,:LASTRESORT,:MIMIC,:MUDSLAP,:NIGHTMARE,:PAYBACK,:PAYDAY,:PSYCHIC,:PSYCHUP,:RAGE,:RAINDANCE,:REFLECT,:RETALIATE,:SCREECH,:SHADOWBALL,:SKULLBASH,:SNARL,:SNATCH,:SPITE,:STOREDPOWER,:SUCKERPUNCH,:SUNNYDAY,:SWIFT,:TAKEDOWN,:TAUNT,:THIEF,:THROATCHOP,:TORMENT,:TRAILBLAZE,:WEATHERBALL,:WONDERROOM,:WORKUP,:ZAPCANNON,
         #Rejuv only moves
         :IRRITATION,:POISONSWEEP],
@@ -17223,31 +17234,29 @@ MONHASH = {
       :Weight => 552,
   },
 
-  # "Florin's Sceptile" => {
-  #   :Type2 => :ROCK,
-  #   # +100 BST
-  #   :BaseStats => [70, 125, 95, 135, 85, 120],
-  #   :Abilities => [:GRASSYSURGE],
-  #   :BaseEXP => 284,
-  #   :Height => 19,
-  #   :Weight => 552,
-  # },
+  "Florin's Sceptile (Kaizo)" => {
+    # +100 BST
+    :BaseStats => [70, 125, 95, 135, 85, 120],
+    :Abilities => [:GRASSYSURGE],
+    :BaseEXP => 284,
+    :Height => 19,
+    :Weight => 552,
+  },
 
-  # "Florin's Sceptile (Mega)" => {
-  #   :Type2 => :ROCK,
-  #   # +100 BST
-  #   :BaseStats => [70, 150, 125, 155, 85, 145],
-  #   :Abilities => [:ADAPTABILITY],
-  #   :BaseEXP => 284,
-  #   :Height => 19,
-  #   :Weight => 552,
-  # },
+  "Florin's Sceptile (Mega)" => {
+    # +100 BST
+    :BaseStats => [70, 150, 125, 155, 85, 145],
+    :Abilities => [:ARMORTAIL],
+    :BaseEXP => 284,
+    :Height => 19,
+    :Weight => 552,
+  },
 
   :OnCreation => {},
   :DefaultForm => 0,
   :MegaForm => {
       :SCEPTILITE => 1,
-      # :SCEPTILITEF => 3,
+      :SCEPTILITEF => 3,
   },
 },
 
@@ -20883,6 +20892,7 @@ MONHASH = {
       :name => "Volbeat",
       :dexnum => 313,
       :Type1 => :BUG,
+      :Type2 => :NORMAL,
       :BaseStats => [65, 73, 75, 47, 85, 85],
       :EVs => [0, 0, 0, 0, 0, 1],
       :Abilities => [:ILLUMINATE, :SWARM],
@@ -20893,7 +20903,8 @@ MONHASH = {
       :CatchRate => 150,
       :Happiness => 70,
       :EggSteps => 4080,
-      :EggMoves => [:BATONPASS,:BUGBUZZ,:COUNTER,:DIZZYPUNCH,:ENCORE,:LUNGE,:ROOST,:SEISMICTOSS,:SILVERWIND,:SWAGGER,:TRICK],
+      :EggMoves => [:BATONPASS,:BUGBUZZ,:COUNTER,:DIZZYPUNCH,:ENCORE,:LUNGE,:ROOST,:SEISMICTOSS,:SILVERWIND,:SWAGGER,:TRICK,
+                    :FOLLOWME], # KAIZOMOD
       :Moveset => [
         [1,:FLASH],
         [1,:TACKLE],
@@ -20936,6 +20947,7 @@ MONHASH = {
       :name => "Illumise",
       :dexnum => 314,
       :Type1 => :BUG,
+      :Type2 => :FAIRY,
       :BaseStats => [65, 47, 75, 73, 85, 85],
       :EVs => [0, 0, 0, 0, 0, 1],
       :Abilities => [:OBLIVIOUS, :TINTEDLENS],
@@ -20946,7 +20958,8 @@ MONHASH = {
       :CatchRate => 150,
       :Happiness => 70,
       :EggSteps => 4080,
-      :EggMoves => [:AROMATHERAPY,:ATTRACT,:BATONPASS,:BUGBUZZ,:CAPTIVATE,:CONFUSERAY,:ENCORE,:FAKETEARS,:GROWTH,:ROOST,:SILVERWIND],
+      :EggMoves => [:AROMATHERAPY,:ATTRACT,:BATONPASS,:BUGBUZZ,:CAPTIVATE,:CONFUSERAY,:ENCORE,:FAKETEARS,:GROWTH,:ROOST,:SILVERWIND,
+                    :AFTERYOU], # KAIZOMOD
       :Moveset => [
         [1,:PLAYNICE],
         [1,:TACKLE],
@@ -27702,7 +27715,13 @@ MONHASH = {
         [35,:TAKEDOWN],
         [43,:SOLARBEAM],
         [48,:LUCKYCHANT],
-        [50,:PETALBLIZZARD]],
+        [50,:PETALBLIZZARD],
+
+        #KAIZOMOD
+        [54,:MOONBLAST],
+        [59,:SOLARBLADE],
+        [65,:BLOSSOMSTORM]
+      ],
       :compatiblemoves => [:BULLETSEED,:DAZZLINGGLEAM,:DRAININGKISS,:ENERGYBALL,:FLASH,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HELPINGHAND,:HYPERBEAM,:LASERFOCUS,:MAGICALLEAF,:NATUREPOWER,:PLAYROUGH,:POLLENPUFF,:ROLLOUT,:SAFEGUARD,:SEEDBOMB,:SOLARBEAM,:SOLARBLADE,:SUNNYDAY,:SWORDSDANCE,:SYNTHESIS,:WEATHERBALL,:WORRYSEED,
         #Rejuv only moves
         :SLASHANDBURN],
@@ -27719,7 +27738,10 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Sunshine Form" => {
+  "Sunshine Form" => {
+      :Type2 => :FAIRY,
+      # +100 BST
+      :BaseStats => [70, 90, 70, 107, 98, 115],
       :Color => "Pink",
   },
 
@@ -30641,7 +30663,22 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Erick's Electivire (Intense)" => {
+    # +50 BST
+    :Type2 => :STEEL,
+    :BaseStats => [75, 133, 97, 105, 85, 95],
+    :Abilities => [:HADRONENGINE],
+  },
+
+  "Erick's Electivire (Kaizo)" => {
+    # +100 BST
+    :Type2 => :STEEL,
+    :BaseStats => [75, 143, 107, 125, 95, 95],
+    :Abilities => [:HADRONENGINE],
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :MAGMORTAR => {
@@ -30770,7 +30807,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 },
 
 :YANMEGA => {
@@ -30844,8 +30881,8 @@ MONHASH = {
       :Type1 => :GRASS,
       :BaseStats => [65, 110, 130, 60, 65, 95],
       :EVs => [0, 0, 2, 0, 0, 0],
-      :Abilities => [:LEAFGUARD, :LEAFGUARD],
-      :HiddenAbilities => :CHLOROPHYLL,
+      :Abilities => [:CHLOROPHYLL, :CHLOROPHYLL],
+      :HiddenAbilities => :SHARPNESS,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemEighth,
       :BaseEXP => 184,
@@ -30915,7 +30952,7 @@ MONHASH = {
       :BaseStats => [65, 60, 110, 130, 95, 65],
       :EVs => [0, 0, 0, 2, 0, 0],
       :Abilities => [:SNOWCLOAK, :SNOWCLOAK],
-      :HiddenAbilities => :ICEBODY,
+      :HiddenAbilities => :SHEERFORCE,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemEighth,
       :BaseEXP => 184,
@@ -31514,6 +31551,7 @@ MONHASH = {
       :BaseStats => [50, 50, 77, 95, 77, 91],
       :EVs => [0, 0, 0, 1, 0, 1],
       :Abilities => [:LEVITATE],
+      :HiddenAbilities => :VOLTABSORB,
       :GrowthRate => :MediumFast,
       :GenderRatio => :Genderless,
       :BaseEXP => 154,
@@ -39066,15 +39104,28 @@ MONHASH = {
       :Weight => 2101,
     },
 
-    "Flora's Ferrothorn" => {
+    "Flora's Ferrothorn (Intense)" => {
+      :Type1 => :GRASS,
+      :Type2 => :STEEL,
+      :BaseStats => [74, 104, 151, 54, 136, 20],
+      :Abilities => [:GRASSYSURGE],
+    },
+
+    "Flora's Ferrothorn (Kaizo)" => {
       :Type1 => :GRASS,
       :Type2 => :STEEL,
       :BaseStats => [74, 134, 161, 54, 146, 20],
       :Abilities => [:GRASSYSURGE],
     },
 
+    "Giga Form" => {
+      :Height => 250,
+      :Weight => 17637,
+    },
+
+  :GigaForm => 5,
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 },
 
 :KLINK => {
@@ -42924,7 +42975,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 },
 
 :BUNNELBY => {
@@ -43954,7 +44005,8 @@ MONHASH = {
       :CatchRate => 190,
       :Happiness => 70,
       :EggSteps => 5120,
-      :EggMoves => [:ASSIST,:BARRIER,:TICKLE,:TRICK,:YAWN],
+      :EggMoves => [:ASSIST,:BARRIER,:TICKLE,:TRICK,:YAWN,
+                    :AFTERYOU, :CALMMIND], # KAIZOMOD
       :Moveset => [
         [1,:SCRATCH],
         [1,:LEER],
@@ -44028,7 +44080,8 @@ MONHASH = {
         [45,:IMPRISON],
         [48,:SUCKERPUNCH],
         [50,:MISTYTERRAIN],
-        [53,:QUICKGUARD]],
+        [53,:QUICKGUARD],
+      ],
       :compatiblemoves => [:ALLURINGVOICE,:ALLYSWITCH,:CALMMIND,:CHARGEBEAM,:CHARM,:COVET,:CUT,:DARKPULSE,:DIG,:DREAMEATER,:ECHOEDVOICE,:ENERGYBALL,:EXPANDINGFORCE,:FAKEOUT,:FAKETEARS,:FLASH,:GIGAIMPACT,:GRAVITY,:HEALBELL,:HELPINGHAND,:HYPERBEAM,:IMPRISON,:IRONTAIL,:LIGHTSCREEN,:MAGICCOAT,:MAGICROOM,:MISTYTERRAIN,:NASTYPLOT,:PAYBACK,:PAYDAY,:PLAYROUGH,:POWERUPPUNCH,:PSYCHIC,:PSYCHICNOISE,:PSYCHICTERRAIN,:PSYCHUP,:PSYSHOCK,:RAINDANCE,:RECYCLE,:REFLECT,:ROLEPLAY,:SAFEGUARD,:SHADOWBALL,:SHOCKWAVE,:SIGNALBEAM,:SKILLSWAP,:SNATCH,:SUCKERPUNCH,:SUNNYDAY,:SWIFT,:TAILSLAP,:TELEKINESIS,:THUNDERBOLT,:THUNDERWAVE,:TORMENT,:TRAILBLAZE,:TRICK,:TRICKROOM,:WONDERROOM,:WORKUP,:ZENHEADBUTT],
       :moveexceptions => [],
       :Color => "Blue",
@@ -45272,8 +45325,8 @@ MONHASH = {
       :Type1 => :FAIRY,
       :BaseStats => [95, 65, 65, 110, 130, 60],
       :EVs => [0, 0, 0, 0, 2, 0],
-      :Abilities => [:CUTECHARM, :CUTECHARM],
-      :HiddenAbilities => :PIXILATE,
+      :Abilities => [:PIXILATE, :PIXILATE],
+      :HiddenAbilities => :MAGICGUARD,
       :GrowthRate => :MediumFast,
       :GenderRatio => :FemEighth,
       :BaseEXP => 184,
@@ -46331,7 +46384,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
-  :DefaultForm => 1,
+  :DefaultForm => 0,
 },
 
 :XERNEAS => {
@@ -54700,7 +54753,7 @@ MONHASH = {
     :Type2 => :DRAGON,
     :Height => 750,
     :Weight => 2456,
-},
+  },
 
     "Mega Form" => {
       :BaseStats => [100, 140, 75, 90, 110, 110],
@@ -55066,17 +55119,23 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Height => 260,
+    :Weight => 2456,
+  },
+
+  "Mega Form" => {
       :BaseStats => [57, 107, 115, 166, 130, 25],
       :Abilities => [:MAGICBOUNCE],
       :Height => 260,
       :Weight => 2456,
   },
 
+  :GigaForm => 1,
   :OnCreation => {},
   :DefaultForm => 0,
     :MegaForm => {
-      :HATTERENITE => 1
+      :HATTERENITE => 2
   },
 },
 
@@ -60111,13 +60170,15 @@ MONHASH = {
       :BaseStats => [40, 40, 35, 50, 100, 70],
       :EVs => [0, 0, 0, 0, 1, 0],
       :Abilities => [:MYCELIUMMIGHT],
+      :HiddenAbilities => :FRIENDGUARD,
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 67,
       :CatchRate => 190,
       :Happiness => 70,
       :EggSteps => 5120,
-      :EggMoves => [:ACUPRESSURE,:KNOCKOFF,:LEECHSEED,:MIRRORCOAT,:RAGEPOWDER,:RAPIDSPIN,:TICKLE,:TOXIC],
+      :EggMoves => [:ACUPRESSURE,:KNOCKOFF,:LEECHSEED,:MIRRORCOAT,:RAGEPOWDER,:RAPIDSPIN,:TICKLE,:TOXIC,
+                    :RAGEPOWDER], #KAIZOMOD
       :Moveset => [
         [1,:MUDSLAP],
         [1,:WRAP],
@@ -60165,6 +60226,7 @@ MONHASH = {
       :BaseStats => [80, 70, 65, 80, 120, 100],
       :EVs => [0, 0, 0, 0, 2, 0],
       :Abilities => [:MYCELIUMMIGHT],
+      :HiddenAbilities => :DRYSKIN,
       :GrowthRate => :MediumSlow,
       :GenderRatio => :FemHalf,
       :BaseEXP => 180,
@@ -60193,7 +60255,8 @@ MONHASH = {
         [44,:GROWTH],
         [48,:GIGADRAIN],
         [54,:EARTHPOWER],
-        [58,:POWERWHIP]],
+        [58,:POWERWHIP],
+      ],
       :compatiblemoves => [:ACIDSPRAY,:BULLETSEED,:CONFUSERAY,:DAZZLINGGLEAM,:EARTHPOWER,:ENERGYBALL,:FLASHCANNON,:FOULPLAY,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:GRASSYGLIDE,:GRASSYTERRAIN,:HEX,:HYPERBEAM,:KNOCKOFF,:LEAFSTORM,:LIGHTSCREEN,:LUNGE,:MAGICALLEAF,:MUDSHOT,:MUDSLAP,:RAINDANCE,:REFLECT,:SCARYFACE,:SCREECH,:SEEDBOMB,:SLUDGEBOMB,:SOLARBEAM,:SPIKES,:SWIFT,:TAUNT,:TOXICSPIKES,:TRAILBLAZE,:TRICKROOM,:VENOSHOCK],
       :moveexceptions => [],
       :Color => "Black",

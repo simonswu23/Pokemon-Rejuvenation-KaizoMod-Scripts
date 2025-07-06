@@ -87,6 +87,7 @@ class PokeBattle_Battler
   attr_accessor :giga
   attr_accessor :gear
   attr_accessor :forewarn
+  attr_accessor :kaizoHelper
 
   #simple true/false vars
 
@@ -933,6 +934,9 @@ class PokeBattle_Battler
     if self.pbOwnSide.effects[:Tailwind] > 0
       speed = speed * 2
     end
+    if self.ability == :FLOWERGIFT or self.pbPartner.ability == :FLOWERGIFT
+      speed = speed * 1.5
+    end
     if KAIZOMOD && self.pbOwnSide.effects[:LuckyWind] > 0
       speed = speed * 2
     end
@@ -940,7 +944,7 @@ class PokeBattle_Battler
       when :SWIFTSWIM
         speed *= 2 if @battle.pbWeather == :RAINDANCE || @battle.FE == :UNDERWATER || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?)
       when :SURGESURFER
-        speed *= 2 if [:ELECTERRAIN, :SHORTCIRCUIT, :UNDERWATER].include?(@battle.FE) || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?) || @battle.state.effects[:ELECTERRAIN] > 0
+        speed *= 2 if [:ELECTERRAIN, :SHORTCIRCUIT, :UNDERWATER].include?(@battle.FE) || ([:WATERSURFACE, :MURKWATERSURFACE].include?(@battle.FE) && !self.isAirborne?) || @battle.state.effects[:ELECTERRAIN] != 0
       when :TELEPATHY
         speed *= 2 if @battle.FE == :PSYTERRAIN || @battle.state.effects[:PSYTERRAIN] > 0
       when :CHLOROPHYLL
@@ -1023,6 +1027,13 @@ class PokeBattle_Battler
     elsif amt <= 0 && self.hp != @totalhp
       amt = 1
     end
+    if (self.ability == :HEALER || self.pbPartner.ability == :HEALER) && KAIZOMOD
+      amt *= 2
+    end
+    if @battle.pbCheckGlobalAbility(:HOSPITALITY) && @battle.FE == :BEWITCHED && KAIZOMOD
+      amt *= 2
+    end
+
     oldhp = self.hp
     self.hp += amt
     raise _INTL("HP less than 0") if self.hp < 0
@@ -1687,7 +1698,7 @@ class PokeBattle_Battler
         end
       end
     end
-    if @battle.state.effects[:ELECTERRAIN] > 0
+    if @battle.state.effects[:ELECTERRAIN] != 0
       if self.ability == :STEADFAST && onactive
         if !pbTooHigh?(PBStats::SPEED)
           pbIncreaseStatBasic(PBStats::SPEED, 1)
@@ -2513,38 +2524,46 @@ class PokeBattle_Battler
     #Surges
     duration=5
     duration=8 if self.hasWorkingItem(:AMPLIFIELDROCK)
-    if self.ability == :ELECTRICSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || @battle.canChangeFE?([:ELECTERRAIN,:DRAGONSDEN])) && !(@battle.state.effects[:ELECTERRAIN] > 0)
+    if self.ability == :ELECTRICSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || @battle.canChangeFE?([:ELECTERRAIN,:DRAGONSDEN])) && !(@battle.state.effects[:ELECTERRAIN] != 0)
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
-        @battle.pbAnimation(:ELECTRICTERRAIN,self,nil)
-        @battle.setField(:ELECTERRAIN,duration)
-        @battle.pbDisplay(_INTL("The terrain became electrified!"))
+        if @battle.state.effects[:ELECTERRAIN] == 0
+          @battle.pbAnimation(:ELECTRICTERRAIN,self,nil)
+          @battle.setField(:ELECTERRAIN,duration)
+          @battle.pbDisplay(_INTL("The terrain became electrified!"))
+        end
       end
     # GrassySurge
     elsif self.ability == :GRASSYSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:GRASSY)) || @battle.canChangeFE?([:GRASSY,:DRAGONSDEN])) && !(@battle.state.effects[:GRASSY] > 0)
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
-        @battle.pbAnimation(:GRASSYTERRAIN,self,nil)
-        @battle.setField(:GRASSY,duration)
-        @battle.pbDisplay(_INTL("The terrain became grassy!"))
+        if @battle.state.effects[:GRASSY] == 0
+          @battle.pbAnimation(:GRASSYTERRAIN,self,nil)
+          @battle.setField(:GRASSY,duration)
+          @battle.pbDisplay(_INTL("The terrain became grassy!"))
+        end
       end
     elsif self.ability == :MISTYSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:MISTY)) || @battle.canChangeFE?([:MISTY,:CORROSIVEMIST,:DRAGONSDEN])) && !(@battle.state.effects[:MISTY] > 0)
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
-        @battle.pbAnimation(:MISTYTERRAIN,self,nil)
-        @battle.setField(:MISTY,duration)
-        @battle.pbDisplay(_INTL("The terrain became misty!"))
+        if @battle.state.effects[:MISTY] == 0
+          @battle.pbAnimation(:MISTYTERRAIN,self,nil)
+          @battle.setField(:MISTY,duration)
+          @battle.pbDisplay(_INTL("The terrain became misty!"))
+        end
       end
     elsif self.ability == :PSYCHICSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:PSYTERRAIN)) || @battle.canChangeFE?([:PSYTERRAIN,:DRAGONSDEN])) && !(@battle.state.effects[:PSYTERRAIN] > 0)
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
-        @battle.pbAnimation(:PSYCHICTERRAIN,self,nil)
-        @battle.setField(:PSYTERRAIN,duration)
-        @battle.pbDisplay(_INTL("The terrain became mysterious!"))
+        if @battle.state.effects[:PSYTERRAIN] == 0
+          @battle.pbAnimation(:PSYCHICTERRAIN,self,nil)
+          @battle.setField(:PSYTERRAIN,duration)
+          @battle.pbDisplay(_INTL("The terrain became mysterious!"))
+        end
       end
     elsif self.ability == :DARKSURGE && onactive
       if @battle.FE== :DARKNESS3
@@ -2568,9 +2587,11 @@ class PokeBattle_Battler
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
-        @battle.pbAnimation(:ELECTRICTERRAIN,self,nil)
-        @battle.setField(:ELECTERRAIN,duration)
-        @battle.pbDisplay(_INTL("{2} turned the ground into Electric Terrain, energizing its futuristic engine!", pbThis))
+        if @battle.state.effects[:ELECTERRAIN] == 0
+          @battle.pbAnimation(:ELECTRICTERRAIN,self,nil)
+          @battle.setField(:ELECTERRAIN,duration)
+          @battle.pbDisplay(_INTL("{1} electrified the terrain, energizing its futuristic engine!", pbThis))
+        end
       end
     end
 
@@ -2614,11 +2635,19 @@ class PokeBattle_Battler
     end
 
     # Gen 9 Mod - Added Hospitality
-    if self.ability == :HOSPITALITY && self.pbPartner && onactive
-      if self.pbPartner.hp < self.pbPartner.totalhp
-        self.pbPartner.pbRecoverHP((pbPartner.totalhp/4).floor, true)
-        @battle.pbDisplay(_INTL("{1}'s Hospitality restored {2}'s HP!", pbThis, pbPartner.pbThis(true)))
+    if self.ability == :HOSPITALITY
+      if self.pbPartner && onactive
+        if self.pbPartner.hp < self.pbPartner.totalhp
+          self.pbPartner.pbRecoverHP((pbPartner.totalhp/3).floor, true)
+          @battle.pbDisplay(_INTL("{1}'s Hospitality restored {2}'s HP!", pbThis, pbPartner.pbThis(true)))
+        end
       end
+      # if (@battle.FE == :BEWITCHED) && onactive
+      #   if self.hp < self.totalhp
+      #     self.pbRecoverHP((self.totalhp/3).floor, true)
+      #     @battle.pbDisplay(_INTL("{1}'s Hospitality restored its own HP!", pbThis))
+      #   end
+      # end
     end
 
     # Weather Abilities
@@ -2696,7 +2725,7 @@ class PokeBattle_Battler
     end
 
     # Gen 9 Mod - Adde Orichalcum Pulse
-    if [:DROUGHT, :ORICHALCUMPULSE].include?(ability) && onactive
+    if ([:DROUGHT, :ORICHALCUMPULSE].include?(ability) || self.crested == :CHERRIM) && onactive
       if @battle.weather != :SUNNYDAY
         if @battle.state.effects[:HeavyRain]
           @battle.pbDisplay(_INTL("There's no relief from this heavy rain!"))
@@ -2722,8 +2751,10 @@ class PokeBattle_Battler
           @battle.pbCommonAnimation("Sunny", nil, nil)
           if ability == :ORICHALCUMPULSE
             @battle.pbDisplay(_INTL("{1}'s Orichalcum Pulse turned the sunlight harsh, sending its ancient pulse into a frenzy!", pbThis))
-          else
+          elsif ability == :DROUGHT
             @battle.pbDisplay(_INTL("{1}'s Drought intensified the sun's rays!", pbThis))
+          else
+            @battle.pbDisplay(_INTL("{1}'s crest intensified the sun's rays!", pbThis))
           end
           if @battle.FE == :DARKCRYSTALCAVERN
             @battle.setField(:CRYSTALCAVERN, @battle.weatherduration)
@@ -3268,7 +3299,7 @@ class PokeBattle_Battler
       spdBoost = (self.speed * PBStats::StageMul[@stages[PBStats::SPEED]]).floor
       stats = [aBoost, dBoost, saBoost, sdBoost, spdBoost]
       boostStat = stats.index(stats.max) + 1
-      if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] > 0) && self.effects[:Quarkdrive][0] == 0
+      if (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0) && self.effects[:Quarkdrive][0] == 0
         self.effects[:Quarkdrive] = [boostStat, false]
         @battle.pbDisplay(_INTL("{1}'s Quark Drive heightened its {2}!", pbThis, pbGetStatName(boostStat)))
       end
@@ -3417,6 +3448,12 @@ class PokeBattle_Battler
         @battle.state.effects[:WaterSport]+=5
         @battle.pbDisplay(_INTL("Fire's power was weakened!"))
       end
+    end
+
+    # Hydro Veil
+    if self.ability == :HYDROVEIL && onactive
+      self.effects[:AquaRing]=true
+      @battle.pbDisplay(_INTL("{1} surrounded itself with a veil of water with its {2}!",self.pbThis,getAbilityName(self.ability)))
     end
 
     # Lucky Wind
@@ -3679,7 +3716,8 @@ class PokeBattle_Battler
       end
       if move.recoil > 0 && !target.damagestate.disguise &&
          user.ability != :ROCKHEAD && user.crested != :RAMPARDOS && user.ability != :MAGICGUARD &&
-         !(move.move == :WILDCHARGE && @battle.FE == :ELECTERRAIN) && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM)
+         !(move.move == :WILDCHARGE && @battle.FE == :ELECTERRAIN) && !(user.ability == :WONDERGUARD && @battle.FE == :COLOSSEUM) &&
+         !(move.move == :POWERSURGE && @battle.state.effects[:ELECTERRAIN] != 0)
         recoilmultiplier = move.recoil
         recoilmultiplier = 0.25 if move.move == :WAVECRASH && (@battle.FE == :WATERSURFACE || @battle.FE == :UNDERWATER)
         recoildamage = [1, (damage * recoilmultiplier).floor].max
@@ -4635,6 +4673,8 @@ class PokeBattle_Battler
       target=:SingleNonUser
     elsif (@battle.FE == :PSYTERRAIN || @battle.state.effects[:PSYTERRAIN] > 0 ) && move.move == :EXPANDINGFORCE
       target=:AllOpposing
+    elsif (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0 ) && move.move == :POWERSURGE
+      target=:AllOpposing
     elsif @battle.FE == :FLOWERGARDEN5 && PBFields::MAXGARDENMOVES.include?(move.move)
       target=:AllOpposing
     elsif @battle.FE == :HAUNTED && (move.move == :MEANLOOK || move.move == :FIRESPIN)
@@ -4733,7 +4773,7 @@ class PokeBattle_Battler
           next if !pbIsOpposing?(i.index) || i.isFainted?
 
           if i.effects[:FollowMe] || i.effects[:RagePowder]
-            unless (i.effects[:RagePowder] && (self.ability == :OVERCOAT || self.hasType?(:GRASS) || self.hasWorkingItem(:SAFETYGOGGLES))) # change target to this
+            unless (i.effects[:RagePowder] && (self.ability == :OVERCOAT || (self.hasType?(:GRASS) && i.abiltiy != :MYCELIUMMIGHT) || self.hasWorkingItem(:SAFETYGOGGLES))) # change target to this
               target = i
               changeeffect = 0
             end
@@ -5651,6 +5691,7 @@ class PokeBattle_Battler
         addleffect = 100 if basemove.move == :LICK && @battle.FE == :HAUNTED
         addleffect = 100 if basemove.move == :DIRECLAW && @battle.FE == :WASTELAND
         addleffect = 100 if basemove.move == :INFERNALPARADE && @battle.FE == :INFERNAL
+        addleffect = 100 if basemove.move == :MATCHAGOTCHA && battle.FE == :BEWITCHED
         addleffect *= 2 if basemove.move == :SUNDAE && (@battle.pbWeather == :HAIL || (@battle.FE == :ICY || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :FROZENDIMENSION))
         addleffect = 0 if (user.crested == :LEDIAN && i > 1) || (user.crested == :CINCCINO && i > 1) && !KAIZOMOD
         if @battle.pbRandom(100) < addleffect
