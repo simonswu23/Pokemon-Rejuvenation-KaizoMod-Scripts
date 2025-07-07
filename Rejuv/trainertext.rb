@@ -33,7 +33,7 @@ TEAMARRAY = [{
 	},
 },
 =end
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	# -1 => {
@@ -2419,8 +2419,8 @@ TEAMARRAY = [{
 :ace => "Who the hell said you could push me like this?",
 :defeat => "What?! I lost?! Ah well, I tried!",
 :items => [:POTION],
-:trainereffect => { 
-	:effectmode => :Fainted, 
+:trainereffect => {
+	:effectmode => :Fainted,
 	:buffactivation => :Limited,
 	1 => {
 		:applyStatus => [:POISON,false,0,"VENAM: A little Venam's kiss for you!",true],
@@ -3296,6 +3296,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:nature => :BOLD,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [252,252,252,252,252,252],
 	:happiness => 255,
 }]},
@@ -3313,6 +3314,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:nature => :BOLD,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [252,252,252,252,252,252],
 	# flavor data
 	:obtaintype => 1,
@@ -12084,6 +12086,7 @@ TEAMARRAY = [{
 	:nature => :TIMID,
 	:iv => 31,
 	:name => "Hapi",
+	:form => 1,
 }]},
 
 # Xen Brigade - Easy
@@ -12152,6 +12155,7 @@ TEAMARRAY = [{
 	:gender => "M",
 	:shiny => true,
 	:name => "Hapi",
+	:form => 1,
 }]},
 
 # Terajuma Shore - Normal
@@ -12349,7 +12353,7 @@ TEAMARRAY = [{
 :teamid => ["Valarie",:LEADER_VALARIE,0],
 :defeat => "Looks like I've been washed away...",
 :items => [:LAPRASCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
@@ -12594,7 +12598,7 @@ TEAMARRAY = [{
 {
 :teamid => ["Valarie",:LEADER_VALARIE,100],
 :items => [:HYPERPOTION, :LAPRASCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
@@ -13023,7 +13027,7 @@ TEAMARRAY = [{
 :teamid => ["Neved",:XENEXECUTIVE_4,1],
 :defeat => "Bested once again...",
 :items => [:INTELEONCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
@@ -13161,7 +13165,7 @@ TEAMARRAY = [{
 :teamid => ["Rorim B.",:DISCOTEEN,1],
 :defeat => "Aiyah! And that's that!",
 :items => [:HYPERPOTION],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Fainted,
 	:buffactivation => :Always,
 	-1 => {
@@ -14035,7 +14039,7 @@ TEAMARRAY = [{
 :ace => "Don't you know how hard it is to kill a bug?",
 :defeat => "Why am I not surprised? My Bug Pokemon were crushed after all!",
 :items => [:HYPERPOTION,:HYPERPOTION,:APPLETUNCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
@@ -14043,7 +14047,7 @@ TEAMARRAY = [{
 	},
 	0 => {
 		:stateChanges => {
-			:WaterSport => [-1,:WATERSPORT,"Dampness seeps through..."], 
+			:WaterSport => [-1,:WATERSPORT,"Dampness seeps through..."],
 		}
 	},
 },
@@ -14135,7 +14139,7 @@ TEAMARRAY = [{
 :ace => "You're our hope! Don't let us down!",
 :defeat => "And that's that.",
 :items => [:FLAPPLECORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	-1 => {
@@ -14652,7 +14656,7 @@ TEAMARRAY = [{
 :teamid => ["Zetta",:XENEXECUTIVE_1,5],
 :defeat => "I never stood a chance... did I?",
 :items => [:RILLABOOMCORE,:SILVCREST],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	-1 => {
@@ -14853,7 +14857,7 @@ TEAMARRAY = [{
 {
 	:species => :VESPIQUEN,
 	:level => 54,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Malik",:XENGRUNT_M,1],
@@ -14871,7 +14875,7 @@ TEAMARRAY = [{
 {
 	:species => :GARCHOMP,
 	:level => 52,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Nickoli",:XENGRUNT_M,1],
@@ -14889,7 +14893,7 @@ TEAMARRAY = [{
 {
 	:species => :RAMPARDOS,
 	:level => 53,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Sheila",:XENGRUNT_F,3],
@@ -14908,7 +14912,7 @@ TEAMARRAY = [{
 {
 	:species => :YANMEGA,
 	:level => 54,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Justy",:XENGRUNT_M,0],
@@ -14940,7 +14944,7 @@ TEAMARRAY = [{
 {
 	:species => :MAGNEZONE,
 	:level => 52,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Sayali",:XENGRUNT_F,0],
@@ -14997,7 +15001,7 @@ TEAMARRAY = [{
 {
 	:species => :URSARING,
 	:level => 52,
-	:iv => 31,	
+	:iv => 31,
 }]},
 {
 :teamid => ["Hamilton",:XENGRUNT_M,0],
@@ -15501,7 +15505,7 @@ TEAMARRAY = [{
 	:nature => :ADAMANT,
 	:iv => 31,
 	:ev => [0,252,0,0,4,252]}]},
-{ 
+{
 :teamid => ["Voluptate",:XENGRUNT_M,0],
 :defeat => "The answer is all in the I.",
 :mons => [{
@@ -15560,7 +15564,7 @@ TEAMARRAY = [{
 	:happiness => 255,
 	:name => "REN REN REN ZETTA REN ZET",
 	:ev => [0, 152, 0, 100, 0, 252]},
-{	
+{
 	:species => :TOXTRICITY,
 	:level => 100,
 	:item => :ELEMENTALSEED,
@@ -15643,7 +15647,7 @@ TEAMARRAY = [{
 	:moves => [:QUIVERDANCE,:TEETERDANCE,:GIGADRAIN,:SLUDGEBOMB],
 	:ability => :CHLOROPHYLL,
 	:ev => [4, 0, 0, 252, 0, 252]
-	
+
 },
 {
 	:species => :LUDICOLO,
@@ -16751,7 +16755,7 @@ TEAMARRAY = [{
 	2 => {
 		:message => "Do you think my Gorebyss can read minds?",
 		:typeChange => [:WATER,:PSYCHIC],
-		:animation => :CALMMIND,	
+		:animation => :CALMMIND,
 		:typeChangeMessage => "Gorebyss has a Psychic aura!",
 		:pokemonStatChanges => { # any statboosts that are given
 			PBStats::SPDEF => 1,
@@ -18215,7 +18219,7 @@ TEAMARRAY = [{
 :teamid => ["Saki",:LEADER_SAKI,0],
 :defeat => "I've been smeckledorfed!",
 :items => [:MELMETALCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Limited,
 	0 => {
@@ -18422,6 +18426,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:form => 2,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [0,0,4,252,0,252]
 },
 ]},
@@ -19225,6 +19230,7 @@ TEAMARRAY = [{
 	:nature => :BOLD,
 	:iv => 31,
 	:name => "Hapi",
+	:form => 1,
 },
 {
 	:species => :ZOROARK,
@@ -19602,7 +19608,7 @@ TEAMARRAY = [{
 :ace => "I'm not breakin' a sweat!",
 :defeat => "What...? But the hype was too real!",
 :items => [:CENTISKORCHCORE],
-:trainereffect => { 
+:trainereffect => {
 	:forceDouble => true,
 	:effectmode => :Party,
 	:buffactivation => :Limited,
@@ -19615,7 +19621,7 @@ TEAMARRAY = [{
 	# },
 	6 => {
 		:pokemonEffect => {
-			:dummy => [true,:FIERYDANCE,"{2} flared up, acquiring Flash Fire!"], 
+			:dummy => [true,:FIERYDANCE,"{2} flared up, acquiring Flash Fire!"],
 		},
 	},
 },
@@ -19631,7 +19637,7 @@ TEAMARRAY = [{
 	:form => 1,
 	:iv => 31,
 	:ev => [0, 0, 0, 252, 4, 252]
-},	
+},
 {
 	:species => :INCINEROAR,
 	:level => 58,
@@ -20370,18 +20376,18 @@ TEAMARRAY = [{
 :ace => "You push me this far...? I can't... It's too hot... It's too hot...",
 :defeat => "No! I won't accept this! I refuse... to lose to you!",
 :items => [:HYPERPOTION,:ULTRAPOTION],
-:trainereffect => { 
-	:effectmode => :Party, 
+:trainereffect => {
+	:effectmode => :Party,
 	:buffactivation => :Limited,
 	0 => {
 		:friendlyEffect => true,
-		:trainersideChanges => {	
+		:trainersideChanges => {
 			:ToxicSpikes => [1,:TOXICSPIKES,"VENAM: take that you frozen BITCH!"],
 		},
 	},
 	2 => {
 		:friendlyEffect => true,
-		:opposingsideChanges => {	
+		:opposingsideChanges => {
 			:Tailwind => [4,:TAILWIND, "MELIA: Hapi, help out with your Lucky Wind!"],
 			:LuckyChant => [4,:LuckyChant],
 			:LuckyWind => [4,:LuckyWind],
@@ -20389,13 +20395,13 @@ TEAMARRAY = [{
 	},
 	5 => {
 		:friendlyEffect => true,
-		:opposingsideChanges => {	
+		:opposingsideChanges => {
 			:AuroraVeil => [5,:AURORAVEIL, "CRAWLI: Frosmoth, Aurora Veil!"],
 		},
 	},
 	7 => {
 		:message => "ANGIE: BLASPHEMOUS -- ALL OF YOU!",
-		:pokemonStatChanges => { 
+		:pokemonStatChanges => {
 			PBStats::ATTACK => 1,
 			PBStats::DEFENSE => 1,
 			PBStats::SPATK => 1,
@@ -20572,35 +20578,35 @@ TEAMARRAY = [{
 :teamid => ["Angie",:LEADER_ANGIE,100],
 :ace => "You push me this far...? I can't... It's too hot... It's too hot...",
 :defeat => "No! I won't accept this! I refuse.. to lose to you!",
-:trainereffect => { 
-	:effectmode => :Party, 
+:trainereffect => {
+	:effectmode => :Party,
 	:buffactivation => :Limited,
 	0 => {
 		:friendlyEffect => true,
-		:trainersideChanges => {	
+		:trainersideChanges => {
 			:ToxicSpikes => [2,:TOXICSPIKES,"VENAM: take that you frozen BITCH!"],
 		},
 	},
 	2 => {
 		:friendlyEffect => true,
-		:opposingsideChanges => {	
+		:opposingsideChanges => {
 			:Tailwind => [4,:TAILWIND, "Melia: Hapi, help out and use Tailwind!"],
 		},
 	},
 	3 => {
 		:friendlyEffect => true,
-		:message => "CRAWLI: Let's warm this place up, Volcarona!", 
+		:message => "CRAWLI: Let's warm this place up, Volcarona!",
 		:fieldChange => [:DIMENSIONAL,"ANGIE: I'll freeze it right back!",0],
 	},
 	4 => {
 		:friendlyEffect => true,
-		:opposingsideChanges => {	
+		:opposingsideChanges => {
 			:AuroraVeil => [5,:AURORAVEIL, "Kreiss: Dear Frosslass, Aurora Veil!"],
 		},
 	},
 	5 => {
 		:message => "ANGIE: BLASPHEMOUS -- ALL OF YOU!",
-		:pokemonStatChanges => { 
+		:pokemonStatChanges => {
 			PBStats::ATTACK => 1,
 			PBStats::DEFENSE => 1,
 			PBStats::SPATK => 1,
@@ -21276,7 +21282,7 @@ TEAMARRAY = [{
 	:nature => :ADAMANT,
 	:iv => 31,
 	:ev => [252, 252, 0, 0, 4, 0],
-},	
+},
 {
 	:species => :HONCHKROW,
 	:level => 57,
@@ -21447,6 +21453,7 @@ TEAMARRAY = [{
 	:form => 2,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [152, 0, 0, 100, 0, 252]},
 {
 	:species => :HYDREIGON,
@@ -21481,12 +21488,12 @@ TEAMARRAY = [{
 :defeat => "I refuse to let it end here...",
 :items => [:ULTRAPOTION,:GRIMMSNARLCORE],
 :trainereffect => { # in party order
-	:effectmode => :Party, 
-	:buffactivation => :Limited, 
+	:effectmode => :Party,
+	:buffactivation => :Limited,
 	4 => {
-		:message => "GEARA: Giratina, fucking do something useful!", 
-		:trainersideChanges => {	
-			:Tailwind => [8,:TAILWIND,"Giratina blew a strong Tailwind for the opposing team!"], 
+		:message => "GEARA: Giratina, fucking do something useful!",
+		:trainersideChanges => {
+			:Tailwind => [8,:TAILWIND,"Giratina blew a strong Tailwind for the opposing team!"],
 		},
 	},
 },
@@ -21565,13 +21572,13 @@ TEAMARRAY = [{
 :defeat => "I.. uh...",
 :items => [:ULTRAPOTION,:SILVCREST,:RILLABOOMCORE],
 :trainereffect => { # in party order
-	:effectmode => :Party, 
-	:buffactivation => :Limited, 
+	:effectmode => :Party,
+	:buffactivation => :Limited,
 	2 => {
-		:message => "GEARA: Zetta, what the hell are you doing?? Get your act together!", 
-		:opposingsideChanges => {	
+		:message => "GEARA: Zetta, what the hell are you doing?? Get your act together!",
+		:opposingsideChanges => {
 			:message => "Zetta: ...",
-			:Volcalith => [true,:VOLCALITH,"Typhlosion threw molten rocks around your team!"], 
+			:Volcalith => [true,:VOLCALITH,"Typhlosion threw molten rocks around your team!"],
 		},
 	},
 },
@@ -22194,6 +22201,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [152, 0, 0, 100, 0, 252]},
 {
 	:species => :AZUMARILL,
@@ -23435,6 +23443,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252]}]},
 {
 :teamid => ["Melia",:ENIGMA_1,2],
@@ -23487,6 +23496,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 },
 {
 	:species => :AZUMARILL,
@@ -23690,6 +23700,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 }]},
 {
 :teamid => ["Melia",:ENIGMA_1,102],
@@ -23742,6 +23753,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 },
 {
 	:species => :HYDREIGON,
@@ -24315,6 +24327,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252]}]},
 {
 :teamid => ["Melia",:ENIGMA_1,4],
@@ -24421,6 +24434,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252],
 	# flavor data
 	:obtaintype => 1,
@@ -24468,6 +24482,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252]}]},
 {
 :teamid => ["Melanie",:LITTLEDEMON,0],
@@ -24920,6 +24935,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 }]},
 {
 :teamid => ["Melia",:ENIGMA_1,104],
@@ -24983,6 +24999,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 }]},
 {
 :teamid => ["Melanie",:LITTLEDEMON,100],
@@ -26237,6 +26254,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 },
 {
 	:species => :AZUMARILL,
@@ -26395,6 +26413,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 },
 {
 	:species => :AZUMARILL,
@@ -26734,7 +26753,7 @@ TEAMARRAY = [{
 :ace => "It seems we are starting to have technical difficulties. Please stand by!",
 :defeat => "Oi vey. That didn't go in my favor at all...",
 :items => [:ULTRAPOTION,:ULTRAPOTION,:TOXTRICITYCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	-1 => {
@@ -29092,7 +29111,7 @@ TEAMARRAY = [{
 :ace => "Are you kidding me? Who said you could turn this around?",
 :defeat => "I tried.",
 :items => [:MAXPOTION,:MAXPOTION,:FULLHEAL,:FERROTHORNCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	-1 => {
@@ -29223,7 +29242,7 @@ TEAMARRAY = [{
 :ace => "It seems like I'm being placed in a corner. Funny how things turn south so quickly.",
 :defeat => "I uh... Didn't expect to win, but I guess it was fun anyway? Yeah! It was!",
 :items => [:VENUSAURCORE],
-:trainereffect => { 
+:trainereffect => {
 	:effectmode => :Party,
 	:buffactivation => :Always,
 	-1 => {
@@ -29232,7 +29251,7 @@ TEAMARRAY = [{
 	0 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29242,7 +29261,7 @@ TEAMARRAY = [{
 	1 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29252,7 +29271,7 @@ TEAMARRAY = [{
 	2 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29262,7 +29281,7 @@ TEAMARRAY = [{
 	3 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29272,8 +29291,8 @@ TEAMARRAY = [{
 	4 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy2 => [true,:QUICKGUARD,"The opposing team is protected by {2}'s Queenly Majesty!"], 
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy2 => [true,:QUICKGUARD,"The opposing team is protected by {2}'s Queenly Majesty!"],
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29285,7 +29304,7 @@ TEAMARRAY = [{
 		:setWeather => [:SUNNYDAY,-1],
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29295,7 +29314,7 @@ TEAMARRAY = [{
 	6 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29305,7 +29324,7 @@ TEAMARRAY = [{
 	7 => {
 		:pokemonEffect => {
 			:FlowerVeil => [true, :FLOWERSHIELD, "A Flower Veil protects {2}!"],
-			:dummy => [true,:GROWTH,"{2} used Growth!"], 
+			:dummy => [true,:GROWTH,"{2} used Growth!"],
 		},
 		:pokemonStatChanges => {
 			PBStats::ATTACK => 2,
@@ -29369,7 +29388,7 @@ TEAMARRAY = [{
 {
 	:species => :CHERRIM,
 	:level => 68,
-	:item => :CHERCREST, 
+	:item => :CHERCREST,
 	:moves => [:BLOSSOMSTORM,:WEATHERBALL,:SOLARBLADE,:SUNNYDAY],
 	:ability => :FLOWERGIFT,
 	:nature => :RASH,
@@ -42768,6 +42787,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252],
 	# flavor data
 	:obtaintype => 1,
@@ -42845,7 +42865,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:ev => [0, 252, 0, 4, 0, 252]}]},
 {
-:teamid => ["Thomas",:STEELRESERVE,0], 
+:teamid => ["Thomas",:STEELRESERVE,0],
 :defeat => "Oh? Well, I'm impressed. Huey could never.",
 :ace => "I've been pushed into a corner. How exciting.",
 :items => [:MAXPOTION],
@@ -43280,7 +43300,7 @@ TEAMARRAY = [{
 	:iv => 31,
 }]},
 {
-:teamid => ["Thomas",:STEELRESERVE,100], 
+:teamid => ["Thomas",:STEELRESERVE,100],
 :items => [:MAXPOTION],
 :mons => [{
 	:species => :KLINKLANG,
@@ -43529,7 +43549,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:ev => [252, 4, 152, 0, 0, 100]
 }]},
-{		
+{
 :teamid => ["Kyle",:XENANALYST_M,0],
 :defeat => "We won't make it if you evict us...",
 :mons => [{
@@ -44682,6 +44702,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252]},
 {
 	:species => :AEGISLASH,
@@ -44801,6 +44822,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252],
 	# flavor data
 	:obtaintype => 1,
@@ -44915,6 +44937,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252],
 	# flavor data
 	:obtaintype => 1,
@@ -45027,6 +45050,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252],
 	# flavor data
 	:obtaintype => 1,
@@ -45790,6 +45814,7 @@ TEAMARRAY = [{
 	:nature => :TIMID,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 }]},
 {
 :teamid => ["Venam",:LEADER_VENAM3,102],
@@ -50643,6 +50668,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 255,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [0, 0, 4, 252, 0, 252]},
 {
 	:species => :AEGISLASH,
@@ -51608,7 +51634,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:ev => [0,0,0,252,4,252]
 }]},
-{	
+{
 :teamid => ["01000001 01000101",:TREAT_02,0],
 :defeat => "No, this isn't possible! Why us?! What did we do?!",
 :mons => [{
@@ -51758,6 +51784,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:happiness => 252,
 	:name => "Hapi",
+	:form => 1,
 	:ev => [4, 0, 0, 252, 0, 252]
 }]},
 {
@@ -51877,7 +51904,7 @@ TEAMARRAY = [{
 	:gender => "M",
 	:nature => :MODEST,
 }]},
-{	
+{
 :teamid => ["01000001 01000101",:TREAT_02,100],
 :defeat => "No, this isn't possible! Why us?! What did we do?!",
 :mons => [{
@@ -51970,6 +51997,7 @@ TEAMARRAY = [{
 	:nature => :TIMID,
 	:happiness => 255,
 	:name => "Hapi",
+	:form => 1,
 }]},
 {
 :teamid => ["Crescent",:INTERCEPTOR,100],
@@ -55255,7 +55283,7 @@ TEAMARRAY = [{
 	:iv => 31,
 	:gender => "F",
 },
-	
+
 {
 	:species => :TAILLOW,
 	:level => 14,
@@ -55876,13 +55904,13 @@ TEAMARRAY = [{
 },
 {
 	:species => :TRUBBISH,
-	:moves => [:POISONGAS,:ACIDSPRAY,:POUND,:ROLLOUT],	
+	:moves => [:POISONGAS,:ACIDSPRAY,:POUND,:ROLLOUT],
 	:level => 13,
 	:ability => :AFTERMATH,
 },
 {
 	:species => :TRUBBISH,
-	:moves => [:POISONGAS,:ACIDSPRAY,:POUND,:SANDATTACK],	
+	:moves => [:POISONGAS,:ACIDSPRAY,:POUND,:SANDATTACK],
 	:level => 13,
 	:ability => :AFTERMATH,
 }]},
