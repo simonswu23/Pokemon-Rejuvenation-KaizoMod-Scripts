@@ -1497,7 +1497,7 @@ class PokeBattle_Battle
         pri += 1 if @field.effect == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type == :FLYING && (@battlers[i].hp >= @battlers[i].totalhp / 2 || ((@field.effect == :MOUNTAIN || @field.effect == :SNOWYMOUNTAIN) && pbWeather == :STRONGWINDS))
-        pri += 1 if (@choices[i][2].move == :GRASSYGLIDE || @choices[i][2].move == :ESCAPEROOT) && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
+        pri += 1 if (@choices[i][2].move == :GRASSYGLIDE) && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
         pri += 1 if @choices[i][2].move == :POWERSURGE && (@field.effect == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
         pri += 1 if @choices[i][2].move == :ATTACKORDER && @battlers[i].crested == :VESPIQUEN
         pri += 1 if @choices[i][2].move == :SQUALL && (@weather == :HAIL || @field.effect == :SNOWYMOUNTAIN)
@@ -5844,7 +5844,7 @@ class PokeBattle_Battle
           end
         end
 
-        if (@battle.FE == :BEWITCHED && (i.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) || i.pbCanIncreaseStatStage?(PBStats::SPDEF, false)))      
+        if i.hasType?(:GRASS) && (@battle.FE == :BEWITCHED && (i.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) || i.pbCanIncreaseStatStage?(PBStats::SPDEF, false)))      
           pbDisplay(_INTL("{1} was strengthened by the magical soil!", i.pbThis))
           for stat in [PBStats::DEFENSE, PBStats::SPDEF]
             i.pbIncreaseStat(stat, 1, abilitymessage: false, statsource: i)
@@ -6006,6 +6006,7 @@ class PokeBattle_Battle
 
       # Shiinotic Crest
       if i.crested == :SHIINOTIC
+        next if i.isFainted?
         for j in priority
           next if j == i
           next if j.isFainted?

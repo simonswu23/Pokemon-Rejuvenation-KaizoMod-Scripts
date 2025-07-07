@@ -1022,17 +1022,18 @@ class PokeBattle_Battler
     if @battle.FE == :BACKALLEY && !(amt >= @totalhp) && !(caller_locations.any? { |string| string.to_s.include?("pbEnemyUseItem") })
       amt = (amt * 0.67).floor
     end
+    if (self.ability == :HEALER || self.pbPartner.ability == :HEALER) && KAIZOMOD
+      amt = (amt * 2).floor
+    end
+    if @battle.pbCheckGlobalAbility(:HOSPITALITY) && @battle.FE == :BEWITCHED && KAIZOMOD
+      amt = (amt * 2).floor
+    end
     if self.hp + amt > @totalhp
       amt = @totalhp - self.hp
     elsif amt <= 0 && self.hp != @totalhp
       amt = 1
     end
-    if (self.ability == :HEALER || self.pbPartner.ability == :HEALER) && KAIZOMOD
-      amt *= 2
-    end
-    if @battle.pbCheckGlobalAbility(:HOSPITALITY) && @battle.FE == :BEWITCHED && KAIZOMOD
-      amt *= 2
-    end
+
 
     oldhp = self.hp
     self.hp += amt

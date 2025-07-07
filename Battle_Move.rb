@@ -1983,6 +1983,9 @@ class PokeBattle_Move
       when 0x184 # Body Press
         atk = attacker.defense
         atkstage = attacker.stages[PBStats::DEFENSE] + 6
+      when 0x2001
+        atk = attacker.speed
+        atkstage = attacker.stages[PBStats::SPEED] + 6
       else
         atk = attacker.attack
         atkstage = attacker.stages[PBStats::ATTACK] + 6
@@ -2193,8 +2196,8 @@ class PokeBattle_Move
       end
     end
     if attacker.ability != :UNAWARE
-      defstage = 6 if @function == 0xA9 # Chip Away (ignore stat stages)
-      defstage = 6 if @move == :PUNISHMENT
+      defstage = 6 if @function == 0x0A9 # Chip Away (ignore stat stages)
+      defstage = 6 if @function == 0x08F
       defstage = 6 if opponent.damagestate.critical && defstage > 6
       defense = (defense * PBStats::StageMul[defstage]).floor
     end
@@ -2766,7 +2769,7 @@ class PokeBattle_Move
     pri = self.priority
 
     pri = 0 if @zmove && @basedamage > 0
-    pri += 1 if (@move == :GRASSYGLIDE || @move == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+    pri += 1 if (@move == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
     pri += 1 if @move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
     pri += 1 if @move == :SQUALL && (@battle.pbWeather == :HAIL)
     pri += 1 if @move == :ATTACKORDER && attacker.crested == :VESPIQUEN

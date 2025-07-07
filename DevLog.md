@@ -175,6 +175,12 @@
 
 # Journal
 
+- 7/6/25 (SWu)
+  - Punishment is still bugged, this means Chip Away etc. are also probably bugged (they don't ignore defense boosts)
+  - fixed Shiinotic bug (would heal from crest even if reduced to 0 HP from passive damage)
+  - fixed Hopsitality and Healer overheal mods
+  - reworked some function code mapping
+
 - 7/5/25 (SWu)
   - pushed terrain fix
   - updated calls of @battle.weather to @battle.pbWeather

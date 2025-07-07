@@ -7943,7 +7943,7 @@ class PokeBattle_AI
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
-      pri += 1 if (battlermove.move == :GRASSYGLIDE || battlermove.move == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+      pri += 1 if (battlermove.move == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
       pri += 1 if battlermove.move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
       pri += 1 if battlermove.move == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
       pri += 1 if battlermove.move == :ATTACKORDER && battler.crested == :VESPIQUEN

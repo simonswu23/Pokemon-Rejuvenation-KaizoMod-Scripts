@@ -7189,16 +7189,16 @@ class PokeBattle_Move_0EE < PokeBattle_Move
     return ret
   end
 
-  def pbAdditionalEffect(attacker,opponent)
-    if (@move == :ESCAPEROOT)
-      success = @battle.pbMoveLast(opponent)
-      if success
-        @battle.pbDisplay(_INTL("{1} got tangled in the roots!", opponent.pbThis))
-      end
-      return true
-    end
-    return false
-  end
+  # def pbAdditionalEffect(attacker,opponent)
+  #   if (@move == :ESCAPEROOT)
+  #     success = @battle.pbMoveLast(opponent)
+  #     if success
+  #       @battle.pbDisplay(_INTL("{1} got tangled in the roots!", opponent.pbThis))
+  #     end
+  #     return true
+  #   end
+  #   return false
+  # end
 
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     return if !showanimation
@@ -13219,7 +13219,7 @@ class PokeBattle_Move_923 < PokeBattle_Move
     else
       pri = oppmovedata.priority
     end
-    pri += 1 if (oppmoveid == :GRASSYGLIDE || oppmoveid == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+    pri += 1 if (oppmoveid == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
     pri += 1 if oppmoveid == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
     pri += 1 if oppmoveid == :ATTACKORDER && opponent.crested == :VESPIQUEN
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING

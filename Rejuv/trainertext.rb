@@ -39,6 +39,11 @@ TEAMARRAY = [{
 	# -1 => {
 	# 	:fieldChange => [:FROZENDIMENSION,"Hubba Hubba",0],
 	# },
+	0 => {
+		:pokemonStatChanges => { # any statboosts that are given
+			PBStats::SPDEF => 6,
+		},
+	}
 },
 :mons => [
 {
@@ -29192,7 +29197,7 @@ TEAMARRAY = [{
 	:species => :SINISTCHA,
 	:level => 66,
 	:item => :LEFTOVERS,
-	:moves => [:MATCHAGOTCHA,:HEX,:CALMMIND,:STRENGTHSAP],
+	:moves => [:MATCHAGOTCHA,:HEX,:CALMMIND,:CURSE],
 	:ability => :HOSPITALITY,
 	:nature => :BOLD,
 	:form => 1,
