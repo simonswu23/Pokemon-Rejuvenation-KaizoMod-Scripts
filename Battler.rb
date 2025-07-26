@@ -2842,10 +2842,10 @@ class PokeBattle_Battler
       end
     end
 
-    if rainbowhold != 0
+    if rainbowhold != 0 && !KAIZOMOD
       fieldbefore = @battle.FE
       @battle.setField(:RAINBOW,rainbowhold)
-      if fieldbefore != :RAINBOW
+      if fieldbefore != :RAINBOW 
         @battle.pbDisplay(_INTL("The weather created a rainbow!"))
       else
         @battle.pbDisplay(_INTL("The weather refreshed the rainbow!"))

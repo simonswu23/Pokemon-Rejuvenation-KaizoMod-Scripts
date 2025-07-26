@@ -5251,7 +5251,7 @@ class PokeBattle_Battle
             @weatherduration = 8
             pbCommonAnimation("Rain", nil, nil)
             pbDisplay(_INTL("Storm-9 created a downpour!"))
-            if rainbowhold != 0
+            if rainbowhold != 0 && !KAIZOMOD
               fieldbefore = @field.effect
               setField(:RAINBOW, rainbowhold)
               if fieldbefore != :RAINBOW
@@ -5844,12 +5844,15 @@ class PokeBattle_Battle
           end
         end
 
-        if i.hasType?(:GRASS) && (@battle.FE == :BEWITCHED && (i.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) || i.pbCanIncreaseStatStage?(PBStats::SPDEF, false)))      
+        if i.hasType?(:GRASS) && (@battle.FE == :BEWITCHED && i.effects[:Stockpile] < 3 && (i.pbCanIncreaseStatStage?(PBStats::DEFENSE, false) || i.pbCanIncreaseStatStage?(PBStats::SPDEF, false)))      
           pbDisplay(_INTL("{1} was strengthened by the magical soil!", i.pbThis))
-          for stat in [PBStats::DEFENSE, PBStats::SPDEF]
-            i.pbIncreaseStat(stat, 1, abilitymessage: false, statsource: i)
-          end
+          i.effects[:Stockpile] += 1
+          i.pbIncreaseStat(PBStats::DEFENSE, 1)
+          i.effects[:StockpileDef] += 1
+          i.pbIncreaseStat(PBStats::SPDEF, 1)
+          i.effects[:StockpileSpDef] += 1
         end
+
       end
     end
     # Leech Seed

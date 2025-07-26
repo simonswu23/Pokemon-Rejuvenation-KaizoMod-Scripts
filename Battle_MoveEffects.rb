@@ -7613,6 +7613,8 @@ class PokeBattle_Move_0FF < PokeBattle_Move
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
 
+    return 0 if KAIZOMOD
+
     rainbowhold = 0
     if @battle.weather == :RAINDANCE
       rainbowhold = 5
@@ -7662,6 +7664,8 @@ class PokeBattle_Move_100 < PokeBattle_Move
     end
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
+
+    return 0 if KAIZOMOD
 
     rainbowhold = 0
     if @battle.weather == :SUNNYDAY
