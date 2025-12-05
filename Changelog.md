@@ -379,8 +379,7 @@
   - Vanillite, Vanillish, Vanilluxe
     - learns Flurry at level 24
     - Vanilluxe learns Sundae upon evolving, Squall at level 46, and Glaciate at level 100
-  - Primarina
-    - learns Boomburst at level 66
+    - Vanillite learns Nasty Plot as an egg move
   - Ekans, Arbok
     - learns Poison Sweep by TM
   - Tranquill, Unfezant
@@ -392,8 +391,10 @@
     - Unfezant learns Dragon Claw by TM
   - Grafaiai
     - learns Hyper Voice by tutor
+  - Espeon
+    - learns Calm Mind and Psychic Noise at level 1
   - Umbreon
-    - learns Toxic at level 1
+    - learns Toxic and Knock Off at level 1
   - Volbeat
     - learns Follow Me as an egg move
   - Illumise
@@ -402,6 +403,8 @@
     - learns After You and Calm Mind as egg moves
   - Toedscool
     - learns Rage Powder as an egg move
+  - Karrablast
+    - learns Fury Cutter as an Egg Move
 
 # Field Changes
   - Water's Surface
@@ -464,7 +467,7 @@
     - Subzero Slammer and Sheer Cold now increment the Frozen Dimensional Field counter by 2
 
   - Bewitched Woods
-    - Ingrained pokemon may switch out, and gain +1 defense and special defense at the end of each turn
+    - Ingrained pokemon may switch out, and gain +1 defense and special defense at the end of each turn if Grass type
     - Lucky Chant reduces incoming damage to x0.66 and grants a 1/20 chance to negate all damage
     - Trick Room fails when used
     - Pastel Veil grants allies immunity to poison attacks
@@ -473,6 +476,8 @@
     - Nature Power becomes Moonblast
     - Magical moves are boosted in power by x1.3 instead x1.4
     - Moonblast / Dark Pulse / Night Daze are boosted in power by x1.3 instead of x1.2
+    - Powder moves have 95 accuracy
+    - Grasswhistle has 85 accuracy
 
   - Murkwater Surface
     - Muddy Water and Surf are boosted by x1.5

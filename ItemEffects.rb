@@ -2759,6 +2759,71 @@ ItemHandlers::UseOnPokemon.add(:PHASEDIAL,proc{|item,pokemon,scene|
     next false
   end
 })
+
+ItemHandlers::UseOnPokemon.add(:ROTOMPHONE,proc{|item,pokemon,scene|
+  if (pokemon.species == :ROTOM) && pokemon.hp>=0
+    cmd=0
+    loop do
+      cmd=scene.pbShowCommands(_INTL("What would you like to do?"),[
+        _INTL("Set Form"),
+        _INTL("Teach Moves")],cmd)
+      case cmd
+      when -1
+        break
+      # Set Form
+      when 0
+        cmd2=0
+        loop do
+          commands=["Normal","Heat","Wash","Frost","Fan","Mow"]
+          cmd2 = pokemon.form
+          cmd2 = 0 if cmd2.nil?
+          msg=_INTL("Current Form is: {1}.",commands[pokemon.form])
+          cmd2=scene.pbShowCommands(msg,commands,cmd2)
+          # Break
+          if cmd2==-1
+            break
+          # Set new form
+          elsif cmd2>=0 && cmd2<commands.length
+            pokemon.form = cmd2
+            pokemon.initAbility
+            pokemon.calcStats
+          end
+          scene.pbHardRefresh
+          scene.pbDisplay(_INTL("{1} changed Forme!",pokemon.name))
+        end
+      # Teach Moves
+      when 1
+        if pokemon.item != :ROTOCREST
+          scene.pbDisplay(_INTL("This Rotom is not compatible with move tutoring (must be holding the Rotom Crest)"))
+          next false
+        else
+          cmd2=0
+          loop do
+            commands=["Overheat","Hydro Pump","Blizzard","Hurricane","Mow Down","Heat Wave","Scald","Freeze Dry","Air Slash","Grassy Glide", "Shadow Ball", "Zap Cannon"]
+            moves = [:OVERHEAT,:HYDROPUMP,:BLIZZARD,:HURRICANE,:MOWDOWN,:HEATWAVE,:SCALD,:FREEZEDRY,:AIRSLASH,:GRASSYGLIDE,:SHADOWBALL,:ZAPCANNON]
+            cmd2 = 0
+            msg=_INTL("Choose a move to teach: ")
+            cmd2=scene.pbShowCommands(msg,commands,cmd2)
+            # Break
+            if cmd2==-1
+              break
+            # Set new form
+            elsif cmd2>=0 && cmd2<commands.length
+              move = moves[cmd2]
+              if move
+                pbLearnMove(pokemon,move)
+                scene.pbHardRefresh
+              end
+            end
+          end
+        end
+      end
+    end
+  else
+    scene.pbDisplay(_INTL("This item can only be used on Rotom!"))
+    next false
+  end
+})
 #===============================================================================
 # UseInField handlers
 #===============================================================================

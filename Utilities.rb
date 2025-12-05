@@ -2908,8 +2908,13 @@ def rotomScript(numform)
      :OVERHEAT,  # Heat, Microwave
      :HYDROPUMP, # Wash, Washing Machine
      :BLIZZARD,  # Frost, Refrigerator
-     :AIRSLASH,  # Fan
-     :LEAFSTORM  # Mow, Lawnmower
+     :HURRICANE,  # Fan
+     :MOWDOWN,  # Mow, Lawnmower
+     :HEATWAVE,
+     :SCALD,
+     :FREEZEDRY,
+     :AIRSLASH,
+     :GRASSYGLIDE 
   ]
   moves.each{|move|
      pbDeleteMoveByID(pokemon,move)

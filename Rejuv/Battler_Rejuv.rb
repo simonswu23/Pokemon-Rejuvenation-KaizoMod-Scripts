@@ -317,10 +317,25 @@ class PokeBattle_Battler
           @spatk = maxStat
           @spdef = maxStat
           @speed = maxStat
-        # when :CHERRIM
-        #   @attack *= 1.33
-        #   @spdef *= 1.33
-        #   @speed *= 1.33
+        when :ROTOM
+          case @form
+          when 0 # normal form
+            @attack *= 1.2
+            @defense *= 1.2
+            @spatk *= 1.2
+            @spdef *= 1.2
+            @speed *= 1.2
+          when 1 # heat, flash fire 
+            @spatk *= 1.3
+          when 2 # wash, storm drain
+            @spdef *= 1.3
+          when 3 # frost, no guard
+            @defense *= 1.3
+          when 4 # fan, gale wings
+            @speed *= 1.5
+          when 5 # mow, speed boost
+            @attack *= 1.3
+          end
         end
       end
 

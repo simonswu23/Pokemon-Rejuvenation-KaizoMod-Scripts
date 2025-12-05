@@ -864,7 +864,7 @@ end
 ################################################################################
 # Blossom Storm
 ################################################################################
-class PokeBattle_Move_902 < PokeBattle_Move
+class PokeBattle_Move_2000 < PokeBattle_Move
   def pbEffect(attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     ret=super(attacker,opponent,hitnum,alltargets,showanimation)
     if opponent.damagestate.calcdamage>0
@@ -1260,7 +1260,7 @@ end
 # Other Handlers
 
 ### Hydro Vortex (new)
-class PokeBattle_Move_2000 < PokeBattle_Move
+class PokeBattle_Move_3000 < PokeBattle_Move
 
   def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
     if (@battle.FE== :UNDERWATER && !opponent.hasType?(:WATER) && !opponent.ability == :STURDY &&

@@ -11,6 +11,8 @@
     return if !@battlers[index].crested
     pbCrestEntry(index,pokemon)
     case @battlers[index].crested
+    when :ROTOM
+      @battlers[index].pokemon.originalForm = @battlers[index].pokemon.form
     when :CASTFORM
       leadmove=@battlers[index].moves.first
       movedata = $cache.moves[leadmove.move].function

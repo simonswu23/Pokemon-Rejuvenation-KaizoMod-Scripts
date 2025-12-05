@@ -7165,7 +7165,8 @@ class PokeBattle_Move_0EE < PokeBattle_Move
       end
       if @move == :FLIPTURN && (opponent.ability == :DRYSKIN ||
         opponent.ability == :WATERABSORB ||
-        opponent.ability == :STORMDRAIN)
+        opponent.ability == :STORMDRAIN) ||
+        (opponent.crested == :ROTOM && opponent.form == 2)
         attacker.userSwitch = false
         attacker.vanished=false
       end
@@ -7189,16 +7190,16 @@ class PokeBattle_Move_0EE < PokeBattle_Move
     return ret
   end
 
-  def pbAdditionalEffect(attacker,opponent)
-    if (@move == :ESCAPEROOT)
-      success = @battle.pbMoveLast(opponent)
-      if success
-        @battle.pbDisplay(_INTL("{1} got tangled in the roots!", opponent.pbThis))
-      end
-      return true
-    end
-    return false
-  end
+  # def pbAdditionalEffect(attacker,opponent)
+  #   if (@move == :ESCAPEROOT)
+  #     success = @battle.pbMoveLast(opponent)
+  #     if success
+  #       @battle.pbDisplay(_INTL("{1} got tangled in the roots!", opponent.pbThis))
+  #     end
+  #     return true
+  #   end
+  #   return false
+  # end
 
   def pbShowAnimation(id,attacker,opponent,hitnum=0,alltargets=nil,showanimation=true)
     return if !showanimation
@@ -7613,6 +7614,8 @@ class PokeBattle_Move_0FF < PokeBattle_Move
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
 
+    return 0 if KAIZOMOD
+
     rainbowhold = 0
     if @battle.weather == :RAINDANCE
       rainbowhold = 5
@@ -7662,6 +7665,8 @@ class PokeBattle_Move_100 < PokeBattle_Move
     end
 
     pbShowAnimation(@move, attacker, opponent, hitnum, alltargets, showanimation)
+
+    return 0 if KAIZOMOD
 
     rainbowhold = 0
     if @battle.weather == :SUNNYDAY
@@ -13219,12 +13224,13 @@ class PokeBattle_Move_923 < PokeBattle_Move
     else
       pri = oppmovedata.priority
     end
-    pri += 1 if (oppmoveid == :GRASSYGLIDE || oppmoveid == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+    pri += 1 if (oppmoveid == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
     pri += 1 if oppmoveid == :SQUALL && (@battle.pbWeather == :HAIL || @battle.FE == :SNOWYMOUNTAIN)
     pri += 1 if oppmoveid == :ATTACKORDER && opponent.crested == :VESPIQUEN
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING
     pri += 1 if opponent.crested == :FERALIGATR && oppmovedata.basedamage != 0 && opponent.turncount == 1 # Feraligatr Crest
     pri += 1 if opponent.ability == :GALEWINGS && oppmovedata.type ==:FLYING && ((opponent.hp >= opponent.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.weather == :STRONGWINDS))
+    pri += 1 if opponent.crested == :ROTOM && oppmovedata.type ==:FLYING && (opponent.hp >= opponent.totalhp / 2)
     pri -= 1 if @battle.FE == :DEEPEARTH && oppmoveid == :COREENFORCER
 
     # pri = -6 if opponent.species == :CORVIKNIGHT && opponent.giga && oppmovedata.move == :BRAVEBIRD

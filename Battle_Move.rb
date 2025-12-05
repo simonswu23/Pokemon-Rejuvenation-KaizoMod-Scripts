@@ -824,6 +824,16 @@ class PokeBattle_Move
       end
       return 0
     end
+    if opponent.crested == :ROTOM && opponent.form == 2 && type == :WATER
+      if opponent.pbCanIncreaseStatStage?(PBStats::SPATK)
+          opponent.pbIncreaseStatBasic(PBStats::SPATK,1)
+          @battle.pbCommonAnimation("StatUp",opponent,nil)
+          @battle.pbDisplay(_INTL("{1}'s crest raised its Special Attack!", opponent.pbThis))
+      else
+        @battle.pbDisplay(_INTL("{1}'s crest made {2} ineffective!", opponent.pbThis,self.name))
+      end
+      return 0
+    end
     if (opponent.ability == :STORMDRAIN && type == :WATER) || (opponent.ability == :LIGHTNINGROD && type == :ELECTRIC) && !(opponent.moldbroken)
       if opponent.pbCanIncreaseStatStage?(PBStats::SPATK)
         if (Rejuv && @battle.FE == :SHORTCIRCUIT) && opponent.ability == :LIGHTNINGROD
@@ -920,7 +930,7 @@ class PokeBattle_Move
         return 0
       end
     end
-    if ((opponent.ability == :FLASHFIRE && !opponent.moldbroken) ||
+    if ((opponent.ability == :FLASHFIRE && !opponent.moldbroken) || (opponent.crested == :ROTOM && opponent.form == 1) ||
       (Rejuv && @battle.FE == :GLITCH && opponent.species == :GENESECT && opponent.hasWorkingItem(:BURNDRIVE))) &&
       type == :FIRE && @battle.FE != :FROZENDIMENSION
       negator = getAbilityName(opponent.ability)
@@ -1028,6 +1038,16 @@ class PokeBattle_Move
         @battle.pbDisplay(_INTL("{1}'s {2} raised its Attack!", opponent.pbThis, getAbilityName(opponent.ability)))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", opponent.pbThis, getAbilityName(opponent.ability), self.name))
+      end
+      return 0
+    end
+    if opponent.crested == :ROTOM && opponent.form == 2 && type == :WATER
+      if opponent.pbCanIncreaseStatStage?(PBStats::SPATK)
+          opponent.pbIncreaseStatBasic(PBStats::SPATK,1)
+          @battle.pbCommonAnimation("StatUp",opponent,nil)
+          @battle.pbDisplay(_INTL("{1}'s crest raised its Special Attack!", opponent.pbThis))
+      else
+        @battle.pbDisplay(_INTL("{1}'s crest made {2} ineffective!", opponent.pbThis,self.name))
       end
       return 0
     end
@@ -1186,7 +1206,7 @@ class PokeBattle_Move
         return 0
       end
     end
-    if ((opponent.ability == :FLASHFIRE && !opponent.moldbroken) ||
+    if ((opponent.ability == :FLASHFIRE && !opponent.moldbroken) || (opponent.crested == :ROTOM && opponent.form == 1) ||
        (Rejuv && @battle.FE == :GLITCH && opponent.species == :GENESECT && opponent.hasWorkingItem(:BURNDRIVE))) &&
        (type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))) && @battle.FE != :FROZENDIMENSION
       negator = getAbilityName(opponent.ability)
@@ -1401,6 +1421,8 @@ class PokeBattle_Move
     return true if (@battle.FE == :UNDERWATER || @battle.FE == :WATERSURFACE) && @move == :ORIGINPULSE
     return true if (@battle.FE == :VOLCANIC || @battle.FE == :VOLCANICTOP) && @move == :PRECIPICEBLADES
     return true if @battle.ProgressiveFieldCheck(PBFields::CONCERT) && @move == :SONICBOOM
+    return true if attacker.crested == :ROTOM && attacker.form == 3
+    return true if @move == :ZAPCANNON && @battle.state.effects[:ELECTERRAIN] != 0
 
     # One-hit KO accuracy handled elsewhere
     if @function == 0x08 || @function == 0x15 # Thunder, Hurricane
@@ -1983,6 +2005,9 @@ class PokeBattle_Move
       when 0x184 # Body Press
         atk = attacker.defense
         atkstage = attacker.stages[PBStats::DEFENSE] + 6
+      when 0x2001
+        atk = attacker.speed
+        atkstage = attacker.stages[PBStats::SPEED] + 6
       else
         atk = attacker.attack
         atkstage = attacker.stages[PBStats::ATTACK] + 6
@@ -2193,8 +2218,8 @@ class PokeBattle_Move
       end
     end
     if attacker.ability != :UNAWARE
-      defstage = 6 if @function == 0xA9 # Chip Away (ignore stat stages)
-      defstage = 6 if @move == :PUNISHMENT
+      defstage = 6 if @function == 0x0A9 # Chip Away (ignore stat stages)
+      defstage = 6 if @function == 0x08F
       defstage = 6 if opponent.damagestate.critical && defstage > 6
       defense = (defense * PBStats::StageMul[defstage]).floor
     end
@@ -2766,7 +2791,7 @@ class PokeBattle_Move
     pri = self.priority
 
     pri = 0 if @zmove && @basedamage > 0
-    pri += 1 if (@move == :GRASSYGLIDE || @move == :ESCAPEROOT) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
+    pri += 1 if (@move == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
     pri += 1 if @move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
     pri += 1 if @move == :SQUALL && (@battle.pbWeather == :HAIL)
     pri += 1 if @move == :ATTACKORDER && attacker.crested == :VESPIQUEN
@@ -2775,6 +2800,7 @@ class PokeBattle_Move
     pri += 1 if attacker.crested == :FERALIGATR && @basedamage != 0 && attacker.turncount == 1 # Feraligatr Crest
     pri += 1 if attacker.ability == :PRANKSTER && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move
     pri += 1 if attacker.ability == :GALEWINGS && @type==:FLYING && ((attacker.hp >= attacker.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
+    pri += 1 if attacker.crested == :ROTOM && @type==:FLYING && (attacker.hp >= attacker.totalhp / 2) 
     pri += 3 if attacker.ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@function)
     pri -= 1 if @battle.FE == :DEEPEARTH && @move == :COREENFORCER
     pri -= 2 if !KAIZOMOD && attacker.ability == :MYCELIUMMIGHT && @basedamage==0 && attacker.effects[:TwoTurnAttack] == 0 # Is status move # Gen 9 Mod - Added Mycelium Might

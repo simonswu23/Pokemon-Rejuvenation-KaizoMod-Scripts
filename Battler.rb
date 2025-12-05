@@ -1022,17 +1022,18 @@ class PokeBattle_Battler
     if @battle.FE == :BACKALLEY && !(amt >= @totalhp) && !(caller_locations.any? { |string| string.to_s.include?("pbEnemyUseItem") })
       amt = (amt * 0.67).floor
     end
+    if (self.ability == :HEALER || self.pbPartner.ability == :HEALER) && KAIZOMOD
+      amt = (amt * 2).floor
+    end
+    if @battle.pbCheckGlobalAbility(:HOSPITALITY) && @battle.FE == :BEWITCHED && KAIZOMOD
+      amt = (amt * 2).floor
+    end
     if self.hp + amt > @totalhp
       amt = @totalhp - self.hp
     elsif amt <= 0 && self.hp != @totalhp
       amt = 1
     end
-    if (self.ability == :HEALER || self.pbPartner.ability == :HEALER) && KAIZOMOD
-      amt *= 2
-    end
-    if @battle.pbCheckGlobalAbility(:HOSPITALITY) && @battle.FE == :BEWITCHED && KAIZOMOD
-      amt *= 2
-    end
+
 
     oldhp = self.hp
     self.hp += amt
@@ -2524,7 +2525,7 @@ class PokeBattle_Battler
     #Surges
     duration=5
     duration=8 if self.hasWorkingItem(:AMPLIFIELDROCK)
-    if self.ability == :ELECTRICSURGE && onactive && ((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || @battle.canChangeFE?([:ELECTERRAIN,:DRAGONSDEN])) && !(@battle.state.effects[:ELECTERRAIN] != 0)
+    if (self.ability == :ELECTRICSURGE || (self.crested == :ROTOM && self.form == 0)) && onactive && ((!Rejuv && @battle.canChangeFE?(:ELECTERRAIN)) || @battle.canChangeFE?([:ELECTERRAIN,:DRAGONSDEN])) && !(@battle.state.effects[:ELECTERRAIN] != 0)
       if @battle.FE == :FROZENDIMENSION
         @battle.pbDisplay(_INTL("The frozen dimension remains unchanged."))
       else
@@ -2841,10 +2842,10 @@ class PokeBattle_Battler
       end
     end
 
-    if rainbowhold != 0
+    if rainbowhold != 0 && !KAIZOMOD
       fieldbefore = @battle.FE
       @battle.setField(:RAINBOW,rainbowhold)
-      if fieldbefore != :RAINBOW
+      if fieldbefore != :RAINBOW 
         @battle.pbDisplay(_INTL("The weather created a rainbow!"))
       else
         @battle.pbDisplay(_INTL("The weather refreshed the rainbow!"))
@@ -4754,11 +4755,11 @@ class PokeBattle_Battler
       end
 
       # Storm Drain here, considers Hidden Power as Normal
-      if targets.length == 1 && movetypes.include?(:WATER) && target.ability != :STORMDRAIN
+      if targets.length == 1 && movetypes.include?(:WATER) && target.ability != :STORMDRAIN && !(target.crested == :ROTOM && target.form == 2)
         for i in priority # use Pokémon earliest in priority
           next if i.index == user.index || i.isFainted?
 
-          if i.ability == :STORMDRAIN && !i.moldbroken
+          if (i.ability == :STORMDRAIN && !i.moldbroken) || (i.crested == :ROTOM && i.form == 2)
             target = i # X's Storm Drain took the attack!
             changeeffect = 2
             break
@@ -5525,6 +5526,30 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} had its type changed to {3}!",pbThis,getAbilityName(self.ability),protype.capitalize))
       end
     end # end of update
+    if (self.crested == :ROTOM)
+      originalform = @form
+      case basemove.move
+      when :ZAPCANNON, :SHADOWBALL
+        @form = 0
+      when :OVERHEAT, :HEATWAVE
+        @form = 1
+      when :HYDROPUMP, :SCALD
+        @form = 2
+      when :BLIZZARD, :FREEZEDRY
+        @form = 3
+      when :HURRICANE, :AIRSLASH
+        @form = 4
+      when :MOWDOWN, :GRASSYGLIDE
+        @form = 5
+      end
+      if (@form != originalform)
+        self.pokemon.form = @form
+        self.pbUpdate(true)
+        @battle.scene.pbChangePokemon(self,self.pokemon) if self.effects[:Substitute] == 0
+        @battle.pbDisplay(_INTL("{1} changed form!",pbThis,getAbilityName(self.ability)))
+        self.pbAbilitiesOnSwitchIn(true)
+      end
+    end
     if (self.ability == :STANCECHANGE)
       pbCheckForm(basemove)
     end

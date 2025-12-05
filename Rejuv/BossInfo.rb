@@ -1775,30 +1775,36 @@ BOSSINFOHASH = {
         :immunities => {}, 
         :moninfo => {
             :species => :ALAKAZAM,
-            :level => 65,
+            :level => 85,
             :gender => "M",
-            :moves => [:CALMMIND,:REFLECT,:LIGHTSCREEN,:NIGHTSHADE],
+            :item => :FOCUSSASH,
+            :ability => :TRACE,
+            :moves => [:PSYSTRIKE,:AURASPHERE,:SHADOWBALL,:RECOVER],
             :nature => :TIMID,
+            :form => 1,
             :iv => 31,
-            :ev => [85,85,85,85,85,85]
+            :ev => [252,252,252,252,252,252]
         },
         :onBreakEffects => {
             2 => {
                 :threshold => 0,
-                :formchange => 1,
+                :abilitychange => :PSYCHICSURGE,
                 :message => "Alakazam is pulling all of its psychic energy to its core!",
                 :statDropCure => true,
-                :movesetUpdate => [:PSYCHIC,:SHADOWBALL,:FOCUSBLAST,:COUNTER],
                 :itemchange => :TWISTEDSPOON,
                 :bossStatChanges => {
+                    PBStats::SPATK => 2,
                     PBStats::SPDEF => 2,
                     PBStats::SPEED => 2                 
                 },
             },
             1 => {
                 :threshold => 0,
-                :bosssideChanges => :Reflect, # effect that applies on the boss when breaking shield
-                :bosssideChangeCount => 5, # duration of the effect(some effects are booleans, double check)
+                :statusCure => true,
+                :abilitychange => :MAGICGUARD,
+                :itemchange => :LIFEORB,
+                :bosssideChanges => [:Reflect,:LightScreen,:Safeguard], # effect that applies on the boss when breaking shield
+                :bosssideChangeCount => 99, # duration of the effect(some effects are booleans, double check)
                 :statDropCure => true,
             },
         }
