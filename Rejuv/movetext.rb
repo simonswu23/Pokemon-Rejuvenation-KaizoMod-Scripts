@@ -14479,6 +14479,22 @@ MOVEHASH = {
 	:desc => "Attacks with a torrent of cherry blossom petals at foes. Lowers attack and special defense outside of sun."
 },
 
+:MOWDOWN => {
+    :ID => 1506,
+    :name => "Mow Down",
+    :function => 0x043,
+    :type => :GRASS,
+    :category => :physical,
+    :basedamage => 120,
+    :accuracy => 100,
+    :maxpp => 15,
+    :effect => 30,
+    :target => :SingleNonUser,
+    :contact => true,
+    :recoil => 0.33,
+    :desc => "The user sets mows the target down with brutal force. It sustains serious damage and may drop the target's defense."
+},
+
 # NPC Signature Moves 
 
 :ESCAPEROOT => {

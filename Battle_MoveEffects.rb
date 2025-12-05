@@ -7165,7 +7165,8 @@ class PokeBattle_Move_0EE < PokeBattle_Move
       end
       if @move == :FLIPTURN && (opponent.ability == :DRYSKIN ||
         opponent.ability == :WATERABSORB ||
-        opponent.ability == :STORMDRAIN)
+        opponent.ability == :STORMDRAIN) ||
+        (opponent.crested == :ROTOM && opponent.form == 2)
         attacker.userSwitch = false
         attacker.vanished=false
       end
@@ -13229,6 +13230,7 @@ class PokeBattle_Move_923 < PokeBattle_Move
     pri += 1 if @battle.FE == :CHESS && opponent.pokemon && opponent.pokemon.piece == :KING
     pri += 1 if opponent.crested == :FERALIGATR && oppmovedata.basedamage != 0 && opponent.turncount == 1 # Feraligatr Crest
     pri += 1 if opponent.ability == :GALEWINGS && oppmovedata.type ==:FLYING && ((opponent.hp >= opponent.totalhp / 2) || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.weather == :STRONGWINDS))
+    pri += 1 if opponent.crested == :ROTOM && oppmovedata.type ==:FLYING && (opponent.hp >= opponent.totalhp / 2)
     pri -= 1 if @battle.FE == :DEEPEARTH && oppmoveid == :COREENFORCER
 
     # pri = -6 if opponent.species == :CORVIKNIGHT && opponent.giga && oppmovedata.move == :BRAVEBIRD

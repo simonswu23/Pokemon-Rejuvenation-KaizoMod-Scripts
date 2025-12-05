@@ -380,8 +380,6 @@
     - learns Flurry at level 24
     - Vanilluxe learns Sundae upon evolving, Squall at level 46, and Glaciate at level 100
     - Vanillite learns Nasty Plot as an egg move
-  - Primarina
-    - learns Boomburst at level 66
   - Ekans, Arbok
     - learns Poison Sweep by TM
   - Tranquill, Unfezant

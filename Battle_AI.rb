@@ -585,8 +585,9 @@ class PokeBattle_AI
             scoremult = 1.0
             if mondata.trainer && (mondata.trainer.trainertype == :UMBTITANIA || mondata.trainer.trainertype == :UMBAMARIA) && @battle.doublebattle
               scoremult *= (1 + 2 * mondata.scorearray[pi][moveindex] / 100.0)
-            elsif (move.pbType(battler) == :FIRE && (battler.pbPartner.ability == :FLASHFIRE || battler.pbPartner.crested == :DRUDDIGON)) ||
+            elsif (move.pbType(battler) == :FIRE && (battler.pbPartner.ability == :FLASHFIRE || battler.pbPartner.crested == :DRUDDIGON || (battler.pbPartner.crested == :ROTOM && battler.pbPartner.form == 1))) ||
                   (move.pbType(battler) == :WATER && (battler.pbPartner.ability == :WATERABSORB || battler.pbPartner.ability == :STORMDRAIN || battler.pbPartner.ability == :DRYSKIN)) ||
+                  (move.pbType(battler) == :WATER && (battler.pbPartner.crested == :ROTOM && battler.pbPartner.form == 2)) ||
                   (move.pbType(battler) == :GRASS && (battler.pbPartner.ability == :SAPSIPPER || battler.pbPartner.crested == :WHISCASH)) ||
                   (move.pbType(battler) == :ELECTRIC && (battler.pbPartner.ability == :VOLTABSORB || battler.pbPartner.ability == :LIGHTNINGROD || battler.pbPartner.ability == :MOTORDRIVE)) ||
                   (move.pbType(battler) == :GROUND && (battler.pbPartner.crested == :SKUNTANK || battler.pbPartner.ability == :EARTHEATER)) # Gen 9 Mod - Added Earth Eater
@@ -1289,12 +1290,12 @@ class PokeBattle_AI
 
         score *= 0.3 if @attacker.pbPartner.ability == :LIGHTNINGROD
       elsif @move.pbType(@attacker) == :WATER
-        if @opponent.pbPartner.ability == :STORMDRAIN
+        if @opponent.pbPartner.ability == :STORMDRAIN || (@opponent.pbPartner.crested == :ROTOM && @opponent.pbPartner.form == 2)
           $ai_log_data[@attacker.index].final_score_moves.push(0)
           return -1
         end
 
-        score *= 0.3 if @attacker.pbPartner.ability == :STORMDRAIN
+        score *= 0.3 if @attacker.pbPartner.ability == :STORMDRAIN || (@attacker.pbPartner.crested == :ROTOM && @attacker.pbPartner.form == 2)
       end
     end
     if !@move.nil? && !@move.zmove && @move.highCritRate?
@@ -2285,7 +2286,10 @@ class PokeBattle_AI
       when 0xaa # Protect, Detect
         miniscore = protectcode()
       when 0xab # Quick Guard
-        if (@opponent.ability == :GALEWINGS && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY || ([:MOUNTAIN, :SNOWYMOUNTAIN, :VOLCANICTOP].include?(@battle.FE) && @battle.pbWeather == :STRONGWINDS))) || (@opponent.ability == :PRANKSTER && (!@attacker.hasType?(:DARK) || @battle.FE == :BEWITCHED)) || checkAIpriority()
+        if (@opponent.ability == :GALEWINGS && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY || ([:MOUNTAIN, :SNOWYMOUNTAIN, :VOLCANICTOP].include?(@battle.FE) && @battle.pbWeather == :STRONGWINDS))) || 
+          (@opponent.crested == :ROTOM && (@opponent.hp >= @opponent.totalhp / 2)) || 
+          (@opponent.ability == :PRANKSTER && (!@attacker.hasType?(:DARK) || @battle.FE == :BEWITCHED)) || 
+           checkAIpriority()
           miniscore = specialprotectcode()
         else
           miniscore = 0
@@ -3182,7 +3186,7 @@ class PokeBattle_AI
         miniscore*= moveturnselectriccode(false,true)
       when 0x179 # Snipe Shot
         if @battle.doublebattle
-          if checkAImoves([:FOLLOWME,:RAGEPOWDER],getAIMemory(@opponent.pbPartner)) || checkAImoves([:SPOTLIGHT]) || [:STORMDRAIN,:LIGHTNINGROD].include?(@opponent.pbPartner.ability)
+          if checkAImoves([:FOLLOWME,:RAGEPOWDER],getAIMemory(@opponent.pbPartner)) || checkAImoves([:SPOTLIGHT]) || [:STORMDRAIN,:LIGHTNINGROD].include?(@opponent.pbPartner.ability) || (@opponent.pbPartner.crested == :ROTOM && @opponent.pbPartner.form == 2)
             miniscore=1.2
           end
         end
@@ -3222,7 +3226,7 @@ class PokeBattle_AI
         end
       when 0x17C # Tar Shot
         miniscore=oppstatdrop([0,0,0,0,1,0,0])
-        if !@opponent.effects[:TarShot] && (PBTypes.twoTypeEff(:FIRE,@opponent.type1,@opponent.type2) != 0) && @opponent.ability != :FLASHFIRE
+        if !@opponent.effects[:TarShot] && (PBTypes.twoTypeEff(:FIRE,@opponent.type1,@opponent.type2) != 0) && @opponent.ability != :FLASHFIRE && !(@opponent.crested == :ROTOM && opponent.form == 1)
           if pbPartyHasType?(:FIRE)
             miniscore*=1.2 unless @battle.FE == :WATERSURFACE
           end
@@ -3455,7 +3459,7 @@ class PokeBattle_AI
       when 0x922 # Triple Dive
         miniscore = multihitcode()
       when 0x923 # Upper Hand
-        if (@opponent.ability == :GALEWINGS && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY)) || checkAIpriority()
+        if ((@opponent.ability == :GALEWINGS || (@opponent.crested == :ROTOM)) && (@opponent.hp >= @opponent.totalhp / 2 || @battle.FE == :SKY)) || checkAIpriority()
           miniscore = suckercode()
         else
           miniscore = 0
@@ -4002,7 +4006,7 @@ class PokeBattle_AI
           miniscore*=0.3 if checkAImoves([:FOULPLAY])
           miniscore*=1.4 if notOHKO?(@attacker,@opponent)
           miniscore*=0.6 if checkAIpriority()
-          miniscore*=0.6 if (@opponent.ability == :SPEEDBOOST || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE)))
+          miniscore*=0.6 if (@opponent.ability == :SPEEDBOOST || (@opponent.crested == :ROTOM && @opponent.form == 5) || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE)))
         when PBStats::DEFENSE
           tank = true
           if pbRoughStat(@opponent,PBStats::SPATK)<pbRoughStat(@opponent,PBStats::ATTACK)
@@ -4150,7 +4154,7 @@ class PokeBattle_AI
       miniscore *= 0.6 if @attacker.effects[:SaltCure] && @attacker.ability != :MAGICGUARD && (@attacker.hasType?(:WATER) || @attacker.hasType?(:STEEL))
       miniscore *= 0.6 if checkAIpriority()
       miniscore *= 0.6 if (
-        @opponent.ability == :SPEEDBOOST ||
+        @opponent.ability == :SPEEDBOOST || (@opponent.crested == :ROTOM && @opponent.form == 5) ||
         (((@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER, :WATERSURFACE, :VOLCANIC, :VOLCANICTOP, :INFERNAL].include?(@battle.FE))) && (stats[PBStats::SPEED] < 2))
       )
       miniscore *= 1.4 if notOHKO?(@attacker, @opponent)
@@ -4554,16 +4558,16 @@ class PokeBattle_AI
     if !@opponent.pbPartner.pokemon.nil?
       miniscore*=1.2 if PBTypes.twoTypeEff(:FIRE,@opponent.pbPartner.type1,@opponent.pbPartner.type2) > 2
     end
-    miniscore*=1.5 if (@attacker.ability == :FLASHFIRE && !@attacker.effects[:FlashFire])
-    miniscore*=1.5 if (@attacker.pbPartner.ability == :FLASHFIRE && !@attacker.pbPartner.effects[:FlashFire])
+    miniscore*=1.5 if (@attacker.ability == :FLASHFIRE || (@attacker.crested == :ROTOM && @attacker.form == 1) && !@attacker.effects[:FlashFire])
+    miniscore*=1.5 if (@attacker.pbPartner.ability == :FLASHFIRE || (@attacker.pbPartner.crested == :ROTOM && @attacker.pbPartner.form == 1) && !@attacker.pbPartner.effects[:FlashFire])
     miniscore*=1.5 if (@attacker.ability == :BLAZE && !@attacker.effects[:Blazed])
     miniscore*=1.5 if (@attacker.pbPartner.ability == :BLAZE && !@attacker.pbPartner.effects[:Blazed])
     miniscore*=1.3 if @attacker.ability == :FLAREBOOST
     miniscore*=1.3 if @attacker.pbPartner.ability == :FLAREBOOST
     miniscore*=1.75 if @attacker.ability == :MAGMAARMOR
     miniscore*=1.75 if @attacker.pbPartner.ability == :MAGMAARMOR
-    miniscore*=0.5 if (@opponent.ability == :FLASHFIRE && !@opponent.effects[:FlashFire])
-    miniscore*=0.5 if (@opponent.pbPartner.ability == :FLASHFIRE && !@opponent.pbPartner.effects[:FlashFire])
+    miniscore*=0.5 if (@opponent.ability == :FLASHFIRE || (@opponent.crested == :ROTOM && @opponent.form == 1) && !@opponent.effects[:FlashFire])
+    miniscore*=0.5 if (@opponent.pbPartner.ability == :FLASHFIRE || (@opponent.pbPartner.crested == :ROTOM && @opponent.pbPartner.form == 1) && !@opponent.pbPartner.effects[:FlashFire])
     miniscore*=0.5 if (@opponent.ability == :BLAZE && !@opponent.effects[:Blazed])
     miniscore*=0.5 if (@opponent.pbPartner.ability == :BLAZE && !@opponent.pbPartner.effects[:Blazed])
     miniscore*=0.75 if @opponent.ability == :FLAREBOOST
@@ -4605,7 +4609,7 @@ class PokeBattle_AI
   def oppstatrestorecode
     return 1 if @opponent.effects[:Substitute] > 0
     miniscore = 1 + 0.05*statchangecounter(@opponent,1,7)
-    miniscore *=1.1 if (@opponent.ability == :SPEEDBOOST || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE)))
+    miniscore *=1.1 if (@opponent.ability == :SPEEDBOOST || (@opponent.crested == :ROTOM && @opponent.form == 5) || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE)))
     return miniscore
   end
 
@@ -4617,7 +4621,7 @@ class PokeBattle_AI
       attscore += -1.1 * statchangecounter(@attacker.pbPartner,1,7) if @attacker.pbPartner.hp>0
     end
     miniscore = oppscore + attscore
-    miniscore*=0.8 if ((@opponent.ability == :SPEEDBOOST || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE))) || checkAImoves(PBStuff::SETUPMOVE))
+    miniscore*=0.8 if ((@opponent.ability == :SPEEDBOOST || (@opponent.crested == :ROTOM && @opponent.form == 5) || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) || (@opponent.ability == :STEAMENGINE && [:UNDERWATER,:WATERSURFACE,:VOLCANIC,:VOLCANICTOP,:INFERNAL].include?(@battle.FE))) || checkAImoves(PBStuff::SETUPMOVE))
     return miniscore
   end
 
@@ -4740,7 +4744,7 @@ class PokeBattle_AI
       miniscore *= 0.4 if @attacker.pbNonActivePokemonCount == 0
     end
     miniscore *= 0.5 if (
-      @opponent.ability == :SPEEDBOOST || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) ||
+      @opponent.ability == :SPEEDBOOST || (@opponent.crested == :ROTOM && @opponent.form == 5) || (@opponent.ability == :MOTORDRIVE && @battle.FE == :ELECTERRAIN) ||
       (@opponent.ability == :STEAMENGINE && [:UNDERWATER, :WATERSURFACE, :VOLCANIC, :VOLCANICTOP, :INFERNAL].include?(@battle.FE))
     )
     miniscore *= 0.1 if @battle.trickroom != 0 || checkAImovesAllOpponents([:TRICKROOM])
@@ -5212,7 +5216,7 @@ class PokeBattle_AI
     miniscore *= 1.3 if @attacker.pbOpposingSide.screenActive?
     miniscore *= 1.2 if @attacker.pbOpposingSide.effects[:Tailwind] > 0
     miniscore *= 0.3 if checkAImoves(PBStuff::SETUPMOVE)
-    if @attacker.ability == :SPEEDBOOST && !pbAIfaster?() && @battle.trickroom == 0
+    if (@attacker.ability == :SPEEDBOOST || (@attacker.crested == :ROTOM && @attacker.form == 5)) && !pbAIfaster?() && @battle.trickroom == 0
       miniscore *= 8
       # experimental -- cancels out drop if killing moves
       if @initial_scores.length > 0
@@ -6427,7 +6431,7 @@ class PokeBattle_AI
     miniscore *= 1.3 if @opponent.status == :PARALYSIS
     miniscore *= 1.3 if @opponent.effects[:Attract] >= 0
     miniscore *= 1.2 if @attacker.pbHasMove?(:BATONPASS)
-    miniscore *= 1.1 if @attacker.ability == :SPEEDBOOST
+    miniscore *= 1.1 if @attacker.ability == :SPEEDBOOST || (@attacker.crested == :ROTOM && @attacker.form == 5) 
     miniscore *= 0.5 if @battle.doublebattle
     return miniscore
   end
@@ -7482,9 +7486,9 @@ class PokeBattle_AI
     miniscore=1.0
     bestmove1 = checkAIbestMove(@attacker.pbOpposing1) #grab moves opposing mons are going to use
     bestmove2 = checkAIbestMove(@attacker.pbOpposing2)
-    if @opponent.ability == :FLASHFIRE || battler.pbPartner.crested == :DRUDDIGON
+    if @opponent.ability == :FLASHFIRE || battler.pbPartner.crested == :DRUDDIGON || (battler.pbPartner.crested == :ROTOM && battler.pbPartner.form == 1)
       miniscore*=3 if bestmove1.pbType(@attacker.pbOpposing1) ==:FIRE || bestmove2.pbType(@attacker.pbOpposing2) ==:FIRE
-    elsif @opponent.ability == :STORMDRAIN || @opponent.ability == :DRYSKIN || @opponent.ability == :WATERABSORB
+    elsif @opponent.ability == :STORMDRAIN || @opponent.ability == :DRYSKIN || @opponent.ability == :WATERABSORB || (@opponent.crested == :ROTOM && @opponent.form == 2)
       miniscore*=3 if bestmove1.pbType(@attacker.pbOpposing1) ==:WATER || bestmove2.pbType(@attacker.pbOpposing2) ==:WATER
     elsif @opponent.ability == :MOTORDRIVE || @opponent.ability == :LIGHTNINGROD || @opponent.ability == :VOLTABSORB
       miniscore*=3 if bestmove1.pbType(@attacker.pbOpposing1) ==:ELECTRIC ||bestmove2.pbType(@attacker.pbOpposing2) ==:ELECTRIC
@@ -7942,6 +7946,7 @@ class PokeBattle_AI
       pri = pri.nil? ? 0 : pri
       pri += 1 if battler.ability == :PRANKSTER && battlermove.basedamage == 0 # Is status move
       pri += 1 if battler.ability == :GALEWINGS && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2 || @battle.FE == :SKY || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN || @battle.FE == :VOLCANICTOP) && @battle.pbWeather == :STRONGWINDS))
+      pri += 1 if battler.crested == :ROTOM && battlermove.type == :FLYING && (battler.hp >= battler.totalhp / 2)
       pri += 1 if @battle.FE == :CHESS && battler.pokemon && battler.pokemon.piece == :KING
       pri += 1 if (battlermove.move == :GRASSYGLIDE) && (@battle.FE == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @battle.FE == :SWAMP)
       pri += 1 if battlermove.move == :POWERSURGE && (@battle.FE == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
@@ -8214,6 +8219,10 @@ class PokeBattle_AI
       when :SKUNTANK then return -1 if type == :GROUND || (!secondtype.nil? && secondtype.include?(:GROUND))
       when :DRUDDIGON then return -1 if type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))
       when :VANILLUXE then return -1 if (type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))) && @battle.weather == :HAIL
+      when :ROTOM
+        return -1 if @form == 1 && type == :FIRE || (!secondtype.nil? && secondtype.include?(:FIRE))
+        return -1 if @form == 2 && type == :WATER || (!secondtype.nil? && secondtype.include?(:WATER))
+        
     end
     if @battle.FE == :ROCKY && (opponent.effects[:Substitute] > 0 || opponent.stages[PBStats::EVASION] > 0)
       return 0 if PBStuff::BULLETMOVE.include?(id)

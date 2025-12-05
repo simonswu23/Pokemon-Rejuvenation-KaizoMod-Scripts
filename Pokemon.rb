@@ -345,7 +345,8 @@ class PokeBattle_Pokemon
 
   def getEggMoveList(relearner=false)
     babyspecies = pbGetBabySpecies(@species,@form)
-    preevo = pbGetPreviousForm(@species,form)
+    prevForm = 1 if (@species == :ALTARIA && @form = 2)
+    preevo = pbGetPreviousForm(@species,prevForm)
     if !$cache.pkmn[babyspecies[0]].EggMoves.nil?
       movelist = $cache.pkmn[babyspecies[0]].EggMoves
       if relearner == true
@@ -630,8 +631,8 @@ class PokeBattle_Pokemon
     self.calcStats
     $Trainer.pokedex.setFormSeen(self)
     $Trainer.pokedex.setFormOwned(self) if $Trainer.party.include?(self) || $PokemonStorage.contains?(self)
-    if @species == :ROTOM
-      formmoves = [:THUNDERSHOCK,:OVERHEAT,:HYDROPUMP,:BLIZZARD,:AIRSLASH,:LEAFSTORM]
+    if @species == :ROTOM && self.item != :ROTOCREST
+      formmoves = [:THUNDERSHOCK,:OVERHEAT,:HYDROPUMP,:BLIZZARD,:HURRICANE,:MOWDOWN,:HEATWAVE,:SCALD,:FREEZEDRY,:AIRSLASH,:GRASSYGLIDE,:ZAPCANNON]
       formmoves.each{|move|
          pbDeleteMoveByID(self,move)
       }

@@ -879,6 +879,13 @@ def getEvolutionForm(mon,item=nil)
   when :MEOWTH then return (form==2) ? 0 : form
   when :CORSOLA then return 0
   when :MRMIME then return 0
+  when :SWABLU then return form == 1 ? 2 : 0
+  when :CAPSAKID
+    if KAIZOMOD && item == :APOPHYLLPAN
+      return 1
+    else
+      return 0
+    end
   when :TOXEL
     if Rejuv && item == :FIRESTONE
       return 2

@@ -71,6 +71,7 @@ class PokeBattle_OnlineBattle < PokeBattle_Battle
         pri += 1 if @battle.FE == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage==0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type==2 && ((@battlers[i].hp >= @battlers[i].totalhp / 2) || ((@battle.FE == :MOUNTAIN || @battle.FE == :SNOWYMOUNTAIN) && @weather == :STRONGWINDS))
+        pri += 1 if @battlers[i].crested == :ROTOM && @choices[i][2].type==2 && (@battlers[i].hp >= @battlers[i].totalhp / 2)
         pri += 3 if @battlers[i].ability == :TRIAGE && (PBStuff::HEALFUNCTIONS).include?(@choices[i][2].function) 
         pri = -2 if !KAIZOMOD && @battlers[i].ability == :MYCELIUMMIGHT && @choices[i][2].basedamage==0 # Gen 9 Mod Added Mycelium Might
 

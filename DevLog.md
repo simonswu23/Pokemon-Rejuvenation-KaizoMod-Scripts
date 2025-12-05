@@ -70,7 +70,7 @@
       - double-check Angie fight with Lucky Wind
 
   ## Rebalancing
-    -
+    - 
 
   ## Implementation Dump
     - Moves:
@@ -172,8 +172,16 @@
 
   ## Other
     - Learnset updates for new moves
+    - Dragon Darts Targeting (Fuck Me)
+      - Rotom -> Wash (Storm Drain), Heat (Flash Fire)
+      - Vanilluxe -> Fire (in the hail)
+      - probably others that I can't think of right now
 
 # Journal
+
+- 8/15/25 (SWu)
+  - Rotom Crest
+    - secondary abilities do NOT interact with field effects (e.g. no Storm Drain buff on Water Surface for Rotom Wash)
 
 - 7/6/25 (SWu)
   - Punishment is still bugged, this means Chip Away etc. are also probably bugged (they don't ignore defense boosts)

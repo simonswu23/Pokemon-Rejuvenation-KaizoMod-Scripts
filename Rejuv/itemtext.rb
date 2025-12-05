@@ -8444,11 +8444,10 @@ ITEMHASH = {
 :ROTOMPHONE => {
     :ID => 943,
     :name => "Rotom Phone",
-    :desc => "A smartphone that was enhanced with a Rotom!",
+    :desc => "A smartphone that was enhanced with a Rotom! Use it to customize your Rotom.",
     :price => 0,
     :keyitem => true,
     :noUseInBattle => true,
-    :noUse => true,
 },
 
 :CONCERTTCK => {
@@ -10909,11 +10908,21 @@ ITEMHASH = {
 },
 
 :SCEPTILITEF => {
-    :ID => 661,
+    :ID => 3012,
     :name => "Florin's Sceptilite",
     :desc => "One variety of Mega Stone. Have Sceptile hold it, and this stone will enable it to Mega Evolve in battle.",
     :price => 999,
     :crystal => true,
+    :noUseInBattle => true,
+    :noUse => true,
+},
+
+:ROTOCREST => {
+    :ID => 3013,
+    :name => "Rotom Crest",
+    :desc => "Don't sue us, pokemon insurgence!",
+    :price => 999,
+    :crest => true,
     :noUseInBattle => true,
     :noUse => true,
 },

@@ -1497,6 +1497,7 @@ class PokeBattle_Battle
         pri += 1 if @field.effect == :CHESS && @battlers[i].pokemon && @battlers[i].pokemon.piece == :KING
         pri += 1 if @battlers[i].ability == :PRANKSTER && @choices[i][2].basedamage == 0 && @battlers[i].effects[:TwoTurnAttack] == 0 # Is status move
         pri += 1 if @battlers[i].ability == :GALEWINGS && @choices[i][2].type == :FLYING && (@battlers[i].hp >= @battlers[i].totalhp / 2 || ((@field.effect == :MOUNTAIN || @field.effect == :SNOWYMOUNTAIN) && pbWeather == :STRONGWINDS))
+        pri += 1 if @battlers[i].crested == :ROTOM && @choices[i][2].type==:FLYING && (@battlers[i].hp >= @battlers[i].totalhp / 2)
         pri += 1 if (@choices[i][2].move == :GRASSYGLIDE) && (@field.effect == :GRASSY || @battle.state.effects[:GRASSY] > 0 || @field.effect == :SWAMP)
         pri += 1 if @choices[i][2].move == :POWERSURGE && (@field.effect == :ELECTERRAIN || @battle.state.effects[:ELECTERRAIN] != 0)
         pri += 1 if @choices[i][2].move == :ATTACKORDER && @battlers[i].crested == :VESPIQUEN
@@ -6713,12 +6714,13 @@ class PokeBattle_Battle
       end
       # Speed Boost
       # A Pokémon's turncount is 0 if it became active after the beginning of a round
-      if i.turncount > 0 && (i.ability == :SPEEDBOOST || (@field.effect == :ELECTERRAIN && i.ability == :MOTORDRIVE) ||
+      if i.turncount > 0 && (i.ability == :SPEEDBOOST || (i.crested == :ROTOM && i.form == 5) || (@field.effect == :ELECTERRAIN && i.ability == :MOTORDRIVE) ||
         ([:VOLCANIC, :VOLCANICTOP, :WATERSURFACE, :UNDERWATER, :INFERNAL].include?(@field.effect) && i.ability == :STEAMENGINE))
         if !i.pbTooHigh?(PBStats::SPEED)
           i.pbIncreaseStatBasic(PBStats::SPEED, 1)
           pbCommonAnimation("StatUp", i, nil)
-          pbDisplay(_INTL("{1}'s {2} raised its Speed!", i.pbThis, getAbilityName(i.ability)))
+          source = i.crested == :ROTOM ? "crest" : getAbilityName(i.ability)
+          pbDisplay(_INTL("{1}'s {2} raised its Speed!", i.pbThis, source))
         end
       end
       if i.ability == :ACCUMULATION && i.turncount > 0 && i.lastMoveUsed != :SPITUP && i.lastMoveUsed != :SWALLOW

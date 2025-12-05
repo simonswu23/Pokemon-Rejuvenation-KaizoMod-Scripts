@@ -22199,7 +22199,41 @@ MONHASH = {
       ]
   },
 
+  "Aevian Form" => {
+      :Type1 => :ELECTRIC,
+      :Type2 => :DRAGON,
+      :BaseStats => [45, 40, 74, 40, 60, 50],
+      :Abilities => [:LEVITATE, :DRIZZLE, :VOLTABSORB],
+      :Color => "Yellow",
+      :EggMoves => [:AGILITY,:ASTONISH,:DEFOG,:DRAGONRUSH,:ELECTRIFY,:FEATHERDANCE,:HAZE,:HYPERVOICE,:HURRICANE,:IONDELUGE,:POWERSWAP,:PURSUIT,:ROOST,:TAILWIND,:STEELWING],
+      :Moveset => [
+        [1,:THUNDERSHOCK],
+        [1,:GROWL],
+        [3,:NUZZLE],
+        [5,:EERIEIMPULSE],
+        [7,:TWISTER],
+        [9,:DEFOG],
+        [11,:DISARMINGVOICE],
+        [14,:RAINDANCE],
+        [17,:SHOCKWAVE],
+        [20,:DRAGONDANCE],
+        [23,:ELECTRICTERRAIN],
+        [26,:WEATHERBALL],
+        [30,:DISCHARGE],
+        [34,:COTTONGUARD],
+        [38,:DRAGONPULSE],
+        [42,:THUNDER],
+        [46,:HURRICANE]],
+      :compatiblemoves => [:AERIALACE,:AGILITY,:AIRCUTTER,:BODYSLAM,:DAZZLINGGLEAM,:DEFOG,:DOUBLEEDGE,:DRACOMETEOR,:DRAGONCHEER,:DRAGONDANCE,:DRAGONPULSE,:DREAMEATER,:DUALWINGBEAT,:ECHOEDVOICE,:EERIEIMPULSE,:ELECTRICTERRAIN,:ELECTROBALL,:ELECTROWEB,:FALSESWIPE,:FLY,:HURRICANE,:HYPERVOICE,:OUTRAGE,:LIGHTSCREEN,:PLUCK,:POWERSWAP,:PSYCHUP,:RAINDANCE,:REFLECT,:RISINGVOLTAGE,:ROOST,:SAFEGUARD,:SKYATTACK,:STEELWING,:SUPERCELLSLAM,:SWIFT,:TAILWIND,:THUNDER,:THUNDERBOLT,:THUNDERWAVE,:VOLTSWITCH,:WILDCHARGE,:TWISTER],
+      :moveexceptions => [],
+      :evolutions => [
+        [:ALTARIA,:Level,35]
+      ],
+      :dexentry => "Storm Cloud",
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :ALTARIA => {
@@ -22230,7 +22264,7 @@ MONHASH = {
         [1,:GROWL],
         [1,:ASTONISH],
         [1,:SING],
-        [0,:DRAGONPULSE],
+        [1,:DRAGONPULSE],
         [3,:ASTONISH],
         [5,:SING],
         [7,:FURYATTACK],
@@ -22267,9 +22301,47 @@ MONHASH = {
     "Mega Form" => {
       :Type2 => :FAIRY,
       :BaseStats => [75, 110, 110, 110, 105, 80],
-      :Abilities => [:PIXILATE],
+      :Abilities => [:FLUFFY],
       :BaseEXP => 207,
       :Height => 15,
+  },
+
+  "Aevian Form" => {
+      :Type1 => :ELECTRIC,
+      :Type2 => :DRAGON,
+      :BaseStats => [75, 70, 105, 80, 90, 70],
+      :Abilities => [:LEVITATE, :DRIZZLE, :VOLTABSORB],
+      :Color => "Yellow",
+      :preevo => {
+        :species => :SWABLU,
+        :form => 1
+      },
+      :Moveset => [
+        [0, :DRAGONBREATH],
+        [1, :DRAGONPULSE],
+        [1, :SKYATTACK],
+        [1, :HURRICANE],
+        [1, :GROWL],
+        [1, :THUNDERSHOCK],
+        [5, :NUZZLE],
+        [5, :EERIEIMPULSE],
+        [7, :TWISTER],
+        [9, :DEFOG],
+        [11, :DISARMINGVOICE],
+        [14, :RAINDANCE],
+        [17, :SHOCKWAVE],
+        [20, :DRAGONDANCE],
+        [23, :ELECTRICTERRAIN],
+        [26, :WEATHERBALL],
+        [30, :DISCHARGE],
+        [34, :COTTONGUARD],
+        [42, :THUNDER],
+        [46, :HURRICANE],
+        [52, :THUNDERCLAP]
+      ],
+      :compatiblemoves => [:AERIALACE,:AGILITY,:AIRCUTTER,:BODYSLAM,:BREAKINGSWIPE,:DAZZLINGGLEAM,:DEFOG,:DOUBLEEDGE,:DRACOMETEOR,:DRAGONCHEER,:DRAGONCLAW,:DRAGONDANCE,:DRAGONPULSE,:DREAMEATER,:DUALWINGBEAT,:ECHOEDVOICE,:EERIEIMPULSE,:ELECTRICTERRAIN,:ELECTROBALL,:ELECTROWEB,:FALSESWIPE,:FLY,:HONECLAWS,:HYPERBEAM,:HYPERVOICE,:OUTRAGE,:LIGHTSCREEN,:PLUCK,:POWERSWAP,:PSYCHUP,:ROAR,:RAINDANCE,:REFLECT,:RISINGVOLTAGE,:ROOST,:SAFEGUARD,:SKYATTACK,:STEELWING,:SUPERCELLSLAM,:SWIFT,:TAILWIND,:THUNDER,:THUNDERBOLT,:THUNDERWAVE,:VOLTSWITCH,:WILDCHARGE,:TWISTER],
+      :moveexceptions => [],
+      :dexentry => "Storm Cloud",
   },
 
   :OnCreation => {},
@@ -31597,7 +31669,7 @@ MONHASH = {
 
     "Heat Rotom" => {
       :Type2 => :FIRE,
-      :BaseStats => [50, 65, 107, 105, 107, 86],
+      :BaseStats => [50, 65, 87, 127, 105, 86],
       :BaseEXP => 182,
       :compatiblemoves => [:ALLYSWITCH,:CHARGEBEAM,:DARKPULSE,:DEFOG,:DREAMEATER,:EERIEIMPULSE,:ELECTRICTERRAIN,:ELECTROBALL,:ELECTROWEB,:FLASH,:FOULPLAY,:HELPINGHAND,:HEX,:HYPERVOICE,:LIGHTSCREEN,:MUDSLAP,:NASTYPLOT,:OMINOUSWIND,:OVERHEAT,:PAINSPLIT,:POLTERGEIST,:PSYCHUP,:RAINDANCE,:REFLECT,:RISINGVOLTAGE,:SHADOWBALL,:SHOCKWAVE,:SIGNALBEAM,:SNATCH,:SPITE,:STOREDPOWER,:SUCKERPUNCH,:SUNNYDAY,:SWIFT,:TELEKINESIS,:THIEF,:THUNDER,:THUNDERBOLT,:THUNDERWAVE,:TRICK,:UPROAR,:VOLTSWITCH,:WILLOWISP],
       :moveexceptions => [:ATTRACT,:CAPTIVATE],
@@ -31611,7 +31683,7 @@ MONHASH = {
 
     "Frost Rotom" => {
       :Type2 => :ICE,
-      :BaseStats => [50, 65, 107, 105, 107, 86],
+      :BaseStats => [50, 65, 127, 105, 87, 86],
       :BaseEXP => 182,
       :compatiblemoves => [:ALLYSWITCH,:BLIZZARD,:CHARGEBEAM,:DARKPULSE,:DEFOG,:DREAMEATER,:EERIEIMPULSE,:ELECTRICTERRAIN,:ELECTROBALL,:ELECTROWEB,:FLASH,:FOULPLAY,:HELPINGHAND,:HEX,:HYPERVOICE,:LIGHTSCREEN,:MUDSLAP,:NASTYPLOT,:OMINOUSWIND,:PAINSPLIT,:POLTERGEIST,:PSYCHUP,:RAINDANCE,:REFLECT,:RISINGVOLTAGE,:SHADOWBALL,:SHOCKWAVE,:SIGNALBEAM,:SNATCH,:SPITE,:STOREDPOWER,:SUCKERPUNCH,:SUNNYDAY,:SWIFT,:TELEKINESIS,:THIEF,:THUNDER,:THUNDERBOLT,:THUNDERWAVE,:TRICK,:UPROAR,:VOLTSWITCH,:WILLOWISP],
       :moveexceptions => [:ATTRACT,:CAPTIVATE],
@@ -31619,13 +31691,13 @@ MONHASH = {
 
     "Fan Rotom" => {
       :Type2 => :FLYING,
-      :BaseStats => [50, 65, 107, 105, 107, 86],
+      :BaseStats => [50, 65, 86, 105, 87, 127],
       :BaseEXP => 182,
   },
 
     "Mow Rotom" => {
       :Type2 => :GRASS,
-      :BaseStats => [50, 65, 107, 105, 107, 86],
+      :BaseStats => [50, 127, 65, 105, 87, 86],
       :BaseEXP => 182,
   },
 
@@ -35660,7 +35732,43 @@ MONHASH = {
       ]
   },
 
+  "Aevian Form" => {
+      :Type1 => :WATER,
+      :Type2 => :FLYING,
+      :BaseStats => [40, 27, 37, 60, 50, 66],
+      :Abilities => [:SOUNDPROOF, :UNBURDEN, :LIQUIDVOICE],
+      :Color => "Blue",
+      :EggMoves => [:AFTERYOU, :AQUARING, :BOUNCE, :CAPTIVATE, :ENCORE, :FAKETEARS, :MISTYTERRAIN, :NATUREPOWER, :PARTINGSHOT, :PERISHSONG, :SWITCHEROO, :WHIRLWIND],
+      :Moveset => [
+        [1,:BUBBLE],
+        [1,:GROWL],
+        [4,:GUST],
+        [8,:DISARMINGVOICE],
+        [10,:SING],
+        [13,:BUBBLEBEAM],
+        [17,:ROUND],
+        [19,:ECHOEDVOICE],
+        [22,:AIRCUTTER],
+        [26,:ICYWIND],
+        [28,:CHARM],
+        [31,:HYPERVOICE],
+        [35,:TAILWIND],
+        [37,:SPARKLINGARIA],
+        [40,:RAINDANCE],
+        [44,:ALLURINGVOICE],
+        [46,:BOOMBURST]
+      ],
+      :compatiblemoves => [:ACROBATICS,:ALLURINGVOICE,:BLIZZARD,:BRINE,:CHARM,:CHILLINGWATER,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:FAKETEARS,:FROSTBREATH,:HAIL,:HYPERVOICE,:HURRICANE,:ICEBEAM,:ICYWIND,:HELPINGHAND,:KNOCKOFF,:LIGHTSCREEN,:MAGICCOAT,:MISTYTERRAIN,:NATUREPOWER,:PSYCHICNOISE,:PSYCHIC,:REFLECT,:SAFEGUARD,:SWIFT,:TAILWIND,:TAUNT,:SHADOWBALL,:SCALD,:UTURN,:WATERPULSE
+        ],
+      :moveexceptions => [],
+      :evolutions => [
+        [:WHISMICOTT,:Item,:WATERSTONE]
+      ],
+      :dexentry => "Bubbles / Singer.",
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :WHIMSICOTT => {
@@ -35709,7 +35817,35 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Aevian Form" => {
+      :Type1 => :WATER,
+      :Type2 => :FLYING,
+      :preevo => {
+        :species => :COTTONEE,
+        :form => 1
+      },
+      :BaseStats => [60, 67, 67, 95, 75, 116],
+      :Abilities => [:SOUNDPROOF, :UNBURDEN, :LIQUIDVOICE],
+      :Color => "Blue",
+      :Moveset => [
+        [1,:BUBBLEBEAM],
+        [1,:DISARMINGVOICE],
+        [1,:ROUND],
+        [1,:SING],
+        [1,:PERISHSONG],
+        [10,:GUST],
+        [28,:TAILWIND],
+        [46,:HURRICANE],
+        [50,:BOOMBURST],
+      ],
+      :compatiblemoves => [:ACROBATICS,:ALLURINGVOICE,:BLIZZARD,:BRINE,:CHARM,:CHILLINGWATER,:COVET,:DAZZLINGGLEAM,:DEFOG,:DREAMEATER,:ENCORE,:ENDEAVOR,:FAKETEARS,:FROSTBREATH,:HAIL,:HYPERVOICE,:HURRICANE,:ICEBEAM,:ICYWIND,:HELPINGHAND,:KNOCKOFF,:LIGHTSCREEN,:MAGICCOAT,:MISTYTERRAIN,:NATUREPOWER,:PSYCHICNOISE,:PSYCHIC,:SAFEGUARD,:SWIFT,:TAILWIND,:TAUNT,:SHADOWBALL,:SCALD,:UTURN,:WATERPULSE
+        ],
+      :moveexceptions => [],
+      :dexentry => "Bubbles / Singer.",
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :PETILIL => {
@@ -45632,7 +45768,7 @@ MONHASH = {
       :Type1 => :DRAGON,
       :BaseStats => [68, 75, 53, 83, 113, 60],
       :EVs => [0, 0, 0, 0, 2, 0],
-      :Abilities => [:SAPSIPPER, :HYDRATION],
+      :Abilities => [:EARTHEATER, :POISONHEAL],
       :HiddenAbilities => :GOOEY,
       :GrowthRate => :Slow,
       :GenderRatio => :FemHalf,
@@ -45683,7 +45819,7 @@ MONHASH = {
       :Type1 => :STEEL,
       :Type2 => :DRAGON,
       :BaseStats => [58, 75, 83, 83, 113, 40],
-      :Abilities => [:SAPSIPPER, :SHELLARMOR, :GOOEY],
+      :Abilities => [:SAPSIPPER, :SHELLARMOR, :REGENERATOR],
       :Moveset => [
         [0,:SHELTER],
         [1,:ACIDARMOR],
@@ -45719,7 +45855,7 @@ MONHASH = {
       :Type1 => :DRAGON,
       :BaseStats => [90, 100, 70, 110, 150, 80],
       :EVs => [0, 0, 0, 0, 3, 0],
-      :Abilities => [:SAPSIPPER, :HYDRATION],
+      :Abilities => [:EARTHEATER, :POISONHEAL],
       :HiddenAbilities => :GOOEY,
       :GrowthRate => :Slow,
       :GenderRatio => :FemHalf,
@@ -45775,7 +45911,7 @@ MONHASH = {
       :Type1 => :STEEL,
       :Type2 => :DRAGON,
       :BaseStats => [80, 100, 100, 110, 150, 60],
-      :Abilities => [:SAPSIPPER, :SHELLARMOR, :GOOEY],
+      :Abilities => [:SAPSIPPER, :SHELLARMOR, :REGENERATOR],
       :preevo => {
         :species => :SLIGGOO,
         :form => 1
@@ -47321,9 +47457,6 @@ MONHASH = {
         [49,:CAPTIVATE],
         [55,:HYDROPUMP],
         [60,:MISTYTERRAIN],
-
-        # KAIZOMOD
-        [66,:BOOMBURST],
       ],
       :compatiblemoves => [:ACROBATICS,:ALLURINGVOICE,:AMNESIA,:AQUATAIL,:BABYDOLLEYES,:BLIZZARD,:BRINE,:BUBBLEBEAM,:CALMMIND,:CHARM,:CHILLINGWATER,:COVET,:DAZZLINGGLEAM,:DIVE,:DRAININGKISS,:ECHOEDVOICE,:ENCORE,:ENERGYBALL,:FLIPTURN,:GIGAIMPACT,:HAIL,:HELPINGHAND,:HYDROCANNON,:HYDROPUMP,:HYPERBEAM,:HYPERVOICE,:ICEBEAM,:ICESPINNER,:ICYWIND,:IRONTAIL,:LIGHTSCREEN,:LIQUIDATION,:MAGICCOAT,:MISTYEXPLOSION,:MISTYTERRAIN,:PLAYROUGH,:PSYCHIC,:PSYCHICNOISE,:PSYCHUP,:RAINDANCE,:REFLECT,:SCALD,:SHADOWBALL,:STOREDPOWER,:SURF,:TRIPLEAXEL,:UPROAR,:WATERFALL,:WATERGUN,:WATERPLEDGE,:WATERPULSE,:WEATHERBALL,:WHIRLPOOL,:WONDERROOM,:WORKUP,
         #Rejuv only moves
@@ -60377,7 +60510,8 @@ MONHASH = {
       :BattlerEnemyY => 12,
       :BattlerAltitude => 0,
       :evolutions => [
-        [:SCOVILLAIN,:Item,:FIRESTONE]
+        [:SCOVILLAIN,:Item,:FIRESTONE],
+        [:SCOVILLAIN,:Item,:ICESTONE]
       ]
   },
 
@@ -60438,7 +60572,43 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
+  "Aevian Form" => {
+      :Type1 => :ICE,
+      :Type2 => :FIRE,
+      :preevo => {
+        :species => :CAPSAKID,
+        :form => 0
+      },
+      :BaseStats => [65, 108, 65, 108, 65, 75],
+      :Abilities => [:CONTRARY, :SLUSHRUSH, :THERMALEXCHANGE],
+      :Color => "Blue",
+      :Moveset => [
+        [0,:ICEBURN],
+        [0,:FLAMETHROWER],
+        [1,:LEER],
+        [1,:FIREFANG],
+        [1,:ICEFANG],
+        [4,:BITE],
+        [10,:FLURRY],
+        [13,:AURORAVEIL],
+        [17,:HAIL],
+        [21,:ICICLESPEAR],
+        [24,:HEADBUTT],
+        [28,:ZENHEADBUTT],
+        [33,:FREEZEDRY],
+        [38,:CRUNCH],
+        [44,:ICEHAMMER],
+        [48,:BLIZZARD],
+        [48,:OVERHEAT]],
+      :compatiblemoves => [:BLIZZARD,:BURNINGJEALOUSY,:CRUNCH,:ENERGYBALL,:FIREBLAST,:FIREFANG,:FLAMETHROWER,:GIGADRAIN,:GIGAIMPACT,:GRASSKNOT,:HAIL,:HEADBUTT,:HELPINGHAND,:HYPERBEAM,:ICEBEAM,:ICICLESPEAR,:ICYWIND,:LASHOUT,:LEAFSTORM,:MAGICALLEAF,:OVERHEAT,:SANDSTORM,:SCARYFACE,:SEEDBOMB,:STOMPINGTANTRUM,:SUNNYDAY,:SUPERFANG,:TAKEDOWN,:TEMPERFLARE,:THIEF,:TRAILBLAZE,:WEATHERBALL,:WILLOWISP,:WORRYSEED,:ZENHEADBUTT,
+        #Rejuv only moves
+        :MAGMADRIFT],
+      :moveexceptions => [],
+      :dexentry => "A Teila Fire and Ice.",
+  },
+
   :OnCreation => {},
+  :DefaultForm => 0,
 },
 
 :RELLOR => {
