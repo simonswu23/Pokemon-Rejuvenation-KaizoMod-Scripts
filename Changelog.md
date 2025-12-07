@@ -91,6 +91,7 @@
   - Runerigus Crest: 25% boost to attack and defense. Additionally, upon hit, traps attacker and lowers their offenses harshly. Saps 1/16th hp per turn from trapped foes.
   - Spinda Crest: Spinda's base stats will always equal it's highest. If the move in the first moveslot is a status move, it will use it upon switch in.
   - Vanilluxe Crest: in hail, immune to Fire attacks and x1.5 boost to Ice moves
+  - Rotom Crest: allows Rotom to learn special moves (from Rotom Phone), and allows Rotom to change form during battle if it uses one of these attacks. Also, grants each rotom form a custom ability + stat boost.
 
 # Items
   - Pinch berries now heal 50% hp
@@ -100,6 +101,8 @@
     - Present
     - Psywave
     - Metronome
+  - Rotom Phone can be used to change base rotom's form, and teach crested Rotom its special moves
+  - Room Service drops the user's speed by 6 upon activation
 
 # Attacks
   - Double Team and Minimize are banned and fail upon use
@@ -136,6 +139,9 @@
   - Heal Pulse and Coaching now bypasses protect
   - Eternabeam has 500 base power
   - Misty Explosion has 250 base power, and deals double damage in Misty Terrain. If the terrain is not active, sets Misty Terrain up for 5 turns upon fainting.
+  - Behemoth Bash is 120 base power and uses the user's defense stat
+  - Behemoth Blade is 120 base power
+  - Dynamax Cannon is 120 base power
 
   ## New Attacks
   - Chain Drain:
@@ -155,6 +161,8 @@
   - Blossom Storm
     - Fairy, physical, 140 bp, 100 accuracy, -1 attack and special defense after use (except in sunlight)
     - Learnset: Cherrim
+  - Mow Down
+    - Grass, physical, 120 bp, 100 accuracy, 30% chance to lower the target's defense by 1, 33% recoil
 
 # Pokemon
   ## Giga Pokemon
@@ -380,6 +388,8 @@
     - learns Flurry at level 24
     - Vanilluxe learns Sundae upon evolving, Squall at level 46, and Glaciate at level 100
     - Vanillite learns Nasty Plot as an egg move
+  - Primarina
+    - learns Boomburst at level 66
   - Ekans, Arbok
     - learns Poison Sweep by TM
   - Tranquill, Unfezant

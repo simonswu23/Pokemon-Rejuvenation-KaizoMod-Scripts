@@ -179,6 +179,10 @@
 
 # Journal
 
+- 12/6/24 (SWu) - welcome back
+  - Welcome back
+  - updated changelog I think
+
 - 8/15/25 (SWu)
   - Rotom Crest
     - secondary abilities do NOT interact with field effects (e.g. no Storm Drain buff on Water Surface for Rotom Wash)
