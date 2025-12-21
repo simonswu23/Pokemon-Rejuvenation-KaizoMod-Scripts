@@ -2179,6 +2179,27 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("The Street Magician's tricks raise {1}'s Special Attack!", pbThis))
         end
       end
+      if self.ability == :RIVALRY && onactive
+        statchange = false
+        if !pbTooHigh?(PBStats::ATTACK)
+          pbIncreaseStatBasic(PBStats::ATTACK,1)
+          @battle.pbCommonAnimation("StatUp",self,nil)
+          statchange = true
+        end
+        if !pbTooLow?(PBStats::SPATK)
+          pbIncreaseStatBasic(PBStats::SPATK,1)
+          @battle.pbCommonAnimation("StatUp",self,nil)
+          statchange = true
+        end
+        @battle.pbDisplay(_INTL("{1}'s {2} is making it aggressive!",pbThis,getAbilityName(ability))) if statchange
+      end
+      if self.ability == :PUNKROCK && onactive
+        if !pbTooHigh?(PBStats::SPATK)
+          pbIncreaseStatBasic(PBStats::SPATK,1)
+          @battle.pbCommonAnimation("StatUp",self,nil)
+          @battle.pbDisplay(_INTL("{1}'s Punk Rock is getting the alley riled up!",pbThis))
+        end
+      end
       if (self.ability == :ANTICIPATION || self.ability == :FOREWARN) && onactive
         statchange = false
         if !pbTooHigh?(PBStats::DEFENSE)
