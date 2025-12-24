@@ -4670,7 +4670,7 @@ class PokeBattle_Battler
               i.pbIncreaseStat(stat,2)
             end
           end
-          i.effects[:Snatch]=false
+          i.effects[:Snatch]=false if i.crested != :THIEVUL
           target=user
           user=i
           # Snatch's PP is reduced if old user has Pressure
@@ -4816,7 +4816,7 @@ class PokeBattle_Battler
       for i in priority
         if i.effects[:Snatch]
           @battle.pbDisplay(_INTL("{1} Snatched {2}'s move!",i.pbThis,user.pbThis(true)))
-          i.effects[:Snatch]=false
+          i.effects[:Snatch]=false if i.crested != :THIEVUL
           target=user
           user=i
           # Snatch's PP is reduced if old user has Pressure

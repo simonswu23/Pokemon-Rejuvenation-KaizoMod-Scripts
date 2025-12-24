@@ -56,21 +56,8 @@
         end
       end
     when :THIEVUL
-      if !@battlers[index].pbOpposing1.isFainted?
-        opposing=@battlers[index].pbOpposing1
-        if opposing.pbCanReduceStatStage?(PBStats::SPATK)
-          opposing.pbReduceStat(PBStats::SPATK,1,statdropper: @battlers[index])
-        end
-      end
-      if !@battlers[index].pbOpposing2.isFainted?
-        opposing=@battlers[index].pbOpposing2
-        if opposing.pbCanReduceStatStage?(PBStats::SPATK)
-          opposing.pbReduceStat(PBStats::SPATK,1,statdropper: @battlers[index])
-        end
-      end
-      if @battlers[index].pbCanIncreaseStatStage?(PBStats::SPATK)
-        @battlers[index].pbIncreaseStat(PBStats::SPATK,1)
-      end
+      @battlers[index].effects[:Snatch]=true
+      @battle.pbDisplay(_INTL("{1} waits for its foes to make a move...", @battlers[index].pbThis))
     when :PROBOPASS
       @battlers[index].effects[:MagnetRise]=8
       pbAnimation(:MAGNETRISE,@battlers[index],nil) # Magnet Rise animation

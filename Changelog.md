@@ -80,6 +80,7 @@
   - Cofagrigus Crest: additionally, upon hit, traps attacker and inflicts curse on them. Saps 1/16th hp per turn from trapped foes.
   - Shiinotic Crest: always drains 1/16 hp at the end of each turn from foes, doubled if foe is statused
   - Cherrim Crest: summons sun on entry for 5 turns
+  - Thievul Crest: doubles all stat drops this pokemon inflicts; any stat drops inflicted will be gained by Thievul. Always has Snatch effect active.
 
   ## New
   - Cacturne Crest: raises offenses by 1 if attacking first
@@ -343,6 +344,8 @@
   - Toedscool and Toedscruel
     - Toedscool gains Friend Guard as an ability
     - Toedscruel gains Dry Skin as an ability
+  - Thievul
+    - Gains Unnerve as ability instead of Run Away
 
   ## Moveset Tweaks (WIP)
   - Shelmet

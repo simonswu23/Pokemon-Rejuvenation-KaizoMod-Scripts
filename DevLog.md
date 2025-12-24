@@ -50,6 +50,8 @@
 - Clown Caricature (Boss)
 - Flora (Gym)
 - Florin (Gym)
+- Venam (GDC)
+- Alice and Allen (GDC)
 
 
 # TODOs:

@@ -1374,7 +1374,7 @@ def pbGigaCompatibleBaseMove?(move)
     when :FERROTHORN      then return true if move.move == :POWERWHIP
     when :URSHIFU         then return true if move.move == :WICKEDBLOW
     when :SANDACONDA      then return true if move.move == :HURRICANE
-    when :KINGLER         then return true if move.move == :XSCISSOR
+    when :KINGLER         then return true if move.move == :BUBBLEBEAM
     when :SNORLAX         then return true if move.move == :BODYSLAM
     when :ORBEETLE        then return true if move.move == :PSYCHIC
   end

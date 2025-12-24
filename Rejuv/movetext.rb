@@ -14862,6 +14862,21 @@ MOVEHASH = {
 	:desc => "Damages opposing team, may paralyze."
 },
 
+:FOAMBURST => {
+	:ID => 2023,
+	:name => "Foam Burst",
+	:function => 0x00C,
+	:type => :WATER,
+	:category => :special,
+	:basedamage => 250,
+	:accuracy => 0,
+	:maxpp => 10,
+	:giga => true,
+    :effect => 100,
+	:target => :SingleNonUser,
+	:desc => "Applies frostbite to targets."
+},
+
 
 # Handlers
 :METEORIMPACTOR => {

@@ -7116,7 +7116,7 @@ class PokeBattle_Battle
       # Gen 9 Mod - Fixed Charge to work until the user uses an electric move
       @battlers[i].effects[:Charge] = false if @battlers[i].effects[:Charge] == true && Gen <= 8
       @battlers[i].effects[:LaserFocus] -= 1 if @battlers[i].effects[:LaserFocus] > 0
-      @battlers[i].effects[:Snatch] = false
+      @battlers[i].effects[:Snatch] = false if @battlers[i].crested != :THIEVUL
       @battlers[i].effects[:Electrify] = false
       @battlers[i].lastHPLost = 0
       @battlers[i].lastAttacker = -1

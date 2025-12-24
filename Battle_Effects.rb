@@ -693,6 +693,11 @@ class PokeBattle_Battler
 
   # Gen 9 Mod - Changed definition of pbReduceStat to include new 'mirrorable' param, which is required for Opportunist and Mirror Herb.
   def pbReduceStat(stat,increment,abilitymessage:true,statmessage:true, statdropper: nil, defiant_proc: true, mirrordrop: false, ignoreContrary: false, mirrorable: true)
+    
+    if (statdropper != nil && statdropper.crested == :THIEVUL)
+      increment = [6, increment * 2].min
+    end
+
     # here we play uno reverse if we have Mirror Armor
     if self.ability == :MIRRORARMOR && !mirrordrop && !self.moldbroken && statdropper != self
       if !statdropper.nil?
@@ -736,6 +741,10 @@ class PokeBattle_Battler
       harsh = "dramatically " if increment >= 3
       stat_text = _INTL("{1}'s {2} {3}fell!", pbThis, pbGetStatName(stat), harsh)
       @battle.pbDisplay(stat_text) if statmessage
+
+      if statdropper != nil && statdropper.crested == :THIEVUL
+        statdropper.pbIncreaseStat(stat,increment,abilitymessage:"crest",statmessage:statmessage)
+      end
 
       # Defiant/Competitive boost
       if defiant_proc

@@ -598,7 +598,7 @@ POKEMONTOGIGAMOVE = {
   :GENGAR     => [:TERRIFY],
   :BUTTERFREE => [:BEFUDDLE],       :MACHAMP    => [:CHISTRIKE],
   :PIKACHU    => [:VOLTCRASH],      :MEOWTH     => [:GOLDRUSH],
-  :KINGLER    => [:KINGSFEAST],     :LAPRAS     => [:RESONANCE],
+  :KINGLER    => [:FOAMBURST],     :LAPRAS     => [:RESONANCE],
   :EEVEE      => [:GIGACHARM],      :SNORLAX    => [:GOURMANDIZE],
   :GARBODOR   => [:LANDFILL],       :MELMETAL   => [:MELTDOWN],
   :CORVIKNIGHT=> [:WINDRAGE],       :ORBEETLE   => [:GRAVITAS],

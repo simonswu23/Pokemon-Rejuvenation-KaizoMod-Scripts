@@ -6991,7 +6991,13 @@ MONHASH = {
       :BattlerAltitude => 0,
   },
 
-    "Giga Form" => {
+  "Giga Form" => {
+    :Type2 => :BUG,
+    :Height => 240,
+    :Weight => 2456,
+  },
+
+  "Mega Form" => {
       :BaseStats => [55, 169, 135, 60, 60, 96],
       :Abilities => [:SHEERFORCE],
       :toobig => true,
@@ -7000,6 +7006,7 @@ MONHASH = {
   },
 
   :OnCreation => {},
+  :GigaForm => 1,
   :DefaultForm => 0,
     :MegaForm => {
       :KINGLERITE => 1
@@ -53484,7 +53491,7 @@ MONHASH = {
       :Type1 => :DARK,
       :BaseStats => [70, 58, 58, 87, 92, 90],
       :EVs => [0, 0, 0, 0, 2, 0],
-      :Abilities => [:RUNAWAY, :UNBURDEN],
+      :Abilities => [:UNNERVE, :UNBURDEN],
       :HiddenAbilities => :STAKEOUT,
       :GrowthRate => :Fast,
       :GenderRatio => :FemHalf,
