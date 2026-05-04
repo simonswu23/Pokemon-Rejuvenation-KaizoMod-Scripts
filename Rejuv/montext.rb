@@ -5690,7 +5690,7 @@ MONHASH = {
 
     "Mega Form" => {
       :BaseStats => [95, 75, 180, 130, 80, 30],
-      :Abilities => [:SHELLARMOR],
+      :Abilities => [:SIMPLE],
       :BaseEXP => 207,
       :Height => 20,
       :Weight => 1200,
@@ -25965,7 +25965,7 @@ MONHASH = {
       :Happiness => 70,
       :EggSteps => 5355,
       :EggMoves => [:ASSIST,:BLAZEKICK,:COUNTER,:DOUBLEKICK,:ENCORE,:FAKEOUT,:FIREPUNCH,:FOCUSENERGY,:FOCUSPUNCH,:HEATWAVE,:HELPINGHAND,:POWERUPPUNCH,:QUICKGUARD,:SUBMISSION,:SWITCHEROO,:THUNDERPUNCH,
-                    :COPYCAT], # KAIZOMOD
+                    :COPYCAT, :MEFIRST], # KAIZOMOD
 
       :Moveset => [
         [1,:SCRATCH],
@@ -37963,6 +37963,12 @@ MONHASH = {
       ]
   },
 
+  "Zetta" => {
+      :Type2 => :NORMAL,
+      :BaseStats => [110, 65, 75, 225, 85, 30],
+      :ExcludeDex => true,
+  },
+
   :OnCreation => {},
 },
 
@@ -38393,6 +38399,50 @@ MONHASH = {
       :BattlerPlayerY => 17,
       :BattlerEnemyY => 9,
       :BattlerAltitude => 7,
+  },
+
+  "SWu's Vanilluxe" => {
+    :Type2 => :ELECTRIC,
+    # +100 BST
+    :BaseStats => [71, 115, 125, 130, 95, 99],
+    :Abilities => [:SNOWWARNING, :REFRIGERATE],
+    :Moveset => [
+        [1,:SHEERCOLD],
+        [1,:FREEZEDRY],
+        [1,:WEATHERBALL],
+        [1,:ICICLESPEAR],
+        [1,:ASTONISH],
+        [1,:UPROAR],
+        [10,:UPROAR],
+        [13,:ICYWIND],
+        [22,:TAUNT],
+        [26,:MIRRORSHOT],
+        [31,:ACIDARMOR],
+        [36,:ICEBEAM],
+        [42,:HAIL],
+        [59,:BLIZZARD],
+        [67,:SHEERCOLD],
+
+        # KAIZOMOD
+        [0,:SUNDAE],
+        [1,:SUNDAE],
+        [1,:EERIEIMPULSE],
+        [4,:NUZZLE],
+        [7,:THUNDERSHOCK],
+        [16,:SHOCKWAVE],
+        [19,:PARABOLICCHARGE],
+        [24,:FLURRY],
+        [36,:THUNDERBOLT],
+        [46,:SQUALL],
+        [50,:EXTREMESPEED],
+        [60,:EXPLOSION],
+        [70,:BOOMBURST],
+        [100,:GLACIATE],
+      ],
+      :compatiblemoves => [:ALLYSWITCH,:AURORAVEIL,:AVALANCHE,:BEATUP,:BLIZZARD,:EXPLOSION,:FLASHCANNON,:FROSTBREATH,:GIGAIMPACT,:HAIL,:HYPERBEAM,:HYPERVOICE,:ICEBEAM,:ICICLESPEAR,:ICYWIND,:IMPRISON,:IRONDEFENSE,:LIGHTSCREEN,:MAGICCOAT,:MAGNETRISE,:RAINDANCE,:SELFDESTRUCT,:SIGNALBEAM,:TAUNT,:UPROAR,:WATERPULSE,:WEATHERBALL,
+        #Rejuv only moves
+        :DELUGE,:EERIEIMPULSE,:SHOCKWAVE,:THUNDER,:THUNDERBOLT,:THUNDERWAVE,:VOLTSWITCH],
+
   },
 
   :OnCreation => {},

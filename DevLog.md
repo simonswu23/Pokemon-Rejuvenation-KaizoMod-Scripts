@@ -50,6 +50,7 @@
 - Clown Caricature (Boss)
 - Flora (Gym)
 - Florin (Gym)
+- Alakazam (Boss)
 - Venam (GDC)
 - Alice and Allen (GDC)
 

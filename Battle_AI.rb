@@ -9250,6 +9250,11 @@ class PokeBattle_AI
         $ai_log_data[@attacker.index].switch_name.push("")
         next
       end
+      if (i.pokemon.species == :DURANT || i.pokemon.species == :SOLOSIS) && i.pokemon.form == 1
+				partyScores.push(-9999999)
+				PBDebug.log(sprintf("Saki Durant Score: 0\n"))
+				next
+			end
       PBDebug.log(sprintf("Scoring for %s switching to: %s",getMonName(@attacker.species),getMonName(i.species))) if $INTERNAL
       if hard_switch
         if !@battle.pbCanSwitch?(@attacker.index,partyindex,false)

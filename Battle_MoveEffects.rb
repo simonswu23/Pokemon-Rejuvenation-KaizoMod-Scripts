@@ -9868,6 +9868,7 @@ end
 ###############################################################################
 class PokeBattle_Move_159 < PokeBattle_Move
   def pbOnStartUse(attacker)
+    return true if KAIZOMOD
     if attacker.species == :HOOPA
       if attacker.form == 1
         return true
